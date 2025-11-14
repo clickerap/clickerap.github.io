@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let brainCost = 1000000;
   let brainCount = 0;
 
-  let adCost = 15000000;
+  let adCost = 8000000;
   let adCount = 0;
 
   let proxmoxCost = 5000000;
@@ -1147,4 +1147,5 @@ document.addEventListener("DOMContentLoaded", () => {
   updateNewsTicker(); // Roep meteen aan voor eerste bericht
   updateUI(); // Zet de initiële UI-waarden
 });
+
 
