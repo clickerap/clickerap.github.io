@@ -178,6 +178,27 @@ document.addEventListener("DOMContentLoaded", () => {
     "Access-list 'DENY_ALL' toegepast. Oeps.",
     "Nieuwe kabel besteld.",
     "Serge overweegt een upgrade naar WiFi 7.",
+    "De servers draaien op volle toeren dankzij Serge's optimalisaties!",
+    "Nieuwe AI-algoritmes detecteren ongewone netwerkactiviteit... of is het een bug?",
+    "Hacker Space: Toegang geweigerd. Probeer een sterker wachtwoord.",
+    "Glasvezelkabels gloeien van de activiteit, de bandbreedte is enorm!",
+    "Quantum Link tot stand gebracht. De toekomst van netwerken is hier.",
+    "Een datacenter is zojuist geüpgraded. Meer packets onderweg!",
+    "Serge's Brein verwerkt miljarden packets per seconde. Indrukwekkend.",
+    "Active Directory is nu online, alle gebruikers zijn geauthenticeerd.",
+    "Proxmox Cluster: nieuwe virtuele machines worden uitgerold.",
+    "Hyper-V Farm is uitgebreid, de virtualisatie is ongeëvenaard.",
+    "Een gouden packet is gespot! Snel klikken!",
+    "De Singularity is nabij... of is het al begonnen?",
+    "Netwerkverkeer stijgt exponentieel, Serge houdt het nauwlettend in de gaten.",
+    "Nieuwe security patch geïnstalleerd. De verdediging is sterker dan ooit.",
+    "Energieverbruik van het datacenter is historisch hoog, maar de efficiëntie ook.",
+    "De matrix is geladen. Klaar voor meer packets?",
+    "Snelheid is geen probleem meer, met Serge aan het roer van het netwerk.",
+    "De cyberwereld is onveilig, maar Serge's netwerk is een fort.",
+    "Geruchten over een nieuw, nog krachtiger packet circuleren...",
+    "De verbinding is zo stabiel dat je er een huis op kunt bouwen.",
+    "Serge is een legende in de netwerkindustrie, zijn naam klinkt overal.",
   ];
 
   // --- Achievement Systeem ---
@@ -1155,6 +1176,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateNewsTicker(); // Roep meteen aan voor eerste bericht
   updateUI(); // Zet de initiële UI-waarden
 });
+
 
 
 
