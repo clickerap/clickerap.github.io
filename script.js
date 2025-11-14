@@ -605,6 +605,7 @@ document.addEventListener("DOMContentLoaded", () => {
     statPowerEl.textContent = `${Math.ceil(
       clickPower * clickMultiplier
     )} (x${clickMultiplier.toFixed(2)})`;
+    statGoldenClicksEl.textContent = goldenPacketClicks; // Update nieuwe statistiek
     const totalUpgrades =
       clickerCount +
       codeCount +
@@ -1149,6 +1150,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateNewsTicker(); // Roep meteen aan voor eerste bericht
   updateUI(); // Zet de initiële UI-waarden
 });
+
 
 
 
