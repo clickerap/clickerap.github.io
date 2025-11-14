@@ -1,0 +1,193 @@
+/* Importeer het Inter-lettertype */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Aangepaste stijlen voor het spel */
+
+/* Visueel effect wanneer op de afbeelding wordt geklikt */
+#clickable-image:active {
+    transform: scale(0.95);
+    filter: brightness(0.9);
+    animation: none; /* Pauzeer pulse animatie tijdens klik */
+}
+
+/* Pulse animatie voor de afbeelding */
+@keyframes pulseImage {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.03);
+    }
+}
+
+/* Nieuwe animatie voor score-pop */
+@keyframes scorePop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+.score-pop {
+    animation: scorePop 0.15s ease-out;
+}
+
+/* Stijl voor de zwevende "+1" tekst */
+.floating-text {
+    position: absolute;
+    font-size: 2.25rem; /* 36px, groter gemaakt */
+    font-weight: 900; /* Extra vet */
+    color: #0d6a9d; /* Donker Cisco blauw */
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5); /* Lichte schaduw */
+    pointer-events: none;
+    user-select: none;
+    opacity: 1;
+    /* Nieuwe animatie */
+    transform: translate(-50%, -50%); /* Centreren op de cursor */
+    animation: floatUpAndScale 1.2s ease-out forwards;
+    z-index: 100;
+}
+
+/* Animatie om de tekst omhoog te laten zweven, schalen en te vervagen */
+@keyframes floatUpAndScale {
+    /* 0%: Start klein OP de cursor (y=0) */
+    0% {
+        transform: translate(-50%, -50%) translateY(0) scale(0.5);
+        opacity: 1;
+    }
+    /* 20%: Wordt groter, maar BLIJFT OP de cursor (y=0) */
+    20% {
+        transform: translate(-50%, -50%) translateY(0) scale(1.1);
+        opacity: 1;
+    }
+    /* 100%: Zweeft nu pas omhoog en vervaagt */
+    100% {
+        transform: translate(-50%, -50%) translateY(-70px) scale(1); /* Iets minder hoog dan -90px */
+        opacity: 0;
+    }
+}
+
+/* Nieuwe Click Burst Animatie */
+.particle {
+    position: absolute; /* Veranderd naar absolute */
+    width: 10px;
+    height: 10px;
+    background: #38bdf8; /* Hemelsblauw */
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99;
+    opacity: 1;
+    animation: clickBurst 1s ease-out forwards;
+}
+
+@keyframes clickBurst {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Nieuwe animatie voor foto bij klik */
+@keyframes clickWobble {
+    0% { transform: scale(1); }
+    25% { transform: scale(0.95) rotate(-3deg); }
+    50% { transform: scale(1.05) rotate(3deg); }
+    75% { transform: scale(0.98) rotate(-1deg); }
+    100% { transform: scale(1) rotate(0); }
+}
+.click-wobble {
+    animation: clickWobble 0.4s ease-out;
+}
+
+/* Animatie voor panelen bij laden */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Animatie voor News Ticker */
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0; }
+    10%, 90% { opacity: 1; }
+}
+#news-ticker {
+    animation: fadeInOut 5s ease-in-out infinite;
+}
+
+/* Nieuwe animatie voor Gouden Packet */
+@keyframes goldenPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(253, 249, 165, 0.7); }
+    50% { transform: scale(1.1); box-shadow: 0 0 35px rgba(253, 249, 165, 1); }
+}
+
+/* Nieuwe animatie voor achtergrond */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* De @apply regels hieronder zijn verwijderd omdat de Tailwind-klassen
+   direct in index.html zijn geplaatst. 
+*/
+
+
+/* Container voor de klikbare afbeelding om positionering van zwevende tekst mogelijk te maken */
+#clickable-container {
+    position: relative;
+}
+
+/* Stijlen voor Achievements */
+.achievement-item {
+    /* @apply verwijderd */
+}
+.achievement-item.locked {
+    display: none; /* Verberg tot ontgrendeld */
+}
+.achievement-item.unlocked {
+    display: flex; /* Zorg dat het getoond wordt */
+    /* @apply verwijderd */
+}
+.achievement-item:not(.locked):hover {
+    /* @apply verwijderd */
+}
+
+/* Nieuw: Animatie voor ontgrendelde prestatie-iconen */
+@keyframes achievementGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 3px rgba(34, 197, 94, 0.4));
+    }
+    50% {
+        filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.8));
+    }
+}
+.achievement-item.unlocked .text-3xl {
+    animation: achievementGlow 2.5s infinite ease-in-out;
+}
+
+/* Stijl voor Toast Notificatie */
+#toast-notification {
+    /* @apply verwijderd */
+    transform: translateX(120%);
+    opacity: 0;
+}
+#toast-notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Nieuw: Stijl voor onbetaalbare winkelitems */
+.shop-item.disabled {
+    /* @apply verwijderd */
+}
+.shop-item.disabled .btn {
+    /* @apply verwijderd */
+}
+
+
