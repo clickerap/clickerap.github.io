@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const statTotalEl = document.getElementById("stat-total");
   const statPowerEl = document.getElementById("stat-power");
   const statUpgradesEl = document.getElementById("stat-upgrades");
+  const statGoldenClicksEl = document.getElementById("stat-golden-clicks"); // Nieuwe statistiek
   const saveBtn = document.getElementById("save-btn");
   const loadBtn = document.getElementById("load-btn");
   const resetBtn = document.getElementById("reset-btn");
@@ -1148,6 +1149,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateNewsTicker(); // Roep meteen aan voor eerste bericht
   updateUI(); // Zet de initiële UI-waarden
 });
+
 
 
 
