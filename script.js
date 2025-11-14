@@ -364,7 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p class="text-sm text-gray-600">${ach.description}</p>
                 </div>
             `;
-      achievementsContainer.appendChild(achEl);
+      achievementsContainer.prepend(achEl);
     }
   }
 
@@ -1147,5 +1147,6 @@ document.addEventListener("DOMContentLoaded", () => {
   updateNewsTicker(); // Roep meteen aan voor eerste bericht
   updateUI(); // Zet de initiële UI-waarden
 });
+
 
 
