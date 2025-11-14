@@ -406,6 +406,7 @@ document.addEventListener("DOMContentLoaded", () => {
     achievements[id] = true;
     const achEl = document.getElementById(achievementData[id].elId);
     if (achEl) {
+      achievementsContainer.prepend(achEl); // Verplaats naar bovenaan
       achEl.classList.remove("locked");
       achEl.classList.add("unlocked");
     }
@@ -1147,6 +1148,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateNewsTicker(); // Roep meteen aan voor eerste bericht
   updateUI(); // Zet de initiële UI-waarden
 });
+
 
 
 
