@@ -276,7 +276,12 @@ document.addEventListener("DOMContentLoaded", () => {
       icon: "🤖",
       elId: "ach-buy-1-ai",
     },
-
+    "buy-1-singularity": {
+      title: "Het Einde",
+      description: "Koop je eerste The Singularity.",
+      icon: "🌀",
+      elId: "ach-buy-1-singularity",
+    },
     "golden-1": {
       title: "Gouden Vangst",
       description: "Klik op je eerste Gouden Packet.",
@@ -1150,6 +1155,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateNewsTicker(); // Roep meteen aan voor eerste bericht
   updateUI(); // Zet de initiële UI-waarden
 });
+
 
 
 
