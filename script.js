@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- DOM Elementen ---
   const scoreEl = document.getElementById("score");
   const spsEl = document.getElementById("sps");
+  const bodyEl = document.body;
   const clickableImage = document.getElementById("clickable-image");
   const clickableContainer = document.getElementById("clickable-container");
   const imageErrorEl = document.getElementById("image-error");
@@ -19,10 +20,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const statPowerEl = document.getElementById("stat-power");
   const statUpgradesEl = document.getElementById("stat-upgrades");
   const statGoldenClicksEl = document.getElementById("stat-golden-clicks"); // Nieuwe statistiek
+  const statGoldenValueEl = document.getElementById("stat-golden-value");
+  const evolvePanelEl = document.getElementById("evolve-panel");
+  const evolveBtn = document.getElementById("evolve-btn");
+  const evolveCostEl = document.getElementById("evolve-cost");
   const saveBtn = document.getElementById("save-btn");
   const loadBtn = document.getElementById("load-btn");
   const resetBtn = document.getElementById("reset-btn");
   const saveFeedbackEl = document.getElementById("save-feedback");
+  const cheatControlsEl = document.getElementById("cheat-controls");
+  const cheatInputEl = document.getElementById("cheat-input");
+  const cheatBtn = document.getElementById("cheat-btn");
+  const cheatFeedbackEl = document.getElementById("cheat-feedback");
   const goldenPacketEl = document.getElementById("golden-packet");
 
   // Upgrade 1: Snellere CPU
@@ -161,10 +170,218 @@ document.addEventListener("DOMContentLoaded", () => {
   let goldenPacketTimer = null;
   let goldenPacketActive = false;
   let goldenPacketClicks = 0;
+  let goldenPacketTotalValue = 0;
   let goldenPacketBonusMultiplier = 1.0;
   let goldenPacketChance = 0.05; // 5% basiskans per 30s
 
+  const EVOLVE_COST = 1_000_000_000;
+  const evolvedImageSrc = "Gemini_Generated_Image_jsk7ebjsk7ebjsk7.png";
+  const originalImageSrc = clickableImage
+    ? clickableImage.getAttribute("src")
+    : "";
+  let hasEvolved = false;
+
   const saveKey = "sergeClickerSave";
+  let cheatUnlockClicks = 0;
+  const cheatUnlockTarget = 20;
+  let cheatUnlocked = false;
+  let hasUsedCheat = false;
+
+  // --- Formatter helpers ---
+  const numberFormatterCache = {};
+  const magnitudeLabels = [
+    { value: 1_000_000_000_000, short: "bln", word: "biljoen" },
+    { value: 1_000_000_000, short: "mld", word: "miljard" },
+    { value: 1_000_000, short: "mlj", word: "miljoen" },
+    { value: 1_000, short: "k", word: "duizend" },
+  ];
+
+  function getNumberFormatter(decimals = 0) {
+    if (!numberFormatterCache[decimals]) {
+      numberFormatterCache[decimals] = new Intl.NumberFormat("nl-NL", {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+      });
+    }
+    return numberFormatterCache[decimals];
+  }
+
+  function formatShortNumber(value, options = {}) {
+    const { smallDecimals = 0 } = options;
+    const absValue = Math.abs(value);
+    const magnitude = magnitudeLabels.find((mag) => absValue >= mag.value);
+    if (!magnitude) {
+      return getNumberFormatter(smallDecimals).format(value);
+    }
+
+    const relativeValue = value / magnitude.value;
+    const relativeFormatter = new Intl.NumberFormat("nl-NL", {
+      minimumFractionDigits:
+        Math.abs(relativeValue) >= 100
+          ? 0
+          : Math.abs(relativeValue) >= 10
+          ? 1
+          : 2,
+      maximumFractionDigits:
+        Math.abs(relativeValue) >= 100
+          ? 0
+          : Math.abs(relativeValue) >= 10
+          ? 1
+          : 2,
+    });
+    return `${relativeFormatter.format(relativeValue)}${magnitude.short}`;
+  }
+
+  function formatNumberWithWords(value, options = {}) {
+    const { decimals = 0 } = options;
+    const formatter = getNumberFormatter(decimals);
+    const baseFormatted = formatter.format(value);
+    const absValue = Math.abs(value);
+
+    const magnitude = magnitudeLabels.find((mag) => absValue >= mag.value);
+    if (!magnitude) return baseFormatted;
+
+    const relativeValue = value / magnitude.value;
+    const relativeFormatter = new Intl.NumberFormat("nl-NL", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits:
+        Math.abs(relativeValue) >= 100
+          ? 0
+          : Math.abs(relativeValue) >= 10
+          ? 1
+          : 2,
+    });
+    const relativeFormatted = relativeFormatter.format(relativeValue);
+
+    return `${baseFormatted} (${relativeFormatted} ${magnitude.short})`;
+  }
+
+  function parseCheatAmount(token) {
+    if (token === undefined) {
+      throw new Error("Geef ook een getal mee.");
+    }
+    const normalized = token.replace(",", ".");
+    const amount = Number(normalized);
+    if (Number.isNaN(amount)) {
+      throw new Error(`'${token}' is geen geldig getal.`);
+    }
+    return amount;
+  }
+
+  function executeCheatCommand(rawCommand) {
+    if (!rawCommand || !rawCommand.trim()) {
+      showCheatFeedback("Typ een commando.", true);
+      return;
+    }
+
+    const parts = rawCommand.trim().split(/\s+/);
+    const command = parts[0].toLowerCase();
+
+    let commandExecuted = false;
+    try {
+      switch (command) {
+        case "help":
+          showCheatFeedback(
+            "Commando's: add, set, sps, power, multiplier, golden, unlockall",
+            false
+          );
+          break;
+
+        case "add":
+        case "addscore": {
+          const amount = parseCheatAmount(parts[1]);
+          score += amount;
+          if (amount > 0) totalPacketsGenerated += amount;
+          updateUI();
+          checkAchievements();
+          showCheatFeedback(`+${formatShortNumber(amount)} toegevoegd.`);
+          commandExecuted = true;
+          break;
+        }
+
+        case "set":
+        case "setscore": {
+          const amount = Math.max(0, parseCheatAmount(parts[1]));
+          score = amount;
+          if (amount > totalPacketsGenerated) {
+            totalPacketsGenerated = amount;
+          }
+          updateUI();
+          checkAchievements();
+          showCheatFeedback(`Score ingesteld op ${formatShortNumber(amount)}.`);
+          commandExecuted = true;
+          break;
+        }
+
+        case "sps": {
+          const amount = Math.max(0, parseCheatAmount(parts[1]));
+          scorePerSecond = amount;
+          updateUI();
+          checkAchievements();
+          showCheatFeedback(`SPS ingesteld op ${formatShortNumber(amount)}.`);
+          commandExecuted = true;
+          break;
+        }
+
+        case "power": {
+          const amount = Math.max(1, Math.floor(parseCheatAmount(parts[1])));
+          clickPower = amount;
+          updateUI();
+          showCheatFeedback(`Klikkracht is nu ${formatShortNumber(amount)}.`);
+          commandExecuted = true;
+          break;
+        }
+
+        case "multiplier": {
+          const amount = Math.max(0.01, parseCheatAmount(parts[1]));
+          clickMultiplier = amount;
+          updateUI();
+          showCheatFeedback(`Multiplier is nu x${amount.toFixed(2)}.`);
+          commandExecuted = true;
+          break;
+        }
+
+        case "golden": {
+          let chance = parseCheatAmount(parts[1]);
+          if (chance > 1) {
+            chance = chance / 100;
+          }
+          goldenPacketChance = Math.min(1, Math.max(0, chance));
+          showCheatFeedback(
+            `Gouden packet kans ingesteld op ${(
+              goldenPacketChance * 100
+            ).toFixed(1)}%.`
+          );
+          commandExecuted = true;
+          break;
+        }
+
+        case "unlockall": {
+          Object.keys(achievementData).forEach((id) => unlockAchievement(id));
+          renderAchievements();
+          showCheatFeedback("Alle prestaties ontgrendeld.");
+          commandExecuted = true;
+          break;
+        }
+
+        default:
+          showCheatFeedback("Onbekend commando. Typ 'help' voor opties.", true);
+      }
+    } catch (error) {
+      showCheatFeedback(
+        error?.message || "Cheat commando mislukt. Probeer opnieuw.",
+        true
+      );
+    } finally {
+      if (commandExecuted) {
+        hasUsedCheat = true;
+        checkAchievements();
+      }
+      if (cheatInputEl) {
+        cheatInputEl.value = "";
+      }
+    }
+  }
 
   // --- News Ticker Berichten ---
   const newsTickerMessages = [
@@ -303,6 +520,18 @@ document.addEventListener("DOMContentLoaded", () => {
       icon: "🌀",
       elId: "ach-buy-1-singularity",
     },
+    "evolve-serge": {
+      title: "Regenboog Ascensie",
+      description: "Evolve Serge naar zijn definitieve vorm.",
+      icon: "🌈",
+      elId: "ach-evolve-serge",
+    },
+    "cheat-master": {
+      title: "Console Cowboy",
+      description: "Voer minstens één cheat-commando uit.",
+      icon: "💻",
+      elId: "ach-cheat-master",
+    },
     "golden-1": {
       title: "Gouden Vangst",
       description: "Klik op je eerste Gouden Packet.",
@@ -392,6 +621,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `;
       achievementsContainer.prepend(achEl);
+
+      if (ach.elId === "ach-click-1") {
+        achEl.addEventListener("click", handleSecretAchievementClick);
+      }
     }
   }
 
@@ -424,6 +657,88 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       saveFeedbackEl.textContent = "";
     }, 2000);
+  }
+
+  function showCheatFeedback(message, isError = false) {
+    if (!cheatFeedbackEl) return;
+    cheatFeedbackEl.textContent = message;
+    cheatFeedbackEl.style.color = isError ? "#dc2626" : "#059669";
+    clearTimeout(showCheatFeedback.timeoutId);
+    showCheatFeedback.timeoutId = setTimeout(() => {
+      cheatFeedbackEl.textContent = "";
+    }, 4000);
+  }
+
+  function revealCheatControls() {
+    if (!cheatControlsEl || cheatUnlocked) return;
+    cheatUnlocked = true;
+    cheatControlsEl.classList.remove("hidden");
+    showToast(
+      "Cheat menu ontgrendeld!",
+      "Druk op Enter om commands te runnen.",
+      "info"
+    );
+  }
+
+  function handleSecretAchievementClick() {
+    if (cheatUnlocked) return;
+    cheatUnlockClicks += 1;
+    if (cheatUnlockClicks >= cheatUnlockTarget) {
+      revealCheatControls();
+    }
+  }
+
+  function updateEvolveButton() {
+    if (!evolvePanelEl) return;
+    const shouldShowPanel = singularityCount > 0 && !hasEvolved;
+    evolvePanelEl.classList.toggle("hidden", !shouldShowPanel);
+    if (evolveBtn) {
+      if (shouldShowPanel) {
+        const canAfford = score >= EVOLVE_COST;
+        evolveBtn.disabled = !canAfford;
+      } else {
+        evolveBtn.disabled = true;
+      }
+    }
+  }
+
+  function applyEvolvedTheme() {
+    if (bodyEl) {
+      bodyEl.classList.add("rainbow-mode");
+    }
+    if (clickableImage) {
+      clickableImage.classList.add("evolved");
+      if (evolvedImageSrc) {
+        clickableImage.src = evolvedImageSrc;
+      }
+    }
+    if (evolvePanelEl) {
+      evolvePanelEl.classList.add("hidden");
+    }
+  }
+
+  function handleEvolveClick() {
+    if (hasEvolved || !evolveBtn) return;
+    if (score < EVOLVE_COST) {
+      showToast(
+        "Niet genoeg packets",
+        `Je hebt ${formatNumberWithWords(score)} / ${formatNumberWithWords(
+          EVOLVE_COST
+        )} packets.`,
+        "info"
+      );
+      return;
+    }
+    score -= EVOLVE_COST;
+    hasEvolved = true;
+    applyEvolvedTheme();
+    showToast(
+      "Serge geëvolueerd!",
+      "Welkom bij het regenboogtijdperk.",
+      "success"
+    );
+    updateUI();
+    checkAchievements();
   }
 
   // Ontgrendel een achievement
@@ -488,6 +803,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!achievements["golden-10"] && goldenPacketClicks >= 10)
       unlockAchievement("golden-10");
 
+    if (!achievements["evolve-serge"] && hasEvolved)
+      unlockAchievement("evolve-serge");
+    if (!achievements["cheat-master"] && hasUsedCheat)
+      unlockAchievement("cheat-master");
+
     // SPS-gebaseerd
     if (!achievements["sps-1"] && scorePerSecond >= 1)
       unlockAchievement("sps-1");
@@ -510,43 +830,43 @@ document.addEventListener("DOMContentLoaded", () => {
   // Update alle UI-elementen (score, kosten, knoppen, stats)
   function updateUI() {
     // Gebruik Math.floor om alleen hele punten te tonen
-    scoreEl.textContent = Math.floor(score);
-    // Toon SPS met 1 decimaal
-    spsEl.textContent = scorePerSecond.toFixed(1);
+    scoreEl.textContent = formatShortNumber(Math.floor(score));
+    // Toon SPS met alleen verkorte woordnotatie
+    spsEl.textContent = formatShortNumber(scorePerSecond, { smallDecimals: 1 });
 
     // Update kosten en aantallen in de winkel
-    clickerCostEl.textContent = clickerCost;
-    clickerCountEl.textContent = clickerCount;
-    codeCostEl.textContent = codeCost;
-    codeCountEl.textContent = codeCount;
-    guiCostEl.textContent = guiCost;
-    guiCountEl.textContent = guiCount;
-    autoClickerCostEl.textContent = autoClickerCost;
-    autoClickerCountEl.textContent = autoClickerCount;
-    superClickerCostEl.textContent = superClickerCost;
-    superClickerCountEl.textContent = superClickerCount;
-    fiberCostEl.textContent = fiberCost;
-    fiberCountEl.textContent = fiberCount;
-    datacenterCostEl.textContent = datacenterCost;
-    datacenterCountEl.textContent = datacenterCount;
-    brainCostEl.textContent = brainCost;
-    brainCountEl.textContent = brainCount;
-    adCostEl.textContent = adCost;
-    adCountEl.textContent = adCount;
-    proxmoxCostEl.textContent = proxmoxCost;
-    proxmoxCountEl.textContent = proxmoxCount;
-    quantumCostEl.textContent = quantumCost;
-    quantumCountEl.textContent = quantumCount;
-    hypervCostEl.textContent = hypervCost;
-    hypervCountEl.textContent = hypervCount;
-    aiCostEl.textContent = aiCost;
-    aiCountEl.textContent = aiCount;
-    singularityCostEl.textContent = singularityCost;
-    singularityCountEl.textContent = singularityCount;
-    snifferCostEl.textContent = snifferCost;
-    snifferCountEl.textContent = snifferCount;
-    multiplierCostEl.textContent = multiplierCost;
-    multiplierCountEl.textContent = multiplierCount;
+    clickerCostEl.textContent = formatNumberWithWords(clickerCost);
+    clickerCountEl.textContent = formatNumberWithWords(clickerCount);
+    codeCostEl.textContent = formatNumberWithWords(codeCost);
+    codeCountEl.textContent = formatNumberWithWords(codeCount);
+    guiCostEl.textContent = formatNumberWithWords(guiCost);
+    guiCountEl.textContent = formatNumberWithWords(guiCount);
+    autoClickerCostEl.textContent = formatNumberWithWords(autoClickerCost);
+    autoClickerCountEl.textContent = formatNumberWithWords(autoClickerCount);
+    superClickerCostEl.textContent = formatNumberWithWords(superClickerCost);
+    superClickerCountEl.textContent = formatNumberWithWords(superClickerCount);
+    fiberCostEl.textContent = formatNumberWithWords(fiberCost);
+    fiberCountEl.textContent = formatNumberWithWords(fiberCount);
+    datacenterCostEl.textContent = formatNumberWithWords(datacenterCost);
+    datacenterCountEl.textContent = formatNumberWithWords(datacenterCount);
+    brainCostEl.textContent = formatNumberWithWords(brainCost);
+    brainCountEl.textContent = formatNumberWithWords(brainCount);
+    adCostEl.textContent = formatNumberWithWords(adCost);
+    adCountEl.textContent = formatNumberWithWords(adCount);
+    proxmoxCostEl.textContent = formatNumberWithWords(proxmoxCost);
+    proxmoxCountEl.textContent = formatNumberWithWords(proxmoxCount);
+    quantumCostEl.textContent = formatNumberWithWords(quantumCost);
+    quantumCountEl.textContent = formatNumberWithWords(quantumCount);
+    hypervCostEl.textContent = formatNumberWithWords(hypervCost);
+    hypervCountEl.textContent = formatNumberWithWords(hypervCount);
+    aiCostEl.textContent = formatNumberWithWords(aiCost);
+    aiCountEl.textContent = formatNumberWithWords(aiCount);
+    singularityCostEl.textContent = formatNumberWithWords(singularityCost);
+    singularityCountEl.textContent = formatNumberWithWords(singularityCount);
+    snifferCostEl.textContent = formatNumberWithWords(snifferCost);
+    snifferCountEl.textContent = formatNumberWithWords(snifferCount);
+    multiplierCostEl.textContent = formatNumberWithWords(multiplierCost);
+    multiplierCountEl.textContent = formatNumberWithWords(multiplierCount);
 
     // Schakel knoppen uit als er niet genoeg punten zijn
     buyClickerBtn.disabled = score < clickerCost;
@@ -626,12 +946,18 @@ document.addEventListener("DOMContentLoaded", () => {
       .classList.toggle("disabled", score < multiplierCost);
 
     // Update Statistieken
-    statClicksEl.textContent = totalManualClicks;
-    statTotalEl.textContent = Math.floor(totalPacketsGenerated);
-    statPowerEl.textContent = `${Math.ceil(
-      clickPower * clickMultiplier
+    statClicksEl.textContent = formatNumberWithWords(totalManualClicks);
+    statTotalEl.textContent = formatNumberWithWords(
+      Math.floor(totalPacketsGenerated)
+    );
+    const displayedPower = Math.ceil(clickPower * clickMultiplier);
+    statPowerEl.textContent = `${formatNumberWithWords(
+      displayedPower
     )} (x${clickMultiplier.toFixed(2)})`;
-    statGoldenClicksEl.textContent = goldenPacketClicks; // Update nieuwe statistiek
+    statGoldenClicksEl.textContent = formatNumberWithWords(goldenPacketClicks); // Update nieuwe statistiek
+    statGoldenValueEl.textContent = formatNumberWithWords(
+      goldenPacketTotalValue
+    );
     const totalUpgrades =
       clickerCount +
       codeCount +
@@ -649,7 +975,12 @@ document.addEventListener("DOMContentLoaded", () => {
       singularityCount +
       snifferCount +
       multiplierCount;
-    statUpgradesEl.textContent = totalUpgrades;
+    statUpgradesEl.textContent = formatNumberWithWords(totalUpgrades);
+
+    if (evolveCostEl) {
+      evolveCostEl.textContent = formatShortNumber(EVOLVE_COST);
+    }
+    updateEvolveButton();
   }
 
   // Wordt uitgevoerd wanneer op de afbeelding wordt geklikt
@@ -982,8 +1313,13 @@ document.addEventListener("DOMContentLoaded", () => {
     score += totalBonus;
     totalPacketsGenerated += totalBonus;
     goldenPacketClicks++;
+    goldenPacketTotalValue += totalBonus;
 
-    showToast(`Gouden Packet!`, `+${totalBonus} packets!`, "info");
+    showToast(
+      `Gouden Packet!`,
+      `+${formatNumberWithWords(totalBonus)} packets!`,
+      "info"
+    );
     hideGoldenPacket();
     checkAchievements();
   }
@@ -1036,9 +1372,12 @@ document.addEventListener("DOMContentLoaded", () => {
       multiplierCost,
       multiplierCount,
       goldenPacketClicks,
+      goldenPacketTotalValue,
       goldenPacketBonusMultiplier,
       goldenPacketChance,
       achievements,
+      hasEvolved,
+      hasUsedCheat,
     };
     localStorage.setItem(saveKey, JSON.stringify(saveData));
     showSaveFeedback("Spel opgeslagen!");
@@ -1092,8 +1431,14 @@ document.addEventListener("DOMContentLoaded", () => {
       multiplierCost = data.multiplierCost || 2000000;
       multiplierCount = data.multiplierCount || 0;
       goldenPacketClicks = data.goldenPacketClicks || 0;
+      goldenPacketTotalValue = data.goldenPacketTotalValue || 0;
       goldenPacketBonusMultiplier = data.goldenPacketBonusMultiplier || 1.0;
       goldenPacketChance = data.goldenPacketChance || 0.05;
+      hasEvolved = Boolean(data.hasEvolved);
+      hasUsedCheat = Boolean(data.hasUsedCheat);
+      if (hasEvolved) {
+        applyEvolvedTheme();
+      }
 
       // Laad achievements en zorg dat nieuwe achievements worden herkend
       achievements = Object.assign(initializeAchievements(), data.achievements);
@@ -1165,6 +1510,25 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   resetBtn.addEventListener("click", resetGame);
 
+  function handleCheatSubmit() {
+    if (!cheatInputEl) return;
+    executeCheatCommand(cheatInputEl.value);
+  }
+
+  if (cheatBtn && cheatInputEl) {
+    cheatBtn.addEventListener("click", handleCheatSubmit);
+    cheatInputEl.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        handleCheatSubmit();
+      }
+    });
+  }
+
+  if (evolveBtn) {
+    evolveBtn.addEventListener("click", handleEvolveClick);
+  }
+
   // --- Spel Starten ---
   loadGame(); // Laad voortgang (of start nieuw)
   renderAchievements(); // Bouw de prestatielijst
@@ -1176,11 +1540,3 @@ document.addEventListener("DOMContentLoaded", () => {
   updateNewsTicker(); // Roep meteen aan voor eerste bericht
   updateUI(); // Zet de initiële UI-waarden
 });
-
-
-
-
-
-
-
-
