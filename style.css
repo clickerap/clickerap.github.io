@@ -324,3 +324,16 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
     0%, 100% { filter: hue-rotate(0deg); }
     50% { filter: hue-rotate(45deg); }
 }
+
+/* Evolved Tier Styles */
+body.rainbow-mode .shop-item.evolved-tier {
+    background: rgba(0, 0, 0, 0.7) !important; /* Altijd donker voor contrast */
+    border-width: 2px !important;
+}
+body.rainbow-mode .shop-item.evolved-tier h3 {
+    text-shadow: none !important; /* Gradient tekst heeft geen shadow nodig */
+}
+body.rainbow-mode .shop-item.evolved-tier p,
+body.rainbow-mode .shop-item.evolved-tier span {
+    color: #ddd !important; /* Lichte tekst in deze specifieke zwarte blokken */
+}
