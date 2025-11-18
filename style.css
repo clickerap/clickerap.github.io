@@ -69,6 +69,18 @@ body.rainbow-mode .shop-item button {
     border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
+body.rainbow-mode #news-container {
+    background: rgba(255, 255, 255, 0.25) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+body.rainbow-mode #news-container p,
+body.rainbow-mode #news-ticker {
+    color: #5c5858 !important;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
+}
+
+
 .glass-block {
     background: rgba(255, 255, 255, 0.92);
     border: 1px solid rgba(255, 255, 255, 0.6);
@@ -306,5 +318,6 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
 }
 
 /* Nieuw: Stijl voor onbetaalbare winkelitems */
+
 
 
