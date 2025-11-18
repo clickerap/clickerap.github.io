@@ -28,7 +28,7 @@ body.rainbow-mode .glass-block h2,
 body.rainbow-mode .glass-block h3,
 body.rainbow-mode .glass-panel h3,
 body.rainbow-mode #score {
-    color: #fff !important;
+    color: #000000 !important;
 }
 
 body.rainbow-mode .glass-block .text-gray-600,
@@ -306,4 +306,5 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
 }
 
 /* Nieuw: Stijl voor onbetaalbare winkelitems */
+
 
