@@ -5,12 +5,37 @@ body {
     font-family: 'Inter', sans-serif;
 }
 
+/* --- RAINBOW MODE STIJLEN --- */
 body.rainbow-mode {
     background: radial-gradient(circle at top, rgba(255, 255, 255, 0.15), transparent 35%),
         linear-gradient(120deg, #ff4d8a, #ffb347, #ffe259, #4facfe, #00f2fe, #7d5fff);
     background-size: 400% 400%;
     animation: rainbowFlow 18s ease infinite;
     color: #fff;
+}
+
+/* NIEUW: Gouden effecten in Rainbow Mode */
+body.rainbow-mode .floating-text {
+    color: #FFD700 !important; /* Goud */
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8) !important;
+}
+
+body.rainbow-mode .particle {
+    background: #FFD700 !important;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+}
+
+/* NIEUW: News Ticker kleurcorrectie in Rainbow Mode */
+body.rainbow-mode #news-container {
+    background: rgba(255, 255, 255, 0.25) !important;
+    color: #000 !important;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+body.rainbow-mode #news-container p,
+body.rainbow-mode #news-ticker {
+    color: #000000 !important;
+    text-shadow: none !important;
 }
 
 body.rainbow-mode .glass-block,
@@ -68,18 +93,6 @@ body.rainbow-mode .shop-item strong {
 body.rainbow-mode .shop-item button {
     border: 1px solid rgba(255, 255, 255, 0.35);
 }
-
-body.rainbow-mode #news-container {
-    background: rgba(255, 255, 255, 0.25) !important; 
-    border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-body.rainbow-mode #news-container p,
-body.rainbow-mode #news-ticker {
-    color: #5c5858 !important;
-    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
-}
-
 
 .glass-block {
     background: rgba(255, 255, 255, 0.92);
@@ -236,11 +249,6 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
     100% { background-position: 0% 50%; }
 }
 
-/* De @apply regels hieronder zijn verwijderd omdat de Tailwind-klassen
-   direct in index.html zijn geplaatst. 
-*/
-
-
 /* Container voor de klikbare afbeelding om positionering van zwevende tekst mogelijk te maken */
 #clickable-container {
     position: relative;
@@ -316,8 +324,3 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
     0%, 100% { filter: hue-rotate(0deg); }
     50% { filter: hue-rotate(45deg); }
 }
-
-/* Nieuw: Stijl voor onbetaalbare winkelitems */
-
-
-
