@@ -112,6 +112,40 @@ document.addEventListener("DOMContentLoaded", () => {
   const multiplierCostEl = document.getElementById("multiplier-cost");
   const multiplierCountEl = document.getElementById("multiplier-count");
 
+  // Evolved Items Wrapper
+  const evolvedItemsWrapper = document.getElementById("evolved-items-wrapper");
+
+  // Evolved Item 1
+  const buyRainbowRouterBtn = document.getElementById("buy-rainbow-router");
+  const rainbowRouterCostEl = document.getElementById("rainbow-router-cost");
+  const rainbowRouterCountEl = document.getElementById("rainbow-router-count");
+
+  // Evolved Item 2
+  const buyGalacticFirewallBtn = document.getElementById(
+    "buy-galactic-firewall"
+  );
+  const galacticFirewallCostEl = document.getElementById(
+    "galactic-firewall-cost"
+  );
+  const galacticFirewallCountEl = document.getElementById(
+    "galactic-firewall-count"
+  );
+
+  // Evolved Item 3
+  const buyTimeServerBtn = document.getElementById("buy-time-server");
+  const timeServerCostEl = document.getElementById("time-server-cost");
+  const timeServerCountEl = document.getElementById("time-server-count");
+
+  // Evolved Item 4
+  const buyParallelVpnBtn = document.getElementById("buy-parallel-vpn");
+  const parallelVpnCostEl = document.getElementById("parallel-vpn-cost");
+  const parallelVpnCountEl = document.getElementById("parallel-vpn-count");
+
+  // Evolved Item 5
+  const buyGodModeBtn = document.getElementById("buy-god-mode");
+  const godModeCostEl = document.getElementById("god-mode-cost");
+  const godModeCountEl = document.getElementById("god-mode-count");
+
   // --- Spel Variabelen ---
   let score = 0;
   let scorePerSecond = 0;
@@ -186,6 +220,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const cheatUnlockTarget = 20;
   let cheatUnlocked = false;
   let hasUsedCheat = false;
+
+  // Evolved Upgrades
+  let rainbowRouterCost = 2500000000; // 2.5 Miljard
+  let rainbowRouterCount = 0;
+
+  let galacticFirewallCost = 10000000000; // 10 Miljard
+  let galacticFirewallCount = 0;
+
+  let timeServerCost = 50000000000; // 50 Miljard
+  let timeServerCount = 0;
+
+  let parallelVpnCost = 250000000000; // 250 Miljard
+  let parallelVpnCount = 0;
+
+  let godModeCost = 1000000000000; // 1 Biljoen
+  let godModeCount = 0;
 
   // --- Formatter helpers ---
   const numberFormatterCache = {};
@@ -282,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
       switch (command) {
         case "help":
           showCheatFeedback(
-            "Commando's: add, set, sps, power, multiplier, golden, unlockall",
+            "Commando's: add, set, pps, power, multiplier, golden, unlockall",
             false
           );
           break;
@@ -313,12 +363,12 @@ document.addEventListener("DOMContentLoaded", () => {
           break;
         }
 
-        case "sps": {
+        case "pps": {
           const amount = Math.max(0, parseCheatAmount(parts[1]));
           scorePerSecond = amount;
           updateUI();
           checkAchievements();
-          showCheatFeedback(`SPS ingesteld op ${formatShortNumber(amount)}.`);
+          showCheatFeedback(`PPS ingesteld op ${formatShortNumber(amount)}.`);
           commandExecuted = true;
           break;
         }
@@ -526,12 +576,6 @@ document.addEventListener("DOMContentLoaded", () => {
       icon: "🌈",
       elId: "ach-evolve-serge",
     },
-    "cheat-master": {
-      title: "Console Cowboy",
-      description: "Voer minstens één cheat-commando uit.",
-      icon: "💻",
-      elId: "ach-cheat-master",
-    },
     "golden-1": {
       title: "Gouden Vangst",
       description: "Klik op je eerste Gouden Packet.",
@@ -586,6 +630,47 @@ document.addEventListener("DOMContentLoaded", () => {
       description: "Bereik 100.000 packets per seconde.",
       icon: "🌀",
       elId: "ach-sps-100000",
+    },
+    // ... bestaande achievements hierboven ...
+
+    // --- NIEUWE EVOLVED ACHIEVEMENTS ---
+    "buy-1-rainbow": {
+      title: "Full Spectrum",
+      description: "Bezit een Regenboog Router.",
+      icon: "🌈",
+      elId: "ach-buy-1-rainbow",
+    },
+    "buy-1-galactic": {
+      title: "Alien Technologie",
+      description: "Bezit een Galactische Firewall.",
+      icon: "🪐",
+      elId: "ach-buy-1-galactic",
+    },
+    "buy-1-time": {
+      title: "Back to the Future",
+      description: "Bezit een Tijd Reizende Server.",
+      icon: "⏳",
+      elId: "ach-buy-1-time",
+    },
+    "buy-1-parallel": {
+      title: "Multiversum",
+      description: "Bezit een Parallel Universum VPN.",
+      icon: "🌌",
+      elId: "ach-buy-1-parallel",
+    },
+    "buy-1-god": {
+      title: "Almacht",
+      description: "Bezit de God Mode Terminal.",
+      icon: "⚡",
+      elId: "ach-buy-1-god",
+    },
+
+    // --- CHEAT ACHIEVEMENT ---
+    "cheater-detected": {
+      title: "Valsspeler!",
+      description: "Je hebt de console gebruikt. Foei!",
+      icon: "⚠️",
+      elId: "ach-cheater-detected",
     },
   };
 
@@ -715,6 +800,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (evolvePanelEl) {
       evolvePanelEl.classList.add("hidden");
     }
+    if (evolvedItemsWrapper) {
+      evolvedItemsWrapper.classList.remove("hidden");
+    }
   }
 
   function handleEvolveClick() {
@@ -805,8 +893,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!achievements["evolve-serge"] && hasEvolved)
       unlockAchievement("evolve-serge");
-    if (!achievements["cheat-master"] && hasUsedCheat)
-      unlockAchievement("cheat-master");
+    // if (!achievements["cheat-master"] && hasUsedCheat)
+    //   unlockAchievement("cheat-master");
 
     // SPS-gebaseerd
     if (!achievements["sps-1"] && scorePerSecond >= 1)
@@ -823,6 +911,29 @@ document.addEventListener("DOMContentLoaded", () => {
       unlockAchievement("sps-10000");
     if (!achievements["sps-100000"] && scorePerSecond >= 100000)
       unlockAchievement("sps-100000");
+
+    // ... bestaande checks ...
+
+    // --- Checks voor Evolved Items ---
+    if (!achievements["buy-1-rainbow"] && rainbowRouterCount >= 1)
+      unlockAchievement("buy-1-rainbow");
+
+    if (!achievements["buy-1-galactic"] && galacticFirewallCount >= 1)
+      unlockAchievement("buy-1-galactic");
+
+    if (!achievements["buy-1-time"] && timeServerCount >= 1)
+      unlockAchievement("buy-1-time");
+
+    if (!achievements["buy-1-parallel"] && parallelVpnCount >= 1)
+      unlockAchievement("buy-1-parallel");
+
+    if (!achievements["buy-1-god"] && godModeCount >= 1)
+      unlockAchievement("buy-1-god");
+
+    // --- Check voor Cheats ---
+    // 'hasUsedCheat' wordt automatisch true als iemand een commando invoert (zie executeCheatCommand functie)
+    if (!achievements["cheater-detected"] && hasUsedCheat)
+      unlockAchievement("cheater-detected");
   }
 
   // --- Functies ---
@@ -868,6 +979,45 @@ document.addEventListener("DOMContentLoaded", () => {
     multiplierCostEl.textContent = formatNumberWithWords(multiplierCost);
     multiplierCountEl.textContent = formatNumberWithWords(multiplierCount);
 
+    // Evolved Upgrades Updates
+    rainbowRouterCostEl.textContent = formatShortNumber(rainbowRouterCost);
+    rainbowRouterCountEl.textContent =
+      formatNumberWithWords(rainbowRouterCount);
+    buyRainbowRouterBtn.disabled = score < rainbowRouterCost;
+    buyRainbowRouterBtn
+      .closest(".shop-item")
+      .classList.toggle("disabled", score < rainbowRouterCost);
+
+    galacticFirewallCostEl.textContent =
+      formatShortNumber(galacticFirewallCost);
+    galacticFirewallCountEl.textContent = formatNumberWithWords(
+      galacticFirewallCount
+    );
+    buyGalacticFirewallBtn.disabled = score < galacticFirewallCost;
+    buyGalacticFirewallBtn
+      .closest(".shop-item")
+      .classList.toggle("disabled", score < galacticFirewallCost);
+
+    timeServerCostEl.textContent = formatShortNumber(timeServerCost);
+    timeServerCountEl.textContent = formatNumberWithWords(timeServerCount);
+    buyTimeServerBtn.disabled = score < timeServerCost;
+    buyTimeServerBtn
+      .closest(".shop-item")
+      .classList.toggle("disabled", score < timeServerCost);
+
+    parallelVpnCostEl.textContent = formatShortNumber(parallelVpnCost);
+    parallelVpnCountEl.textContent = formatNumberWithWords(parallelVpnCount);
+    buyParallelVpnBtn.disabled = score < parallelVpnCost;
+    buyParallelVpnBtn
+      .closest(".shop-item")
+      .classList.toggle("disabled", score < parallelVpnCost);
+
+    godModeCostEl.textContent = formatShortNumber(godModeCost);
+    godModeCountEl.textContent = formatNumberWithWords(godModeCount);
+    buyGodModeBtn.disabled = score < godModeCost;
+    buyGodModeBtn
+      .closest(".shop-item")
+      .classList.toggle("disabled", score < godModeCost);
     // Schakel knoppen uit als er niet genoeg punten zijn
     buyClickerBtn.disabled = score < clickerCost;
     buyClickerBtn
@@ -1245,6 +1395,61 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function buyRainbowRouter() {
+    if (score >= rainbowRouterCost) {
+      score -= rainbowRouterCost;
+      scorePerSecond += 1000000; // +1 Miljoen
+      rainbowRouterCount++;
+      rainbowRouterCost = Math.ceil(rainbowRouterCost * 1.5);
+      updateUI();
+      checkAchievements();
+    }
+  }
+
+  function buyGalacticFirewall() {
+    if (score >= galacticFirewallCost) {
+      score -= galacticFirewallCost;
+      scorePerSecond += 5000000; // +5 Miljoen
+      galacticFirewallCount++;
+      galacticFirewallCost = Math.ceil(galacticFirewallCost * 1.5);
+      updateUI();
+      checkAchievements();
+    }
+  }
+
+  function buyTimeServer() {
+    if (score >= timeServerCost) {
+      score -= timeServerCost;
+      scorePerSecond += 25000000; // +25 Miljoen
+      timeServerCount++;
+      timeServerCost = Math.ceil(timeServerCost * 1.5);
+      updateUI();
+      checkAchievements();
+    }
+  }
+
+  function buyParallelVpn() {
+    if (score >= parallelVpnCost) {
+      score -= parallelVpnCost;
+      scorePerSecond += 150000000; // +150 Miljoen
+      parallelVpnCount++;
+      parallelVpnCost = Math.ceil(parallelVpnCost * 1.5);
+      updateUI();
+      checkAchievements();
+    }
+  }
+
+  function buyGodMode() {
+    if (score >= godModeCost) {
+      score -= godModeCost;
+      scorePerSecond += 1000000000; // +1 Biljoen
+      godModeCount++;
+      godModeCost = Math.ceil(godModeCost * 1.5);
+      updateUI();
+      checkAchievements();
+    }
+  }
+
   // De hoofd-spelloop (voor automatische punten)
   function gameLoop() {
     const packetsThisTick = scorePerSecond / 10;
@@ -1378,6 +1583,18 @@ document.addEventListener("DOMContentLoaded", () => {
       achievements,
       hasEvolved,
       hasUsedCheat,
+      // ... bestaande data
+      rainbowRouterCost,
+      rainbowRouterCount,
+      galacticFirewallCost,
+      galacticFirewallCount,
+      timeServerCost,
+      timeServerCount,
+      parallelVpnCost,
+      parallelVpnCount,
+      godModeCost,
+      godModeCount,
+      // ...
     };
     localStorage.setItem(saveKey, JSON.stringify(saveData));
     showSaveFeedback("Spel opgeslagen!");
@@ -1436,6 +1653,16 @@ document.addEventListener("DOMContentLoaded", () => {
       goldenPacketChance = data.goldenPacketChance || 0.05;
       hasEvolved = Boolean(data.hasEvolved);
       hasUsedCheat = Boolean(data.hasUsedCheat);
+      rainbowRouterCost = data.rainbowRouterCost || 2500000000;
+      rainbowRouterCount = data.rainbowRouterCount || 0;
+      galacticFirewallCost = data.galacticFirewallCost || 10000000000;
+      galacticFirewallCount = data.galacticFirewallCount || 0;
+      timeServerCost = data.timeServerCost || 50000000000;
+      timeServerCount = data.timeServerCount || 0;
+      parallelVpnCost = data.parallelVpnCost || 250000000000;
+      parallelVpnCount = data.parallelVpnCount || 0;
+      godModeCost = data.godModeCost || 1000000000000;
+      godModeCount = data.godModeCount || 0;
       if (hasEvolved) {
         applyEvolvedTheme();
       }
@@ -1499,6 +1726,20 @@ document.addEventListener("DOMContentLoaded", () => {
   buyMultiplierBtn
     .closest(".shop-item")
     .addEventListener("click", buyMultiplier);
+
+  buyRainbowRouterBtn
+    .closest(".shop-item")
+    .addEventListener("click", buyRainbowRouter);
+  buyGalacticFirewallBtn
+    .closest(".shop-item")
+    .addEventListener("click", buyGalacticFirewall);
+  buyTimeServerBtn
+    .closest(".shop-item")
+    .addEventListener("click", buyTimeServer);
+  buyParallelVpnBtn
+    .closest(".shop-item")
+    .addEventListener("click", buyParallelVpn);
+  buyGodModeBtn.closest(".shop-item").addEventListener("click", buyGodMode);
 
   // Gouden Packet
   goldenPacketEl.addEventListener("click", handleClickGoldenPacket);
