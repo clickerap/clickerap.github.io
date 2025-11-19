@@ -202,11 +202,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let multiplierCount = 0;
 
   let goldenPacketTimer = null;
+  let goldenPacketHideTimer = null; // Nieuwe timer voor het verbergen
   let goldenPacketActive = false;
   let goldenPacketClicks = 0;
   let goldenPacketTotalValue = 0;
   let goldenPacketBonusMultiplier = 1.0;
   let goldenPacketChance = 0.05; // 5% basiskans per 30s
+  let currentRunChanceBonus = 0; // Bad luck protection bonus
 
   const EVOLVE_COST = 1_000_000_000;
   const evolvedImageSrc = "Gemini_Generated_Image_jsk7ebjsk7ebjsk7.png";
@@ -240,11 +242,29 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Formatter helpers ---
   const numberFormatterCache = {};
   const magnitudeLabels = [
-    { value: 1_000_000_000_000, short: "bln", word: "biljoen" },
-    { value: 1_000_000_000, short: "mld", word: "miljard" },
-    { value: 1_000_000, short: "mlj", word: "miljoen" },
-    { value: 1_000, short: "k", word: "duizend" },
-  ];
+  // --- De Astronomische Grote Jongens ---
+  { value: 1e100, short: "googol", word: "googol" },        // 10^100
+  { value: 1e60, short: "dec", word: "deciljoen" },         // 10^60
+  { value: 1e54, short: "non", word: "noniljoen" },         // 10^54
+  { value: 1e48, short: "oct", word: "octiljoen" },         // 10^48
+  { value: 1e42, short: "sept", word: "septiljoen" },       // 10^42
+  { value: 1e36, short: "sext", word: "sextiljoen" },       // 10^36
+  
+  // --- De "Klassieke" Grote Getallen ---
+  { value: 1e33, short: "qntld", word: "quintiljard" },     // 10^33
+  { value: 1e30, short: "qntln", word: "quintiljoen" },     // 10^30
+  { value: 1e27, short: "qdrld", word: "quadriljard" },     // 10^27
+  { value: 1e24, short: "qdrln", word: "quadriljoen" },     // 10^24
+  { value: 1e21, short: "trld", word: "triljard" },         // 10^21
+  { value: 1e18, short: "trln", word: "triljoen" },         // 10^18 (Dit was jouw getal!)
+  { value: 1e15, short: "bld", word: "biljard" },           // 10^15
+  
+  // --- Je originele lijst (met syntax update) ---
+  { value: 1_000_000_000_000, short: "bln", word: "biljoen" }, // 10^12
+  { value: 1_000_000_000, short: "mld", word: "miljard" },     // 10^9
+  { value: 1_000_000, short: "mlj", word: "miljoen" },         // 10^6
+  { value: 1_000, short: "k", word: "duizend" },               // 10^3
+];
 
   function getNumberFormatter(decimals = 0) {
     if (!numberFormatterCache[decimals]) {
@@ -466,6 +486,30 @@ document.addEventListener("DOMContentLoaded", () => {
     "Geruchten over een nieuw, nog krachtiger packet circuleren...",
     "De verbinding is zo stabiel dat je er een huis op kunt bouwen.",
     "Serge is een legende in de netwerkindustrie, zijn naam klinkt overal.",
+  ];
+
+  // --- Evolved News Ticker Berichten ---
+  const evolvedNewsTickerMessages = [
+    "Serge is nu één met het universum.",
+    "Regenbogen stromen door de glasvezelkabels.",
+    "De packets hebben nu een lichtsnelheid bereikt.",
+    "Het internet is nu 100% Serge-powered.",
+    "Aliens bellen: ze willen hun bandbreedte terug.",
+    "De matrix is herschreven in regenboogkleuren.",
+    "Oneindige packets... en nog steeds niet genoeg.",
+    "Tijd en ruimte buigen voor de netwerksnelheid.",
+    "Serge heeft het einde van het internet bereikt (en het is mooi).",
+    "404 Error: Limiet niet gevonden.",
+    "De cloud is nu een regenboogwolk.",
+    "Ping: 0ms. Overal. Altijd.",
+    "Cybersecurity is nu overbodig; niemand durft Serge aan te vallen.",
+    "De servers draaien op pure kosmische energie.",
+    "Elke klik creëert een nieuw universum.",
+    "De firewall blokkeert nu ook slechte vibes.",
+    "Serge's aura verlicht het hele datacenter.",
+    "De bits en bytes dansen de tango.",
+    "Upload voltooid: Bewustzijn geüpload naar het netwerk.",
+    "Het is geen bug, het is een transcendentale feature.",
   ];
 
   // --- Achievement Systeem ---
@@ -1085,10 +1129,16 @@ document.addEventListener("DOMContentLoaded", () => {
       .closest(".shop-item")
       .classList.toggle("disabled", score < singularityCost);
 
-    buySnifferBtn.disabled = score < snifferCost;
+    buySnifferBtn.disabled = score < snifferCost || goldenPacketChance >= 0.25;
     buySnifferBtn
       .closest(".shop-item")
-      .classList.toggle("disabled", score < snifferCost);
+      .classList.toggle(
+        "disabled",
+        score < snifferCost || goldenPacketChance >= 0.25
+      );
+    if (goldenPacketChance >= 0.25) {
+        buySnifferBtn.textContent = "MAX";
+    }
 
     buyMultiplierBtn.disabled = score < multiplierCost;
     buyMultiplierBtn
@@ -1373,10 +1423,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Koop "Packet Sniffer"
   function buySniffer() {
+    if (goldenPacketChance >= 0.25) return; // Cap op 25%
+
     if (score >= snifferCost) {
       score -= snifferCost;
       snifferCount++;
       goldenPacketChance += 0.01; // Verhoog kans met 1%
+      if (goldenPacketChance > 0.25) goldenPacketChance = 0.25; // Hard cap
       snifferCost = Math.ceil(snifferCost * 1.8);
       updateUI();
       checkAchievements();
@@ -1461,8 +1514,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // News Ticker Loop
   function updateNewsTicker() {
-    const message =
-      newsTickerMessages[Math.floor(Math.random() * newsTickerMessages.length)];
+    const messages = hasEvolved ? evolvedNewsTickerMessages : newsTickerMessages;
+    const message = messages[Math.floor(Math.random() * messages.length)];
     newsTickerEl.textContent = message;
   }
 
@@ -1470,15 +1523,27 @@ document.addEventListener("DOMContentLoaded", () => {
   function startGoldenPacketTimer() {
     if (goldenPacketActive) return; // Er is er al een
 
-    const baseInterval = 30000; // 30 seconden
-    // Minimaal 15s, maximaal 60s wachttijd
-    const randomTime = Math.random() * (baseInterval * 2) + baseInterval / 2;
+    // Clear bestaande timers voor de zekerheid
+    clearTimeout(goldenPacketTimer);
+    clearTimeout(goldenPacketHideTimer);
+
+    // Minimaal 15s, maximaal 60s wachttijd (was 15-75s)
+    const minTime = 15000;
+    const maxTime = 60000;
+    const randomTime = Math.random() * (maxTime - minTime) + minTime;
 
     goldenPacketTimer = setTimeout(() => {
-      if (Math.random() < goldenPacketChance) {
-        // Kansberekening
+      // Bad Luck Protection:
+      // Effectieve kans = basiskans + bonus
+      const effectiveChance = goldenPacketChance + currentRunChanceBonus;
+
+      if (Math.random() < effectiveChance) {
+        // Succes!
         spawnGoldenPacket();
+        currentRunChanceBonus = 0; // Reset bonus
       } else {
+        // Helaas, volgende keer meer kans
+        currentRunChanceBonus += 0.005; // +0.5% per fail
         startGoldenPacketTimer(); // Probeer opnieuw
       }
     }, randomTime);
@@ -1486,6 +1551,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function spawnGoldenPacket() {
     goldenPacketActive = true;
+    clearTimeout(goldenPacketTimer); // Stop de spawn timer
 
     // Willekeurige positie binnen het venster (viewport)
     const vw = window.innerWidth;
@@ -1500,13 +1566,16 @@ document.addEventListener("DOMContentLoaded", () => {
     goldenPacketEl.classList.remove("hidden");
 
     // Verdwijnt na 8 seconden
-    setTimeout(() => {
+    clearTimeout(goldenPacketHideTimer); // Reset hide timer
+    goldenPacketHideTimer = setTimeout(() => {
       hideGoldenPacket();
     }, 8000);
   }
 
   function handleClickGoldenPacket() {
     if (!goldenPacketActive) return;
+
+    clearTimeout(goldenPacketHideTimer); // Stop de hide timer direct!
 
     // Bonus: 10 minuten (600 seconden) aan SPS + 15% van klikkracht
     const spsBonus = scorePerSecond * 600;
@@ -1532,6 +1601,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function hideGoldenPacket() {
     goldenPacketActive = false;
     goldenPacketEl.classList.add("hidden");
+    clearTimeout(goldenPacketHideTimer); // Clear timer
     startGoldenPacketTimer(); // Start de timer voor de volgende
   }
 
@@ -1781,6 +1851,5 @@ document.addEventListener("DOMContentLoaded", () => {
   updateNewsTicker(); // Roep meteen aan voor eerste bericht
   updateUI(); // Zet de initiële UI-waarden
 });
-
 
 
