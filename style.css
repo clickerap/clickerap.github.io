@@ -16,7 +16,8 @@ body.rainbow-mode {
 
 /* NIEUW: Gouden effecten in Rainbow Mode */
 body.rainbow-mode .floating-text {
-    color: #FFD700 !important; /* Goud */
+    color: #FFD700 !important;
+    /* Goud */
     text-shadow: 0 0 10px rgba(255, 215, 0, 0.8) !important;
 }
 
@@ -116,9 +117,17 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
 }
 
 @keyframes rainbowFlow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 /* Aangepaste stijlen voor het spel */
@@ -127,14 +136,18 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
 #clickable-image:active {
     transform: scale(0.95);
     filter: brightness(0.9);
-    animation: none; /* Pauzeer pulse animatie tijdens klik */
+    animation: none;
+    /* Pauzeer pulse animatie tijdens klik */
 }
 
 /* Pulse animatie voor de afbeelding */
 @keyframes pulseImage {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.03);
     }
@@ -142,10 +155,19 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
 
 /* Nieuwe animatie voor score-pop */
 @keyframes scorePop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
+
 .score-pop {
     animation: scorePop 0.15s ease-out;
 }
@@ -153,44 +175,55 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
 /* Stijl voor de zwevende "+1" tekst */
 .floating-text {
     position: absolute;
-    font-size: 2.25rem; /* 36px, groter gemaakt */
-    font-weight: 900; /* Extra vet */
-    color: #0d6a9d; /* Donker Cisco blauw */
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5); /* Lichte schaduw */
+    font-size: 2.25rem;
+    /* 36px, groter gemaakt */
+    font-weight: 900;
+    /* Extra vet */
+    color: #0d6a9d;
+    /* Donker Cisco blauw */
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    /* Lichte schaduw */
     pointer-events: none;
     user-select: none;
     opacity: 1;
     /* Nieuwe animatie */
-    transform: translate(-50%, -50%); /* Centreren op de cursor */
+    transform: translate(-50%, -50%);
+    /* Centreren op de cursor */
     animation: floatUpAndScale 1.2s ease-out forwards;
     z-index: 100;
 }
 
 /* Animatie om de tekst omhoog te laten zweven, schalen en te vervagen */
 @keyframes floatUpAndScale {
+
     /* 0%: Start klein OP de cursor (y=0) */
     0% {
         transform: translate(-50%, -50%) translateY(0) scale(0.5);
         opacity: 1;
     }
+
     /* 20%: Wordt groter, maar BLIJFT OP de cursor (y=0) */
     20% {
         transform: translate(-50%, -50%) translateY(0) scale(1.1);
         opacity: 1;
     }
+
     /* 100%: Zweeft nu pas omhoog en vervaagt */
     100% {
-        transform: translate(-50%, -50%) translateY(-70px) scale(1); /* Iets minder hoog dan -90px */
+        transform: translate(-50%, -50%) translateY(-70px) scale(1);
+        /* Iets minder hoog dan -90px */
         opacity: 0;
     }
 }
 
 /* Nieuwe Click Burst Animatie */
 .particle {
-    position: absolute; /* Veranderd naar absolute */
+    position: absolute;
+    /* Veranderd naar absolute */
     width: 10px;
     height: 10px;
-    background: #38bdf8; /* Hemelsblauw */
+    background: #38bdf8;
+    /* Hemelsblauw */
     border-radius: 50%;
     pointer-events: none;
     z-index: 99;
@@ -203,6 +236,7 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
         transform: translate(0, 0) scale(1);
         opacity: 1;
     }
+
     100% {
         transform: translate(var(--tx), var(--ty)) scale(0);
         opacity: 0;
@@ -211,42 +245,90 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
 
 /* Nieuwe animatie voor foto bij klik */
 @keyframes clickWobble {
-    0% { transform: scale(1); }
-    25% { transform: scale(0.95) rotate(-3deg); }
-    50% { transform: scale(1.05) rotate(3deg); }
-    75% { transform: scale(0.98) rotate(-1deg); }
-    100% { transform: scale(1) rotate(0); }
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(0.95) rotate(-3deg);
+    }
+
+    50% {
+        transform: scale(1.05) rotate(3deg);
+    }
+
+    75% {
+        transform: scale(0.98) rotate(-1deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(0);
+    }
 }
+
 .click-wobble {
     animation: clickWobble 0.4s ease-out;
 }
 
 /* Animatie voor panelen bij laden */
 @keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Animatie voor News Ticker */
 @keyframes fadeInOut {
-    0%, 100% { opacity: 0; }
-    10%, 90% { opacity: 1; }
+
+    0%,
+    100% {
+        opacity: 0;
+    }
+
+    10%,
+    90% {
+        opacity: 1;
+    }
 }
+
 #news-ticker {
     animation: fadeInOut 5s ease-in-out infinite;
 }
 
 /* Nieuwe animatie voor Gouden Packet */
 @keyframes goldenPulse {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(253, 249, 165, 0.7); }
-    50% { transform: scale(1.1); box-shadow: 0 0 35px rgba(253, 249, 165, 1); }
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(253, 249, 165, 0.7);
+    }
+
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 35px rgba(253, 249, 165, 1);
+    }
 }
 
 /* Nieuwe animatie voor achtergrond */
 @keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 /* Container voor de klikbare afbeelding om positionering van zwevende tekst mogelijk te maken */
@@ -255,21 +337,29 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
 }
 
 .achievement-item.locked {
-    display: none; /* Verberg tot ontgrendeld */
+    display: none;
+    /* Verberg tot ontgrendeld */
 }
+
 .achievement-item.unlocked {
-    display: flex; /* Zorg dat het getoond wordt */
+    display: flex;
+    /* Zorg dat het getoond wordt */
     /* @apply verwijderd */
 }
+
 /* Nieuw: Animatie voor ontgrendelde prestatie-iconen */
 @keyframes achievementGlow {
-    0%, 100% {
+
+    0%,
+    100% {
         filter: drop-shadow(0 0 3px rgba(34, 197, 94, 0.4));
     }
+
     50% {
         filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.8));
     }
 }
+
 .achievement-item.unlocked .text-3xl {
     animation: achievementGlow 2.5s infinite ease-in-out;
 }
@@ -280,6 +370,7 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
     transform: translateX(120%);
     opacity: 0;
 }
+
 #toast-notification.show {
     transform: translateX(0);
     opacity: 1;
@@ -289,6 +380,7 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
     position: relative;
     overflow: hidden;
 }
+
 .rainbow-card::after {
     content: "";
     position: absolute;
@@ -300,14 +392,23 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
 }
 
 @keyframes liquidSheen {
-    0% { transform: translateX(-100%) rotate(10deg); }
-    50% { transform: translateX(100%) rotate(10deg); }
-    100% { transform: translateX(100%) rotate(10deg); }
+    0% {
+        transform: translateX(-100%) rotate(10deg);
+    }
+
+    50% {
+        transform: translateX(100%) rotate(10deg);
+    }
+
+    100% {
+        transform: translateX(100%) rotate(10deg);
+    }
 }
 
 .evolve-btn {
     letter-spacing: 0.4em;
 }
+
 .evolve-btn:disabled {
     filter: grayscale(0.4);
     transform: scale(1);
@@ -321,19 +422,31 @@ body.rainbow-mode .achievement-item.unlocked .text-3xl {
 }
 
 @keyframes evolvedGlow {
-    0%, 100% { filter: hue-rotate(0deg); }
-    50% { filter: hue-rotate(45deg); }
+
+    0%,
+    100% {
+        filter: hue-rotate(0deg);
+    }
+
+    50% {
+        filter: hue-rotate(45deg);
+    }
 }
 
 /* Evolved Tier Styles */
 body.rainbow-mode .shop-item.evolved-tier {
-    background: rgba(0, 0, 0, 0.7) !important; /* Altijd donker voor contrast */
+    background: rgba(0, 0, 0, 0.7) !important;
+    /* Altijd donker voor contrast */
     border-width: 2px !important;
 }
+
 body.rainbow-mode .shop-item.evolved-tier h3 {
-    text-shadow: none !important; /* Gradient tekst heeft geen shadow nodig */
+    text-shadow: none !important;
+    /* Gradient tekst heeft geen shadow nodig */
 }
+
 body.rainbow-mode .shop-item.evolved-tier p,
 body.rainbow-mode .shop-item.evolved-tier span {
-    color: #ddd !important; /* Lichte tekst in deze specifieke zwarte blokken */
+    color: #ddd !important;
+    /* Lichte tekst in deze specifieke zwarte blokken */
 }
