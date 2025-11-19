@@ -1147,7 +1147,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Update Statistieken
     statClicksEl.textContent = formatNumberWithWords(totalManualClicks);
-    statTotalEl.textContent = formatNumberWithWords(
+    statTotalEl.textContent = formatShortNumber(
       Math.floor(totalPacketsGenerated)
     );
     const displayedPower = Math.ceil(clickPower * clickMultiplier);
