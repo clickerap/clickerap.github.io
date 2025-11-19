@@ -1,727 +1,542 @@
 <!DOCTYPE html>
 <html lang="nl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Serge Clicker</title>
-    <!-- Tailwind CSS laden -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Link naar je eigen stylesheet -->
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body
-    class="bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 text-white min-h-screen p-4 lg:p-8"
-    style="background-size: 200% 200%; animation: gradientBG 15s ease infinite"
-  >
-    <!-- Titel van het Spel -->
-    <h1
-      class="text-6xl font-black text-center text-white mb-8"
-      style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3)"
-    >
-      <span class="text-sky-300">Serge</span> Clicker
-    </h1>
 
-    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
-      <!-- Linker kolom: Spelgebied -->
-      <div
-        class="glass-block flex-1 flex flex-col items-center gap-6 bg-white/90 backdrop-blur-sm p-6 lg:p-12 rounded-2xl shadow-xl border border-gray-200 transition-all duration-300 hover:shadow-2xl text-gray-900"
-        style="animation: fadeIn 0.5s ease-out forwards"
-      >
-        <!-- Scorebord -->
-        <div class="text-center">
-          <h1 class="text-6xl font-bold" id="score">0</h1>
-          <p class="text-gray-600 text-lg mt-1">
-            <span id="sps">0</span> packets per seconde
-          </p>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Serge Clicker</title>
+  <!-- Tailwind CSS laden -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Link naar je eigen stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-        <!-- Klikbaar gebied -->
-        <div id="clickable-container">
-          <img
-            src="35616611_186097762080080_1909471807589580800_n.jpg"
-            alt="Klik op Serge!"
-            id="clickable-image"
-            class="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover cursor-pointer shadow-lg border-4 border-sky-300 transition-all duration-100 ease-in-out select-none"
-            draggable="false"
-            style="animation: pulseImage 3s infinite ease-in-out"
-          />
-        </div>
+<body class="bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 text-white min-h-screen p-4 lg:p-8"
+  style="background-size: 200% 200%; animation: gradientBG 15s ease infinite">
+  <!-- Titel van het Spel -->
+  <h1 class="text-6xl font-black text-center text-white mb-8" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3)">
+    <span class="text-sky-300">Serge</span> Clicker
+  </h1>
 
-        <!-- Foutmeldingen (voor het geval de afbeelding niet laadt) -->
-        <p id="image-error" class="text-red-500 hidden">
-          Afbeelding kon niet geladen worden. Zorg dat het bestand in dezelfde
-          map staat.
+  <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
+    <!-- Linker kolom: Spelgebied -->
+    <div
+      class="glass-block flex-1 flex flex-col items-center gap-6 bg-white/90 backdrop-blur-sm p-6 lg:p-12 rounded-2xl shadow-xl border border-gray-200 transition-all duration-300 hover:shadow-2xl text-gray-900"
+      style="animation: fadeIn 0.5s ease-out forwards">
+      <!-- Scorebord -->
+      <div class="text-center">
+        <h1 class="text-6xl font-bold" id="score">0</h1>
+        <p class="text-gray-600 text-lg mt-1">
+          <span id="sps">0</span> packets per seconde
         </p>
-
-        <!-- Nieuw: Netwerk Log (News Ticker) -->
-        <div
-          id="news-container"
-          class="w-full text-center mt-6 p-4 bg-gray-800 text-white rounded-lg shadow-inner"
-        >
-          <p class="text-sm italic" id="news-ticker">
-            Netwerk wordt geïnitialiseerd...
-          </p>
-        </div>
-
-        <!-- Nieuw: Statistieken Paneel -->
-        <div class="w-full mt-6">
-          <h3 class="text-2xl font-bold text-center mb-4">Statistieken</h3>
-          <ul
-            class="glass-panel space-y-2 bg-gray-100 p-4 rounded-lg shadow-inner"
-          >
-            <li class="flex justify-between">
-              <span class="text-gray-600">Handmatige Kliks:</span>
-              <strong id="stat-clicks" class="text-gray-900">0</strong>
-            </li>
-            <li class="flex justify-between">
-              <span class="text-gray-600">Totale Packets Ooit:</span>
-              <strong id="stat-total" class="text-gray-900">0</strong>
-            </li>
-            <li class="flex justify-between">
-              <span class="text-gray-600">Klikkracht:</span>
-              <strong id="stat-power" class="text-gray-900">1 (x1.00)</strong>
-            </li>
-            <li class="flex justify-between">
-              <span class="text-gray-600">Totaal Upgrades:</span>
-              <strong id="stat-upgrades" class="text-gray-900">0</strong>
-            </li>
-            <li class="flex justify-between">
-              <span class="text-gray-600">Gouden Packets Geklikt:</span>
-              <strong id="stat-golden-clicks" class="text-gray-900">0</strong>
-            </li>
-            <li class="flex justify-between">
-              <span class="text-gray-600">Opbrengst Gouden Packets:</span>
-              <strong id="stat-golden-value" class="text-gray-900">0</strong>
-            </li>
-          </ul>
-
-          <!-- Evolutiekaart -->
-          <div id="evolve-panel" class="hidden mt-6">
-            <div
-              class="rainbow-card rounded-3xl border border-amber-200/60 bg-white/5 p-6 text-center text-white shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-xl"
-            >
-              <p
-                class="text-xs font-semibold uppercase tracking-[0.4em] text-amber-200/80"
-              >
-                Transcendent Upgrade
-              </p>
-              <h4 class="mt-2 text-3xl font-black drop-shadow-lg">
-                Evolve Serge
-              </h4>
-              <p class="mt-2 text-sm text-white/80">
-                Ontketen het regenboogtijdperk met ongeëvenaarde visuals en
-                prestige.
-              </p>
-              <button
-                id="evolve-btn"
-                class="evolve-btn mt-4 w-full rounded-2xl border-2 border-white/40 bg-gradient-to-br from-amber-400 via-yellow-400 to-rose-500 px-6 py-4 text-lg font-bold uppercase tracking-widest text-white shadow-[0_12px_40px_rgba(252,211,77,0.55)] transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-[0_20px_55px_rgba(251,191,36,0.8)] focus:outline-none focus:ring-4 focus:ring-amber-200 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                🌈 Evolve Serge • Kost:
-                <span id="evolve-cost" class="font-black">1 mld</span> packets
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
 
-      <!-- Rechter kolom: Winkel & Achievements -->
-      <div
-        class="glass-block w-full lg:w-1/2 xl:w-1/3 bg-white/90 backdrop-blur-sm p-6 lg:p-8 rounded-2xl shadow-xl border border-gray-200 transition-all duration-300 hover:shadow-2xl text-gray-900"
-        style="animation: fadeIn 0.5s 0.2s ease-out forwards; opacity: 0"
-      >
-        <!-- Nieuw: Save/Load Knoppen -->
-        <div
-          id="save-controls"
-          class="mb-6 pb-6 border-b border-gray-200 flex gap-2 justify-center"
-        >
-          <button
-            id="save-btn"
-            class="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-gray-700 hover:scale-105"
-          >
-            Opslaan
-          </button>
-          <button
-            id="load-btn"
-            class="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-gray-700 hover:scale-105"
-          >
-            Laden
-          </button>
-          <button
-            id="reset-btn"
-            class="px-4 py-2 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out bg-red-600 hover:bg-red-700 hover:scale-105"
-          >
-            Reset
-          </button>
-        </div>
-        <p
-          id="save-feedback"
-          class="text-center text-sm text-green-600 mb-4 h-5"
-        ></p>
-
-        <!-- Cheat commando's -->
-        <div id="cheat-controls" class="hidden mb-6 flex flex-col gap-2">
-          <label
-            for="cheat-input"
-            class="text-sm font-semibold text-center text-gray-600 uppercase tracking-wide"
-            >Cheat commando</label
-          >
-          <div class="flex flex-col sm:flex-row gap-2">
-            <input
-              id="cheat-input"
-              type="text"
-              placeholder="bijv. add 100000"
-              class="flex-1 px-3 py-2 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-400"
-            />
-            <button
-              id="cheat-btn"
-              class="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-purple-700 hover:scale-105"
-            >
-              Voer uit
-            </button>
-          </div>
-          <p
-            id="cheat-feedback"
-            class="text-center text-sm h-5 text-gray-500"
-          ></p>
-        </div>
-
-        <h2
-          class="text-3xl font-bold mb-6 text-center border-b border-gray-200 pb-4"
-        >
-          Winkel
-        </h2>
-
-        <div class="space-y-4 h-[400px] overflow-y-auto pr-2">
-          <!-- Upgrade 1: Snellere CPU (25) -->
-          <div
-            class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">⚙️ Snellere CPU</h3>
-              <span class="text-lg font-bold text-sky-700" id="clicker-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Verhoogt het *basis* aantal packets per klik met +1.
-            </p>
-            <button
-              id="buy-clicker"
-              class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none"
-            >
-              Koop voor <span id="clicker-cost">25</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 2: Netwerk Switch (50) -->
-          <div
-            class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">🔄 Netwerk Switch</h3>
-              <span
-                class="text-lg font-bold text-sky-700"
-                id="auto-clicker-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Genereert automatisch +1 packet per seconde.
-            </p>
-            <button
-              id="buy-auto-clicker"
-              class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none"
-            >
-              Koop voor <span id="auto-clicker-cost">50</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 3: Core Router (500) -->
-          <div
-            class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">🌍 Core Router</h3>
-              <span
-                class="text-lg font-bold text-sky-700"
-                id="super-clicker-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Genereert automatisch +5 packets per seconde.
-            </p>
-            <button
-              id="buy-super-clicker"
-              class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none"
-            >
-              Koop voor <span id="super-clicker-cost">500</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 4: Geoptimaliseerde Code (1000) -->
-          <div
-            class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">💻 Geoptimaliseerde Code</h3>
-              <span class="text-lg font-bold text-sky-700" id="code-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Verhoogt je *totale* klikwaarde met 5% (multiplicatief).
-            </p>
-            <button
-              id="buy-code"
-              class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none"
-            >
-              Koop voor <span id="code-cost">1000</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 5: Glasvezel Backbone (8000) -->
-          <div
-            class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">✨ Glasvezel Backbone</h3>
-              <span class="text-lg font-bold text-sky-700" id="fiber-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Genereert automatisch +50 packets per seconde.
-            </p>
-            <button
-              id="buy-fiber"
-              class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none"
-            >
-              Koop voor <span id="fiber-cost">8000</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 6: Intuïtieve GUI (50k) -->
-          <div
-            class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">🖱️ Intuïtieve GUI</h3>
-              <span class="text-lg font-bold text-sky-700" id="gui-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Verhoogt je *basis* klikkracht permanent met +10.
-            </p>
-            <button
-              id="buy-gui"
-              class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none"
-            >
-              Koop voor <span id="gui-cost">50000</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 7: Datacenter (100k) -->
-          <div
-            class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">🏢 Datacenter</h3>
-              <span class="text-lg font-bold text-sky-700" id="datacenter-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Genereert automatisch +250 packets per seconde.
-            </p>
-            <button
-              id="buy-datacenter"
-              class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none"
-            >
-              Koop voor <span id="datacenter-cost">100000</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 8: Packet Sniffer (500k) -->
-          <div
-            class="shop-item select-none bg-yellow-50 p-4 rounded-lg shadow-inner border border-yellow-200 transition-all duration-200 hover:shadow-md hover:bg-yellow-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">👃 Packet Sniffer</h3>
-              <span class="text-lg font-bold text-yellow-700" id="sniffer-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Verhoogt de kans op een 'Gouden Packet' met 1%.
-            </p>
-            <button
-              id="buy-sniffer"
-              class="w-full px-4 py-3 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 bg-yellow-500 hover:bg-yellow-600 hover:shadow-lg hover:scale-105 pointer-events-none"
-            >
-              Koop voor <span id="sniffer-cost">500000</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 9: Serge's Brein (1M) -->
-          <div
-            class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">🧠 Serge's Brein</h3>
-              <span class="text-lg font-bold text-sky-700" id="brain-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Genereert automatisch +1.000 packets per seconde.
-            </p>
-            <button
-              id="buy-brain"
-              class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none"
-            >
-              Koop voor <span id="brain-cost">1000000</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 11: Gouden Multiplier (2M) -->
-          <div
-            class="shop-item select-none bg-yellow-50 p-4 rounded-lg shadow-inner border border-yellow-200 transition-all duration-200 hover:shadow-md hover:bg-yellow-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">✨ Gouden Multiplier</h3>
-              <span
-                class="text-lg font-bold text-yellow-700"
-                id="multiplier-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Verhoogt de bonus van 'Gouden Packets' met 10%.
-            </p>
-            <button
-              id="buy-multiplier"
-              class="w-full px-4 py-3 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 bg-yellow-500 hover:bg-yellow-600 hover:shadow-lg hover:scale-105 pointer-events-none"
-            >
-              Koop voor <span id="multiplier-cost">2000000</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 12: Proxmox Cluster (5M) -->
-          <div
-            class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">🖥️ Proxmox Cluster</h3>
-              <span class="text-lg font-bold text-sky-700" id="proxmox-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Genereert automatisch +5.000 packets per seconde.
-            </p>
-            <button
-              id="buy-proxmox"
-              class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none"
-            >
-              Koop voor <span id="proxmox-cost">5000000</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 10: Active Directory (1.5M) -->
-          <div
-            class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">📂 Active Directory</h3>
-              <span class="text-lg font-bold text-sky-700" id="ad-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Authenticeert automatisch +7.500 packets per seconde.
-            </p>
-            <button
-              id="buy-ad"
-              class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none"
-            >
-              Koop voor <span id="ad-cost">800000</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 13: Quantum Link (12M) -->
-          <div
-            class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">🌌 Quantum Link</h3>
-              <span class="text-lg font-bold text-sky-700" id="quantum-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Genereert automatisch +10.000 packets per seconde.
-            </p>
-            <button
-              id="buy-quantum"
-              class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none"
-            >
-              Koop voor <span id="quantum-cost">12000000</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 14: Hyper-V Farm (20M) -->
-          <div
-            class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">🪟 Hyper-V Farm</h3>
-              <span class="text-lg font-bold text-sky-700" id="hyperv-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Genereert automatisch +15.000 packets per seconde.
-            </p>
-            <button
-              id="buy-hyperv"
-              class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none"
-            >
-              Koop voor <span id="hyperv-cost">20000000</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 15: AI Netwerk Admin (75M) -->
-          <div
-            class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">🤖 AI Netwerk Admin</h3>
-              <span class="text-lg font-bold text-sky-700" id="ai-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Genereert automatisch +50.000 packets per seconde.
-            </p>
-            <button
-              id="buy-ai"
-              class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none"
-            >
-              Koop voor <span id="ai-cost">75000000</span> packets
-            </button>
-          </div>
-
-          <!-- Upgrade 16: The Singularity (500M) -->
-          <div
-            class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <h3 class="text-xl font-semibold">🌀 The Singularity</h3>
-              <span
-                class="text-lg font-bold text-sky-700"
-                id="singularity-count"
-                >0</span
-              >
-            </div>
-            <p class="text-sm text-gray-700 mb-3">
-              Genereert automatisch +250.000 packets per seconde.
-            </p>
-            <button
-              id="buy-singularity"
-              class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none"
-            >
-              Koop voor <span id="singularity-cost">500000000</span> packets
-            </button>
-          </div>
-
-          <!-- --- EVOLVED SHOP ITEMS (Standaard verborgen) --- -->
-          <div
-            id="evolved-items-wrapper"
-            class="hidden mt-6 border-t-2 border-yellow-400 pt-4 relative"
-          >
-            <!-- Label voor deze sectie -->
-            <div
-              class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg"
-            >
-              Evolved Tech
-            </div>
-
-            <!-- Item 1: Regenboog Router (2.5 Miljard) -->
-            <div
-              class="shop-item evolved-tier select-none bg-gray-900/80 p-4 rounded-lg mb-4 border border-yellow-400/50 transition-all hover:scale-[1.02] cursor-pointer"
-            >
-              <div class="flex justify-between items-center mb-2">
-                <h3
-                  class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
-                >
-                  🌈 Regenboog Router
-                </h3>
-                <span
-                  class="text-lg font-bold text-white"
-                  id="rainbow-router-count"
-                  >0</span
-                >
-              </div>
-              <p class="text-sm text-gray-300 mb-3">
-                Stuurt packets door alle kleuren van het spectrum. (+1M PPS)
-              </p>
-              <button
-                id="buy-rainbow-router"
-                class="w-full px-4 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold rounded-lg shadow-lg disabled:opacity-50 pointer-events-none"
-              >
-                Koop voor
-                <span id="rainbow-router-cost">2500000000</span>
-              </button>
-            </div>
-
-            <!-- Item 2: Galactische Firewall (10 Miljard) -->
-            <div
-              class="shop-item evolved-tier select-none bg-gray-900/80 p-4 rounded-lg mb-4 border border-purple-400/50 transition-all hover:scale-[1.02] cursor-pointer"
-            >
-              <div class="flex justify-between items-center mb-2">
-                <h3
-                  class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400"
-                >
-                  🪐 Galactische Firewall
-                </h3>
-                <span
-                  class="text-lg font-bold text-white"
-                  id="galactic-firewall-count"
-                  >0</span
-                >
-              </div>
-              <p class="text-sm text-gray-300 mb-3">
-                Blokkeert aliens, laat packets door. (+5M PPS)
-              </p>
-              <button
-                id="buy-galactic-firewall"
-                class="w-full px-4 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-bold rounded-lg shadow-lg disabled:opacity-50 pointer-events-none"
-              >
-                Koop voor
-                <span id="galactic-firewall-cost">10000000000</span>
-              </button>
-            </div>
-
-            <!-- Item 3: Tijd Reizende Server (50 Miljard) -->
-            <div
-              class="shop-item evolved-tier select-none bg-gray-900/80 p-4 rounded-lg mb-4 border border-green-400/50 transition-all hover:scale-[1.02] cursor-pointer"
-            >
-              <div class="flex justify-between items-center mb-2">
-                <h3
-                  class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600"
-                >
-                  ⏳ Tijd Reizende Server
-                </h3>
-                <span
-                  class="text-lg font-bold text-white"
-                  id="time-server-count"
-                  >0</span
-                >
-              </div>
-              <p class="text-sm text-gray-300 mb-3">
-                Verstuurt packets voordat je klikt. (+25M PPS)
-              </p>
-              <button
-                id="buy-time-server"
-                class="w-full px-4 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold rounded-lg shadow-lg disabled:opacity-50 pointer-events-none"
-              >
-                Koop voor
-                <span id="time-server-cost">50000000000</span>
-              </button>
-            </div>
-
-            <!-- Item 4: Parallel Universum VPN (250 Miljard) -->
-            <div
-              class="shop-item evolved-tier select-none bg-gray-900/80 p-4 rounded-lg mb-4 border border-red-500/50 transition-all hover:scale-[1.02] cursor-pointer"
-            >
-              <div class="flex justify-between items-center mb-2">
-                <h3
-                  class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500"
-                >
-                  🌌 Parallel VPN
-                </h3>
-                <span
-                  class="text-lg font-bold text-white"
-                  id="parallel-vpn-count"
-                  >0</span
-                >
-              </div>
-              <p class="text-sm text-gray-300 mb-3">
-                Downloadt het internet van een andere dimensie. (+150M PPS)
-              </p>
-              <button
-                id="buy-parallel-vpn"
-                class="w-full px-4 py-3 bg-gradient-to-r from-red-600 to-orange-600 text-white font-bold rounded-lg shadow-lg disabled:opacity-50 pointer-events-none"
-              >
-                Koop voor
-                <span id="parallel-vpn-cost">250000000000</span>
-              </button>
-            </div>
-
-            <!-- Item 5: God Mode Terminal (1 Biljoen) -->
-            <div
-              class="shop-item evolved-tier select-none bg-gray-900/80 p-4 rounded-lg mb-4 border border-yellow-200 transition-all hover:scale-[1.02] cursor-pointer shadow-[0_0_15px_rgba(255,215,0,0.3)]"
-            >
-              <div class="flex justify-between items-center mb-2">
-                <h3 class="text-xl font-bold text-yellow-300">
-                  ⚡ God Mode Terminal
-                </h3>
-                <span class="text-lg font-bold text-white" id="god-mode-count"
-                  >0</span
-                >
-              </div>
-              <p class="text-sm text-gray-300 mb-3">
-                sudo make_me_rich. (+1 Miljard PPS)
-              </p>
-              <button
-                id="buy-god-mode"
-                class="w-full px-4 py-3 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 text-white font-bold rounded-lg shadow-lg disabled:opacity-50 pointer-events-none"
-              >
-                Koop voor
-                <span id="god-mode-cost">1000000000000</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Achievements Sectie -->
-        <h2
-          class="text-3xl font-bold mt-10 mb-6 text-center border-b border-gray-200 pb-4"
-        >
-          Prestaties
-        </h2>
-        <div
-          id="achievements-container"
-          class="space-y-3 h-[250px] overflow-y-auto pr-2"
-        >
-          <!-- Achievements worden hier door JS ingevoegd -->
-        </div>
+      <!-- Klikbaar gebied -->
+      <div id="clickable-container">
+        <img src="35616611_186097762080080_1909471807589580800_n.jpg" alt="Klik op Serge!" id="clickable-image"
+          class="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover cursor-pointer shadow-lg border-4 border-sky-300 transition-all duration-100 ease-in-out select-none"
+          draggable="false" style="animation: pulseImage 3s infinite ease-in-out" />
       </div>
-    </div>
 
-    <!-- Nieuw: Gouden Packet -->
-    <div
-      id="golden-packet"
-      class="hidden fixed w-16 h-16 bg-yellow-300 rounded-full cursor-pointer shadow-2xl border-4 border-white z-[200] flex items-center justify-center"
-      style="animation: goldenPulse 2s infinite"
-    >
-      <span class="text-3xl">📦</span>
-    </div>
-
-    <!-- Toast Notificatie HTML (verborgen) -->
-    <div
-      id="toast-notification"
-      class="fixed bottom-10 right-10 bg-green-500 text-white p-4 rounded-lg shadow-xl transition-all duration-500 ease-out z-50"
-    >
-      <h4 id="toast-title" class="font-bold text-lg">Prestatie ontgrendeld!</h4>
-      <p id="toast-description" class="text-sm">
-        Je hebt iets geweldigs gedaan.
+      <!-- Foutmeldingen (voor het geval de afbeelding niet laadt) -->
+      <p id="image-error" class="text-red-500 hidden">
+        Afbeelding kon niet geladen worden. Zorg dat het bestand in dezelfde
+        map staat.
       </p>
+
+      <!-- Nieuw: Netwerk Log (News Ticker) -->
+      <div id="news-container" class="w-full text-center mt-6 p-4 bg-gray-800 text-white rounded-lg shadow-inner">
+        <p class="text-sm italic" id="news-ticker">
+          Netwerk wordt geïnitialiseerd...
+        </p>
+      </div>
+
+      <!-- Nieuw: Statistieken Paneel -->
+      <div class="w-full mt-6">
+        <h3 class="text-2xl font-bold text-center mb-4">Statistieken</h3>
+        <ul class="glass-panel space-y-2 bg-gray-100 p-4 rounded-lg shadow-inner">
+          <li class="flex justify-between">
+            <span class="text-gray-600">Handmatige Kliks:</span>
+            <strong id="stat-clicks" class="text-gray-900">0</strong>
+          </li>
+          <li class="flex justify-between">
+            <span class="text-gray-600">Totale Packets Ooit:</span>
+            <strong id="stat-total" class="text-gray-900">0</strong>
+          </li>
+          <li class="flex justify-between">
+            <span class="text-gray-600">Klikkracht:</span>
+            <strong id="stat-power" class="text-gray-900">1 (x1.00)</strong>
+          </li>
+          <li class="flex justify-between">
+            <span class="text-gray-600">Totaal Upgrades:</span>
+            <strong id="stat-upgrades" class="text-gray-900">0</strong>
+          </li>
+          <li class="flex justify-between">
+            <span class="text-gray-600">Gouden Packets Geklikt:</span>
+            <strong id="stat-golden-clicks" class="text-gray-900">0</strong>
+          </li>
+          <li class="flex justify-between">
+            <span class="text-gray-600">Opbrengst Gouden Packets:</span>
+            <strong id="stat-golden-value" class="text-gray-900">0</strong>
+          </li>
+        </ul>
+
+        <!-- Evolutiekaart -->
+        <div id="evolve-panel" class="hidden mt-6">
+          <div
+            class="rainbow-card rounded-3xl border border-amber-200/60 bg-white/5 p-6 text-center text-white shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-xl">
+            <p class="text-xs font-semibold uppercase tracking-[0.4em] text-amber-200/80">
+              Transcendent Upgrade
+            </p>
+            <h4 class="mt-2 text-3xl font-black drop-shadow-lg">
+              Evolve Serge
+            </h4>
+            <p class="mt-2 text-sm text-white/80">
+              Ontketen het regenboogtijdperk met ongeëvenaarde visuals en
+              prestige.
+            </p>
+            <button id="evolve-btn"
+              class="evolve-btn mt-4 w-full rounded-2xl border-2 border-white/40 bg-gradient-to-br from-amber-400 via-yellow-400 to-rose-500 px-6 py-4 text-lg font-bold uppercase tracking-widest text-white shadow-[0_12px_40px_rgba(252,211,77,0.55)] transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-[0_20px_55px_rgba(251,191,36,0.8)] focus:outline-none focus:ring-4 focus:ring-amber-200 disabled:cursor-not-allowed disabled:opacity-40">
+              🌈 Evolve Serge • Kost:
+              <span id="evolve-cost" class="font-black">1 mld</span> packets
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Link naar je eigen JavaScript-bestand -->
-    <script src="script.js" defer></script>
-  </body>
+    <!-- Rechter kolom: Winkel & Achievements -->
+    <div
+      class="glass-block w-full lg:w-1/2 xl:w-1/3 bg-white/90 backdrop-blur-sm p-6 lg:p-8 rounded-2xl shadow-xl border border-gray-200 transition-all duration-300 hover:shadow-2xl text-gray-900"
+      style="animation: fadeIn 0.5s 0.2s ease-out forwards; opacity: 0">
+      <!-- Nieuw: Save/Load Knoppen -->
+      <div id="save-controls" class="mb-6 pb-6 border-b border-gray-200 flex gap-2 justify-center">
+        <button id="save-btn"
+          class="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-gray-700 hover:scale-105">
+          Opslaan
+        </button>
+        <button id="load-btn"
+          class="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-gray-700 hover:scale-105">
+          Laden
+        </button>
+        <button id="reset-btn"
+          class="px-4 py-2 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out bg-red-600 hover:bg-red-700 hover:scale-105">
+          Reset
+        </button>
+      </div>
+      <p id="save-feedback" class="text-center text-sm text-green-600 mb-4 h-5"></p>
+
+      <!-- Cheat commando's -->
+      <div id="cheat-controls" class="hidden mb-6 flex flex-col gap-2">
+        <label for="cheat-input" class="text-sm font-semibold text-center text-gray-600 uppercase tracking-wide">Cheat
+          commando</label>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <input id="cheat-input" type="text" placeholder="bijv. add 100000"
+            class="flex-1 px-3 py-2 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-400" />
+          <button id="cheat-btn"
+            class="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-purple-700 hover:scale-105">
+            Voer uit
+          </button>
+        </div>
+        <p id="cheat-feedback" class="text-center text-sm h-5 text-gray-500"></p>
+      </div>
+
+      <h2 class="text-3xl font-bold mb-6 text-center border-b border-gray-200 pb-4">
+        Winkel
+      </h2>
+
+      <div class="space-y-4 h-[400px] overflow-y-auto pr-2">
+        <!-- Upgrade 1: Snellere CPU (25) -->
+        <div
+          class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">⚙️ Snellere CPU</h3>
+            <span class="text-lg font-bold text-sky-700" id="clicker-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Verhoogt het *basis* aantal packets per klik met +1.
+          </p>
+          <button id="buy-clicker"
+            class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none">
+            Koop voor <span id="clicker-cost">25</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 2: Netwerk Switch (50) -->
+        <div
+          class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">🔄 Netwerk Switch</h3>
+            <span class="text-lg font-bold text-sky-700" id="auto-clicker-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Genereert automatisch +1 packet per seconde.
+          </p>
+          <button id="buy-auto-clicker"
+            class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none">
+            Koop voor <span id="auto-clicker-cost">50</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 3: Core Router (500) -->
+        <div
+          class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">🌍 Core Router</h3>
+            <span class="text-lg font-bold text-sky-700" id="super-clicker-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Genereert automatisch +5 packets per seconde.
+          </p>
+          <button id="buy-super-clicker"
+            class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none">
+            Koop voor <span id="super-clicker-cost">500</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 4: Geoptimaliseerde Code (1000) -->
+        <div
+          class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">💻 Geoptimaliseerde Code</h3>
+            <span class="text-lg font-bold text-sky-700" id="code-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Verhoogt je *totale* klikwaarde met 5% (multiplicatief).
+          </p>
+          <button id="buy-code"
+            class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none">
+            Koop voor <span id="code-cost">1000</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 5: Glasvezel Backbone (8000) -->
+        <div
+          class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">✨ Glasvezel Backbone</h3>
+            <span class="text-lg font-bold text-sky-700" id="fiber-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Genereert automatisch +50 packets per seconde.
+          </p>
+          <button id="buy-fiber"
+            class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none">
+            Koop voor <span id="fiber-cost">8000</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 6: Intuïtieve GUI (50k) -->
+        <div
+          class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">🖱️ Intuïtieve GUI</h3>
+            <span class="text-lg font-bold text-sky-700" id="gui-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Verhoogt je *basis* klikkracht permanent met +10.
+          </p>
+          <button id="buy-gui"
+            class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none">
+            Koop voor <span id="gui-cost">50000</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 7: Datacenter (100k) -->
+        <div
+          class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">🏢 Datacenter</h3>
+            <span class="text-lg font-bold text-sky-700" id="datacenter-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Genereert automatisch +250 packets per seconde.
+          </p>
+          <button id="buy-datacenter"
+            class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none">
+            Koop voor <span id="datacenter-cost">100000</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 8: Packet Sniffer (500k) -->
+        <div
+          class="shop-item select-none bg-yellow-50 p-4 rounded-lg shadow-inner border border-yellow-200 transition-all duration-200 hover:shadow-md hover:bg-yellow-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">👃 Packet Sniffer</h3>
+            <span class="text-lg font-bold text-yellow-700" id="sniffer-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Verhoogt de kans op een 'Gouden Packet' met 1%.
+          </p>
+          <button id="buy-sniffer"
+            class="w-full px-4 py-3 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 bg-yellow-500 hover:bg-yellow-600 hover:shadow-lg hover:scale-105 pointer-events-none">
+            Koop voor <span id="sniffer-cost">500000</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 9: Serge's Brein (1M) -->
+        <div
+          class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">🧠 Serge's Brein</h3>
+            <span class="text-lg font-bold text-sky-700" id="brain-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Genereert automatisch +1.000 packets per seconde.
+          </p>
+          <button id="buy-brain"
+            class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none">
+            Koop voor <span id="brain-cost">1000000</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 11: Gouden Multiplier (2M) -->
+        <div
+          class="shop-item select-none bg-yellow-50 p-4 rounded-lg shadow-inner border border-yellow-200 transition-all duration-200 hover:shadow-md hover:bg-yellow-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">✨ Gouden Multiplier</h3>
+            <span class="text-lg font-bold text-yellow-700" id="multiplier-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Verhoogt de bonus van 'Gouden Packets' met 10%.
+          </p>
+          <button id="buy-multiplier"
+            class="w-full px-4 py-3 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 bg-yellow-500 hover:bg-yellow-600 hover:shadow-lg hover:scale-105 pointer-events-none">
+            Koop voor <span id="multiplier-cost">2000000</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 12: Proxmox Cluster (5M) -->
+        <div
+          class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">🖥️ Proxmox Cluster</h3>
+            <span class="text-lg font-bold text-sky-700" id="proxmox-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Genereert automatisch +5.000 packets per seconde.
+          </p>
+          <button id="buy-proxmox"
+            class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none">
+            Koop voor <span id="proxmox-cost">5000000</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 10: Active Directory (1.5M) -->
+        <div
+          class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">📂 Active Directory</h3>
+            <span class="text-lg font-bold text-sky-700" id="ad-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Authenticeert automatisch +7.500 packets per seconde.
+          </p>
+          <button id="buy-ad"
+            class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none">
+            Koop voor <span id="ad-cost">800000</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 13: Quantum Link (12M) -->
+        <div
+          class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">🌌 Quantum Link</h3>
+            <span class="text-lg font-bold text-sky-700" id="quantum-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Genereert automatisch +10.000 packets per seconde.
+          </p>
+          <button id="buy-quantum"
+            class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none">
+            Koop voor <span id="quantum-cost">12000000</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 14: Hyper-V Farm (20M) -->
+        <div
+          class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">🪟 Hyper-V Farm</h3>
+            <span class="text-lg font-bold text-sky-700" id="hyperv-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Genereert automatisch +15.000 packets per seconde.
+          </p>
+          <button id="buy-hyperv"
+            class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none">
+            Koop voor <span id="hyperv-cost">20000000</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 15: AI Netwerk Admin (75M) -->
+        <div
+          class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">🤖 AI Netwerk Admin</h3>
+            <span class="text-lg font-bold text-sky-700" id="ai-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Genereert automatisch +50.000 packets per seconde.
+          </p>
+          <button id="buy-ai"
+            class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none">
+            Koop voor <span id="ai-cost">75000000</span> packets
+          </button>
+        </div>
+
+        <!-- Upgrade 16: The Singularity (500M) -->
+        <div
+          class="shop-item select-none bg-sky-50 p-4 rounded-lg shadow-inner border border-sky-200 transition-all duration-200 hover:shadow-md hover:bg-sky-100 hover:translate-x-1 cursor-pointer">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold">🌀 The Singularity</h3>
+            <span class="text-lg font-bold text-sky-700" id="singularity-count">0</span>
+          </div>
+          <p class="text-sm text-gray-700 mb-3">
+            Genereert automatisch +250.000 packets per seconde.
+          </p>
+          <button id="buy-singularity"
+            class="w-full px-4 py-3 bg-sky-600 text-white font-semibold rounded-lg shadow-md transition-all duration-200 ease-in-out hover:bg-sky-700 hover:shadow-lg hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70 disabled:shadow-none disabled:scale-100 pointer-events-none">
+            Koop voor <span id="singularity-cost">500000000</span> packets
+          </button>
+        </div>
+
+        <!-- --- EVOLVED SHOP ITEMS (Standaard verborgen) --- -->
+        <div id="evolved-items-wrapper" class="hidden mt-6 border-t-2 border-yellow-400 pt-4 relative">
+          <!-- Label voor deze sectie -->
+          <div
+            class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">
+            Evolved Tech
+          </div>
+
+          <!-- Item 1: Regenboog Router (2.5 Miljard) -->
+          <div
+            class="shop-item evolved-tier select-none bg-gray-900/80 p-4 rounded-lg mb-4 border border-yellow-400/50 transition-all hover:scale-[1.02] cursor-pointer">
+            <div class="flex justify-between items-center mb-2">
+              <h3
+                class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500">
+                🌈 Regenboog Router
+              </h3>
+              <span class="text-lg font-bold text-white" id="rainbow-router-count">0</span>
+            </div>
+            <p class="text-sm text-gray-300 mb-3">
+              Stuurt packets door alle kleuren van het spectrum. (+1M PPS)
+            </p>
+            <button id="buy-rainbow-router"
+              class="w-full px-4 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold rounded-lg shadow-lg disabled:opacity-50 pointer-events-none">
+              Koop voor
+              <span id="rainbow-router-cost">2500000000</span>
+            </button>
+          </div>
+
+          <!-- Item 2: Galactische Firewall (10 Miljard) -->
+          <div
+            class="shop-item evolved-tier select-none bg-gray-900/80 p-4 rounded-lg mb-4 border border-purple-400/50 transition-all hover:scale-[1.02] cursor-pointer">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
+                🪐 Galactische Firewall
+              </h3>
+              <span class="text-lg font-bold text-white" id="galactic-firewall-count">0</span>
+            </div>
+            <p class="text-sm text-gray-300 mb-3">
+              Blokkeert aliens, laat packets door. (+5M PPS)
+            </p>
+            <button id="buy-galactic-firewall"
+              class="w-full px-4 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-bold rounded-lg shadow-lg disabled:opacity-50 pointer-events-none">
+              Koop voor
+              <span id="galactic-firewall-cost">10000000000</span>
+            </button>
+          </div>
+
+          <!-- Item 3: Tijd Reizende Server (50 Miljard) -->
+          <div
+            class="shop-item evolved-tier select-none bg-gray-900/80 p-4 rounded-lg mb-4 border border-green-400/50 transition-all hover:scale-[1.02] cursor-pointer">
+            <div class="flex justify-between items-center mb-2">
+              <h3
+                class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">
+                ⏳ Tijd Reizende Server
+              </h3>
+              <span class="text-lg font-bold text-white" id="time-server-count">0</span>
+            </div>
+            <p class="text-sm text-gray-300 mb-3">
+              Verstuurt packets voordat je klikt. (+25M PPS)
+            </p>
+            <button id="buy-time-server"
+              class="w-full px-4 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold rounded-lg shadow-lg disabled:opacity-50 pointer-events-none">
+              Koop voor
+              <span id="time-server-cost">50000000000</span>
+            </button>
+          </div>
+
+          <!-- Item 4: Parallel Universum VPN (250 Miljard) -->
+          <div
+            class="shop-item evolved-tier select-none bg-gray-900/80 p-4 rounded-lg mb-4 border border-red-500/50 transition-all hover:scale-[1.02] cursor-pointer">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
+                🌌 Parallel VPN
+              </h3>
+              <span class="text-lg font-bold text-white" id="parallel-vpn-count">0</span>
+            </div>
+            <p class="text-sm text-gray-300 mb-3">
+              Downloadt het internet van een andere dimensie. (+150M PPS)
+            </p>
+            <button id="buy-parallel-vpn"
+              class="w-full px-4 py-3 bg-gradient-to-r from-red-600 to-orange-600 text-white font-bold rounded-lg shadow-lg disabled:opacity-50 pointer-events-none">
+              Koop voor
+              <span id="parallel-vpn-cost">250000000000</span>
+            </button>
+          </div>
+
+          <!-- Item 5: God Mode Terminal (1 Biljoen) -->
+          <div
+            class="shop-item evolved-tier select-none bg-gray-900/80 p-4 rounded-lg mb-4 border border-yellow-200 transition-all hover:scale-[1.02] cursor-pointer shadow-[0_0_15px_rgba(255,215,0,0.3)]">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="text-xl font-bold text-yellow-300">
+                ⚡ God Mode Terminal
+              </h3>
+              <span class="text-lg font-bold text-white" id="god-mode-count">0</span>
+            </div>
+            <p class="text-sm text-gray-300 mb-3">
+              sudo make_me_rich. (+1 Miljard PPS)
+            </p>
+            <button id="buy-god-mode"
+              class="w-full px-4 py-3 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 text-white font-bold rounded-lg shadow-lg disabled:opacity-50 pointer-events-none">
+              Koop voor
+              <span id="god-mode-cost">1000000000000</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Achievements Sectie -->
+      <h2 class="text-3xl font-bold mt-10 mb-6 text-center border-b border-gray-200 pb-4">
+        Prestaties
+      </h2>
+      <div id="achievements-container" class="space-y-3 h-[250px] overflow-y-auto pr-2">
+        <!-- Achievements worden hier door JS ingevoegd -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Nieuw: Gouden Packet -->
+  <div id="golden-packet"
+    class="hidden fixed w-16 h-16 bg-yellow-300 rounded-full cursor-pointer shadow-2xl border-4 border-white z-[200] flex items-center justify-center"
+    style="animation: goldenPulse 2s infinite">
+    <span class="text-3xl">📦</span>
+  </div>
+
+  <!-- Toast Notificatie HTML (verborgen) -->
+  <div id="toast-notification"
+    class="fixed bottom-10 right-10 bg-green-500 text-white p-4 rounded-lg shadow-xl transition-all duration-500 ease-out z-50">
+    <h4 id="toast-title" class="font-bold text-lg">Prestatie ontgrendeld!</h4>
+    <p id="toast-description" class="text-sm">
+      Je hebt iets geweldigs gedaan.
+    </p>
+  </div>
+
+  <!-- Link naar je eigen JavaScript-bestand -->
+  <script src="script.js" defer></script>
+</body>
+
 </html>
