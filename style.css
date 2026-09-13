@@ -176,8 +176,84 @@ button { font: inherit; color: inherit; }
 
 body[data-achtergrond="regenboog"] {
   background-image: linear-gradient(135deg, #f472b6, #fb923c 20%, #facc15 40%, #4ade80 60%, #38bdf8 80%, #a78bfa);
-  background-size: 340% 340%;
-  animation-duration: 16s;
+  background-size: 320% 320%;
+  animation-duration: 9s;
+}
+
+/* --- Bewegende achtergronden ---
+   Eén laag over de achtergrond heen, achter de kaarten. Elk thema zijn
+   eigen effect; met animaties uit blijft er een stilstaand beeld over. */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* Matrix: regen van lichtgevende kolommen. */
+body[data-achtergrond="matrix"]::before {
+  opacity: 0.55;
+  background-image:
+    linear-gradient(180deg, transparent 0 38%, rgba(134, 239, 172, 0.85) 70%, transparent 100%),
+    repeating-linear-gradient(90deg, rgba(134, 239, 172, 0.55) 0 2px, transparent 2px 16px);
+  background-size: 100% 62vh, 100% 100%;
+  background-repeat: repeat-y, repeat;
+  background-blend-mode: multiply;
+  animation: matrixregen 6.5s linear infinite;
+}
+@keyframes matrixregen {
+  from { background-position-y: 0; }
+  to { background-position-y: 62vh; }
+}
+
+/* Regenboog: een trage glans die er schuin overheen trekt. */
+body[data-achtergrond="regenboog"]::before {
+  opacity: 1;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.28) 50%, transparent 62%);
+  background-size: 260% 100%;
+  animation: glans 7s ease-in-out infinite;
+}
+@keyframes glans {
+  0% { background-position: 120% 0; }
+  55%, 100% { background-position: -60% 0; }
+}
+
+/* Diepe ruimte: sterren die langzaam aan- en uitgaan. */
+body[data-achtergrond="diepteruimte"]::before {
+  opacity: 0.9;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 18%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 68% 9%, #fff, transparent),
+    radial-gradient(1px 1px at 34% 62%, #dbeafe, transparent),
+    radial-gradient(1.5px 1.5px at 88% 47%, #fff, transparent),
+    radial-gradient(1px 1px at 52% 31%, #bfdbfe, transparent),
+    radial-gradient(1.5px 1.5px at 22% 81%, #fff, transparent),
+    radial-gradient(1px 1px at 76% 73%, #e0e7ff, transparent),
+    radial-gradient(1.5px 1.5px at 95% 88%, #fff, transparent),
+    radial-gradient(1px 1px at 44% 94%, #dbeafe, transparent),
+    radial-gradient(1px 1px at 6% 44%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 29% 7%, #e0e7ff, transparent),
+    radial-gradient(1px 1px at 60% 52%, #fff, transparent),
+    radial-gradient(1px 1px at 81% 24%, #dbeafe, transparent),
+    radial-gradient(1.5px 1.5px at 15% 66%, #fff, transparent),
+    radial-gradient(1px 1px at 40% 15%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 70% 38%, #bfdbfe, transparent),
+    radial-gradient(1px 1px at 91% 64%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 58% 84%, #e0e7ff, transparent),
+    radial-gradient(1px 1px at 3% 92%, #fff, transparent),
+    radial-gradient(1px 1px at 48% 45%, #fff, transparent),
+    radial-gradient(1px 1px at 84% 5%, #dbeafe, transparent),
+    radial-gradient(1.5px 1.5px at 26% 36%, #fff, transparent),
+    radial-gradient(1px 1px at 66% 96%, #fff, transparent),
+    radial-gradient(1px 1px at 37% 74%, #bfdbfe, transparent);
+  animation: sterren 5.5s ease-in-out infinite alternate;
+}
+@keyframes sterren {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
 }
 
 /* ---------- Portretten en ringen (vrij te spelen) ---------- */
@@ -208,17 +284,41 @@ body[data-achtergrond="regenboog"] {
   z-index: 1;
   box-shadow: 0 0 0 4px var(--ring, #93c5fd), 0 14px 30px -12px rgba(11, 37, 69, 0.6);
 }
+/* Een draaiende ring achter de foto. Alleen de thema's die erom vragen
+   zetten hem aan; de rest houdt een gewone gekleurde rand. */
 .serge::before {
   content: "";
   position: absolute;
   inset: -11px;
   border-radius: 50%;
-  background: conic-gradient(#f472b6, #fb923c, #facc15, #4ade80, #38bdf8, #a78bfa, #f472b6);
   opacity: 0;
   animation: draaien 7s linear infinite;
   pointer-events: none;
 }
-.serge[data-ring="regenboog"]::before { opacity: 1; }
+.serge[data-ring="regenboog"]::before {
+  opacity: 1;
+  background: conic-gradient(#f472b6, #fb923c, #facc15, #4ade80, #38bdf8, #a78bfa, #f472b6);
+}
+.serge[data-ring="goud"]::before {
+  opacity: 1;
+  background: conic-gradient(#b45309, #fde68a 12%, #b45309 28%, #92400e 52%, #fcd34d 70%, #b45309 88%, #b45309);
+  animation-duration: 5s;
+}
+.serge[data-ring="matrix"]::before {
+  opacity: 1;
+  background: conic-gradient(#052e16 0 62%, #22c55e 78%, #bbf7d0 86%, #22c55e 92%, #052e16 100%);
+  animation-duration: 3.4s;
+}
+.serge[data-ring="goud"] img,
+.serge[data-ring="matrix"] img { box-shadow: 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
+
+/* Alarmrood knippert niet, het ademt. */
+.serge[data-ring="rood"] img { animation: ademen 4.5s ease-in-out infinite, alarm 2.2s ease-in-out infinite; }
+@keyframes alarm {
+  0%, 100% { box-shadow: 0 0 0 4px var(--ring), 0 0 0 0 rgba(239, 68, 68, 0.5), 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
+  50% { box-shadow: 0 0 0 4px var(--ring), 0 0 0 12px rgba(239, 68, 68, 0), 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
+}
+
 @keyframes draaien {
   to { transform: rotate(360deg); }
 }
@@ -1616,4 +1716,6 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
 body.rustig { animation: none; }
 body.rustig .packet { animation: packetIn 200ms ease-out both; }
 body.rustig .serge img { animation: none; }
+body.rustig::before { animation: none; }
+body.rustig .serge::before { animation: none; }
 body.rustig .buff, body.rustig .node.kan, body.rustig .poort.rijp, body.rustig .pip { animation: none; }
