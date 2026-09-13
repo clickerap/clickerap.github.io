@@ -694,6 +694,21 @@ onSkin((skin) => {
   });
 });
 
+// ------------------------------------------------------ Mobiele volgorde
+// Op een telefoon hoort het logboek onderaan, bij de rest van de cijfers,
+// zodat de winkel niet twee schermen naar beneden staat. Op desktop staat
+// het gewoon onder de quotes in de linkerkolom.
+
+const logboekBlok = document.querySelector(".logboek");
+const smalScherm = window.matchMedia("(max-width: 900px)");
+
+function plaatsLogboek() {
+  const doel = smalScherm.matches ? document.querySelector(".status") : document.querySelector(".stage");
+  if (logboekBlok.parentElement !== doel) doel.append(logboekBlok);
+}
+
+smalScherm.addEventListener("change", plaatsLogboek);
+
 // --------------------------------------------------------------- Hint
 
 const HINTS = [
@@ -754,6 +769,7 @@ export function initShell() {
   setBuyAmount(G.options.buyAmount || 1);
   sellToggle.setAttribute("aria-pressed", String(!!G.options.sellMode));
   applyUiterlijk();
+  plaatsLogboek();
   showTab("winkel");
   renderAll();
   syncRack();

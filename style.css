@@ -54,6 +54,10 @@
 
 * { box-sizing: border-box; }
 
+/* Geen blauw vlak bij het aanraken van knoppen; het indrukken van Serge
+   geeft zelf al genoeg terugkoppeling. */
+html { -webkit-tap-highlight-color: transparent; }
+
 /* Zonder deze regel wint een eigen display-waarde van het hidden-attribuut. */
 [hidden] { display: none !important; }
 
@@ -1682,7 +1686,9 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
     grid-template-columns: minmax(0, 1fr);
     /* De namen van de tweekolomsindeling moeten hier expliciet terug naar
        één kolom, anders vallen de kaarten over elkaar heen. */
-    grid-template-areas: "klik" "status" "paneel";
+    /* De winkel is waar je moet zijn; de cijfers en het logboek komen
+       daaronder. */
+    grid-template-areas: "klik" "paneel" "status";
     grid-template-rows: auto;
   }
   .panel { position: static; max-height: none; min-height: 0; }
@@ -1692,14 +1698,23 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
 @media (max-width: 620px) {
   body { font-size: 15.5px; }
   .topbar { padding: 18px 96px 14px; }
-  .stage { padding: 18px 14px; gap: 20px; border-radius: var(--r-l); }
+  .stage { padding: 14px 14px 16px; gap: 11px; border-radius: var(--r-l); }
+  .status { padding: 14px; gap: 12px; }
+  .counter-sub { margin-top: 2px; font-size: 15px; }
+  .clicker { gap: 8px; }
+  .status .logboek { min-height: 150px; }
+  .loglijst { max-height: 220px; }
   .board { padding: 0 12px 24px; gap: 14px; }
   .panel { border-radius: var(--r-l); }
   .counter strong { font-size: 42px; }
-  .serge img { width: 200px; height: 200px; }
+  .serge img { width: 172px; height: 172px; border-width: 5px; }
   .toaster { left: 12px; right: 12px; bottom: 12px; align-items: stretch; }
   .toast { max-width: none; }
   .tabpanels > section { padding: 14px; }
+  /* Alle vijf de tabbladen moeten op een telefoon naast elkaar passen. */
+  .tabs { padding: 8px 6px 0; gap: 0; }
+  .tabs button { padding: 10px 7px 12px; font-size: 13.5px; }
+  .pip { min-width: 19px; padding: 1px 5px; margin-left: 3px; font-size: 11px; }
   .markt-rij { grid-template-columns: minmax(0, 1fr) auto; row-gap: 8px; }
   .markt-rij .spark { display: none; }
 }
