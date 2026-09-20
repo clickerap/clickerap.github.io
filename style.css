@@ -550,6 +550,8 @@ body[data-achtergrond="diepteruimte"]::before {
   font-size: 15px;
   font-weight: 600;
   cursor: help;
+  -webkit-user-select: none;
+  user-select: none;
   animation: buffIn var(--soepel) both, gloed 2.6s ease-in-out infinite;
 }
 .buff.slecht {
@@ -1462,6 +1464,86 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
 .zaad small { color: var(--inkt-licht); }
 .zaad.on { border-color: var(--blauw-600); background: var(--blauw-100); color: var(--blauw-700); font-weight: 700; }
 
+/* ---------- Cursus ---------- */
+
+.cursus-index { display: flex; flex-direction: column; gap: 6px; }
+.cursus-item {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 20px;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  border: 1px solid var(--lijn);
+  border-radius: var(--r-m);
+  background: var(--vlak);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--sneller), background var(--sneller), transform var(--sneller);
+}
+.cursus-item:hover { border-color: var(--blauw-300); background: #f4f9ff; transform: translateY(-1px); }
+.cursus-item.gelezen { background: var(--vlak-zacht); }
+.cursus-nr {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--blauw-100);
+  color: var(--blauw-700);
+  font-weight: 700;
+  font-size: 13px;
+}
+.cursus-item.gelezen .cursus-nr { background: var(--groen-vlak); color: var(--groen); }
+.cursus-tekst { min-width: 0; }
+.cursus-tekst strong { display: block; font-size: 15px; font-weight: 600; }
+.cursus-tekst span {
+  display: block;
+  font-size: 13px;
+  color: var(--inkt-licht);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cursus-vink { color: var(--groen); font-weight: 700; text-align: center; }
+
+.cursus-blad { display: flex; flex-direction: column; gap: 12px; }
+.cursus-p { font-size: 15px; line-height: 1.65; }
+.cursus-lijst { display: flex; flex-direction: column; gap: 6px; padding-left: 20px; list-style: disc; }
+.cursus-lijst li { font-size: 14.5px; line-height: 1.55; color: var(--inkt-zacht); }
+.cursus-code {
+  margin: 0;
+  padding: 12px 14px;
+  background: var(--blauw-900);
+  color: #dbeafe;
+  border-radius: var(--r-m);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 12.5px;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+.cursus-serge {
+  font-size: 14.5px;
+  line-height: 1.6;
+  background: var(--goud-vlak);
+  border: 1px solid var(--goud-rand);
+  border-radius: var(--r-m);
+  padding: 11px 14px;
+  color: #7c3d00;
+}
+.cursus-tabelvak { overflow-x: auto; }
+.cursus-tabel { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+.cursus-tabel th,
+.cursus-tabel td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--lijn); }
+.cursus-tabel th {
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--inkt-licht);
+  border-bottom-color: var(--lijn-sterk);
+}
+.cursus-tabel td:first-child { font-weight: 600; }
+.cursus-tabel tr:last-child td { border-bottom: 0; }
+
 /* ---------- Zwevende dingen ---------- */
 
 .tooltip {
@@ -1712,6 +1794,11 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
   .toast { max-width: none; }
   .tabpanels > section { padding: 14px; }
   /* Alle vijf de tabbladen moeten op een telefoon naast elkaar passen. */
+  /* De cursustabellen moeten op een telefoon binnen de breedte blijven. */
+  .cursus-tabel { font-size: 12.5px; }
+  .cursus-tabel th, .cursus-tabel td { padding: 6px 7px; }
+  .cursus-tabel th { font-size: 10.5px; letter-spacing: 0.04em; }
+  .cursus-p { font-size: 14.5px; }
   .tabs { padding: 8px 6px 0; gap: 0; }
   .tabs button { padding: 10px 7px 12px; font-size: 13.5px; }
   .pip { min-width: 19px; padding: 1px 5px; margin-left: 3px; font-size: 11px; }

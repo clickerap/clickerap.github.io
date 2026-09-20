@@ -5,7 +5,7 @@ import { BUFF_BY_ID, HAZARDS, INCIDENTS } from "../data/buffs.js";
 import { fmt, fmtLong, fmtTime, setNotation } from "../format.js";
 import { click, goldenClicked, goldenExpired, fixIncident, ignoreIncident } from "../engine.js";
 import { on, emit } from "../bus.js";
-import { toast, floatText, sparks, blip, chord, dialog, attachTooltip } from "./fx.js";
+import { toast, floatText, sparks, blip, chord, dialog, attachTooltip, hoverCapable } from "./fx.js";
 import { renderAll, syncFast, renderStudie, renderMeer, renderAchievements, resetPanels } from "./panels.js";
 import { save, wipe, exportSave, importSave, setSlot, currentSlot, slotSummary } from "../save.js";
 import { meet, tekenGrafiek } from "./grafiek.js";
@@ -194,6 +194,23 @@ export function syncCounter() {
 let buffSleutel = "";
 const buffTijden = new Map();
 
+// Wat een buff precies doet, in losse regels. Zowel de tooltip op desktop
+// als het venstertje op een telefoon tekenen dit.
+function buffInfo(entry, def) {
+  const e = entry.effect || def.effect || {};
+  const regels = [];
+  if (e.ppsMult) regels.push(["Productie", `x${fmt(e.ppsMult, { decimals: 2 })}`]);
+  if (e.clickMult) regels.push(["Per klik", `x${fmt(e.clickMult, { decimals: 2 })}`]);
+  if (e.randomBuildingMult && entry.building) {
+    const b = BUILDINGS.find((x) => x.id === entry.building);
+    regels.push([b ? b.name : "Eén apparaat", `x${fmt(e.randomBuildingMult)}`]);
+  }
+  const rest = entry.charges
+    ? `Nog ${entry.charges} ${entry.charges === 1 ? "klik" : "kliks"}`
+    : `Nog ${fmtTime(Math.max(0, (entry.until - Date.now()) / 1000))}`;
+  return { regels, rest };
+}
+
 export function syncBuffs() {
   const sleutel = G.buffs.map((b) => b.id).join("|");
   if (sleutel !== buffSleutel) {
@@ -207,27 +224,38 @@ export function syncBuffs() {
       const pil = document.createElement("span");
       pil.className = `buff${entry.hazard ? " slecht" : ""}`;
       pil.innerHTML = `<span>${def.icon}</span> ${def.name} <time></time>`;
+      const info = () => buffInfo(entry, def);
       attachTooltip(pil, () => {
-        const e = entry.effect || def.effect || {};
-        const regels = [];
-        if (e.ppsMult) {
-          regels.push(`<div class="regel"><span>Productie</span><span>x${fmt(e.ppsMult, { decimals: 2 })}</span></div>`);
-        }
-        if (e.clickMult) {
-          regels.push(`<div class="regel"><span>Per klik</span><span>x${fmt(e.clickMult, { decimals: 2 })}</span></div>`);
-        }
-        if (e.randomBuildingMult && entry.building) {
-          const b = BUILDINGS.find((x) => x.id === entry.building);
-          regels.push(`<div class="regel"><span>${b ? b.name : "Eén apparaat"}</span><span>x${fmt(e.randomBuildingMult)}</span></div>`);
-        }
-        const rest = entry.charges
-          ? `Nog ${entry.charges} ${entry.charges === 1 ? "klik" : "kliks"}`
-          : `Nog ${fmtTime(Math.max(0, (entry.until - Date.now()) / 1000))}`;
+        const { regels, rest } = info();
         return `<h4>${def.icon} ${def.name}</h4>
-          ${regels.join("")}
+          ${regels.map(([l, w]) => `<div class="regel"><span>${l}</span><span>${w}</span></div>`).join("")}
           <p class="cursief">${def.desc}</p>
           <div class="regel prijsregel">${rest}</div>`;
       });
+      // Zonder muis is er geen tooltip; daar opent een tik hetzelfde verhaal.
+      if (!hoverCapable) {
+        pil.setAttribute("role", "button");
+        pil.setAttribute("tabindex", "0");
+        const toon = () => {
+          const { regels, rest } = info();
+          dialog({
+            title: `${def.icon} ${def.name}`,
+            body: `<p>${def.desc}</p>
+              <div class="statlijst" style="margin-top:12px">
+                ${regels.map(([l, w]) => `<div><span>${l}</span><strong>${w}</strong></div>`).join("")}
+                <div><span>Nog actief</span><strong>${rest.replace(/^Nog /, "")}</strong></div>
+              </div>`,
+            actions: [{ label: "Duidelijk", style: "ghost" }],
+          });
+        };
+        pil.addEventListener("click", toon);
+        pil.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toon();
+          }
+        });
+      }
       buffbar.append(pil);
       buffTijden.set(entry, pil.querySelector("time"));
     }

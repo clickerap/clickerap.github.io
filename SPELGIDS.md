@@ -2,7 +2,7 @@
 
 > **Let op: hier staat alles in, ook alle verborgen dingen.** Wil je zelf zoeken, lees dan niet verder dan het hoofdstuk over de studieboom.
 
-Dit bestand is gemaakt met `node tools/spelgids.mjs` en volgt de spelbestanden. Op dit moment: **22 apparaten**, **154 upgrades**, **121 prestaties** (waarvan 20 verborgen), **24 knooppunten** in de studieboom en **4 opdrachten** in het labo.
+Dit bestand is gemaakt met `node tools/spelgids.mjs` en volgt de spelbestanden. Op dit moment: **22 apparaten**, **154 upgrades**, **123 prestaties** (waarvan 20 verborgen), **24 knooppunten** in de studieboom en **4 opdrachten** in het labo.
 
 ## Hoe het spel werkt
 
@@ -451,7 +451,7 @@ Af en toe gaat er iets stuk in je netwerk. Je krijgt dan onder Serge twee knoppe
 
 ## Koffie en assistenten
 
-Elke prestatie die je haalt, zet je koffiepeil hoger: 121 prestaties is een vol kopje. Op zichzelf doet dat niets — tot je assistenten koopt. Die worden sterker naarmate er meer koffie is, en dat is het krachtigste vermenigvuldiger van het hele spel.
+Elke prestatie die je haalt, zet je koffiepeil hoger: 123 prestaties is een vol kopje. Op zichzelf doet dat niets — tot je assistenten koopt. Die worden sterker naarmate er meer koffie is, en dat is het krachtigste vermenigvuldiger van het hele spel.
 
 | Koffiepeil | Rang |
 |---|---|
@@ -519,7 +519,23 @@ Elk studiepunt geeft daarnaast blijvend 1% extra productie, ook de punten die je
 
 ## Het labo
 
-Vier opdrachten achter één tabblad. Ze gaan apart open.
+Vijf onderdelen achter één tabblad. De cursus staat er meteen; de rest gaat apart open.
+
+### 📚 Cursus
+
+Altijd beschikbaar. 9 korte hoofdstukken over de basis van netwerken — geen spel, maar de theorie waar de overhoring en de terminal op leunen. Elk hoofdstuk dat je voor het eerst uitleest levert packets op: minstens 1.000, of dertig seconden van je productie.
+
+| Hoofdstuk | Waarover |
+|---|---|
+| 1. 📦 **Wat stuurt een netwerk rond?** | Packets, frames en waarom alles in stukjes gaat |
+| 2. 🧱 **Het OSI-model** | Zeven lagen, van de kabel tot je scherm |
+| 3. 🏷️ **IP-adressen** | 32 bits, vier octetten, publiek en privé |
+| 4. 📏 **Subnetmaskers en prefixes** | Welk deel is netwerk, welk deel is host |
+| 5. ✂️ **Zelf subnetten** | Een netwerk opdelen, stap voor stap |
+| 6. 🔀 **VLANs** | Eén switch, meerdere gescheiden netwerken |
+| 7. 🧭 **Switch, router en firewall** | Wie doet wat, en op welke laag |
+| 8. 🪪 **DHCP en DNS** | Hoe je een adres krijgt en hoe namen werken |
+| 9. 🚚 **TCP, UDP en poorten** | Betrouwbaar of snel, en waar je aanbelt |
 
 ### 📝 Serge's overhoring
 
@@ -647,7 +663,7 @@ De geëvolueerde Serge is de opvolger van de oude Evolve-knop: bij een miljard p
 
 ## Alle prestaties
 
-121 stuks. De verborgen staan in het volgende hoofdstuk.
+123 stuks. De verborgen staan in het volgende hoofdstuk.
 
 ### Klikken
 
@@ -772,6 +788,8 @@ De geëvolueerde Serge is de opvolger van de oude Evolve-knop: bij een miljard p
 
 | Prestatie | Hoe |
 |---|---|
+| 📖 **Eerste hoofdstuk** | Lees een hoofdstuk van de cursus. |
+| 🎒 **Cursus uit** | Lees alle hoofdstukken van de cursus. |
 | 📝 **Eerste overhoring** | Beantwoord een subnetvraag goed. |
 | ✅ **Serge knikt** | Tien goede antwoorden op rij. |
 | 🧮 **Subnetten in je hoofd** | Vijfentwintig goede antwoorden op rij. |

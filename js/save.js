@@ -120,6 +120,7 @@ function applyData(data) {
       cli: { ...fresh.minigames.cli, ...(data.minigames?.cli || {}) },
       market: { ...fresh.minigames.market, ...(data.minigames?.market || {}) },
       patch: { ...fresh.minigames.patch, ...(data.minigames?.patch || {}) },
+      cursus: { ...fresh.minigames.cursus, ...(data.minigames?.cursus || {}) },
       laatste: data.minigames?.laatste,
     },
     buffs: Array.isArray(data.buffs) ? data.buffs.filter((b) => b && b.until > Date.now()) : [],

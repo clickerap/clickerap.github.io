@@ -14,6 +14,7 @@ import { BUFFS, HAZARDS, INCIDENTS } from "../js/data/buffs.js";
 import { KABELS, PROTOCOLLEN } from "../js/data/patch.js";
 import { GOEDEREN } from "../js/data/market.js";
 import { UITERLIJK, SOORTNAMEN, ALLE_SKINS } from "../js/data/uiterlijk.js";
+import { HOOFDSTUKKEN } from "../js/data/cursus.js";
 
 const nl = new Intl.NumberFormat("nl-NL", { maximumFractionDigits: 2 });
 const SCHAAL = [
@@ -189,7 +190,15 @@ for (const tak of BRANCHES) {
 // --------------------------------------------------------------- Labo
 
 kop(2, "Het labo");
-p("Vier opdrachten achter één tabblad. Ze gaan apart open.");
+p("Vijf onderdelen achter één tabblad. De cursus staat er meteen; de rest gaat apart open.");
+
+kop(3, "📚 Cursus");
+p(`Altijd beschikbaar. ${HOOFDSTUKKEN.length} korte hoofdstukken over de basis van netwerken — geen spel, maar de theorie waar de overhoring en de terminal op leunen. Elk hoofdstuk dat je voor het eerst uitleest levert packets op: minstens 1.000, of dertig seconden van je productie.`);
+p("");
+tabel(
+  ["Hoofdstuk", "Waarover"],
+  HOOFDSTUKKEN.map((h, i) => [`${i + 1}. ${h.icoon} **${h.titel}**`, h.korte])
+);
 
 kop(3, "📝 Serge's overhoring");
 p("Vraagt 5.000 packets totaal. Je krijgt een subnetvraag met vier antwoorden. Goed antwoord levert packets op — minstens 500, of 90 seconden van je productie, wat het meest is — plus 12% extra per goed antwoord op rij, tot drie keer zoveel. Na een goed antwoord duurt het 2,5 minuut voor de volgende vraag; na een fout antwoord ruim een minuut, en je reeks begint opnieuw.");

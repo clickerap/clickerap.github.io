@@ -5,9 +5,10 @@ import { quiz } from "./quiz.js";
 import { terminal } from "./terminal.js";
 import { market, startMarkt } from "./market.js";
 import { patch } from "./patch.js";
+import { cursus } from "./cursus.js";
 import { emit } from "../bus.js";
 
-export const GAMES = [quiz, terminal, market, patch];
+export const GAMES = [cursus, quiz, terminal, market, patch];
 
 const picker = document.getElementById("labo-picker");
 const stage = document.getElementById("labo-stage");

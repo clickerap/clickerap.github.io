@@ -59,6 +59,7 @@ export function freshState() {
       cli: { hostname: "SERGE", mode: "user", interfaces: {}, opdracht: null, nextAt: 0, gedaan: 0 },
       market: { cash: 0, holdings: {}, prices: null, profit: 0, tick: 0 },
       patch: { grid: null, discovered: {}, plantedEver: 0 },
+      cursus: { gelezen: {}, open: null },
     },
     seen: {},
     lastSeen: Date.now(),
