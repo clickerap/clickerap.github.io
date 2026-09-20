@@ -2,7 +2,7 @@
 
 > **Let op: hier staat alles in, ook alle verborgen dingen.** Wil je zelf zoeken, lees dan niet verder dan het hoofdstuk over de studieboom.
 
-Dit bestand is gemaakt met `node tools/spelgids.mjs` en volgt de spelbestanden. Op dit moment: **22 apparaten**, **154 upgrades**, **120 prestaties** (waarvan 20 verborgen), **24 knooppunten** in de studieboom en **4 opdrachten** in het labo.
+Dit bestand is gemaakt met `node tools/spelgids.mjs` en volgt de spelbestanden. Op dit moment: **22 apparaten**, **154 upgrades**, **121 prestaties** (waarvan 20 verborgen), **24 knooppunten** in de studieboom en **4 opdrachten** in het labo.
 
 ## Hoe het spel werkt
 
@@ -451,7 +451,7 @@ Af en toe gaat er iets stuk in je netwerk. Je krijgt dan onder Serge twee knoppe
 
 ## Koffie en assistenten
 
-Elke prestatie die je haalt, zet je koffiepeil hoger: 120 prestaties is een vol kopje. Op zichzelf doet dat niets — tot je assistenten koopt. Die worden sterker naarmate er meer koffie is, en dat is het krachtigste vermenigvuldiger van het hele spel.
+Elke prestatie die je haalt, zet je koffiepeil hoger: 121 prestaties is een vol kopje. Op zichzelf doet dat niets — tot je assistenten koopt. Die worden sterker naarmate er meer koffie is, en dat is het krachtigste vermenigvuldiger van het hele spel.
 
 | Koffiepeil | Rang |
 |---|---|
@@ -529,7 +529,25 @@ De vragen worden ter plekke opgesteld en ter plekke nagerekend, dus ze zijn eind
 
 ### ⌨️ Terminal
 
-Vraagt één netwerk switch. Een nagebouwde command line die zich gedraagt als een switch die nog opgezet moet worden. Typ `?` voor de lijst. De echte volgorde werkt: `enable`, `configure terminal`, `interface gi0/1`, `ip address 10.0.0.1 255.255.255.0`, `no shutdown`. Zet je de interface volledig goed op, dan krijg je een bonus en een prestatie. `write memory` levert eenmalig ook wat op.
+Vraagt één netwerk switch. Een nagebouwde command line die zich gedraagt als een switch die nog opgezet moet worden — inclusief de eigenaardigheden van een echte IOS-CLI.
+
+**Afkortingen werken.** Elk woord mag je inkorten tot het nog eenduidig is, precies zoals op een echt apparaat: `en`, `conf t`, `int gi0/1`, `ip add`, `no shut`, `sh ip int br`, `wr`. Is een afkorting dubbelzinnig, dan zegt hij welke woorden er nog passen.
+
+**Tab vult aan.** Eén woord dat past wordt afgemaakt; passen er meerdere, dan vult hij aan tot waar ze gelijk zijn en toont hij de mogelijkheden. **?** laat zien wat er op deze plek mag staan, met uitleg erbij — ook midden in een commando.
+
+**Er staat altijd een opdracht open.** Serge vraagt je een poort op een bepaald adres te zetten, hem up te brengen en de configuratie te bewaren. Rond je dat af met `write memory`, dan krijg je packets: minstens 2.500, of twee minuten van je productie, wat het meest is. Daarna schrijft hij na tweeënhalve minuut een nieuwe opdracht uit.
+
+De volledige reeks voor een opdracht ziet er zo uit:
+
+```
+en
+conf t
+int gi0/3
+ip add 10.42.7.1 255.255.255.0
+no shut
+end
+wr
+```
 
 ### 📈 Bandbreedtemarkt
 
@@ -629,7 +647,7 @@ De geëvolueerde Serge is de opvolger van de oude Evolve-knop: bij een miljard p
 
 ## Alle prestaties
 
-120 stuks. De verborgen staan in het volgende hoofdstuk.
+121 stuks. De verborgen staan in het volgende hoofdstuk.
 
 ### Klikken
 
@@ -758,7 +776,8 @@ De geëvolueerde Serge is de opvolger van de oude Evolve-knop: bij een miljard p
 | ✅ **Serge knikt** | Tien goede antwoorden op rij. |
 | 🧮 **Subnetten in je hoofd** | Vijfentwintig goede antwoorden op rij. |
 | ⌨️ **enable** | Voer je eerste commando uit in de terminal. |
-| 💾 **Running config** | Zet een interface volledig goed op. |
+| 💾 **Running config** | Rond je eerste opdracht in de terminal af. |
+| 🧑‍💻 **Vaste hand op de CLI** | Rond tien opdrachten in de terminal af. |
 | 📈 **Koop laag, verkoop hoog** | Maak winst op de bandbreedtemarkt. |
 | 🤑 **Marktmanipulatie** | Verdien een fortuin op de markt in één sessie. |
 | 🌱 **Eerste kabel geplant** | Plant iets in de patchkast. |

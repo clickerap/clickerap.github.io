@@ -56,7 +56,7 @@ export function freshState() {
     },
     minigames: {
       quiz: { streak: 0, best: 0, correct: 0, wrong: 0, nextAt: 0 },
-      cli: { history: [], hostname: "SERGE", mode: "user", ifaceUp: false, ifaceIp: false, unlocked: false },
+      cli: { hostname: "SERGE", mode: "user", interfaces: {}, opdracht: null, nextAt: 0, gedaan: 0 },
       market: { cash: 0, holdings: {}, prices: null, profit: 0, tick: 0 },
       patch: { grid: null, discovered: {}, plantedEver: 0 },
     },

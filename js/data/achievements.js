@@ -120,7 +120,8 @@ ach("quiz-1", "Eerste overhoring", "📝", "Beantwoord een subnetvraag goed.", n
 ach("quiz-10", "Serge knikt", "✅", "Tien goede antwoorden op rij.", null, { manual: true });
 ach("quiz-25", "Subnetten in je hoofd", "🧮", "Vijfentwintig goede antwoorden op rij.", null, { manual: true });
 ach("cli-1", "enable", "⌨️", "Voer je eerste commando uit in de terminal.", null, { manual: true });
-ach("cli-config", "Running config", "💾", "Zet een interface volledig goed op.", null, { manual: true });
+ach("cli-config", "Running config", "💾", "Rond je eerste opdracht in de terminal af.", null, { manual: true });
+ach("cli-tien", "Vaste hand op de CLI", "🧑‍💻", "Rond tien opdrachten in de terminal af.", null, { manual: true });
 ach("beurs-winst", "Koop laag, verkoop hoog", "📈", "Maak winst op de bandbreedtemarkt.", null, { manual: true });
 ach("beurs-fortuin", "Marktmanipulatie", "🤑", "Verdien een fortuin op de markt in één sessie.", null, { manual: true });
 ach("patch-1", "Eerste kabel geplant", "🌱", "Plant iets in de patchkast.", null, { manual: true });

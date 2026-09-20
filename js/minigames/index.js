@@ -26,6 +26,7 @@ function kies(game) {
 function teken() {
   clearInterval(hertekenTimer);
   if (!actief) return;
+  actief.stop?.();
   actief.render(stage);
   // De markt en de patchkast lopen door; die tekenen we periodiek opnieuw.
   if (actief.id === "market") hertekenTimer = setInterval(() => actief.render(stage), 5000);
@@ -65,6 +66,7 @@ function syncPicker() {
 }
 
 export function stopLabo() {
+  actief?.stop?.();
   clearInterval(hertekenTimer);
   clearInterval(pickerTimer);
   pickerTimer = null;

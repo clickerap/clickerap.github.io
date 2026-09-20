@@ -197,7 +197,17 @@ p("");
 p("De vragen worden ter plekke opgesteld en ter plekke nagerekend, dus ze zijn eindeloos. Zes soorten: netwerkadres, broadcastadres, aantal bruikbare hosts, subnetmasker bij een prefix, het kleinste subnet voor een aantal hosts, en of twee adressen in hetzelfde subnet zitten.");
 
 kop(3, "⌨️ Terminal");
-p("Vraagt één netwerk switch. Een nagebouwde command line die zich gedraagt als een switch die nog opgezet moet worden. Typ `?` voor de lijst. De echte volgorde werkt: `enable`, `configure terminal`, `interface gi0/1`, `ip address 10.0.0.1 255.255.255.0`, `no shutdown`. Zet je de interface volledig goed op, dan krijg je een bonus en een prestatie. `write memory` levert eenmalig ook wat op.");
+p("Vraagt één netwerk switch. Een nagebouwde command line die zich gedraagt als een switch die nog opgezet moet worden — inclusief de eigenaardigheden van een echte IOS-CLI.");
+p("");
+p("**Afkortingen werken.** Elk woord mag je inkorten tot het nog eenduidig is, precies zoals op een echt apparaat: `en`, `conf t`, `int gi0/1`, `ip add`, `no shut`, `sh ip int br`, `wr`. Is een afkorting dubbelzinnig, dan zegt hij welke woorden er nog passen.");
+p("");
+p("**Tab vult aan.** Eén woord dat past wordt afgemaakt; passen er meerdere, dan vult hij aan tot waar ze gelijk zijn en toont hij de mogelijkheden. **?** laat zien wat er op deze plek mag staan, met uitleg erbij — ook midden in een commando.");
+p("");
+p("**Er staat altijd een opdracht open.** Serge vraagt je een poort op een bepaald adres te zetten, hem up te brengen en de configuratie te bewaren. Rond je dat af met `write memory`, dan krijg je packets: minstens 2.500, of twee minuten van je productie, wat het meest is. Daarna schrijft hij na tweeënhalve minuut een nieuwe opdracht uit.");
+p("");
+p("De volledige reeks voor een opdracht ziet er zo uit:");
+p("");
+p(["```", "en", "conf t", "int gi0/3", "ip add 10.42.7.1 255.255.255.0", "no shut", "end", "wr", "```"].join("\n"));
 
 kop(3, "📈 Bandbreedtemarkt");
 p("Vraagt één serverrack. Zes goederen met koersen die elke vijf seconden bewegen, ook als je niet kijkt. Met **+** investeer je een tiende van je packets, met **−** verkoop je alles van dat goed. Wat je terugkrijgt hangt alleen af van hoe de koers bewoog sinds je instapte, dus je kunt de markt niet gebruiken om je productie te ontlopen.");
