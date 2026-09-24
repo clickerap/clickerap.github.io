@@ -3,7 +3,7 @@
 // Eén regel: buiten dit bestand wordt G.pps of G.clickValue nooit met de hand
 // gezet. Je wijzigt bezit, upgrades of buffs en roept recompute() aan.
 
-import { BUILDINGS, BUILDING_BY_ID, VAKKEN, costOf, bulkCost, affordableAmount, refundOf } from "./data/buildings.js";
+import { BUILDINGS, BUILDING_BY_ID, VAKKEN, costOf, bulkCost, affordableAmount } from "./data/buildings.js";
 import { UPGRADES, UPGRADE_BY_ID } from "./data/upgrades.js";
 import { ACHIEVEMENTS, ACHIEVEMENT_BY_ID, EGG_COUNT, KOFFIE_RANKS } from "./data/achievements.js";
 import { NODES, NODE_BY_ID, ectsFor, BONUS_PER_PUNT } from "./data/skilltree.js";
@@ -52,6 +52,7 @@ export function freshState() {
       runPlayTime: 0,
       bestPps: 0,
       clickCap: 0,
+      besteReeks: 0,
     },
     options: {
       notation: "kort",
@@ -62,8 +63,8 @@ export function freshState() {
       netwerknaam: "",
     },
     minigames: {
-      quiz: { streak: 0, best: 0, correct: 0, wrong: 0, nextAt: 0 },
-      cli: { hostname: "SERGE", mode: "user", iface: null, interfaces: {}, opdracht: null, nextAt: 0, gedaan: 0 },
+      quiz: { streak: 0, best: 0, correct: 0, wrong: 0, nextAt: 0, onderwerp: "alles" },
+      cli: { hostname: "SERGE", mode: "user", iface: null, vlanId: null, interfaces: {}, vlans: {}, banner: null, secret: false, gateway: null, vorige: null, opdracht: null, nextAt: 0, gedaan: 0 },
       market: { holdings: {}, prices: null, historie: null, trend: {}, nieuws: [], geruchten: [], stats: { verkopen: 0, gewonnen: 0, besteWinst: 0 }, profit: 0, tick: 0 },
       patch: { discovered: {}, gedaan: 0, luchtdicht: 0, nummer: 0, wachtrij: [], volgendeAt: 0, huidig: null },
       cursus: { gelezen: {}, open: null },
@@ -109,6 +110,11 @@ export const D = {
   startPackets: 0,
   startBuff: false,
   ectsGain: 1,
+  costMult: 1,
+  sellRate: 0.25,
+  startBuildings: {},
+  laboTempo: 1,
+  marktLimiet: 1,
 };
 
 let revision = 0;
@@ -135,6 +141,12 @@ function reqView() {
     totalBuildings: D.totalBuildings,
     vakOwned: D.vakOwned,
     protocollen: Object.keys(G.minigames?.patch?.discovered || {}).length,
+    totaalPrestaties: ACHIEVEMENTS.length,
+    werkorders: G.minigames?.patch?.gedaan || 0,
+    luchtdicht: G.minigames?.patch?.luchtdicht || 0,
+    opdrachten: G.minigames?.cli?.gedaan || 0,
+    quizGoed: G.minigames?.quiz?.correct || 0,
+    vrijgespeeld: Object.keys(G.skins).length,
   };
 }
 
@@ -177,14 +189,21 @@ export function recompute() {
     startPackets: 0,
     startBuff: false,
     ectsGain: 1,
+    synergyMult: 1,
+    costMult: 1,
+    sellRate: 0.25,
+    startBuildings: {},
+    laboTempo: 1,
+    marktLimiet: 1,
   };
   for (const b of BUILDINGS) mods.buildingMult[b.id] = 1;
   for (const vak of Object.keys(VAKKEN)) mods.vakMult[vak] = 1;
 
   const applyEffect = (e) => {
     if (!e) return;
-    if (e.buildingMult) mods.buildingMult[e.buildingMult.id] *= e.buildingMult.x;
-    if (e.vakMult) mods.vakMult[e.vakMult.vak] *= e.vakMult.x;
+    // Een knooppunt in de studieboom kan meer apparaten of vakken tegelijk raken.
+    for (const bm of [].concat(e.buildingMult || [])) mods.buildingMult[bm.id] *= bm.x;
+    for (const vm of [].concat(e.vakMult || [])) mods.vakMult[vm.vak] *= vm.x;
     if (e.allMult) mods.allMult *= e.allMult;
     if (e.clickFlat) mods.clickFlat += e.clickFlat;
     if (e.clickMult) mods.clickMult *= e.clickMult;
@@ -205,6 +224,14 @@ export function recompute() {
     if (e.startPackets) mods.startPackets = Math.max(mods.startPackets, e.startPackets);
     if (e.startBuff) mods.startBuff = true;
     if (e.ectsGain) mods.ectsGain *= e.ectsGain;
+    if (e.synergyMult) mods.synergyMult *= e.synergyMult;
+    if (e.costMult) mods.costMult *= e.costMult;
+    if (e.sellRate) mods.sellRate = Math.max(mods.sellRate, e.sellRate);
+    if (e.laboTempo) mods.laboTempo *= e.laboTempo;
+    if (e.marktLimiet) mods.marktLimiet *= e.marktLimiet;
+    if (e.startBuildings) {
+      for (const [id, n] of Object.entries(e.startBuildings)) mods.startBuildings[id] = Math.max(mods.startBuildings[id] || 0, n);
+    }
   };
 
   for (const id in G.upgrades) if (G.upgrades[id]) applyEffect(UPGRADE_BY_ID[id]?.effect);
@@ -238,7 +265,7 @@ export function recompute() {
   // Synergie tussen gebouwen
   for (const syn of mods.synergies) {
     const from = G.buildings[syn.from] || 0;
-    mods.buildingMult[syn.to] *= 1 + from * syn.per;
+    mods.buildingMult[syn.to] *= 1 + from * syn.per * mods.synergyMult;
   }
 
   // Koffiepeil: hoeveel prestaties je hebt, ten opzichte van alles wat er is.
@@ -293,6 +320,11 @@ export function recompute() {
   D.ddosReward = mods.ddosReward;
   D.autoIncident = mods.autoIncident;
   D.startPackets = mods.startPackets;
+  D.costMult = mods.costMult;
+  D.sellRate = mods.sellRate;
+  D.startBuildings = mods.startBuildings;
+  D.laboTempo = mods.laboTempo;
+  D.marktLimiet = mods.marktLimiet;
   D.startBuff = mods.startBuff;
   D.ectsGain = mods.ectsGain;
   D.allMult = mods.allMult;
@@ -330,8 +362,18 @@ function aantalVan(amount, max) {
   return n > 0 ? n : 1;
 }
 
+// Een apparaat met de korting uit de studieboom erin verwerkt. De prijzen
+// blijven zo op één plek berekend, in data/buildings.js.
+function metKorting(b) {
+  return D.costMult === 1 ? b : { ...b, baseCost: b.baseCost * D.costMult };
+}
+
+function terugVoor(b, owned, n) {
+  return Math.floor(bulkCost(metKorting(b), Math.max(0, owned - n), n) * D.sellRate);
+}
+
 export function buyBuilding(id, amount = 1) {
-  const b = BUILDING_BY_ID[id];
+  const b = BUILDING_BY_ID[id] && metKorting(BUILDING_BY_ID[id]);
   if (!b) return 0;
   const owned = G.buildings[id] || 0;
   const n = aantalVan(amount, affordableAmount(b, owned, G.packets));
@@ -349,7 +391,7 @@ export function sellBuilding(id, amount = 1) {
   const owned = G.buildings[id] || 0;
   const n = Math.min(owned, aantalVan(amount, owned));
   if (!(n > 0)) return 0;
-  earn(refundOf(b, owned, n), { lifetime: false });
+  earn(terugVoor(b, owned, n), { lifetime: false });
   G.buildings[id] = owned - n;
   G.stats.sold += n;
   recompute();
@@ -357,18 +399,18 @@ export function sellBuilding(id, amount = 1) {
 }
 
 export function priceOf(id, amount = 1, selling = false) {
-  const b = BUILDING_BY_ID[id];
+  const b = metKorting(BUILDING_BY_ID[id]);
   const owned = G.buildings[id] || 0;
   if (selling) {
     const n = Math.min(owned, aantalVan(amount, owned));
-    return { amount: n, price: refundOf(b, owned, n) };
+    return { amount: n, price: terugVoor(BUILDING_BY_ID[id], owned, n) };
   }
   const n = aantalVan(amount, affordableAmount(b, owned, G.packets));
   return { amount: n, price: bulkCost(b, owned, Math.max(n, 1)) };
 }
 
 export function nextCost(id) {
-  return costOf(BUILDING_BY_ID[id], G.buildings[id] || 0);
+  return costOf(metKorting(BUILDING_BY_ID[id]), G.buildings[id] || 0);
 }
 
 // --- Upgrades ---
@@ -497,6 +539,10 @@ export function graduate() {
 
   recompute();
   G.packets = D.startPackets;
+  // Apparaten om mee te beginnen, uit de studieboom.
+  for (const [id, n] of Object.entries(D.startBuildings)) {
+    if (BUILDING_BY_ID[id]) G.buildings[id] = Math.max(G.buildings[id] || 0, n);
+  }
   recompute();
   return gained;
 }

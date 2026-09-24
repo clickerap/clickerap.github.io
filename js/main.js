@@ -6,7 +6,8 @@ import { setNotation, fmt, fmtTime } from "./format.js";
 import { start, forceGolden, markActivity, nextNews, nieuweRun } from "./engine.js";
 import { initShell, frameSync, showTab } from "./ui/shell.js";
 import { renderLabo, initLabo, stopLabo } from "./minigames/index.js";
-import { toast, dialog } from "./ui/fx.js";
+import { toast, dialog, houVenstersVast } from "./ui/fx.js";
+import { toonOpstart } from "./ui/opstart.js";
 import { initEggs, initConsole } from "./eggs.js";
 import { on, emit } from "./bus.js";
 
@@ -26,6 +27,9 @@ await neemTabbladOver({
 });
 
 const resultaat = load();
+// Het opstartscherm zo vroeg mogelijk, zodat je het spel er niet eerst
+// even onder ziet. Vensters zoals "Welkom terug" wachten tot het weg is.
+houVenstersVast(toonOpstart(G.uiterlijk.opstart));
 setNotation(G.options.notation);
 recompute();
 checkAchievements();

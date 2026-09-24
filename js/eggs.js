@@ -1,11 +1,12 @@
 // Verborgen dingen. Niets hiervan staat in de uitleg, alles geeft een prestatie.
 // Wie de lijst wil weten, moet de broncode maar lezen — dat mag.
 
-import { G, D, findEgg, earn, recompute, UPGRADES, ACHIEVEMENTS } from "./state.js";
+import { G, D, findEgg, earn, recompute, touch, UPGRADES, ACHIEVEMENTS } from "./state.js";
 import { on, emit } from "./bus.js";
 import { toast, sparks, chord } from "./ui/fx.js";
 import { fmt } from "./format.js";
 import { BUILDINGS } from "./data/buildings.js";
+import { ALLE_SKINS } from "./data/uiterlijk.js";
 
 function beloon(id, title, text, bonus = 0) {
   if (!findEgg(id)) return;
@@ -143,7 +144,7 @@ function openConsole(anchor) {
   kaart.id = "cheat-kaart";
   kaart.innerHTML = `
     <h3>Console</h3>
-    <p class="panel-intro">add 1e9 · set 1000 · pps 500 · gebouw switch 100 · upgrades · prestaties · punten 50 · goud · reset</p>
+    <p class="panel-intro">add 1e9 · set 1000 · pps 500 · gebouw switch 100 · upgrades · prestaties · skins · punten 50 · goud · reset</p>
     <div class="knoprij" style="margin-top:10px">
       <input class="veld" id="cheat-in" placeholder="commando" autocomplete="off" style="flex:1;min-width:140px" />
       <button type="button" class="btn" id="cheat-go">Uitvoeren</button>
@@ -205,6 +206,13 @@ function uitvoeren(raw) {
       for (const a of ACHIEVEMENTS) G.achievements[a.id] = true;
       recompute();
       return { text: "Alle prestaties vrijgegeven." };
+    }
+    case "skins": {
+      // Alles tegelijk, zonder een melding per ding.
+      for (const skin of ALLE_SKINS) G.skins[`${skin.soort}:${skin.id}`] = true;
+      touch();
+      emit("uiterlijk");
+      return { text: `Alle ${ALLE_SKINS.length} onderdelen van Uiterlijk vrijgegeven.` };
     }
     case "punten": {
       const n = getal(delen[1]) ?? 10;

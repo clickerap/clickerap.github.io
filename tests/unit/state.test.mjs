@@ -7,7 +7,7 @@ import {
   G, D, freshState, recompute, earn, spend, buyBuilding, sellBuilding, priceOf, checkAchievements,
   graduate, ectsOnGraduate, ACHIEVEMENTS, BUILDINGS, UPGRADES,
 } from "../../js/state.js";
-import { ECTS_BASIS } from "../../js/data/skilltree.js";
+import { ECTS_BASIS, ectsFor, lifetimeForEcts } from "../../js/data/skilltree.js";
 
 beforeEach(() => {
   Object.assign(G, freshState());
@@ -75,7 +75,7 @@ test("elke prestatie is haalbaar", () => {
 test("afstuderen geeft studiepunten vanaf de nieuwe drempel", () => {
   G.stats.lifetime = ECTS_BASIS - 1;
   assert.equal(ectsOnGraduate(), 0);
-  G.stats.lifetime = ECTS_BASIS * 8;
+  G.stats.lifetime = lifetimeForEcts(2);
   recompute();
   assert.equal(ectsOnGraduate(), 2);
   G.buildings.switch = 10;
@@ -84,4 +84,16 @@ test("afstuderen geeft studiepunten vanaf de nieuwe drempel", () => {
   assert.equal(G.prestige, 2);
   assert.deepEqual(G.buildings, {});
   assert.ok(Math.abs(D.prestigeMult - 1.2) < 1e-9);
+});
+
+test("studiepunten groeien met het aantal cijfers, niet met het totaal", () => {
+  // Het omgekeerde van de formule klopt, ook precies op de drempels.
+  for (const n of [1, 5, 13, 70, 598, 2969]) assert.equal(ectsFor(lifetimeForEcts(n)), n);
+  // Tien keer meer verdienen geeft een paar punten meer, geen verdubbeling.
+  const bij = (totaal) => ectsFor(totaal);
+  assert.equal(bij(1e9), 0);
+  // Bij de oude formule was dat +115% per cijfer; nu rond een derde.
+  assert.ok(bij(1e20) - bij(1e19) < bij(1e19) * 0.5, "een extra cijfer is geen explosie");
+  // Wie alles gebouwd heeft (ruwweg 1e30 verdiend), komt rond de studieboom uit.
+  assert.ok(bij(1e30) > 2500 && bij(1e30) < 3500, `${bij(1e30)} punten bij 1e30`);
 });

@@ -17,13 +17,21 @@ import { GOEDEREN, KOPPEN, MARKT } from "./data/market.js";
 import { PROTOCOLLEN, MATEN, WERK, DREMPELS } from "./data/patch.js";
 import { maakPuzzel, schoneKabels, alleVerbonden } from "./minigames/kabelgoot.js";
 import { HOOFDSTUK_BY_ID } from "./data/cursus.js";
-import { POORTEN, MODI, geldigAdres } from "./data/terminal.js";
+import { ONDERWERP_BY_ID } from "./data/vragen.js";
+import { POORTEN, MODI, TAKEN, geldigAdres, geldigeVlan, geldigeVlannaam, schoonOpdracht } from "./data/terminal.js";
 
 export const SAVE_KEY = "sergeClicker";
 export const LEGACY_KEY = "sergeClickerSave";
 const BACKUP_KEY = `${SAVE_KEY}:backup`;
 const LABO = ["cursus", "quiz", "cli", "market", "patch"];
 const SKIN_KEYS = new Set(ALLE_SKINS.map((s) => `${s.soort}:${s.id}`));
+// De hoofddeksels waren eerst portretten en zijn nu accessoires, die je bij
+// elk portret kunt dragen. Wie er een had, houdt hem.
+const VERHUISD = {
+  "portret:afgestudeerd": "accessoire:baret",
+  "portret:gentleman": "accessoire:hogehoed",
+  "portret:kroon": "accessoire:kroon",
+};
 
 // --- De opslag zelf ---
 // localStorage kan ontbreken of geblokkeerd zijn (privévenster, strenge
@@ -217,7 +225,15 @@ export function schoon(data) {
     for (const soort of Object.keys(UITERLIJK)) {
       if (typeof d.uiterlijk[soort] === "string") uiterlijk[soort] = d.uiterlijk[soort];
     }
+    // Een hoofddeksel dat vroeger een portret was, wordt het accessoire.
+    const verhuisd = VERHUISD[`portret:${uiterlijk.portret}`];
+    if (verhuisd) {
+      uiterlijk.accessoire = verhuisd.split(":")[1];
+      uiterlijk.portret = fresh.uiterlijk.portret;
+    }
   }
+  const skinLijst = (Array.isArray(d.skins) ? d.skins : isObject(d.skins) ? Object.keys(d.skins).filter((k) => d.skins[k]) : [])
+    .map((k) => VERHUISD[k] || k);
 
   const buffs = [];
   for (const b of Array.isArray(d.buffs) ? d.buffs : []) {
@@ -250,7 +266,7 @@ export function schoon(data) {
     achievements: idMap(d.achievements, kent(ACHIEVEMENT_BY_ID)),
     nodes: idMap(d.nodes, kent(NODE_BY_ID)),
     eggs: idMap(d.eggs, (id) => Object.hasOwn(ACHIEVEMENT_BY_ID, id) && ACHIEVEMENT_BY_ID[id].egg === true),
-    skins: { ...fresh.skins, ...idMap(d.skins, (k) => SKIN_KEYS.has(k)) },
+    skins: { ...fresh.skins, ...idMap(skinLijst, (k) => SKIN_KEYS.has(k)) },
     uiterlijk,
     seen: idMap(d.seen, kent(BUILDING_BY_ID)),
     prestige: getal(d.prestige),
@@ -271,7 +287,14 @@ function schoonLabo(m, nu) {
   const wachttijd = (v) => getal(v, 0, 0, nu + 10 * 60 * 1000);
 
   const q = isObject(bron.quiz) ? bron.quiz : {};
-  const quiz = { streak: geheel(q.streak), best: geheel(q.best), correct: geheel(q.correct), wrong: geheel(q.wrong), nextAt: wachttijd(q.nextAt) };
+  const quiz = {
+    streak: geheel(q.streak),
+    best: geheel(q.best),
+    correct: geheel(q.correct),
+    wrong: geheel(q.wrong),
+    nextAt: wachttijd(q.nextAt),
+    onderwerp: q.onderwerp === "alles" || Object.hasOwn(ONDERWERP_BY_ID, q.onderwerp) ? q.onderwerp : "alles",
+  };
 
   const c = isObject(bron.cli) ? bron.cli : {};
   const interfaces = {};
@@ -285,20 +308,33 @@ function schoonLabo(m, nu) {
         up: p.up === true,
         omschrijving: typeof p.omschrijving === "string" ? p.omschrijving.slice(0, 80) : null,
       };
+      if (p.modus === "access" || p.modus === "trunk") interfaces[poort].modus = p.modus;
+      if (p.modus !== "trunk" && geldigeVlan(p.vlan)) interfaces[poort].vlan = p.vlan;
     }
   }
-  const op = c.opdracht;
-  const opdracht = isObject(op) && POORTEN.includes(op.poort) && geldigAdres(op.ip) && geldigAdres(op.mask)
-    ? { poort: op.poort, ip: op.ip, mask: op.mask }
-    : null;
+  const opdracht = schoonOpdracht(c.opdracht);
+  const vlans = {};
+  if (isObject(c.vlans)) {
+    for (const [id, naam] of Object.entries(c.vlans)) {
+      if (geldigeVlan(Number(id)) && geldigeVlannaam(naam)) vlans[Number(id)] = naam;
+    }
+  }
   const iface = POORTEN.includes(c.iface) ? c.iface : null;
+  const vlanId = geldigeVlan(c.vlanId) && vlans[c.vlanId] ? c.vlanId : null;
   let mode = MODI.includes(c.mode) ? c.mode : "user";
   if (mode === "iface" && !iface) mode = "config";
+  if (mode === "vlan" && !vlanId) mode = "config";
   const cli = {
     hostname: typeof c.hostname === "string" && /^[a-z0-9-]{1,16}$/i.test(c.hostname) ? c.hostname.toUpperCase() : "SERGE",
     mode,
     iface: mode === "iface" ? iface : null,
+    vlanId: mode === "vlan" ? vlanId : null,
     interfaces,
+    vlans,
+    banner: typeof c.banner === "string" && c.banner.trim() ? c.banner.slice(0, 120) : null,
+    secret: c.secret === true,
+    gateway: geldigAdres(c.gateway) ? c.gateway : null,
+    vorige: Object.hasOwn(TAKEN, c.vorige) ? c.vorige : null,
     opdracht,
     nextAt: wachttijd(c.nextAt),
     gedaan: geheel(c.gedaan),

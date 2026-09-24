@@ -8,11 +8,13 @@ import {
   buyNode, graduate, ectsOnGraduate, koffieRank, skinUnlocked, kiesSkin,
 } from "../state.js";
 import { UPGRADE_BY_ID } from "../data/upgrades.js";
-import { UITERLIJK, SOORTNAMEN, fotoVoor } from "../data/uiterlijk.js";
+import { UITERLIJK, SOORTNAMEN, SOORTUITLEG, RANGEN, RANG_VOLGORDE, FOTO, fotoVoor, GROEPEN } from "../data/uiterlijk.js";
+import { logoHtml, accessoireHtml } from "./opmaak.js";
 import { CATEGORIEEN } from "../data/achievements.js";
-import { BRANCHES, lifetimeForEcts, BONUS_PER_PUNT } from "../data/skilltree.js";
+import { BRANCHES, NODE_BY_ID, lifetimeForEcts, BONUS_PER_PUNT } from "../data/skilltree.js";
 import { fmt, fmtLong, fmtPct, fmtTime, fmtEta } from "../format.js";
-import { attachTooltip, refreshTooltip, toast, blip, dialog, hoverCapable } from "./fx.js";
+import { attachTooltip, refreshTooltip, toast, blip, dialog, hoverCapable, klikEffect, klikGeluid, floatText } from "./fx.js";
+import { toonOpstart } from "./opstart.js";
 import { emit } from "../bus.js";
 import { esc } from "../html.js";
 import { VERSIE } from "../versie.js";
@@ -481,61 +483,67 @@ function renderStudie() {
   syncStudie(true);
 }
 
+// De boom is een raster: kolommen gaan dieper een tak in, rijen zijn de takken.
+// Kruisknopen staan tussen twee takken in. De lijnen staan in één SVG met
+// dezelfde maat als het raster, zodat ze meeschalen met het paneel.
 function buildTree() {
   treeBuilt = true;
-  treeEl.innerHTML = "";
-  for (const branch of BRANCHES) {
-    const wrap = document.createElement("div");
-    wrap.className = "branch";
-    wrap.innerHTML = `<h4>${branch.icon} ${branch.name} — ${branch.desc}</h4>`;
-    const row = document.createElement("div");
-    row.className = "branch-row";
-    const nodes = NODES.filter((n) => n.branch === branch.id);
-    nodes.forEach((node, i) => {
-      if (i > 0) {
-        const draad = document.createElement("span");
-        draad.className = "draad";
-        draad.dataset.after = node.id;
-        row.append(draad);
+  const kolommen = Math.max(...NODES.map((n) => n.pos[0])) + 1;
+  const rijen = BRANCHES.length;
+  const midden = ([k, r]) => [k * 100 + 50, r * 100 + 50];
+  const lijnen = NODES.flatMap((node) => node.needs.map((van) => {
+    const [x1, y1] = midden(NODE_BY_ID[van].pos);
+    const [x2, y2] = midden(node.pos);
+    return `<line data-van="${van}" data-naar="${node.id}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
+  })).join("");
+  treeEl.innerHTML = `
+    <div class="boom" style="--rijen: ${rijen}">
+      <div class="boom-takken">
+        ${BRANCHES.map((b) => `<span class="boom-tak" title="${esc(b.desc)}"><span aria-hidden="true">${b.icon}</span> ${esc(b.name)}</span>`).join("")}
+      </div>
+      <div class="boom-veld">
+        <svg class="boom-lijnen" viewBox="0 0 ${kolommen * 100} ${rijen * 100}" preserveAspectRatio="none" aria-hidden="true">${lijnen}</svg>
+      </div>
+    </div>`;
+  const veld = treeEl.querySelector(".boom-veld");
+  for (const node of NODES) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = `node${node.branch === "kruis" ? " groot" : ""}${node.id === "dr" ? " top" : ""}`;
+    btn.dataset.id = node.id;
+    btn.textContent = node.icon;
+    btn.style.left = `${((node.pos[0] + 0.5) / kolommen) * 100}%`;
+    btn.style.top = `${((node.pos[1] + 0.5) / rijen) * 100}%`;
+    btn.setAttribute("aria-label", `${node.name}, ${node.cost} studiepunten: ${node.note}`);
+    btn.addEventListener("click", () => {
+      if (buyNode(node.id)) {
+        blip(880, 0.12);
+        toast({ title: node.name, text: node.note, icon: node.icon, tone: "goed" });
+        syncStudie(true);
       }
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "node";
-      btn.dataset.id = node.id;
-      btn.textContent = node.icon;
-      btn.setAttribute("aria-label", `${node.name}: ${node.note}`);
-      btn.addEventListener("click", () => {
-        if (buyNode(node.id)) {
-          blip(880, 0.12);
-          toast({ title: node.name, text: node.note, icon: node.icon, tone: "goed" });
-          syncStudie(true);
-        }
-      });
-      attachTooltip(btn, () => {
-        const bezit = !!G.nodes[node.id];
-        const open = node.needs.every((n) => G.nodes[n]);
-        const prijs = bezit
-          ? "Al gekocht"
-          : !open
-            ? `<span class="kan-niet">Eerst het knooppunt ervoor</span>`
-            : G.ects >= node.cost
-              ? `Koop voor ${fmt(node.cost)} studiepunten`
-              : `<span class="kan-niet">${fmt(node.cost)} studiepunten — je hebt er ${fmt(G.ects)}</span>`;
-        return `<h4>${node.icon} ${node.name}</h4>
-          <div class="regel"><span>Effect</span><span>${node.note}</span></div>
-          <p class="cursief">${node.desc}</p>
-          <div class="regel prijsregel">${prijs}</div>`;
-      });
-      row.append(btn);
     });
-    wrap.append(row);
-    treeEl.append(wrap);
+    attachTooltip(btn, () => {
+      const bezit = !!G.nodes[node.id];
+      const mist = node.needs.filter((n) => !G.nodes[n]).map((n) => NODE_BY_ID[n].name);
+      const prijs = bezit
+        ? "Al gekocht"
+        : mist.length
+          ? `<span class="kan-niet">Eerst: ${esc(mist.join(" en "))}</span>`
+          : G.ects >= node.cost
+            ? `Koop voor ${fmt(node.cost)} studiepunten`
+            : `<span class="kan-niet">${fmt(node.cost)} studiepunten — je hebt er ${fmt(G.ects)}</span>`;
+      return `<h4>${node.icon} ${esc(node.name)}</h4>
+        <div class="regel"><span>Effect</span><span>${esc(node.note)}</span></div>
+        <p class="cursief">${esc(node.desc)}</p>
+        <div class="regel prijsregel">${prijs}</div>`;
+    });
+    veld.append(btn);
   }
 }
 
 function syncTree() {
   for (const btn of treeEl.querySelectorAll(".node")) {
-    const node = NODES.find((n) => n.id === btn.dataset.id);
+    const node = NODE_BY_ID[btn.dataset.id];
     const bezit = !!G.nodes[node.id];
     const open = node.needs.every((n) => G.nodes[n]);
     const kan = !bezit && open && G.ects >= node.cost;
@@ -544,9 +552,10 @@ function syncTree() {
     btn.classList.toggle("kanniet", !kan && !bezit);
     zetAttr(btn, "aria-disabled", String(!kan));
   }
-  for (const draad of treeEl.querySelectorAll(".draad")) {
-    const node = NODES.find((n) => n.id === draad.dataset.after);
-    draad.classList.toggle("aan", node.needs.every((n) => G.nodes[n]));
+  for (const lijn of treeEl.querySelectorAll("line")) {
+    const van = !!G.nodes[lijn.dataset.van];
+    lijn.classList.toggle("aan", van);
+    lijn.classList.toggle("vol", van && !!G.nodes[lijn.dataset.naar]);
   }
 }
 
@@ -585,7 +594,7 @@ function rijHtml(sleutel, label) {
 
 function renderMeer() {
   if (!meerBuilt) buildMeer();
-  if (meerEl.querySelector(".skin.op-slot") && Object.keys(G.skins).length !== skinTelling) {
+  if (Object.keys(G.skins).length !== skinTelling) {
     skinTelling = Object.keys(G.skins).length;
     renderUiterlijk();
   }
@@ -598,37 +607,126 @@ function renderMeer() {
 
 // De ring- en portretvoorbeeldjes tonen elkaars huidige keuze, zodat je ziet
 // hoe de combinatie eruitziet voor je hem kiest.
+function voorbeeld(soort, skin, open) {
+  const foto = (portret) => `<img src="${esc(fotoVoor(portret))}" alt="" />`;
+  switch (soort) {
+    case "achtergrond":
+      return `<span class="skin-preview" data-achtergrond="${esc(skin.id)}"></span>`;
+    case "ring":
+      return `<span class="skin-preview" data-ring="${esc(skin.id)}" data-portret="${esc(G.uiterlijk.portret)}">${foto(G.uiterlijk.portret)}</span>`;
+    case "portret":
+      return `<span class="skin-preview" data-portret="${esc(skin.id)}" data-ring="${esc(G.uiterlijk.ring)}">${foto(skin.id)}</span>`;
+    case "paneel": {
+      const [achter, tekst, accent] = skin.kleuren;
+      return `<span class="skin-preview paneel-voorbeeld" aria-hidden="true" style="--pv-achter: ${esc(achter)}; --pv-tekst: ${esc(tekst)}; --pv-accent: ${esc(accent)}"><i></i><i></i><i></i></span>`;
+    }
+    case "accessoire":
+      return `<span class="skin-preview acc-voorbeeld" data-portret="${esc(G.uiterlijk.portret)}" data-ring="${esc(G.uiterlijk.ring)}">${foto(G.uiterlijk.portret)}<span class="accessoire" data-accessoire="${esc(skin.id)}">${accessoireHtml(skin.id)}</span></span>`;
+    case "logo":
+      return `<span class="skin-preview logo-voorbeeld" aria-hidden="true"><span class="wordmark mini" data-logo="${esc(skin.id)}">${logoHtml(skin.id)}</span></span>`;
+    case "teller":
+      return `<span class="skin-preview teller-voorbeeld" aria-hidden="true"><span class="counter mini" data-teller="${esc(skin.id)}"><strong>1,2 mld</strong></span></span>`;
+    case "lettertype":
+      return `<span class="skin-preview teken" aria-hidden="true" style="font-family: ${esc(skin.familie)}">Aa</span>`;
+    case "filter":
+      return `<span class="skin-preview filter-voorbeeld" data-filter="${esc(skin.id)}" aria-hidden="true"><i class="kleur"></i><i class="laag"></i></span>`;
+    case "packet": {
+      const gezicht = skin.id === "serge" ? ` style="background-image: url('${esc(FOTO.standaard)}')"` : "";
+      return `<span class="skin-preview packet-voorbeeld stijl-${esc(skin.id)}" aria-hidden="true"${gezicht}>${esc(skin.inhoud ?? skin.voorbeeld)}</span>`;
+    }
+    case "titel":
+      return `<span class="skin-preview plaatje rang-${skin.rang}" aria-hidden="true">${open ? `${esc(skin.icoon)} ${esc(skin.naam)}` : "?"}</span>`;
+    case "houding":
+      return `<span class="skin-preview houding-voorbeeld" data-houding="${esc(skin.id)}" aria-hidden="true">${foto(G.uiterlijk.portret)}</span>`;
+    case "accent":
+      return `<span class="skin-preview accent-voorbeeld${skin.kleur.startsWith("#") ? "" : " regenboog"}" style="--a: ${esc(skin.kleur)}" aria-hidden="true"><i></i><i></i></span>`;
+    case "zweeftekst":
+      return `<span class="skin-preview zweef-voorbeeld" aria-hidden="true"><span class="zweef${skin.id === "standaard" ? "" : ` zweef-${esc(skin.id)}`}" data-tekst="+42">+42</span></span>`;
+    case "melding":
+      return `<span class="skin-preview melding-voorbeeld" aria-hidden="true"><span class="toast goed mini${skin.id === "standaard" ? "" : ` stijl-${esc(skin.id)}`}"><h4>Nieuw!</h4></span></span>`;
+    case "combo":
+      return skin.id === "geen"
+        ? `<span class="skin-preview teken" aria-hidden="true">—</span>`
+        : `<span class="skin-preview combo-voorbeeld" aria-hidden="true"><span class="combo" data-combo="${esc(skin.id)}"><b>${esc(skin.voorbeeld)}</b></span></span>`;
+    case "cursor":
+      return skin.punt
+        ? `<span class="skin-preview cursor-voorbeeld" aria-hidden="true"><img src="img/cursor/${esc(skin.id)}.svg" alt="" /></span>`
+        : `<span class="skin-preview teken" aria-hidden="true">${esc(skin.voorbeeld)}</span>`;
+    case "opstart":
+      return `<span class="skin-preview opstart-voorbeeld" data-opstart="${esc(skin.id)}" aria-hidden="true">${esc(skin.voorbeeld)}</span>`;
+    default:
+      return `<span class="skin-preview teken" aria-hidden="true">${esc(skin.voorbeeld || "")}</span>`;
+  }
+}
+
 function skinKnop(soort, skin) {
   const open = skinUnlocked(soort, skin.id);
   const gekozen = G.uiterlijk[soort] === skin.id;
-  const portret = soort === "portret" ? skin.id : G.uiterlijk.portret;
-  const foto = `<img src="${esc(fotoVoor(portret))}" alt="" />`;
-  const preview = soort === "achtergrond"
-    ? `<span class="skin-preview" data-achtergrond="${esc(skin.id)}"></span>`
-    : soort === "ring"
-      ? `<span class="skin-preview" data-ring="${esc(skin.id)}" data-portret="${esc(G.uiterlijk.portret)}">${foto}</span>`
-      : `<span class="skin-preview" data-portret="${esc(skin.id)}" data-ring="${esc(G.uiterlijk.ring)}">${foto}</span>`;
   return `
-    <button type="button" class="skin${open ? "" : " op-slot"}" data-soort="${soort}" data-id="${esc(skin.id)}"
+    <button type="button" class="skin kaart-${skin.rang}${open ? "" : " op-slot"}" data-soort="${soort}" data-id="${esc(skin.id)}"
             aria-pressed="${gekozen}" aria-disabled="${!open}"
             title="${esc(open ? skin.beschrijving : skin.hoe)}">
-      ${preview}
+      ${voorbeeld(soort, skin, open)}
       <span class="skin-naam">${open ? skin.naam : "Op slot"}</span>
+      <span class="skin-rang rang-tekst-${skin.rang}">${RANGEN[skin.rang].naam}</span>
       <span class="skin-hoe">${open ? skin.beschrijving : skin.hoe}</span>
     </button>`;
 }
 
+// Eén soort tegelijk in beeld. Bovenaan kies je een groep, daaronder een
+// soort; beide tonen hoeveel je er al hebt.
+let toonSoort = "portret";
+const laatsteSoort = {};
+const aantalOpen = (soort) => UITERLIJK[soort].filter((skin) => skinUnlocked(soort, skin.id)).length;
+const groepVan = (soort) => GROEPEN.find((g) => g.soorten.includes(soort));
+
 function renderUiterlijk() {
   const kaartEl = meerEl.querySelector("#uiterlijk-kaart");
   if (!kaartEl) return;
-  let totaal = 0;
-  for (const soort of Object.keys(UITERLIJK)) {
-    kaartEl.querySelector(`.skinrij[data-soort="${soort}"]`).innerHTML =
-      UITERLIJK[soort].map((skin) => skinKnop(soort, skin)).join("");
-    totaal += UITERLIJK[soort].length;
-  }
+  const groep = groepVan(toonSoort);
+  kaartEl.querySelector("#skin-groepen").innerHTML = GROEPEN.map((g) => {
+    const open = g.soorten.reduce((som, soort) => som + aantalOpen(soort), 0);
+    const totaal = g.soorten.reduce((som, soort) => som + UITERLIJK[soort].length, 0);
+    const aan = g === groep;
+    return `<button type="button" data-groep="${g.id}" aria-pressed="${aan}" class="${aan ? "on" : ""}"><span aria-hidden="true">${g.icoon}</span> ${g.naam} <small>${open}/${totaal}</small></button>`;
+  }).join("");
+  kaartEl.querySelector("#skin-tabs").innerHTML = groep.soorten
+    .map((soort) => `<button type="button" data-toon="${soort}" aria-pressed="${soort === toonSoort}" class="${soort === toonSoort ? "on" : ""}">${SOORTNAMEN[soort]} <small>${aantalOpen(soort)}/${UITERLIJK[soort].length}</small></button>`)
+    .join("");
+  const rij = kaartEl.querySelector(".skinrij");
+  rij.dataset.soort = toonSoort;
+  rij.setAttribute("aria-label", SOORTNAMEN[toonSoort]);
+  // Van gewoon naar goddelijk, zodat de zeldzaamste dingen onderaan wachten.
+  const opVolgorde = [...UITERLIJK[toonSoort]].sort((a, b) => RANG_VOLGORDE.indexOf(a.rang) - RANG_VOLGORDE.indexOf(b.rang));
+  rij.innerHTML = opVolgorde.map((skin) => skinKnop(toonSoort, skin)).join("");
+  kaartEl.querySelector("#skin-hint").textContent = SOORTUITLEG[toonSoort];
+  const totaal = Object.values(UITERLIJK).reduce((som, lijst) => som + lijst.length, 0);
   kaartEl.querySelector("#uiterlijk-telling").textContent =
     `${Object.keys(G.skins).length} van de ${totaal} vrijgespeeld`;
+}
+
+// Laat meteen zien of horen wat je net koos.
+function probeer(soort, id, knop) {
+  const r = knop.querySelector(".skin-preview").getBoundingClientRect();
+  const x = r.left + r.width / 2;
+  const y = r.top + r.height / 2;
+  if (soort === "geluid") klikGeluid(id);
+  if (soort === "klik") klikEffect(id, x, y);
+  if (soort === "zweeftekst") floatText(x, y - 10, "+1.337");
+  if (soort === "combo") emit("reeks:voorbeeld", id);
+  if (soort === "opstart") toonOpstart(id);
+  if (soort === "melding") toast({ title: "Zo ziet een melding eruit", text: `Stijl: ${UITERLIJK.melding.find((m) => m.id === id).naam}.`, icon: "🎨", tone: "goed" });
+  if (soort === "muziek" && id !== "geen" && !G.options.sound) {
+    toast({ title: "Het geluid staat uit", text: "Zet Geluid aan bij Instellingen hieronder om de muziek te horen.", icon: "🔇" });
+  }
+}
+
+// Verras me: van elke soort een willekeurig vrijgespeeld ding.
+function verras() {
+  for (const soort of Object.keys(UITERLIJK)) {
+    const open = UITERLIJK[soort].filter((skin) => skinUnlocked(soort, skin.id));
+    kiesSkin(soort, open[Math.floor(Math.random() * open.length)].id);
+  }
 }
 
 function buildMeer() {
@@ -637,9 +735,13 @@ function buildMeer() {
     <div class="kaart" id="uiterlijk-kaart">
       <h3>Uiterlijk <span id="uiterlijk-telling" style="float:right;text-transform:none;letter-spacing:0;font-weight:600"></span></h3>
       <p class="panel-intro">Geef je spel een eigen gezicht. Je speelt ze vrij door te spelen; wat je eenmaal hebt, houd je ook na het afstuderen.</p>
-      ${Object.keys(UITERLIJK)
-        .map((soort) => `<h4 class="skin-kop">${SOORTNAMEN[soort]}</h4><div class="skinrij" data-soort="${soort}"></div>`)
-        .join("")}
+      <div class="skin-bediening">
+        <div class="skin-groepen" id="skin-groepen" role="group" aria-label="Welk deel van het spel?"></div>
+        <div class="segmented skin-tabs" id="skin-tabs" role="group" aria-label="Wat wil je aanpassen?"></div>
+        <button type="button" class="btn ghost small" id="skin-verras">Verras me</button>
+      </div>
+      <p class="panel-intro" id="skin-hint"></p>
+      <div class="skinrij" role="group"></div>
       <h4 class="skin-kop"><label for="opt-netwerknaam">Netwerknaam</label></h4>
       <input class="veld" id="opt-netwerknaam" maxlength="24" placeholder="Bijvoorbeeld: Serge-net" autocomplete="off" />
       <p class="panel-intro" style="margin-top:8px">Komt onder de titel van het spel te staan. Laat leeg om hem weg te laten.</p>
@@ -701,10 +803,34 @@ function buildMeer() {
   for (const [sleutel] of STATRIJEN) statEls.set(sleutel, meerEl.querySelector(`[data-stat="${sleutel}"]`));
   for (const id of Object.keys(VAKKEN)) vakEls.set(id, meerEl.querySelector(`[data-vak="${id}"]`));
   meerEl.addEventListener("click", (e) => {
+    const groep = e.target.closest("[data-groep]");
+    if (groep) {
+      const def = GROEPEN.find((g) => g.id === groep.dataset.groep);
+      toonSoort = laatsteSoort[def.id] || def.soorten[0];
+      renderUiterlijk();
+      meerEl.querySelector(`[data-groep="${def.id}"]`)?.focus();
+      return;
+    }
+    const tab = e.target.closest("[data-toon]");
+    if (tab) {
+      toonSoort = tab.dataset.toon;
+      laatsteSoort[groepVan(toonSoort).id] = toonSoort;
+      renderUiterlijk();
+      meerEl.querySelector(`[data-toon="${toonSoort}"]`)?.focus();
+      return;
+    }
+    if (e.target.closest("#skin-verras")) {
+      verras();
+      blip(660, 0.07);
+      emit("uiterlijk");
+      renderUiterlijk();
+      return;
+    }
     const knop = e.target.closest(".skin");
     if (!knop) return;
     if (kiesSkin(knop.dataset.soort, knop.dataset.id)) {
-      blip(660, 0.07);
+      if (knop.dataset.soort !== "geluid") blip(660, 0.07);
+      probeer(knop.dataset.soort, knop.dataset.id, knop);
       emit("uiterlijk");
       renderUiterlijk();
     }

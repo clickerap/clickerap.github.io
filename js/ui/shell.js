@@ -2,17 +2,21 @@
 
 import { G, D, BUILDINGS, VAKKEN, nextCost, availableUpgrades, onAchievement, onSkin, touch, rev } from "../state.js";
 import { buffUiterlijk, effectVan, INCIDENT_BY_ID } from "../data/buffs.js";
-import { fotoVoor } from "../data/uiterlijk.js";
+import { fotoVoor, TITELS, MAATJES, RANGEN, ENKELVOUD, DE_WOORD, LETTERTYPES, PACKETS, CURSORS } from "../data/uiterlijk.js";
+import { logoHtml, accessoireHtml } from "./opmaak.js";
 import { STUDIE_OPEN } from "../data/skilltree.js";
 import { fmt, fmtLong, fmtTime, setNotation } from "../format.js";
 import { click, goldenClicked, goldenExpired, fixIncident, ignoreIncident } from "../engine.js";
 import { on, emit } from "../bus.js";
-import { toast, floatText, sparks, blip, chord, dialog, attachTooltip, hoverCapable, kondigAan } from "./fx.js";
+import { toast, floatText, sparks, blip, chord, dialog, attachTooltip, hoverCapable, kondigAan, klikEffect, klikGeluid } from "./fx.js";
 import { renderAll, syncFast, renderStudie, syncStudie, renderMeer, renderAchievements, resetPanels } from "./panels.js";
 import { save, wipe, exportSave, importSave, wisselSlot, actiefBestand, slotSummary, backupInfo, herstelBackup } from "../save.js";
 import { meet, tekenGrafiek } from "./grafiek.js";
 import { esc } from "../html.js";
 import { stelRegenIn } from "./regen.js";
+import { stelLevendIn, LEVENDE_ACHTERGRONDEN } from "./levend.js";
+import { stelWeerIn, stelSpoorIn } from "./deeltjes.js";
+import { stelMuziekIn } from "./muziek.js";
 
 const el = (id) => document.getElementById(id);
 const scoreEl = el("score");
@@ -126,13 +130,15 @@ function clickSerge(event) {
   const x = event?.clientX || rect.left + rect.width / 2;
   const y = event?.clientY || rect.top + rect.height / 2;
   floatText(x, y - 10, `+${fmt(value)}`);
-  sparks(x, y, G.options.motion ? 8 : 0);
+  klikEffect(G.uiterlijk.klik, x, y);
   if (G.options.motion) {
     sergeBtn.classList.remove("hit");
     void sergeBtn.offsetWidth;
     sergeBtn.classList.add("hit");
   }
-  blip(560 + Math.random() * 90, 0.04, 0.035);
+  klikGeluid(G.uiterlijk.geluid);
+  klikReeks();
+  maatjeNaKlik();
   if (G.options.motion) {
     scoreEl.classList.remove("pop");
     void scoreEl.offsetWidth;
@@ -531,10 +537,13 @@ on("golden:spawn", (info) => {
   packetInfo = info;
   packetEl = document.createElement("button");
   packetEl.type = "button";
-  packetEl.className = `packet${info.hazard ? " rood" : ""}`;
+  // Een rood packet ziet er altijd hetzelfde uit; een gouden volgt Uiterlijk.
+  const stijl = PACKETS.find((p) => p.id === G.uiterlijk.packet) || PACKETS[0];
+  packetEl.className = info.hazard ? "packet rood" : `packet stijl-${stijl.id}`;
   packetEl.style.left = `${x}px`;
   packetEl.style.top = `${y}px`;
-  packetEl.textContent = info.hazard ? "🚨" : "📦";
+  packetEl.textContent = info.hazard ? "🚨" : (stijl.inhoud ?? stijl.voorbeeld);
+  if (!info.hazard && stijl.id === "serge") packetEl.style.backgroundImage = `url("${fotoVoor(G.uiterlijk.portret)}")`;
   packetEl.setAttribute("aria-label", info.hazard ? "Verdacht packet, niet aanklikken" : "Gouden packet");
   packetEl.addEventListener("click", () => {
     goldenClicked(info);
@@ -637,6 +646,7 @@ on("meer:built", () => {
   sound.addEventListener("change", () => {
     G.options.sound = sound.checked;
     if (sound.checked) chord([620, 820]);
+    stelMuziekIn({ soort: G.uiterlijk.muziek, aan: G.options.sound });
     save();
   });
 
@@ -763,17 +773,231 @@ on("meer:built", () => {
 });
 
 const netwerknaamEl = el("netwerknaam");
+const titelEl = el("titelbadge");
+const wordmarkEl = el("wordmark");
+const accessoireEl = el("accessoire");
+const tellerEl = document.querySelector(".counter");
 const minderBeweging = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+// ---------------------------------------------------------------- Maatje
+// ------------------------------------------------------------ Klikreeks
+// Klik je binnen een halve seconde opnieuw, dan loopt je reeks door. De
+// beste reeks telt mee voor Uiterlijk; hoe hij in beeld komt, kies je daar.
+
+const comboEl = el("combo");
+const REEKS_PAUZE = 550;
+const MIJLPALEN = [10, 25, 50, 100, 250, 500, 1000];
+const REEKS_TEKST = {
+  vechtspel: ["GOED!", "GEWELDIG!", "ONSTUITBAAR!", "LEGENDARISCH!", "GODDELIJK!", "K.O.!", "PERFECT K.O.!"],
+  sport: ["Mooie reeks!", "Hij blijft maar gaan!", "Wat. Een. Klikker.", "DIT IS HISTORISCH!", "Dames en heren, dit heb ik nog nooit gezien!", "Iemand moet die muis afpakken!", "DE MUIS IS GESMOLTEN!"],
+  serge: ["Goed zo.", "Netjes.", "Dat komt op je rapport.", "Tien op tien.", "Ik ben trots op je.", "Dit is geen stage meer, dit is kunst.", "Ik heb je niets meer te leren."],
+};
+let reeks = 0;
+let laatsteKlik = 0;
+let vorigeTussentijd = 0;
+let reeksTimer = 0;
+
+function romeins(n) {
+  const TEKENS = [[1000, "M"], [900, "CM"], [500, "D"], [400, "CD"], [100, "C"], [90, "XC"], [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]];
+  let uit = "";
+  for (const [waarde, teken] of TEKENS) {
+    while (n >= waarde) {
+      uit += teken;
+      n -= waarde;
+    }
+  }
+  return uit;
+}
+
+// De tekst bij de hoogste mijlpaal die je al voorbij bent.
+function mijlpaalTekst(lijst, n) {
+  let tekst = "";
+  MIJLPALEN.forEach((m, i) => {
+    if (n >= m) tekst = lijst[i];
+  });
+  return tekst;
+}
+
+function klikReeks() {
+  const nu = performance.now();
+  const tussen = nu - laatsteKlik;
+  reeks = tussen <= REEKS_PAUZE ? reeks + 1 : 1;
+  laatsteKlik = nu;
+  if (reeks > G.stats.besteReeks) G.stats.besteReeks = reeks;
+  clearTimeout(reeksTimer);
+  reeksTimer = setTimeout(eindeReeks, REEKS_PAUZE + 200);
+  const stijl = G.uiterlijk.combo;
+  const vorige = vorigeTussentijd;
+  vorigeTussentijd = tussen;
+  if (stijl === "geen" || reeks < 3) return;
+  toonReeks(stijl, reeks, vorige ? Math.abs(tussen - vorige) / vorige : 1);
+}
+
+// Ook voor het voorbeeld in het menu.
+export function toonReeks(stijl, n, afwijking = 0) {
+  const mijlpaal = MIJLPALEN.includes(n);
+  let kop;
+  let onder = "";
+  switch (stijl) {
+    case "arcade":
+      kop = `COMBO ×${n}`;
+      break;
+    case "vechtspel":
+      kop = `${n} HITS`;
+      onder = mijlpaalTekst(REEKS_TEKST.vechtspel, n);
+      break;
+    case "ritme":
+      kop = `${n}`;
+      onder = afwijking < 0.12 ? "PERFECT" : afwijking < 0.3 ? "GOED" : "NET NIET";
+      break;
+    case "sport":
+      kop = `${n} op rij`;
+      onder = mijlpaalTekst(REEKS_TEKST.sport, n);
+      break;
+    case "serge":
+      kop = `${n}`;
+      onder = mijlpaalTekst(REEKS_TEKST.serge, n) || "Hm.";
+      break;
+    case "kracht":
+      kop = `KRACHT ${(n * 1000).toLocaleString("nl-NL")}`;
+      onder = n * 1000 > 9000 ? "HET IS MEER DAN NEGENDUIZEND!" : "";
+      break;
+    case "hemels":
+      kop = `×${romeins(Math.min(n, 3999))}`;
+      if (mijlpaal) klikGeluid("hemelkoor");
+      break;
+    default:
+      return;
+  }
+  comboEl.dataset.combo = stijl;
+  comboEl.style.setProperty("--hitte", String(Math.min(1, n / 100)));
+  comboEl.innerHTML = `<b>${esc(kop)}</b>${onder ? `<small>${esc(onder)}</small>` : ""}`;
+  comboEl.hidden = false;
+  comboEl.classList.remove("weg", "tik", "mijlpaal");
+  void comboEl.offsetWidth;
+  comboEl.classList.add(mijlpaal ? "mijlpaal" : "tik");
+  clearTimeout(reeksTimer);
+  reeksTimer = setTimeout(eindeReeks, REEKS_PAUZE + 200);
+}
+
+on("reeks:voorbeeld", (stijl) => toonReeks(stijl, 25));
+
+function eindeReeks() {
+  reeks = 0;
+  if (comboEl.hidden) return;
+  comboEl.classList.add("weg");
+  reeksTimer = setTimeout(() => (comboEl.hidden = true), 320);
+}
+
+// Het maatje zit rechtsonder naast Serge. Het zegt iets als je erop klikt,
+// na elke veertig kliks op Serge, en af en toe uit zichzelf.
+
+const maatjeEl = el("maatje");
+const ballonEl = el("maatje-ballon");
+let maatjeDef = null;
+let ballonTimer = 0;
+let kliksSinds = 0;
+let vorigeZin = "";
+
+function zetMaatje(id) {
+  const def = MAATJES.find((m) => m.id === id && m.zegt.length) || null;
+  if (def === maatjeDef) return;
+  maatjeDef = def;
+  maatjeEl.hidden = !def;
+  ballonEl.hidden = true;
+  if (!def) return;
+  maatjeEl.dataset.maatje = def.id;
+  maatjeEl.firstElementChild.textContent = def.voorbeeld;
+  maatjeEl.setAttribute("aria-label", `${def.naam}: klik om iets te horen`);
+  maatjeEl.title = def.naam;
+}
+
+function maatjeZegt(voorlezen = false) {
+  if (!maatjeDef) return;
+  const keuze = maatjeDef.zegt.filter((z) => z !== vorigeZin);
+  vorigeZin = keuze[Math.floor(Math.random() * keuze.length)];
+  ballonEl.textContent = vorigeZin;
+  ballonEl.hidden = false;
+  ballonEl.classList.remove("in");
+  void ballonEl.offsetWidth;
+  ballonEl.classList.add("in");
+  clearTimeout(ballonTimer);
+  ballonTimer = setTimeout(() => (ballonEl.hidden = true), 4800);
+  if (voorlezen) kondigAan(`${maatjeDef.naam}: ${vorigeZin}`);
+}
+
+function maatjeNaKlik() {
+  if (!maatjeDef) return;
+  kliksSinds++;
+  if (kliksSinds >= 40) {
+    kliksSinds = 0;
+    maatjeZegt();
+  }
+}
+
+maatjeEl.addEventListener("click", () => {
+  kliksSinds = 0;
+  maatjeZegt(true);
+  if (G.options.motion) {
+    maatjeEl.classList.remove("hop");
+    void maatjeEl.offsetWidth;
+    maatjeEl.classList.add("hop");
+  }
+});
+// Af en toe uit zichzelf, maar alleen als je kijkt.
+setInterval(() => {
+  if (maatjeDef && !document.hidden && Math.random() < 0.35) maatjeZegt();
+}, 60000);
 
 export function applyUiterlijk() {
   const naam = (G.options.netwerknaam || "").trim();
   netwerknaamEl.hidden = !naam;
   netwerknaamEl.textContent = naam;
-  const { portret, ring, achtergrond } = G.uiterlijk;
+  const { portret, ring, achtergrond, titel } = G.uiterlijk;
+  const titelDef = TITELS.find((t) => t.id === titel && t.id !== "geen");
+  titelEl.hidden = !titelDef;
+  if (titelDef) {
+    titelEl.className = `titelbadge rang-${titelDef.rang}`;
+    titelEl.innerHTML = `<span aria-hidden="true">${esc(titelDef.icoon)}</span> ${esc(titelDef.naam)}`;
+    titelEl.title = `${RANGEN[titelDef.rang].naam}: ${titelDef.beschrijving}`;
+  }
   document.body.dataset.achtergrond = achtergrond;
-  stelRegenIn({ aan: achtergrond === "matrix", beweging: G.options.motion && !minderBeweging.matches });
+  document.body.dataset.paneel = G.uiterlijk.paneel;
+  document.body.dataset.filter = G.uiterlijk.filter;
+  document.body.dataset.accent = G.uiterlijk.accent;
+  document.body.dataset.melding = G.uiterlijk.melding;
+  // De muisaanwijzer: een SVG in img/cursor, met de plek die klikt.
+  const cursor = CURSORS.find((c) => c.id === G.uiterlijk.cursor && c.punt);
+  if (cursor) {
+    document.body.dataset.cursor = cursor.id;
+    document.body.style.setProperty("--cursor", `url("img/cursor/${cursor.id}.svg") ${cursor.punt[0]} ${cursor.punt[1]}`);
+  } else {
+    delete document.body.dataset.cursor;
+    document.body.style.removeProperty("--cursor");
+  }
+  tellerEl.dataset.teller = G.uiterlijk.teller;
+  // Alleen opnieuw opbouwen als er iets verandert, anders beginnen de
+  // animaties van het logo en het accessoire telkens opnieuw.
+  if (wordmarkEl.dataset.logo !== G.uiterlijk.logo) {
+    wordmarkEl.dataset.logo = G.uiterlijk.logo;
+    wordmarkEl.innerHTML = logoHtml(G.uiterlijk.logo);
+  }
+  if (accessoireEl.dataset.accessoire !== G.uiterlijk.accessoire) {
+    accessoireEl.dataset.accessoire = G.uiterlijk.accessoire;
+    accessoireEl.innerHTML = accessoireHtml(G.uiterlijk.accessoire);
+  }
+  const letter = LETTERTYPES.find((l) => l.id === G.uiterlijk.lettertype);
+  document.body.style.fontFamily = letter && letter.id !== "plex" ? letter.familie : "";
+  const beweging = G.options.motion && !minderBeweging.matches;
+  stelRegenIn({ aan: achtergrond === "matrix", beweging });
+  stelLevendIn({ scene: LEVENDE_ACHTERGRONDEN.includes(achtergrond) ? achtergrond : null, beweging });
+  stelWeerIn({ soort: G.uiterlijk.weer, beweging });
+  stelSpoorIn({ soort: G.uiterlijk.spoor, beweging });
+  zetMaatje(G.uiterlijk.maatje);
+  stelMuziekIn({ soort: G.uiterlijk.muziek, aan: G.options.sound });
   sergeBtn.dataset.portret = portret;
   sergeBtn.dataset.ring = ring;
+  sergeBtn.dataset.houding = G.uiterlijk.houding;
   const bron = fotoVoor(portret);
   if (sergeImg.getAttribute("src") !== bron) sergeImg.src = bron;
 }
@@ -782,7 +1006,14 @@ on("uiterlijk", applyUiterlijk);
 minderBeweging.addEventListener("change", applyUiterlijk);
 
 onSkin((skin) => {
-  logboek(`Nieuw ${skin.soort}: ${skin.naam}`, "goud");
+  // "Nieuw legendarisch portret", maar "nieuwe legendarische ring": bij de
+  // de-woorden krijgen de bijvoeglijke naamwoorden een e.
+  const soort = ENKELVOUD[skin.soort];
+  const de = DE_WOORD[skin.soort];
+  const nieuw = de ? "Nieuwe" : "Nieuw";
+  const rangDef = RANGEN[skin.rang];
+  const rang = rangDef && skin.rang !== "gewoon" ? ` ${de ? rangDef.verbogen : rangDef.onverbogen}` : "";
+  logboek(`${nieuw}${rang} ${soort}: ${skin.naam}`, "goud");
   if (skin.feest) {
     dialog({
       title: skin.feest.titel,
@@ -802,7 +1033,7 @@ onSkin((skin) => {
     return;
   }
   toast({
-    title: `Nieuw ${skin.soort}: ${skin.naam}`,
+    title: `${nieuw}${rang} ${soort}: ${skin.naam}`,
     text: "Te kiezen onder het tandwiel, bij Uiterlijk.",
     icon: "🎨",
     tone: "goud",

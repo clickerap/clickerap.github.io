@@ -47,7 +47,7 @@ function basisPps() {
 const perMinuut = () => basisPps() * 60;
 
 export function limiet() {
-  return Math.max(2000, perMinuut() * MARKT.limietMinuten);
+  return Math.max(2000, perMinuut() * MARKT.limietMinuten * (D.marktLimiet || 1));
 }
 
 export function waardeVan(id) {

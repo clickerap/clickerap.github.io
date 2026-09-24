@@ -3,6 +3,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { openSpel, staat } from "./hulp.mjs";
+import { STUDIE_OPEN, lifetimeForEcts } from "../../js/data/skilltree.js";
 
 const RUST = `{ version: 3, packets: 1e6, buildings: { patchkabel: 5, switch: 1 }, seen: ["patchkabel", "switch"], stats: { lifetime: 1e6, clicks: 50 }, lastSeen: nu }`;
 
@@ -145,14 +146,15 @@ test("bug 10: je kunt terugscrollen in de terminal", async () => {
 
 test("bug 12: de afstudeerkaart werkt zichzelf bij", async () => {
   const { page, context } = await openSpel({
-    saves: { sergeClicker: `{ version: 3, packets: 0, stats: { lifetime: 2e9 }, lastSeen: nu }` },
+    // Het tabblad is open, maar het eerste studiepunt is nog niet binnen.
+    saves: { sergeClicker: `{ version: 3, packets: 0, stats: { lifetime: ${STUDIE_OPEN * 2} }, lastSeen: nu }` },
   });
   await page.click('button[data-tab="studie"]');
   assert.equal(await page.isDisabled("#graduate-btn"), true);
-  await page.evaluate(async () => {
+  await page.evaluate(async (totaal) => {
     const { G } = await import("/js/state.js");
-    G.stats.lifetime = 3e10;
-  });
+    G.stats.lifetime = totaal;
+  }, lifetimeForEcts(1) * 1.05);
   await page.waitForTimeout(400);
   assert.equal(await page.isDisabled("#graduate-btn"), false);
   assert.match(await page.textContent("#graduate-btn"), /Afstuderen voor 1 studiepunt/);

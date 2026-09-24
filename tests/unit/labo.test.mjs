@@ -84,7 +84,8 @@ test("een gerucht dat uitkomt geeft voorkennis", () => {
   assert.equal(m.holdings.gpu.gerucht, kop);
   tickMarkt();
   assert.equal(m.holdings.gpu.voorkennis, true);
-  assert.equal(m.nieuws[0].soort, "bevestigd");
+  // Er kan in dezelfde tik toevallig nog een nieuw bericht bovenop komen.
+  assert.ok(m.nieuws.some((n) => n.kop === kop && n.soort === "bevestigd"));
   verkopen("gpu", 1);
   assert.equal(G.achievements["beurs-gerucht"], true);
 });

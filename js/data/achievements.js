@@ -118,7 +118,7 @@ ach("prestige-boom", "Volledig curriculum", "🌳", "Koop elk knooppunt in de st
 groep("Labo");
 ach("cursus-1", "Eerste hoofdstuk", "📖", "Lees een hoofdstuk van de cursus.", null, { manual: true });
 ach("cursus-alles", "Cursus uit", "🎒", "Lees alle hoofdstukken van de cursus.", null, { manual: true });
-ach("quiz-1", "Eerste overhoring", "📝", "Beantwoord een subnetvraag goed.", null, { manual: true });
+ach("quiz-1", "Eerste overhoring", "📝", "Beantwoord een vraag van de overhoring goed.", null, { manual: true });
 ach("quiz-10", "Serge knikt", "✅", "Tien goede antwoorden op rij.", null, { manual: true });
 ach("quiz-25", "Subnetten in je hoofd", "🧮", "Vijfentwintig goede antwoorden op rij.", null, { manual: true });
 ach("cli-1", "enable", "⌨️", "Voer je eerste commando uit in de terminal.", null, { manual: true });

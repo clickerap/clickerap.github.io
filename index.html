@@ -24,8 +24,11 @@
 
   <header class="topbar">
     <div class="titel">
-      <h1 class="wordmark"><span>Serge</span> Clicker</h1>
+      <!-- De naam blijft voor schermlezers altijd "Serge Clicker", ook als een
+           logo hem anders schrijft. -->
+      <h1 class="wordmark" id="wordmark" aria-label="Serge Clicker"><span class="w1">Serge</span> <span class="w2">Clicker</span></h1>
       <p class="netwerknaam" id="netwerknaam" hidden></p>
+      <p class="titelbadge" id="titelbadge" hidden></p>
     </div>
     <div class="kop-knoppen">
       <button type="button" class="ghost-btn" id="btn-help" aria-label="Uitleg en sneltoetsen" title="Uitleg">?</button>
@@ -42,9 +45,16 @@
       </div>
 
       <div class="clicker">
-        <button type="button" id="serge" class="serge" aria-label="Klik op Serge om packets te versturen">
-          <img src="img/serge.jpg" alt="" id="serge-img" width="320" height="320" draggable="false" />
-        </button>
+        <div class="serge-plek">
+          <button type="button" id="serge" class="serge" aria-label="Klik op Serge om packets te versturen">
+            <img src="img/serge.jpg" alt="" id="serge-img" width="320" height="320" draggable="false" />
+            <!-- Binnen de knop, zodat het accessoire meeveert als je klikt. -->
+            <span class="accessoire" id="accessoire" aria-hidden="true"></span>
+          </button>
+          <p class="combo" id="combo" aria-hidden="true" hidden></p>
+          <button type="button" class="maatje" id="maatje" hidden><span aria-hidden="true"></span></button>
+          <p class="maatje-ballon" id="maatje-ballon" hidden></p>
+        </div>
         <p class="clicker-hint" id="clicker-hint">Klik om te beginnen</p>
       </div>
 
@@ -185,6 +195,11 @@
     </div>
   </dialog>
 
+  <!-- Het schermfilter uit Uiterlijk: een laag die van kleur verandert en een
+       laag met lijnen, randen of korrel. -->
+  <div class="filterkleur" aria-hidden="true"></div>
+  <div class="filterlaag" aria-hidden="true"></div>
+
   <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
   <div class="toaster" id="toaster" aria-live="polite"></div>
   <div class="fx" id="fx" aria-hidden="true"></div>
@@ -202,6 +217,61 @@
   <noscript>
     <p style="padding:2rem;text-align:center">Serge Clicker heeft JavaScript nodig.</p>
   </noscript>
+  <!-- Filters voor portretten die CSS alleen niet kan maken. -->
+  <svg class="filters" width="0" height="0" aria-hidden="true" focusable="false">
+    <!-- 8-bit: alleen elk negende pixel blijft over, en groeit dan tot een blok. -->
+    <filter id="pixel" x="0" y="0" width="1" height="1">
+      <feFlood x="4" y="4" width="1" height="1" />
+      <feComposite width="9" height="9" />
+      <feTile result="raster" />
+      <feComposite in="SourceGraphic" in2="raster" operator="in" />
+      <feMorphology operator="dilate" radius="4" />
+    </filter>
+    <!-- Pop-art: felle kleuren, teruggebracht tot een paar vlakken. -->
+    <filter id="popart" color-interpolation-filters="sRGB">
+      <feColorMatrix type="saturate" values="2.4" />
+      <feComponentTransfer>
+        <feFuncR type="discrete" tableValues="0.1 0.6 0.98 1" />
+        <feFuncG type="discrete" tableValues="0.05 0.35 0.85 1" />
+        <feFuncB type="discrete" tableValues="0.35 0.65 0.95" />
+      </feComponentTransfer>
+    </filter>
+    <!-- Festival: drie kleuren, van diep indigo via magenta naar geel. -->
+    <filter id="festival" color-interpolation-filters="sRGB">
+      <feColorMatrix type="saturate" values="0" />
+      <feComponentTransfer>
+        <feFuncR type="table" tableValues="0.12 0.93 1" />
+        <feFuncG type="table" tableValues="0.07 0.28 0.9" />
+        <feFuncB type="table" tableValues="0.36 0.6 0.45" />
+      </feComponentTransfer>
+    </filter>
+    <!-- Schets: de randen van het beeld als potloodlijnen op licht papier. -->
+    <filter id="schets" color-interpolation-filters="sRGB">
+      <feColorMatrix type="saturate" values="0" result="grijs" />
+      <feConvolveMatrix in="grijs" order="3" kernelMatrix="-1 -1 -1 -1 8 -1 -1 -1 -1" preserveAlpha="true" result="randen" />
+      <feComponentTransfer in="randen" result="lijnen">
+        <feFuncR type="linear" slope="-4" intercept="1" />
+        <feFuncG type="linear" slope="-4" intercept="1" />
+        <feFuncB type="linear" slope="-4" intercept="1" />
+      </feComponentTransfer>
+      <feComponentTransfer in="grijs" result="papier">
+        <feFuncR type="linear" slope="0.35" intercept="0.68" />
+        <feFuncG type="linear" slope="0.35" intercept="0.68" />
+        <feFuncB type="linear" slope="0.35" intercept="0.66" />
+      </feComponentTransfer>
+      <feBlend in="lijnen" in2="papier" mode="multiply" />
+    </filter>
+    <!-- Warmtebeeld: grijswaarden, dan een kleurschaal van koud blauw via rood
+         en oranje naar wit. -->
+    <filter id="warmtebeeld" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="0.3 0.59 0.11 0 0  0.3 0.59 0.11 0 0  0.3 0.59 0.11 0 0  0 0 0 1 0" />
+      <feComponentTransfer>
+        <feFuncR type="table" tableValues="0.04 0.3 0.8 1 1 1" />
+        <feFuncG type="table" tableValues="0 0 0.08 0.42 0.82 1" />
+        <feFuncB type="table" tableValues="0.3 0.62 0.42 0.05 0.12 0.9" />
+      </feComponentTransfer>
+    </filter>
+  </svg>
 </body>
 
 </html>

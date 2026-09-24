@@ -13,8 +13,11 @@ import { NODES, BRANCHES, ECTS_BASIS, STUDIE_OPEN, BONUS_PER_PUNT } from "../js/
 import { BUFFS, HAZARDS, INCIDENTS } from "../js/data/buffs.js";
 import { VERBINDINGEN, MATEN, WERK, DREMPELS, PROTOCOLLEN } from "../js/data/patch.js";
 import { GOEDEREN, GOED_BY_ID, KOPPEN, MARKT } from "../js/data/market.js";
-import { UITERLIJK, SOORTNAMEN, ALLE_SKINS } from "../js/data/uiterlijk.js";
+import { UITERLIJK, SOORTNAMEN, ALLE_SKINS, RANGEN } from "../js/data/uiterlijk.js";
 import { HOOFDSTUKKEN } from "../js/data/cursus.js";
+import { TAKEN } from "../js/data/terminal.js";
+import { ONDERWERPEN, FEITEN } from "../js/data/vragen.js";
+import { REKENVRAGEN } from "../js/minigames/quiz.js";
 
 const nl = new Intl.NumberFormat("nl-NL", { maximumFractionDigits: 2 });
 const SCHAAL = [
@@ -176,9 +179,11 @@ tabel(["Koffiepeil", "Rang"], KOFFIE_RANKS.map(([peil, naam]) => [`${Math.round(
 kop(2, "Afstuderen en de studieboom");
 p(`Vanaf ${getal(ECTS_BASIS)} packets totaal kun je afstuderen. Je verliest je packets, apparaten en upgrades, maar je houdt je prestaties, je koffiepeil en de hele studieboom — en je krijgt studiepunten.`);
 p("");
-p(`Het aantal punten is de derdemachtswortel van je totaal gedeeld door ${getal(ECTS_BASIS)}. In gewone taal: elk volgend punt kost meer dan het vorige, dus verder spelen loont, maar oneindig doorgaan niet.`);
+p("Het aantal punten hangt af van hoeveel cijfers je totaal heeft: 0,3 × (cijfers − 9)³. Een totaal met elf cijfers geeft 2 punten, met vijftien cijfers 64, met twintig cijfers 399 en met dertig cijfers 2.778. Elk extra cijfer levert dus iets meer op dan het vorige, maar de punten schieten niet meer door het dak: wie alles gebouwd heeft, komt rond de 3.000 uit, net genoeg voor de hele studieboom.");
 p("");
 p(`Elk studiepunt geeft daarnaast blijvend ${Math.round(BONUS_PER_PUNT * 100)}% extra productie, ook de punten die je alweer uitgegeven hebt. Afstuderen loont het meest als je bonus uit studiepunten er minstens door verdubbelt.`);
+p(`De boom heeft ${BRANCHES.length} takken van zes knooppunten. In een tak koop je van links naar rechts. Aan het eind van twee naburige takken zit een kruisknoop die ze allebei vraagt, en helemaal rechts het doctoraat, dat alle kruisknopen vraagt. Samen kost de boom ${NODES.reduce((som, n) => som + n.cost, 0)} studiepunten.`);
+p("");
 for (const tak of BRANCHES) {
   kop(3, `${tak.icon} ${tak.name} — ${tak.desc}`);
   tabel(
@@ -186,6 +191,16 @@ for (const tak of BRANCHES) {
     NODES.filter((n) => n.branch === tak.id).map((n) => [`${n.icon} **${n.name}**`, `${n.cost} punten`, n.note])
   );
 }
+kop(3, "🔗 Kruisknopen en het doctoraat");
+tabel(
+  ["Knooppunt", "Vraagt", "Kosten", "Effect"],
+  NODES.filter((n) => n.branch === "kruis").map((n) => [
+    `${n.icon} **${n.name}**`,
+    n.needs.map((id) => NODES.find((x) => x.id === id).name).join(" en "),
+    `${n.cost} punten`,
+    n.note,
+  ])
+);
 
 // --------------------------------------------------------------- Labo
 
@@ -201,9 +216,20 @@ tabel(
 );
 
 kop(3, "📝 Serge's overhoring");
-p("Vraagt 5.000 packets totaal. Je krijgt een subnetvraag met vier antwoorden. Goed antwoord levert packets op — minstens 500, of 90 seconden van je productie, wat het meest is — plus 12% extra per goed antwoord op rij, tot drie keer zoveel. Na een goed antwoord duurt het 2,5 minuut voor de volgende vraag; na een fout antwoord ruim een minuut, en je reeks begint opnieuw.");
+p("Vraagt 5.000 packets totaal. Je krijgt een vraag met vier antwoorden. Goed antwoord levert packets op — minstens 500, of 90 seconden van je productie, wat het meest is — plus 10% extra per goed antwoord op rij, tot twee keer zoveel. Na een goed antwoord duurt het 2,5 minuut voor de volgende vraag; na een fout antwoord de helft, en je reeks begint opnieuw. Na elk antwoord legt Serge kort uit waarom het goede antwoord klopt.");
 p("");
-p("De vragen worden ter plekke opgesteld en ter plekke nagerekend, dus ze zijn eindeloos. Zes soorten: netwerkadres, broadcastadres, aantal bruikbare hosts, subnetmasker bij een prefix, het kleinste subnet voor een aantal hosts, en of twee adressen in hetzelfde subnet zitten.");
+p(`Bovenaan kies je een onderwerp, of je laat alles door elkaar komen. Er zijn ${ONDERWERPEN.length} onderwerpen. Rekenvragen — subnetten, binair en hex, poortnummers, OSI-lagen en IPv6 afkorten — worden ter plekke opgesteld en nagerekend, dus die zijn eindeloos. Daarnaast zijn er ${FEITEN.length} vaste vragen over protocollen, IOS, switching, kabels, wifi en beveiliging. Een vaste vraag komt niet terug zolang er in dat onderwerp nog andere klaarliggen.`);
+p("");
+tabel(
+  ["Onderwerp", "Soort vragen"],
+  ONDERWERPEN.map((o) => {
+    const reken = REKENVRAGEN[o.id]?.length || 0;
+    const vast = FEITEN.filter((f) => f.onderwerp === o.id).length;
+    return [`${o.icoon} **${o.naam}**`, [reken && `${reken} ${reken === 1 ? "soort" : "soorten"} rekenvragen`, vast && `${vast} vaste vragen`].filter(Boolean).join(" en ")];
+  })
+);
+p("");
+p("**Oefenvragen.** Terwijl je wacht op de volgende vraag, kun je oefenvragen doen. Die leveren niets op, maar een fout antwoord kost je reeks ook niet.");
 
 kop(3, "⌨️ Terminal");
 p("Vraagt één netwerk switch. Een nagebouwde command line die zich gedraagt als een switch die nog opgezet moet worden — inclusief de eigenaardigheden van een echte IOS-CLI.");
@@ -212,11 +238,26 @@ p("**Afkortingen werken.** Elk woord mag je inkorten tot het nog eenduidig is, p
 p("");
 p("**Tab vult aan.** Eén woord dat past wordt afgemaakt; passen er meerdere, dan vult hij aan tot waar ze gelijk zijn en toont hij de mogelijkheden. **?** laat zien wat er op deze plek mag staan, met uitleg erbij — ook midden in een commando.");
 p("");
-p("**Er staat altijd een opdracht open.** Serge vraagt je een poort op een bepaald adres te zetten, hem up te brengen en de configuratie te bewaren. Rond je dat af met `write memory`, dan krijg je packets: minstens 2.500, of twee minuten van je productie, wat het meest is. Daarna schrijft hij na tweeënhalve minuut een nieuwe opdracht uit.");
+p("**Serge schrijft opdrachten uit.** Rond je er een af met `write memory`, dan krijg je packets: minstens 2.500, of anderhalve tot drieënhalve minuut van je productie, naargelang hoe moeilijk de opdracht is. Anderhalve minuut later ligt de volgende klaar. Nooit twee keer na elkaar dezelfde soort, en hoe meer opdrachten je afwerkt, hoe meer soorten er kunnen komen.");
 p("");
-p("De volledige reeks voor een opdracht ziet er zo uit:");
+const NA = ["meteen", "na 1 opdracht", "na 3 opdrachten", "na 6 opdrachten"];
+const vanaf = (niveau) => NA[niveau] || NA[NA.length - 1];
+// De voorbeelden zijn willekeurig. Met een vaste reeks getallen blijft de gids
+// gelijk als je hem opnieuw maakt.
+const willekeurig = Math.random;
+let zaad = 7;
+Math.random = () => ((zaad = (zaad * 16807) % 2147483647) - 1) / 2147483646;
+tabel(
+  ["Opdracht", "Komt", "Levert", "Bijvoorbeeld"],
+  Object.values(TAKEN).map((t) => [`**${t.naam}**`, vanaf(t.niveau), `${nl.format(t.seconden / 60)} min productie`, t.tekst(t.maak({ hostname: "SERGE" }))])
+);
+Math.random = willekeurig;
+p("");
+p("De volledige reeks voor de eerste opdracht ziet er zo uit:");
 p("");
 p(["```", "en", "conf t", "int gi0/3", "ip add 10.42.7.1 255.255.255.0", "no shut", "end", "wr", "```"].join("\n"));
+p("");
+p("Voor de andere opdrachten kent de switch ook `hostname`, `description`, `shutdown`, `vlan` met `name`, `switchport mode access` en `switchport access vlan`, `ip default-gateway`, `banner motd #tekst#` en `enable secret`. Met `show running-config`, `show ip interface brief` en `show vlan brief` zie je wat er al staat — handig bij foutzoeken, waar Serge niet zegt wat er mis is.");
 p("");
 p("Ook de andere gewoontes van een echt apparaat werken: `copy run start` in plaats van `wr`, `do` voor commando's uit de bevoorrechte modus terwijl je aan het configureren bent (`do show ip int br`, `do wr`), `interface GigabitEthernet 0/1` met een spatie, en rechtstreeks van de ene interface naar de andere springen. Op een telefoon staan er knoppen voor Tab en ? onder de invoer.");
 
@@ -269,13 +310,16 @@ tabel(
 // ----------------------------------------------------------- Uiterlijk
 
 kop(2, "Uiterlijk");
-p(`Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. Drie losse keuzes die je vrij combineert: welke foto, welke ring eromheen en welke kleuren de pagina krijgt. Samen ${ALLE_SKINS.length} dingen om vrij te spelen, en wat je eenmaal hebt houd je ook na het afstuderen.`);
+p(`Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. ${Object.keys(UITERLIJK).length} losse keuzes die je vrij combineert: ${Object.values(SOORTNAMEN).map((n) => n.toLowerCase()).join(", ").replace(/, (?=[^,]*$)/, " en ")}. Samen ${ALLE_SKINS.length} dingen om vrij te spelen, elk met een zeldzaamheid: gewoon, ongewoon, zeldzaam, episch, legendarisch, mythisch of goddelijk. Wat je eenmaal hebt, houd je ook na het afstuderen. Met **Verras me** kies je van elke soort iets willekeurigs uit wat je al hebt. Sneeuw, bloesem, vlinders en herfstbladeren speel je vrij in hun seizoen, het avondlicht door 's avonds te spelen.`);
 p("");
 for (const soort of Object.keys(UITERLIJK)) {
   kop(3, SOORTNAMEN[soort]);
   tabel(
     [SOORTNAMEN[soort], "Hoe je hem vrijspeelt"],
-    UITERLIJK[soort].map((v) => [`**${v.naam}** — ${v.beschrijving}`, v.hoe || "Heb je vanaf het begin"])
+    UITERLIJK[soort].map((v) => [
+      `${v.icoon ? `${v.icoon} ` : ""}**${v.naam}** *(${RANGEN[v.rang].naam.toLowerCase()})* — ${v.beschrijving}`,
+      v.hoe || "Heb je vanaf het begin",
+    ])
   );
 }
 p("De geëvolueerde Serge is de opvolger van de oude Evolve-knop: bij een miljard packets verdiend krijg je een melding en kun je hem omzetten.");
@@ -337,6 +381,7 @@ tabel(
     ["`gebouw switch 100`", "Zet het aantal van één apparaat. De id's staan hieronder."],
     ["`upgrades`", "Geeft alle upgrades vrij"],
     ["`prestaties`", "Geeft alle prestaties vrij"],
+    ["`skins`", "Geeft alles van Uiterlijk vrij: portretten, ringen, achtergronden, klikeffecten, klikgeluiden en titels"],
     ["`punten 50`", "Voegt studiepunten toe"],
     ["`goud`", "Laat meteen een gouden packet verschijnen"],
     ["`reset`", "Wist alle actieve buffs en straffen"],

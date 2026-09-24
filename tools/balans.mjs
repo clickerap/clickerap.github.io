@@ -5,8 +5,8 @@
 // Een denkbeeldige speler heeft het tabblad de hele tijd open en klikt in een
 // vast tempo. Hij koopt elke betaalbare upgrade en telkens het apparaat met de
 // kortste terugverdientijd. Hij studeert af zodra dat zijn bonus uit
-// studiepunten minstens verdubbelt, en koopt dan de goedkoopste knooppunten in
-// de studieboom.
+// studiepunten minstens anderhalf keer zo groot maakt (en na minstens twintig
+// minuten), en koopt dan de goedkoopste knooppunten in de studieboom.
 // Gouden packets, het labo en offline tijd tellen niet mee: de uitkomst is dus
 // een bovengrens voor hoe lang het duurt.
 
@@ -25,6 +25,8 @@ const MIN_RUN = 20 * 60; // seconden
 recompute();
 const eersteKeer = {};
 const afgestudeerd = [];
+const BOOM = NODES.reduce((som, n) => som + n.cost, 0);
+let boomVol = null;
 let t = 0;
 let runStart = 0;
 
@@ -49,6 +51,7 @@ function koopKnooppunten() {
       .sort((a, b) => a.cost - b.cost);
     if (!kan.length || !buyNode(kan[0].id)) break;
   }
+  if (!boomVol && NODES.every((n) => G.nodes[n.id])) boomVol = t;
 }
 
 while (t < MAX_UREN * 3600) {
@@ -61,9 +64,9 @@ while (t < MAX_UREN * 3600) {
   for (const b of BUILDINGS) if (!eersteKeer[b.id] && G.buildings[b.id] > 0) eersteKeer[b.id] = t;
 
   const winst = AFSTUDEREN ? ectsOnGraduate() : 0;
-  // De bonus is 1 + BONUS_PER_PUNT x punten; hij verdubbelt als de winst
-  // minstens even groot is als alles wat je al had, plus 1 / BONUS_PER_PUNT.
-  if (winst > 0 && t - runStart >= MIN_RUN && winst >= G.prestige + 1 / BONUS_PER_PUNT) {
+  // De bonus is 1 + BONUS_PER_PUNT x punten; hij wordt anderhalf keer zo groot
+  // als de winst minstens de helft is van wat je al had plus 1 / BONUS_PER_PUNT.
+  if (winst > 0 && t - runStart >= MIN_RUN && winst >= (G.prestige + 1 / BONUS_PER_PUNT) / 2) {
     graduate();
     afgestudeerd.push({ uur: t / 3600, punten: G.prestige });
     koopKnooppunten();
@@ -78,8 +81,9 @@ for (const b of BUILDINGS) {
   console.log(`  ${b.name.padEnd(24)} ${eersteKeer[b.id] ? `na ${uur(eersteKeer[b.id])} uur` : "niet gehaald"}`);
 }
 console.log(`\nAfgestudeerd: ${afgestudeerd.length} keer`);
-for (const a of afgestudeerd.slice(0, 12)) console.log(`  na ${a.uur.toFixed(1).replace(".", ",")} uur, ${a.punten} studiepunten totaal`);
-if (afgestudeerd.length > 12) console.log(`  ... en nog ${afgestudeerd.length - 12} keer`);
+for (const a of afgestudeerd.slice(0, 16)) console.log(`  na ${a.uur.toFixed(1).replace(".", ",")} uur, ${a.punten} studiepunten totaal`);
+if (afgestudeerd.length > 16) console.log(`  ... en nog ${afgestudeerd.length - 16} keer`);
+console.log(boomVol ? `Studieboom (${BOOM} punten) helemaal gekocht na ${uur(boomVol)} uur.` : `Studieboom (${BOOM} punten) niet helemaal gekocht.`);
 console.log(`\nAan het eind: ${fmtLong(D.pps)} per seconde, ${fmtLong(G.stats.lifetime)} verdiend, ${G.prestige} studiepunten.`);
 console.log(`Vermenigvuldigers: koffie x${D.koffieMult.toFixed(2)}, studiepunten x${D.prestigeMult.toFixed(2)}, alles x${D.allMult.toFixed(2)}, ${D.aantalUpgrades} upgrades, ${D.aantalPrestaties} prestaties.`);
 console.log("Bezit en opbrengst per apparaat:");

@@ -3,13 +3,14 @@
 // De commando's worden opgelost zoals een echte IOS-CLI dat doet: elk woord
 // mag afgekort worden tot het nog eenduidig is, Tab vult aan, en ? laat zien
 // wat er op deze plek mag staan. Daarnaast staat er altijd een werkopdracht
-// open, zodat de terminal meer is dan een grap.
+// open, zodat de terminal meer is dan een grap. Welke soorten opdrachten er
+// zijn, staat in data/terminal.js.
 
 import { G, D, earn, unlock } from "../state.js";
 import { fmt, fmtTime } from "../format.js";
 import { toast, chord, blip, hoverCapable } from "../ui/fx.js";
 import { egg } from "../eggs.js";
-import { POORTEN, geldigAdres, normaliseerPoort } from "../data/terminal.js";
+import { POORTEN, TAKEN, geldigAdres, normaliseerPoort, nieuweTaak, geldigeVlan, geldigeVlannaam } from "../data/terminal.js";
 import { VERSIE } from "../versie.js";
 import { INFO_KNOP } from "./info.js";
 
@@ -18,9 +19,12 @@ const PROMPTS = {
   enable: (h) => `${h}#`,
   config: (h) => `${h}(config)#`,
   iface: (h, i) => `${h}(config-if${i ? `-${i}` : ""})#`,
+  vlan: (h) => `${h}(config-vlan)#`,
 };
 
-const COOLDOWN = 150;
+// Seconden tussen twee opdrachten; het labo in de studieboom maakt dat korter.
+const COOLDOWN = 90;
+const wachttijd = () => COOLDOWN * (D.laboTempo || 1);
 const MAX_REGELS = 300;
 
 // De uitvoer groeit regel voor regel. `reeks` gaat omhoog als hij geleegd of
@@ -47,11 +51,13 @@ export function uitvoerRegels() {
   return uitvoer.map((r) => r.tekst);
 }
 
-function staat() {
-  const cli = G.minigames.cli;
+function staat(cli = G.minigames.cli) {
   if (!cli.interfaces) cli.interfaces = {};
   if (!cli.hostname) cli.hostname = "SERGE";
   if (!cli.mode) cli.mode = "user";
+  cli.vlans ||= {};
+  // Een opdracht zonder soort komt uit een oudere versie: een adres.
+  if (cli.opdracht && !cli.opdracht.soort) cli.opdracht.soort = "adres";
   return cli;
 }
 
@@ -63,35 +69,34 @@ function poort(cli, naam) {
 // --------------------------------------------------------------- Opdracht
 
 function nieuweOpdracht(cli) {
-  const vrij = POORTEN.filter((p) => !cli.interfaces[p]?.up);
-  const naam = vrij.length ? vrij[Math.floor(Math.random() * vrij.length)] : POORTEN[Math.floor(Math.random() * POORTEN.length)];
-  const derde = 1 + Math.floor(Math.random() * 250);
-  cli.opdracht = {
-    poort: naam,
-    ip: `10.${derde}.${1 + Math.floor(Math.random() * 250)}.1`,
-    mask: "255.255.255.0",
-  };
+  staat(cli);
+  cli.opdracht = nieuweTaak(cli);
+  cli.vorige = cli.opdracht.soort;
   return cli.opdracht;
 }
 
+const taakVan = (cli) => TAKEN[cli.opdracht?.soort] || TAKEN.adres;
+
 export function opdrachtTekst(cli) {
   if (!cli.opdracht) return null;
-  const o = cli.opdracht;
-  return `Zet ${o.poort} op ${o.ip} ${o.mask}, breng hem up en bewaar de configuratie.`;
+  return taakVan(cli).tekst(cli.opdracht);
 }
 
 function controleerOpdracht(cli) {
-  const o = cli.opdracht;
-  if (!o) return false;
-  const p = cli.interfaces[o.poort];
-  return !!(p && p.ip === o.ip && p.mask === o.mask && p.up);
+  return !!cli.opdracht && taakVan(cli).klaar(staat(cli), cli.opdracht);
+}
+
+// Productie zonder tijdelijke buffs: een burst maakt een opdracht niet meer waard.
+function basisPps() {
+  return D.buffPps > 0 ? D.pps / D.buffPps : D.pps;
 }
 
 function beloonOpdracht(cli) {
-  const winst = Math.max(2500, D.pps * 120) * D.minigameReward;
+  const seconden = taakVan(cli).seconden;
+  const winst = Math.max(2500, basisPps() * seconden) * D.minigameReward;
   earn(winst);
   cli.gedaan = (cli.gedaan || 0) + 1;
-  cli.nextAt = Date.now() + COOLDOWN * 1000;
+  cli.nextAt = Date.now() + wachttijd() * 1000;
   cli.opdracht = null;
   schrijf(`% Opdracht afgerond: ${fmt(winst)} packets`, "ok");
   chord([620, 820, 1040]);
@@ -114,6 +119,7 @@ function toonCommandos(cli) {
       },
     },
     "running-config": { hulp: "De huidige configuratie", doe: () => toonConfig(cli) },
+    "vlan": { hulp: "De VLAN's op deze switch", kinderen: { brief: { hulp: "Kort overzicht", doe: () => toonVlans(cli) } }, doe: () => toonVlans(cli) },
     "version": { hulp: "Versie en uptime", doe: () => toonVersie() },
     "mac": { hulp: "MAC-adressen", kinderen: { "address-table": { hulp: "Geleerde adressen", doe: () => schrijf("Alle adressen zijn geleerd. En weer vergeten. En weer geleerd.") } } },
     "clock": { hulp: "De klok", doe: () => schrijf(new Date().toLocaleString("nl-BE")) },
@@ -167,8 +173,35 @@ function grammatica(cli) {
       do: doen,
       interface: interfaceKiezen,
       hostname: { hulp: "De naam van dit apparaat", arg: "naam", doe: (a) => zetHostnaam(cli, a[0]) },
+      vlan: { hulp: "Een VLAN maken of aanpassen", arg: "nummer", doe: (a) => kiesVlan(cli, a[0]) },
+      ip: {
+        hulp: "IP-instellingen van de switch",
+        kinderen: { "default-gateway": { hulp: "Waar beheerverkeer naartoe gaat", arg: "adres", doe: (a) => zetGateway(cli, a[0]) } },
+      },
+      banner: { hulp: "Een tekst bij het inloggen", kinderen: { motd: { hulp: "Bericht van de dag", arg: "#tekst#", doe: (a) => zetBanner(cli, a.join(" ")) } } },
+      enable: { hulp: "De bevoorrechte modus", kinderen: { secret: { hulp: "Beveiligen met een wachtwoord", arg: "wachtwoord", doe: (a) => zetSecret(cli, a[0]) } } },
+      no: {
+        hulp: "Iets ongedaan maken",
+        kinderen: {
+          vlan: { hulp: "Een VLAN weghalen", arg: "nummer", doe: (a) => weesVlan(cli, a[0]) },
+          ip: { hulp: "IP-instellingen", kinderen: { "default-gateway": { hulp: "De gateway weghalen", doe: () => { cli.gateway = null; } } } },
+          banner: { hulp: "De banner", kinderen: { motd: { hulp: "De banner weghalen", doe: () => { cli.banner = null; } } } },
+        },
+      },
       exit: { hulp: "Een niveau terug", doe: () => { cli.mode = "enable"; } },
       end: { hulp: "Terug naar bevoorrechte modus", doe: () => { cli.mode = "enable"; } },
+    };
+  }
+
+  if (cli.mode === "vlan") {
+    return {
+      ...gedeeld,
+      do: doen,
+      name: { hulp: "De naam van dit VLAN", arg: "naam", doe: (a) => zetVlannaam(cli, a[0]) },
+      vlan: { hulp: "Een ander VLAN kiezen", arg: "nummer", doe: (a) => kiesVlan(cli, a[0]) },
+      interface: interfaceKiezen,
+      exit: { hulp: "Terug naar de configuratie", doe: () => { cli.mode = "config"; cli.vlanId = null; } },
+      end: { hulp: "Terug naar bevoorrechte modus", doe: () => { cli.mode = "enable"; cli.vlanId = null; } },
     };
   }
 
@@ -187,7 +220,21 @@ function grammatica(cli) {
       },
     },
     shutdown: { hulp: "De interface uitzetten", doe: () => zetUp(cli, false) },
+    switchport: {
+      hulp: "Instellingen als switchpoort",
+      kinderen: {
+        mode: {
+          hulp: "Access of trunk",
+          kinderen: {
+            access: { hulp: "Eén VLAN, voor een eindtoestel", doe: () => zetModus(cli, "access") },
+            trunk: { hulp: "Alle VLAN's, naar een andere switch", doe: () => zetModus(cli, "trunk") },
+          },
+        },
+        access: { hulp: "Het VLAN van een accesspoort", kinderen: { vlan: { hulp: "Het VLAN-nummer", arg: "nummer", doe: (a) => zetToegang(cli, a[0]) } } },
+      },
+    },
     description: { hulp: "Omschrijving instellen", arg: "tekst", doe: (a) => { poort(cli, cli.iface).omschrijving = a.join(" ").slice(0, 80); schrijf("% Omschrijving ingesteld. Serge waardeert dit meer dan je denkt.", "ok"); } },
+    vlan: { hulp: "Een VLAN maken of aanpassen", arg: "nummer", doe: (a) => kiesVlan(cli, a[0]) },
     exit: { hulp: "Een niveau terug", doe: () => { cli.mode = "config"; cli.iface = null; } },
     end: { hulp: "Terug naar bevoorrechte modus", doe: () => { cli.mode = "enable"; cli.iface = null; } },
   };
@@ -210,13 +257,30 @@ function toonPoorten(cli) {
 
 function toonConfig(cli) {
   const regels = [`hostname ${cli.hostname}`, "!"];
+  // Een secret wordt nooit leesbaar getoond, ook hier niet.
+  if (cli.secret) regels.push("enable secret 5 $1$SrGe$Nv9kq0bK1wY7xL2pQ4uZ8.", "!");
+  for (const [id, naam] of Object.entries(cli.vlans || {}).sort((a, b) => a[0] - b[0])) regels.push(`vlan ${id}`, ` name ${naam}`, "!");
   for (const [naam, p] of Object.entries(cli.interfaces)) {
     regels.push(`interface ${naam}`);
     if (p.omschrijving) regels.push(` description ${p.omschrijving}`);
+    if (p.modus) regels.push(` switchport mode ${p.modus}`);
+    if (p.vlan) regels.push(` switchport access vlan ${p.vlan}`);
     regels.push(p.ip ? ` ip address ${p.ip} ${p.mask}` : " no ip address");
     regels.push(p.up ? " no shutdown" : " shutdown", "!");
   }
+  if (cli.gateway) regels.push(`ip default-gateway ${cli.gateway}`, "!");
+  if (cli.banner) regels.push(`banner motd ^C${cli.banner}^C`, "!");
   regels.push("end");
+  schrijf(regels.join("\n"));
+}
+
+function toonVlans(cli) {
+  const inVlan = (id) => POORTEN.filter((p) => (cli.interfaces[p]?.vlan || 1) === id && cli.interfaces[p]?.modus !== "trunk").join(", ");
+  const regels = ["VLAN Name                             Status    Ports", "---- -------------------------------- --------- -------------------------------"];
+  regels.push(`${"1".padEnd(5)}${"default".padEnd(33)}${"active".padEnd(10)}${inVlan(1)}`);
+  for (const [id, naam] of Object.entries(cli.vlans || {}).sort((a, b) => a[0] - b[0])) {
+    regels.push(`${String(id).padEnd(5)}${naam.padEnd(33)}${"active".padEnd(10)}${inVlan(Number(id))}`);
+  }
   schrijf(regels.join("\n"));
 }
 
@@ -240,6 +304,7 @@ function kiesPoort(cli, naam) {
   if (!p) return schrijf(`% Onbekende interface. Deze switch heeft ${POORTEN[0]} tot en met ${POORTEN[POORTEN.length - 1]}.`, "err");
   poort(cli, p);
   cli.iface = p;
+  cli.vlanId = null;
   cli.mode = "iface";
 }
 
@@ -250,6 +315,82 @@ function zetHostnaam(cli, naam) {
     return schrijf("% Een hostnaam begint met een letter en bevat alleen letters, cijfers en streepjes, hooguit 16.", "err");
   }
   cli.hostname = naam.toUpperCase();
+}
+
+function leesVlan(tekst) {
+  const id = Number(tekst);
+  return String(tekst || "").match(/^\d+$/) ? id : NaN;
+}
+
+function kiesVlan(cli, tekst) {
+  const id = leesVlan(tekst);
+  if (id === 1) return schrijf("% VLAN 1 is het standaard-VLAN; dat pas je niet aan.", "err");
+  if (!geldigeVlan(id)) return schrijf("% Een VLAN-nummer ligt tussen 2 en 4094.", "err");
+  cli.vlans ||= {};
+  cli.vlans[id] ??= `VLAN${String(id).padStart(4, "0")}`;
+  cli.vlanId = id;
+  cli.iface = null;
+  cli.mode = "vlan";
+}
+
+function weesVlan(cli, tekst) {
+  const id = leesVlan(tekst);
+  if (!cli.vlans?.[id]) return schrijf("% Dat VLAN bestaat niet.", "err");
+  delete cli.vlans[id];
+  schrijf(`% VLAN ${id} verwijderd. Poorten die erin zaten, zitten nu in geen enkel VLAN.`);
+}
+
+function zetVlannaam(cli, naam) {
+  if (!geldigeVlannaam(naam || "")) return schrijf("% Een VLAN-naam is één woord: letters, cijfers, - en _, hooguit 32.", "err");
+  cli.vlans[cli.vlanId] = naam;
+}
+
+function zetModus(cli, modus) {
+  const p = poort(cli, cli.iface);
+  p.modus = modus;
+  if (modus === "trunk") delete p.vlan;
+}
+
+function zetToegang(cli, tekst) {
+  const id = leesVlan(tekst);
+  if (!geldigeVlan(id) && id !== 1) return schrijf("% Een VLAN-nummer ligt tussen 1 en 4094.", "err");
+  const p = poort(cli, cli.iface);
+  if (p.modus === "trunk") return schrijf("% Dit is een trunkpoort. Zet hem eerst op switchport mode access.", "err");
+  if (id !== 1 && !cli.vlans[id]) {
+    cli.vlans[id] = `VLAN${String(id).padStart(4, "0")}`;
+    schrijf(`% Access VLAN does not exist. Creating vlan ${id}`);
+  }
+  if (id === 1) delete p.vlan;
+  else p.vlan = id;
+}
+
+function zetGateway(cli, ip) {
+  if (!geldigAdres(ip)) return schrijf("% Dat is geen geldig adres.", "err");
+  cli.gateway = ip;
+}
+
+// banner motd #tekst#: het eerste teken is het scheidingsteken, de tekst loopt
+// tot hetzelfde teken nog eens komt.
+function zetBanner(cli, rest) {
+  const tekst = String(rest || "").trim();
+  if (!tekst) return schrijf("% banner motd #tekst#", "err");
+  const teken = tekst[0];
+  const eind = tekst.indexOf(teken, 1);
+  const inhoud = (eind === -1 ? tekst.slice(1) : tekst.slice(1, eind)).trim().slice(0, 120);
+  if (!inhoud) return schrijf("% De banner is leeg.", "err");
+  cli.banner = inhoud;
+  schrijf("% Banner ingesteld. Wie inlogt, ziet hem voortaan eerst.", "ok");
+}
+
+function zetSecret(cli, wachtwoord) {
+  if (!wachtwoord) return schrijf("% enable secret <wachtwoord>", "err");
+  if (wachtwoord.toLowerCase() === "cisco") {
+    schrijf("% 'cisco' als wachtwoord? Serge fronst, maar zet het toch.", "err");
+    egg("egg-cisco", "Vendor lock-in", "Standaardwachtwoorden zijn geen wachtwoorden.", D.pps * 45);
+  }
+  // Het wachtwoord zelf bewaren we niet; alleen dat er een is.
+  cli.secret = true;
+  schrijf("% De bevoorrechte modus is beveiligd.", "ok");
 }
 
 function zetAdres(cli, args) {
@@ -448,16 +589,24 @@ export const terminal = {
   name: "Terminal",
   icon: "⌨️",
   info: [
-    { kop: "Wat is het", tekst: "Een switch die je opzet zoals een echte Cisco-switch: via de commandoregel. Bovenaan staat altijd een opdracht, bijvoorbeeld een poort een adres geven." },
+    { kop: "Wat is het", tekst: "Een switch die je opzet zoals een echte Cisco-switch: via de commandoregel. Bovenaan staat altijd een opdracht. Hoe meer je er afwerkt, hoe meer soorten er komen: adressen, namen, VLAN's, beveiliging en foutzoeken." },
     {
-      kop: "Een opdracht afwerken",
+      kop: "De basis",
       punten: [
         "`enable` (kort: `en`) brengt je naar de bevoorrechte modus.",
         "`configure terminal` (`conf t`) opent de configuratiemodus.",
-        "`interface gi0/3` (`int gi0/3`) kiest de poort uit de opdracht.",
-        "`ip address 10.20.30.1 255.255.255.0` zet het adres en het masker.",
-        "`no shutdown` (`no shut`) zet de poort aan.",
+        "`interface gi0/3` (`int gi0/3`) kiest een poort.",
         "`end`, en dan `write memory` (`wr`), bewaart de configuratie. Pas dan kijkt Serge de opdracht na.",
+      ],
+    },
+    {
+      kop: "Wat je nodig hebt",
+      punten: [
+        "Op een poort: `ip address 10.20.30.1 255.255.255.0`, `no shutdown` of `shutdown`, `description Printer B.204`.",
+        "Een poort in een VLAN: `switchport mode access` en dan `switchport access vlan 20`.",
+        "In de configuratie: `hostname SW-AULA`, `vlan 20` en daarna `name LEERLINGEN`.",
+        "Ook in de configuratie: `ip default-gateway 10.1.1.254`, `banner motd #Alleen voor bevoegden#` en `enable secret <wachtwoord>`.",
+        "Bij foutzoeken tonen `show ip interface brief`, `show running-config` en `show vlan brief` wat er mis is.",
       ],
     },
     {
@@ -469,7 +618,7 @@ export const terminal = {
         "Met de pijltjes omhoog en omlaag haal je vorige commando's terug.",
       ],
     },
-    { kop: "Beloning", tekst: `Een afgewerkte opdracht levert twee minuten van je productie op, en minstens 2.500 packets. De volgende opdracht komt ${COOLDOWN} seconden later.` },
+    { kop: "Beloning", tekst: `Een afgewerkte opdracht levert anderhalve tot drieënhalve minuut van je productie op, naargelang hoe moeilijk hij is, en minstens 2.500 packets. De volgende opdracht komt ${COOLDOWN} seconden later.` },
   ],
 
   render(root) {
@@ -586,7 +735,8 @@ export const terminal = {
       const tekst = opdrachtTekst(cli);
       if (opdrachtEl.dataset.tekst !== tekst) {
         opdrachtEl.dataset.tekst = tekst;
-        opdrachtEl.innerHTML = "<strong>Opdracht.</strong> <span></span>";
+        opdrachtEl.innerHTML = "<strong></strong> <span></span>";
+        opdrachtEl.querySelector("strong").textContent = `${taakVan(cli).naam}.`;
         opdrachtEl.querySelector("span").textContent = tekst;
       }
     } else {

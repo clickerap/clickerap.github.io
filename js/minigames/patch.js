@@ -65,6 +65,9 @@ function nieuweOrder(p) {
   return { nr: p.nummer, n: keuze[Math.floor(Math.random() * keuze.length)], zaad: Math.floor(Math.random() * 2 ** 32) };
 }
 
+// Het labo in de studieboom maakt de wachttijd korter.
+const interval = () => WERK.interval * (D.laboTempo || 1);
+
 // Elke paar minuten een order erbij, ook als het spel dicht was. Een volle bak
 // wacht: de klok loopt pas weer als je er een uithaalt.
 export function vulWachtrij(nu = Date.now()) {
@@ -74,7 +77,7 @@ export function vulWachtrij(nu = Date.now()) {
   let erbij = false;
   while (p.wachtrij.length < WERK.wachtrij && p.volgendeAt <= nu) {
     p.wachtrij.push(nieuweOrder(p));
-    p.volgendeAt += WERK.interval * 1000;
+    p.volgendeAt += interval() * 1000;
     erbij = true;
   }
   return erbij;
@@ -85,7 +88,7 @@ export function neemOrder(index = 0, nu = Date.now()) {
   if (p.huidig && !p.huidig.klaar) return false;
   const order = p.wachtrij[index];
   if (!order) return false;
-  if (p.wachtrij.length >= WERK.wachtrij) p.volgendeAt = nu + WERK.interval * 1000;
+  if (p.wachtrij.length >= WERK.wachtrij) p.volgendeAt = nu + interval() * 1000;
   p.wachtrij.splice(index, 1);
   p.huidig = { ...order, kabels: [], hulp: 0 };
   return true;

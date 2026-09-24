@@ -86,6 +86,25 @@
   --groen-vlak: #dcfce7;
   --groen-rand: #86efac;
 
+  /* Kleuren die in de panelen vastlagen. Een paneelthema (Uiterlijk) zet ze
+     allemaal opnieuw, zodat tekst op elk thema leesbaar blijft. */
+  --blauw-50: #f4f9ff;
+  --teller: var(--blauw-900);
+  --knop: var(--blauw-600);
+  --knop-hover: #1d4ed8;
+  --goud-tekst: #7c3d00;
+  --goud-tekst-zacht: #8a5a00;
+  --rood-tekst: #8c1c16;
+  --paars-vlak: #f5f0ff;
+  --paars-rand: #c4b5fd;
+  --paars-tekst: #5b21b6;
+  --groen-knop: #15803d;
+  --groen-knop-hover: #116632;
+  --rood-knop: #b91c1c;
+  --rood-knop-hover: #8c1c16;
+  --koffie-van: #fff7ed;
+  --koffie-tot: #fef3c7;
+
   --r-s: 10px;
   --r-m: 14px;
   --r-l: 20px;
@@ -193,6 +212,109 @@ button { font: inherit; color: inherit; }
   color: rgba(255, 255, 255, 0.82);
 }
 
+/* Een titel die je vrijspeelt, als naamplaatje onder het logo. Donker
+   doorschijnend, zodat hij op elke achtergrond leesbaar blijft. */
+.titelbadge {
+  margin-top: 5px;
+  padding: 4px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* Zeldzaamheid van een titel: hoe zeldzamer, hoe feller het plaatje. Het
+   naamplaatje onder het logo en het voorbeeld in het menu delen dit. */
+.rang-gewoon { background: rgba(11, 37, 69, 0.62); color: #fff; }
+.rang-ongewoon { background: linear-gradient(135deg, #15803d, #0f766e); color: #fff; border-color: rgba(187, 247, 208, 0.55); }
+.rang-zeldzaam { background: linear-gradient(135deg, #1d4ed8, #0e7490); color: #fff; border-color: rgba(186, 230, 253, 0.55); }
+.rang-episch {
+  background: linear-gradient(135deg, #6d28d9, #a21caf);
+  color: #fff;
+  border-color: rgba(233, 213, 255, 0.6);
+  box-shadow: 0 0 16px rgba(192, 38, 211, 0.5);
+}
+.rang-legendarisch {
+  background: linear-gradient(110deg, #d97706 0%, #f59e0b 30%, #fde68a 46%, #f59e0b 62%, #d97706 100%);
+  background-size: 260% 100%;
+  color: #2b1600;
+  border-color: rgba(254, 243, 199, 0.8);
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.6);
+  animation: titelGlans 3.8s linear infinite;
+}
+@keyframes titelGlans {
+  from { background-position: 100% 0; }
+  to { background-position: -160% 0; }
+}
+/* Mythisch: een rand die alle kleuren doorloopt. */
+@property --titelhoek {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+.rang-mythisch {
+  border: 2px solid transparent;
+  background:
+    linear-gradient(#140a2b, #140a2b) padding-box,
+    conic-gradient(from var(--titelhoek), #f472b6, #facc15, #4ade80, #38bdf8, #a78bfa, #f472b6) border-box;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(196, 181, 253, 0.9);
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.6);
+  animation: titelRand 4s linear infinite;
+}
+@keyframes titelRand {
+  to { --titelhoek: 360deg; }
+}
+/* Goddelijk: wit en goud, met een gloed die ademt. */
+.rang-goddelijk {
+  border: 2px solid transparent;
+  background:
+    linear-gradient(135deg, #fffdf2, #fef3c7) padding-box,
+    conic-gradient(from var(--titelhoek), #fde68a, #ffffff, #f59e0b, #ffffff, #fde68a) border-box;
+  color: #3b2600;
+  animation: titelRand 3s linear infinite, goddelijkeGloed 2.4s ease-in-out infinite;
+}
+@keyframes goddelijkeGloed {
+  0%, 100% { box-shadow: 0 0 14px rgba(253, 230, 138, 0.6), 0 0 0 0 rgba(255, 255, 255, 0); }
+  50% { box-shadow: 0 0 30px rgba(253, 230, 138, 0.95), 0 0 0 5px rgba(255, 255, 255, 0.35); }
+}
+/* Het labeltje met de zeldzaamheid in het menu: een eigen vlakje, zodat het
+   op elk paneelthema leesbaar is. */
+.skin-rang { padding: 1px 8px; border-radius: 999px; color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.02em; }
+.rang-tekst-gewoon { background: #475569; }
+.rang-tekst-ongewoon { background: #15803d; }
+.rang-tekst-zeldzaam { background: #0e7490; }
+.rang-tekst-episch { background: #7e22ce; }
+.rang-tekst-legendarisch { background: #b45309; }
+.rang-tekst-mythisch { background: #be185d; }
+.rang-tekst-goddelijk { background: linear-gradient(135deg, #b45309, #d97706); }
+
+/* De kaart in het menu draagt de zeldzaamheid ook: vanaf legendarisch een
+   gloed of een rand die beweegt, zodat je ziet waar je naartoe werkt. */
+.skin.kaart-legendarisch:not(.op-slot) { box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.45), 0 0 16px -4px rgba(245, 158, 11, 0.7); }
+.skin.kaart-mythisch:not(.op-slot),
+.skin.kaart-goddelijk:not(.op-slot) {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--vlak), var(--vlak)) padding-box,
+    conic-gradient(from var(--titelhoek), #f472b6, #facc15, #4ade80, #38bdf8, #a78bfa, #f472b6) border-box;
+  animation: titelRand 5s linear infinite;
+}
+.skin.kaart-goddelijk:not(.op-slot) {
+  background:
+    linear-gradient(var(--vlak), var(--vlak)) padding-box,
+    conic-gradient(from var(--titelhoek), #fde68a, #ffffff, #f59e0b, #ffffff, #fde68a) border-box;
+  animation: titelRand 3s linear infinite, goddelijkeGloed 2.4s ease-in-out infinite;
+}
+.skin[aria-pressed="true"].kaart-mythisch,
+.skin[aria-pressed="true"].kaart-goddelijk {
+  background:
+    linear-gradient(var(--blauw-100), var(--blauw-100)) padding-box,
+    conic-gradient(from var(--titelhoek), #f472b6, #facc15, #4ade80, #38bdf8, #a78bfa, #f472b6) border-box;
+}
+.skin-preview.plaatje:not(.rang-episch, .rang-legendarisch, .rang-mythisch, .rang-goddelijk) { box-shadow: none; }
+
 .wordmark {
   font-size: clamp(30px, 4.4vw, 46px);
   font-weight: 700;
@@ -200,7 +322,8 @@ button { font: inherit; color: inherit; }
   letter-spacing: -0.03em;
   text-shadow: 0 2px 12px rgba(11, 37, 69, 0.35);
 }
-.wordmark span { color: #bae6fd; }
+.wordmark { isolation: isolate; }
+.wordmark .w1 { color: #bae6fd; }
 
 .kop-knoppen {
   position: absolute;
@@ -246,6 +369,19 @@ button { font: inherit; color: inherit; }
 [data-achtergrond="matrix"] { --lucht: #0b3a1d; --blauw: #041c0d; --indigo: #000000; }
 [data-achtergrond="nevel"] { --lucht: #a78bfa; --blauw: #6d28d9; --indigo: #2e1065; }
 [data-achtergrond="regenboog"] { --lucht: #f472b6; --blauw: #38bdf8; --indigo: #a78bfa; }
+[data-achtergrond="glasvezel"] { --lucht: #0b1e3a; --blauw: #07142b; --indigo: #02040c; }
+[data-achtergrond="noorderlicht"] { --lucht: #0f2d3f; --blauw: #071a2c; --indigo: #020617; }
+[data-achtergrond="synthwave"] { --lucht: #f472b6; --blauw: #7c3aed; --indigo: #1e1045; }
+[data-achtergrond="netwerk"] { --lucht: #0c2447; --blauw: #071a36; --indigo: #020617; }
+[data-achtergrond="lavalamp"] { --lucht: #f97316; --blauw: #be123c; --indigo: #3b0764; }
+[data-achtergrond="datacenter"] { --lucht: #1c2a3d; --blauw: #0b1626; --indigo: #03060c; }
+[data-achtergrond="zeebodem"] { --lucht: #0e4a6e; --blauw: #072b47; --indigo: #020c18; }
+[data-achtergrond="warp"] { --lucht: #312e81; --blauw: #0a0620; --indigo: #000000; }
+[data-achtergrond="blokjes"] { --lucht: #1f2937; --blauw: #111827; --indigo: #030712; }
+[data-achtergrond="aquarium"] { --lucht: #0ea5e9; --blauw: #0369a1; --indigo: #0c4a6e; }
+[data-achtergrond="meteoren"] { --lucht: #1e293b; --blauw: #0f172a; --indigo: #020617; }
+[data-achtergrond="vuurwerk"] { --lucht: #1e1b4b; --blauw: #0b1026; --indigo: #01030a; }
+[data-achtergrond="heelal"] { --lucht: #4c1d95; --blauw: #0a0418; --indigo: #000000; }
 
 /* Regenboog: een groter beeld dat sneller en verder schuift. */
 body[data-achtergrond="regenboog"]::before {
@@ -281,6 +417,94 @@ body::after {
   pointer-events: none;
 }
 body[data-achtergrond="matrix"]::before { display: none; }
+
+/* Het SVG-filter voor Warmtebeeld hoort in de pagina, maar neemt geen plaats in. */
+.filters { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* Netwerkkaart en Glasvezel: een levend canvas (js/ui/levend.js). */
+.achtergrondcanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+body[data-achtergrond="netwerk"]::before,
+body[data-achtergrond="glasvezel"]::before,
+body[data-achtergrond="datacenter"]::before,
+body[data-achtergrond="zeebodem"]::before,
+body[data-achtergrond="warp"]::before,
+body[data-achtergrond="lavalamp"]::before,
+body[data-achtergrond="blokjes"]::before,
+body[data-achtergrond="aquarium"]::before,
+body[data-achtergrond="meteoren"]::before,
+body[data-achtergrond="vuurwerk"]::before,
+body[data-achtergrond="heelal"]::before { display: none; }
+
+/* Weer en muisspoor (js/ui/deeltjes.js): het weer achter de kaarten, het
+   spoor erboven, allebei zonder dat je erdoor niet meer kunt klikken. */
+.weerlaag,
+.spoorlaag { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.weerlaag { z-index: -1; }
+.spoorlaag { z-index: 54; }
+
+/* Noorderlicht: zachte banen groen en violet die traag golven boven een
+   donkere hemel. Het beeld is breder dan het venster en schuift met een
+   transform, net als het gewone kleurverloop. */
+body[data-achtergrond="noorderlicht"]::before { animation: none; }
+body[data-achtergrond="noorderlicht"]::after {
+  opacity: 1;
+  inset: -12vh -60vw auto -20vw;
+  height: 115vh;
+  /* Smalle, hoge gordijnen licht, verspreid over de hele breedte. */
+  background:
+    radial-gradient(7% 42% at 8% 30%, rgba(52, 211, 153, 0.8), transparent 70%),
+    radial-gradient(12% 34% at 19% 24%, rgba(74, 222, 128, 0.65), transparent 70%),
+    radial-gradient(8% 46% at 31% 34%, rgba(45, 212, 191, 0.75), transparent 70%),
+    radial-gradient(14% 30% at 43% 20%, rgba(52, 211, 153, 0.7), transparent 70%),
+    radial-gradient(7% 44% at 55% 36%, rgba(167, 139, 250, 0.7), transparent 70%),
+    radial-gradient(12% 32% at 66% 26%, rgba(74, 222, 128, 0.7), transparent 70%),
+    radial-gradient(8% 48% at 78% 32%, rgba(45, 212, 191, 0.75), transparent 70%),
+    radial-gradient(12% 34% at 90% 24%, rgba(192, 132, 252, 0.6), transparent 70%),
+    radial-gradient(40% 20% at 50% 85%, rgba(52, 211, 153, 0.35), transparent 70%);
+  transform-origin: 50% 0;
+  animation: noorderlicht 26s ease-in-out infinite alternate;
+}
+@keyframes noorderlicht {
+  0% { transform: translateX(0) scaleY(1) skewX(0deg); }
+  50% { transform: translateX(-18vw) scaleY(1.25) skewX(-8deg); }
+  100% { transform: translateX(-34vw) scaleY(0.9) skewX(6deg); }
+}
+
+/* Synthwave: een ondergaande zon boven een neonraster dat naar je toe rijdt. */
+body[data-achtergrond="synthwave"]::before {
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  animation: none;
+  background:
+    radial-gradient(circle at 82% 17vh, #fde68a 0, #fb923c 7vmin, #ec4899 13vmin, rgba(236, 72, 153, 0) 13.2vmin),
+    linear-gradient(to bottom, #1e1045 0, #4c1d95 8vh, #a21caf 14vh, #f472b6 17vh, #1a0b33 17.1vh, #0b0520 100%);
+}
+body[data-achtergrond="synthwave"]::after {
+  opacity: 1;
+  inset: 17vh -50vw auto;
+  height: 100vh;
+  background-image:
+    linear-gradient(rgba(244, 114, 182, 0.75) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(244, 114, 182, 0.75) 2px, transparent 2px);
+  background-size: 64px 64px;
+  transform-origin: 50% 0;
+  transform: perspective(60vh) rotateX(58deg);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 20%);
+  mask-image: linear-gradient(to bottom, transparent, #000 20%);
+  animation: rijden 1.6s linear infinite;
+}
+@keyframes rijden {
+  from { transform: perspective(60vh) rotateX(58deg) translateY(0); }
+  to { transform: perspective(60vh) rotateX(58deg) translateY(64px); }
+}
 
 /* Regenboog: een trage glans die er schuin overheen trekt. */
 body[data-achtergrond="regenboog"]::after {
@@ -329,6 +553,594 @@ body[data-achtergrond="diepteruimte"]::after {
   to { opacity: 1; }
 }
 
+/* ---------- Panelen (vrij te spelen) ----------
+   Een paneelthema zet de kleurvariabelen opnieuw binnen de drie panelen, de
+   vensters en de dialogen. Alles daarbinnen gebruikt die variabelen, dus
+   tekst blijft leesbaar. De donkere onderdelen (markt, patchkast, terminal)
+   hebben hun eigen kleuren en blijven zoals ze zijn. */
+
+.stage, .status, .panel, .sheet-card, .modal-card { color: var(--inkt); }
+
+/* Wit: licht, met bovenaan een vleugje van de gekozen achtergrond. */
+body[data-paneel="wit"] :is(.stage, .status, .panel) {
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--lucht) 12%, #fff), #fff 240px);
+}
+
+/* Ruitjespapier: een schrift met een rode kantlijn. */
+body[data-paneel="ruitjes"] :is(.stage, .status, .panel) {
+  --inkt: #17234a;
+  background-color: #fdfdf8;
+  background-image:
+    linear-gradient(90deg, transparent 9px, rgba(220, 38, 38, 0.55) 9px 11px, transparent 11px),
+    linear-gradient(rgba(59, 130, 246, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.14) 1px, transparent 1px);
+  background-size: 100% 100%, 22px 22px, 22px 22px;
+}
+
+/* Matglas: de achtergrond schemert erdoorheen. Donkerdere grijstinten voor
+   de kleine tekst, zodat hij ook boven een zwarte achtergrond leesbaar blijft. */
+body[data-paneel="glas"] :is(.stage, .status, .panel) {
+  --vlak: rgba(255, 255, 255, 0.72);
+  --vlak-zacht: rgba(255, 255, 255, 0.5);
+  --inkt-zacht: #2c3f5c;
+  --inkt-licht: #3f5373;
+  --lijn: rgba(16, 35, 60, 0.12);
+  --lijn-sterk: rgba(16, 35, 60, 0.26);
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  backdrop-filter: blur(16px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+}
+
+/* De donkere thema's delen hoe goud, rood, groen en paars eruitzien. */
+:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"]) :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --goud: #fbbf24;
+  --goud-vlak: rgba(251, 191, 36, 0.14);
+  --goud-rand: rgba(251, 191, 36, 0.5);
+  --goud-tekst: #fde68a;
+  --goud-tekst-zacht: #f3d27a;
+  --rood: #fca5a5;
+  --rood-vlak: rgba(248, 113, 113, 0.16);
+  --rood-rand: rgba(248, 113, 113, 0.5);
+  --rood-tekst: #fecaca;
+  --groen: #86efac;
+  --groen-vlak: rgba(74, 222, 128, 0.14);
+  --groen-rand: rgba(74, 222, 128, 0.45);
+  --paars-vlak: rgba(167, 139, 250, 0.16);
+  --paars-rand: rgba(167, 139, 250, 0.5);
+  --paars-tekst: #ddd6fe;
+  --koffie-van: rgba(251, 191, 36, 0.1);
+  --koffie-tot: rgba(251, 191, 36, 0.18);
+  --schaduw-s: 0 1px 2px rgba(0, 0, 0, 0.4), 0 3px 8px -3px rgba(0, 0, 0, 0.5);
+}
+:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"]) .vak-netwerken { --kleur: #38bdf8; --kleur-vlak: rgba(56, 189, 248, 0.16); --kleur-rand: rgba(56, 189, 248, 0.45); }
+:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"]) .vak-sddc { --kleur: #a78bfa; --kleur-vlak: rgba(167, 139, 250, 0.16); --kleur-rand: rgba(167, 139, 250, 0.45); }
+:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"]) .vak-cloud { --kleur: #2dd4bf; --kleur-vlak: rgba(45, 212, 191, 0.16); --kleur-rand: rgba(45, 212, 191, 0.45); }
+:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"]) .vak-security { --kleur: #fb923c; --kleur-vlak: rgba(251, 146, 60, 0.16); --kleur-rand: rgba(251, 146, 60, 0.45); }
+
+/* Nachtdienst: donkerblauw. */
+body[data-paneel="nacht"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: #13223b;
+  --vlak-zacht: #0e1a2e;
+  --blauw-50: #182c4d;
+  --inkt: #e8eff9;
+  --inkt-zacht: #b8c6dc;
+  --inkt-licht: #93a6c3;
+  --lijn: #243754;
+  --lijn-sterk: #34496c;
+  --blauw-100: #1c355c;
+  --blauw-300: #3e64a3;
+  --blauw-400: #5282cc;
+  --blauw-700: #a5cdff;
+  --blauw-900: #07101d;
+  --teller: #f3f7ff;
+}
+
+/* Krijtbord: groen bord in een houten lijst, met wat krijtstof. */
+body[data-paneel="krijtbord"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: #2a4a37;
+  --vlak-zacht: #213d2d;
+  --blauw-50: #2f5540;
+  --inkt: #f3f6ef;
+  --inkt-zacht: #d3ddd2;
+  --inkt-licht: #adc2b1;
+  --lijn: rgba(243, 246, 239, 0.16);
+  --lijn-sterk: rgba(243, 246, 239, 0.34);
+  --blauw-100: #37604a;
+  --blauw-300: #7fa98f;
+  --blauw-400: #9cc3a9;
+  --blauw-600: #1f6f50;
+  --blauw-700: #fde68a;
+  --blauw-900: #15281d;
+  --knop: #1f6f50;
+  --knop-hover: #185a41;
+  --teller: #fffbe6;
+}
+body[data-paneel="krijtbord"] :is(.stage, .status, .panel) {
+  background-color: #23402f;
+  background-image:
+    radial-gradient(40% 30% at 20% 15%, rgba(255, 255, 255, 0.05), transparent 70%),
+    radial-gradient(35% 25% at 80% 60%, rgba(255, 255, 255, 0.04), transparent 70%),
+    radial-gradient(30% 20% at 40% 90%, rgba(255, 255, 255, 0.035), transparent 70%);
+  border: 9px solid #7a4a22;
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.3), inset 0 0 30px rgba(0, 0, 0, 0.35), var(--schaduw-l);
+}
+
+/* Blauwdruk: een bouwtekening, met fijne en grove ruitjes. */
+body[data-paneel="blauwdruk"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: #0f4880;
+  --vlak-zacht: #0c3f72;
+  --blauw-50: #13558f;
+  --inkt: #f2f8ff;
+  --inkt-zacht: #cfe2f7;
+  --inkt-licht: #a9c8ea;
+  --lijn: rgba(224, 242, 254, 0.22);
+  --lijn-sterk: rgba(224, 242, 254, 0.42);
+  --blauw-100: #1a62a6;
+  --blauw-300: #7fb3e6;
+  --blauw-400: #9ccaf5;
+  --blauw-600: #1d6fd1;
+  --blauw-700: #ffffff;
+  --blauw-900: #072b50;
+  --knop: #1d6fd1;
+  --knop-hover: #155db5;
+  --teller: #ffffff;
+}
+body[data-paneel="blauwdruk"] :is(.stage, .status, .panel) {
+  background-color: #0b3d6e;
+  background-image:
+    linear-gradient(rgba(224, 242, 254, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(224, 242, 254, 0.14) 1px, transparent 1px),
+    linear-gradient(rgba(224, 242, 254, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(224, 242, 254, 0.06) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  box-shadow: inset 0 0 0 2px rgba(224, 242, 254, 0.35), var(--schaduw-l);
+}
+
+/* Windows 95: grijze vensters met schuine randen en een blauwe titelbalk.
+   Alle hoeken worden recht door de radiusvariabelen op nul te zetten. */
+body[data-paneel="retro"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: #c3c3c3;
+  --vlak-zacht: #d6d3ce;
+  --blauw-50: #dcdcdc;
+  --inkt: #000000;
+  --inkt-zacht: #1f1f1f;
+  --inkt-licht: #3b3b3b;
+  --lijn: #8a8a8a;
+  --lijn-sterk: #4a4a4a;
+  --blauw-100: #ffffff;
+  --blauw-300: #000080;
+  --blauw-400: #000080;
+  --blauw-600: #000080;
+  --blauw-700: #000080;
+  --blauw-900: #000080;
+  --knop: #000080;
+  --knop-hover: #1084d0;
+  --teller: #000000;
+  --r-s: 0px;
+  --r-m: 0px;
+  --r-l: 0px;
+  --r-xl: 0px;
+  --schaduw-s: none;
+  --schaduw-m: 2px 2px 0 rgba(0, 0, 0, 0.35);
+  border: 2px solid;
+  border-color: #ffffff #404040 #404040 #ffffff;
+  box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf, 5px 5px 0 rgba(0, 0, 0, 0.35);
+}
+/* Het rechterpaneel is al sticky, en dus gepositioneerd; alleen de andere twee. */
+body[data-paneel="retro"] :is(.stage, .status) { position: relative; }
+body[data-paneel="retro"] .stage { padding-top: 44px; }
+body[data-paneel="retro"] .status { padding-top: 42px; }
+body[data-paneel="retro"] .panel { padding-top: 24px; }
+body[data-paneel="retro"] :is(.stage, .status, .panel)::before {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  height: 22px;
+  padding: 0 8px;
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 22px;
+  text-align: left;
+}
+body[data-paneel="retro"] .stage::before { content: "Serge.exe"; }
+body[data-paneel="retro"] .status::before { content: "Netwerkmonitor"; }
+body[data-paneel="retro"] .panel::before { content: "Beheer"; }
+body[data-paneel="retro"] .btn,
+body[data-paneel="retro"] .btn.groen,
+body[data-paneel="retro"] .btn.gevaar,
+body[data-paneel="retro"] .btn.ghost {
+  background: #c3c3c3;
+  color: #000;
+  border: 2px solid;
+  border-color: #ffffff #404040 #404040 #ffffff;
+}
+body[data-paneel="retro"] .btn:hover { background: #d4d0c8; }
+body[data-paneel="retro"] .btn:active { border-color: #404040 #ffffff #ffffff #404040; }
+body[data-paneel="retro"] .btn[disabled] { color: #808080; text-shadow: 1px 1px 0 #fff; }
+
+/* Neon: bijna zwart, met een gloeiende rand van cyaan naar roze. */
+body[data-paneel="neon"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: #12101f;
+  --vlak-zacht: #0d0b18;
+  --blauw-50: #1b1733;
+  --inkt: #f5f3ff;
+  --inkt-zacht: #cfc9ea;
+  --inkt-licht: #a8a0cf;
+  --lijn: #2a2548;
+  --lijn-sterk: #3d3566;
+  --blauw-100: #241d47;
+  --blauw-300: #6d5bd0;
+  --blauw-400: #8b7cf0;
+  --blauw-600: #7c3aed;
+  --blauw-700: #67e8f9;
+  --blauw-900: #07060f;
+  --knop: #7c3aed;
+  --knop-hover: #6d28d9;
+  --teller: #ffffff;
+  border: 2px solid transparent;
+  background: linear-gradient(var(--vlak), var(--vlak)) padding-box, linear-gradient(135deg, #22d3ee, #a855f7 50%, #f472b6) border-box;
+  box-shadow: 0 0 22px rgba(168, 85, 247, 0.45), 0 0 60px -10px rgba(34, 211, 238, 0.35);
+}
+body[data-paneel="neon"] .counter strong { text-shadow: 0 0 18px rgba(167, 139, 250, 0.75); }
+
+/* Gouden kluis: zwart met een gouden rand. */
+body[data-paneel="goud"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: #1d170a;
+  --vlak-zacht: #161106;
+  --blauw-50: #2a210c;
+  --inkt: #fbf3dc;
+  --inkt-zacht: #e6d6ae;
+  --inkt-licht: #c9b47f;
+  --lijn: rgba(252, 211, 77, 0.18);
+  --lijn-sterk: rgba(252, 211, 77, 0.36);
+  --blauw-100: #3a2d0d;
+  --blauw-300: #a37b1c;
+  --blauw-400: #c99a2e;
+  --blauw-600: #b45309;
+  --blauw-700: #fcd34d;
+  --blauw-900: #0d0a04;
+  --knop: #b45309;
+  --knop-hover: #92400e;
+  --teller: #fde68a;
+  border: 2px solid transparent;
+  background: radial-gradient(120% 70% at 50% 0%, #2c2210, var(--vlak)) padding-box, linear-gradient(135deg, #fde68a, #b45309 40%, #fcd34d 70%, #92400e) border-box;
+  box-shadow: 0 0 28px -6px rgba(251, 191, 36, 0.45), var(--schaduw-l);
+}
+
+/* Panelen met een laag die beweegt: die laag ligt achter de tekst. */
+body:is([data-paneel="kurk"], [data-paneel="crt"], [data-paneel="aurora"], [data-paneel="hologram"], [data-paneel="sterren"], [data-paneel="hemelpoort"], [data-paneel="ijspaleis"]) :is(.stage, .status, .panel) { isolation: isolate; }
+body:is([data-paneel="kurk"], [data-paneel="crt"], [data-paneel="aurora"], [data-paneel="hologram"], [data-paneel="sterren"], [data-paneel="hemelpoort"], [data-paneel="ijspaleis"]) :is(.stage, .status) { position: relative; }
+body:is([data-paneel="crt"], [data-paneel="aurora"], [data-paneel="hologram"], [data-paneel="sterren"], [data-paneel="hemelpoort"], [data-paneel="ijspaleis"]) :is(.stage, .status, .panel)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Prikbord: kurk met twee punaises, en de kaarten zijn briefjes. */
+body[data-paneel="kurk"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: #fffaf0;
+  --vlak-zacht: #f6ecd9;
+  --inkt: #2b1a08;
+  --inkt-zacht: #3d2710;
+  --inkt-licht: #4a2e10;
+  --lijn: rgba(74, 46, 16, 0.2);
+  --lijn-sterk: rgba(74, 46, 16, 0.38);
+  --teller: #2b1a08;
+}
+body[data-paneel="kurk"] :is(.stage, .status, .panel) {
+  background-color: #c99a5f;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(90, 55, 20, 0.35) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 70% 60%, rgba(90, 55, 20, 0.3) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 45% 80%, rgba(255, 235, 200, 0.35) 0 1px, transparent 1.5px);
+  background-size: 11px 13px, 9px 7px, 13px 11px;
+  border: 6px solid #8a5a2b;
+}
+body[data-paneel="kurk"] :is(.stage, .status, .panel)::before,
+body[data-paneel="kurk"] :is(.stage, .status, .panel)::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  z-index: 3;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fecaca, #dc2626 55%, #7f1d1d);
+  box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+body[data-paneel="kurk"] :is(.stage, .status, .panel)::before { left: 10px; }
+body[data-paneel="kurk"] :is(.stage, .status, .panel)::after { right: 10px; background: radial-gradient(circle at 35% 35%, #bfdbfe, #2563eb 55%, #1e3a8a); }
+
+/* Beeldbuis: groen fosfor op zwart, met scanlijnen en een balk die zakt. */
+body[data-paneel="crt"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: #04200f;
+  --vlak-zacht: #031a0b;
+  --blauw-50: #072a14;
+  --inkt: #c8facc;
+  --inkt-zacht: #9eeab0;
+  --inkt-licht: #6fd08f;
+  --lijn: rgba(110, 231, 168, 0.18);
+  --lijn-sterk: rgba(110, 231, 168, 0.36);
+  --blauw-100: #0b3a1d;
+  --blauw-300: #22c55e;
+  --blauw-400: #4ade80;
+  --blauw-600: #15803d;
+  --blauw-700: #86efac;
+  --blauw-900: #010c05;
+  --knop: #15803d;
+  --knop-hover: #166534;
+  --teller: #dcfce7;
+  text-shadow: 0 0 6px rgba(74, 222, 128, 0.35);
+}
+body[data-paneel="crt"] :is(.stage, .status, .panel) { background: #03140a; box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8), 0 0 0 3px #1f2a24, var(--schaduw-l); }
+body[data-paneel="crt"] :is(.stage, .status, .panel)::before {
+  z-index: 5;
+  background:
+    linear-gradient(to bottom, rgba(134, 239, 172, 0) 0%, rgba(134, 239, 172, 0.07) 50%, rgba(134, 239, 172, 0) 100%) 0 0 / 100% 22% no-repeat,
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.18) 0 1px, transparent 1px 3px);
+  animation: beeldbuis 7s linear infinite;
+}
+@keyframes beeldbuis {
+  from { background-position: 0 -30%, 0 0; }
+  to { background-position: 0 130%, 0 0; }
+}
+
+/* Regenboogrand: licht paneel met een rand die langzaam alle kleuren doorloopt. */
+@property --paneelhoek {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+body[data-paneel="regenboog"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  border: 3px solid transparent;
+  background:
+    linear-gradient(var(--vlak), var(--vlak)) padding-box,
+    conic-gradient(from var(--paneelhoek), #f472b6, #facc15, #4ade80, #38bdf8, #a78bfa, #f472b6) border-box;
+  animation: paneelRand 8s linear infinite;
+}
+@keyframes paneelRand {
+  to { --paneelhoek: 360deg; }
+}
+
+/* Magma: donkerrood, met een rand die gloeit als lava. */
+body[data-paneel="magma"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: #2a0f0a;
+  --vlak-zacht: #210b07;
+  --blauw-50: #361510;
+  --inkt: #fff1ea;
+  --inkt-zacht: #f7cdb8;
+  --inkt-licht: #e7a98f;
+  --lijn: rgba(251, 146, 60, 0.2);
+  --lijn-sterk: rgba(251, 146, 60, 0.4);
+  --blauw-100: #4a1a0e;
+  --blauw-300: #c2410c;
+  --blauw-400: #ea580c;
+  --blauw-600: #c2410c;
+  --blauw-700: #fdba74;
+  --blauw-900: #140503;
+  --knop: #c2410c;
+  --knop-hover: #9a3412;
+  --teller: #ffedd5;
+  border: 2px solid transparent;
+  background: radial-gradient(130% 70% at 50% 110%, #7f1d1d, var(--vlak) 70%) padding-box, linear-gradient(135deg, #fb923c, #dc2626 45%, #fbbf24 70%, #b91c1c) border-box;
+  animation: magmaGloed 3.2s ease-in-out infinite;
+}
+@keyframes magmaGloed {
+  0%, 100% { box-shadow: 0 0 16px -2px rgba(249, 115, 22, 0.45), var(--schaduw-l); }
+  50% { box-shadow: 0 0 34px 2px rgba(249, 115, 22, 0.8), var(--schaduw-l); }
+}
+
+/* IJspaleis: bevroren glas, met glinsters die even oplichten. */
+body[data-paneel="ijspaleis"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: rgba(255, 255, 255, 0.82);
+  --vlak-zacht: rgba(240, 249, 255, 0.7);
+  --inkt: #0c3452;
+  --inkt-zacht: #1d4e73;
+  --inkt-licht: #2d5f86;
+  --lijn: rgba(12, 52, 82, 0.14);
+  --lijn-sterk: rgba(12, 52, 82, 0.28);
+  --teller: #0c3452;
+}
+body[data-paneel="ijspaleis"] :is(.stage, .status, .panel) {
+  background: linear-gradient(160deg, #f0f9ff, #dbeafe 55%, #e0f2fe);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: inset 0 0 30px rgba(186, 230, 253, 0.9), var(--schaduw-l);
+}
+body[data-paneel="ijspaleis"] :is(.stage, .status, .panel)::before {
+  background:
+    radial-gradient(2px 2px at 15% 20%, #fff, transparent),
+    radial-gradient(3px 3px at 80% 12%, #fff, transparent),
+    radial-gradient(2px 2px at 60% 70%, #fff, transparent),
+    radial-gradient(2.5px 2.5px at 30% 90%, #fff, transparent),
+    radial-gradient(2px 2px at 92% 55%, #fff, transparent);
+  animation: glinster 3.6s ease-in-out infinite alternate;
+}
+@keyframes glinster {
+  from { opacity: 0.2; }
+  to { opacity: 1; }
+}
+
+/* Aurora: noorderlicht dat traag achter de tekst langs golft. */
+body[data-paneel="aurora"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: rgba(6, 22, 34, 0.78);
+  --vlak-zacht: rgba(4, 16, 26, 0.7);
+  --blauw-50: rgba(20, 60, 70, 0.7);
+  --inkt: #effff9;
+  --inkt-zacht: #c2ecdf;
+  --inkt-licht: #93d4c4;
+  --lijn: rgba(94, 234, 212, 0.18);
+  --lijn-sterk: rgba(94, 234, 212, 0.36);
+  --blauw-100: rgba(20, 83, 80, 0.8);
+  --blauw-300: #14b8a6;
+  --blauw-400: #2dd4bf;
+  --blauw-600: #0f766e;
+  --blauw-700: #5eead4;
+  --blauw-900: #020a10;
+  --knop: #0f766e;
+  --knop-hover: #115e59;
+  --teller: #f0fdfa;
+}
+body[data-paneel="aurora"] :is(.stage, .status, .panel) { background: #061520; overflow: hidden; }
+body[data-paneel="aurora"] :is(.stage, .status, .panel)::before {
+  inset: -30% -60%;
+  background:
+    radial-gradient(18% 40% at 25% 40%, rgba(52, 211, 153, 0.55), transparent 70%),
+    radial-gradient(14% 45% at 45% 35%, rgba(45, 212, 191, 0.45), transparent 70%),
+    radial-gradient(18% 38% at 65% 45%, rgba(167, 139, 250, 0.45), transparent 70%),
+    radial-gradient(12% 42% at 82% 38%, rgba(74, 222, 128, 0.4), transparent 70%);
+  animation: auroraPaneel 18s ease-in-out infinite alternate;
+}
+@keyframes auroraPaneel {
+  from { transform: translateX(-12%) skewX(-6deg); }
+  to { transform: translateX(12%) skewX(8deg); }
+}
+
+/* Hologram: doorschijnend cyaan, met scanlijnen en af en toe een hapering. */
+body[data-paneel="hologram"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: rgba(8, 51, 68, 0.72);
+  --vlak-zacht: rgba(6, 40, 54, 0.66);
+  --blauw-50: rgba(14, 116, 144, 0.4);
+  --inkt: #e0fbff;
+  --inkt-zacht: #b5ecf5;
+  --inkt-licht: #9ad9e6;
+  --lijn: rgba(103, 232, 249, 0.22);
+  --lijn-sterk: rgba(103, 232, 249, 0.42);
+  --blauw-100: rgba(14, 116, 144, 0.55);
+  --blauw-300: #22d3ee;
+  --blauw-400: #67e8f9;
+  --blauw-600: #0e7490;
+  --blauw-700: #a5f3fc;
+  --blauw-900: #021a24;
+  --knop: #0e7490;
+  --knop-hover: #155e75;
+  --teller: #ecfeff;
+}
+body[data-paneel="hologram"] :is(.stage, .status, .panel) {
+  background: rgba(8, 47, 73, 0.84);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(103, 232, 249, 0.55);
+  box-shadow: 0 0 24px rgba(34, 211, 238, 0.35), inset 0 0 30px rgba(34, 211, 238, 0.15);
+  animation: holoHapering 6s steps(1, end) infinite;
+}
+body[data-paneel="hologram"] :is(.stage, .status, .panel)::before {
+  z-index: 5;
+  background: repeating-linear-gradient(to bottom, rgba(103, 232, 249, 0.07) 0 2px, transparent 2px 5px);
+  animation: holoLijnen 4s linear infinite;
+}
+@keyframes holoLijnen {
+  from { background-position: 0 0; }
+  to { background-position: 0 50px; }
+}
+@keyframes holoHapering {
+  0%, 93%, 97%, 100% { opacity: 1; translate: 0 0; }
+  95% { opacity: 0.85; translate: 2px 0; }
+}
+
+/* Sterrennacht: een diepblauwe hemel waar sterren zachtjes twinkelen. */
+body[data-paneel="sterren"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: rgba(17, 24, 56, 0.9);
+  --vlak-zacht: rgba(12, 17, 42, 0.85);
+  --blauw-50: #1b2452;
+  --inkt: #f1f5ff;
+  --inkt-zacht: #cbd5f5;
+  --inkt-licht: #a5b4e8;
+  --lijn: rgba(199, 210, 254, 0.18);
+  --lijn-sterk: rgba(199, 210, 254, 0.36);
+  --blauw-100: #26306b;
+  --blauw-300: #6366f1;
+  --blauw-400: #818cf8;
+  --blauw-600: #4f46e5;
+  --blauw-700: #c7d2fe;
+  --blauw-900: #04061a;
+  --knop: #4f46e5;
+  --knop-hover: #4338ca;
+  --teller: #ffffff;
+}
+body[data-paneel="sterren"] :is(.stage, .status, .panel) { background: radial-gradient(120% 80% at 70% 0%, #1e2a5e, #070a1f 70%); }
+body[data-paneel="sterren"] :is(.stage, .status, .panel)::before {
+  background:
+    radial-gradient(1.5px 1.5px at 10% 12%, #fff, transparent),
+    radial-gradient(1px 1px at 25% 40%, #e0e7ff, transparent),
+    radial-gradient(2px 2px at 42% 18%, #fff, transparent),
+    radial-gradient(1px 1px at 58% 55%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 75% 30%, #fde68a, transparent),
+    radial-gradient(1px 1px at 88% 72%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 15% 80%, #c7d2fe, transparent),
+    radial-gradient(1px 1px at 35% 92%, #fff, transparent),
+    radial-gradient(2px 2px at 64% 86%, #fff, transparent),
+    radial-gradient(1px 1px at 93% 8%, #fff, transparent);
+  background-size: 260px 300px;
+  animation: twinkelen 3.8s ease-in-out infinite alternate;
+}
+@keyframes twinkelen {
+  from { opacity: 0.35; }
+  to { opacity: 1; }
+}
+
+/* Hemelpoort: wit en goud, met stralen licht die er traag doorheen trekken. */
+body[data-paneel="hemelpoort"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: rgba(255, 253, 245, 0.9);
+  --vlak-zacht: rgba(254, 243, 199, 0.6);
+  --blauw-50: #fff8e1;
+  --inkt: #3b2600;
+  --inkt-zacht: #5a3d05;
+  --inkt-licht: #6b4a0d;
+  --lijn: rgba(180, 83, 9, 0.18);
+  --lijn-sterk: rgba(180, 83, 9, 0.34);
+  --blauw-100: #fde68a;
+  --blauw-300: #f59e0b;
+  --blauw-400: #d97706;
+  --blauw-600: #b45309;
+  --blauw-700: #92400e;
+  --knop: #b45309;
+  --knop-hover: #92400e;
+  --teller: #3b2600;
+  border: 2px solid transparent;
+  background:
+    radial-gradient(120% 80% at 50% 0%, #fffdf5, #fef3c7 60%, #fde68a) padding-box,
+    conic-gradient(from var(--paneelhoek), #fde68a, #ffffff, #f59e0b, #ffffff, #fde68a) border-box;
+  animation: paneelRand 6s linear infinite, hemelGloed 3s ease-in-out infinite;
+}
+@keyframes hemelGloed {
+  0%, 100% { box-shadow: 0 0 20px rgba(253, 230, 138, 0.55), var(--schaduw-l); }
+  50% { box-shadow: 0 0 44px rgba(253, 230, 138, 0.95), var(--schaduw-l); }
+}
+body[data-paneel="hemelpoort"] :is(.stage, .status, .panel) { overflow: hidden; }
+body[data-paneel="hemelpoort"] :is(.stage, .status, .panel)::before {
+  inset: -50%;
+  background: repeating-conic-gradient(from 0deg at 50% 0%, rgba(255, 255, 255, 0.5) 0 4deg, rgba(255, 255, 255, 0) 4deg 14deg);
+  animation: draaien 60s linear infinite;
+  opacity: 0.55;
+}
+body.rustig :is(.stage, .status, .panel, .sheet-card, .modal-card),
+body.rustig :is(.stage, .status, .panel)::before { animation: none; }
+
+/* Het voorbeeldje in het menu: een klein paneel met twee regels tekst. */
+.skin-preview.paneel-voorbeeld {
+  width: 66px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 0 10px;
+  background: var(--pv-achter);
+}
+.paneel-voorbeeld i { display: block; width: 100%; height: 4px; border-radius: 2px; background: var(--pv-tekst); }
+.paneel-voorbeeld i:nth-child(2) { width: 62%; background: var(--pv-accent); }
+.paneel-voorbeeld i:nth-child(3) { width: 82%; opacity: 0.55; }
+
 /* ---------- Portretten en ringen (vrij te spelen) ---------- */
 
 [data-portret="archief"] img, img[data-portret="archief"] { filter: sepia(0.8) contrast(1.06) brightness(1.02); }
@@ -338,6 +1150,96 @@ body[data-achtergrond="diepteruimte"]::after {
 [data-portret="matrix"] img, img[data-portret="matrix"] { filter: grayscale(1) brightness(0.9) sepia(1) hue-rotate(65deg) saturate(4.5) contrast(1.15); }
 [data-portret="roentgen"] img, img[data-portret="roentgen"] { filter: invert(1) hue-rotate(180deg) contrast(1.05); }
 [data-portret="poster"] img, img[data-portret="poster"] { filter: saturate(2.6) contrast(1.45) brightness(1.05); }
+[data-portret="storing"] img, img[data-portret="storing"] { filter: saturate(1.3) contrast(1.1) drop-shadow(-3px 0 0 rgba(255, 0, 90, 0.6)) drop-shadow(3px 0 0 rgba(0, 220, 255, 0.6)); }
+[data-portret="warmte"] img, img[data-portret="warmte"] { filter: url(#warmtebeeld); }
+[data-portret="goudbeeld"] img, img[data-portret="goudbeeld"] { filter: grayscale(1) sepia(1) saturate(3.4) hue-rotate(-10deg) brightness(1.06) contrast(1.2); }
+[data-portret="pixel"] img, img[data-portret="pixel"] { filter: url(#pixel) saturate(1.3); }
+[data-portret="popart"] img, img[data-portret="popart"] { filter: url(#popart); }
+[data-portret="festival"] img, img[data-portret="festival"] { filter: url(#festival) contrast(1.05); }
+[data-portret="schets"] img, img[data-portret="schets"] { filter: url(#schets) sepia(0.2); }
+[data-portret="hologram"] img, img[data-portret="hologram"] { filter: grayscale(1) sepia(1) hue-rotate(150deg) saturate(3.2) brightness(1.15) contrast(1.1); }
+
+/* Discobal: alle kleuren draaien rond. */
+[data-portret="disco"] img, img[data-portret="disco"] { filter: saturate(1.8) hue-rotate(90deg); }
+.serge[data-portret="disco"] img { animation: ademen 4.5s ease-in-out infinite, disco 3.2s linear infinite; }
+@keyframes disco {
+  from { filter: saturate(1.8) contrast(1.1) hue-rotate(0deg); }
+  to { filter: saturate(1.8) contrast(1.1) hue-rotate(360deg); }
+}
+/* Radioactief: groen, en hij gloeit in golven. */
+[data-portret="radioactief"] img, img[data-portret="radioactief"] { filter: grayscale(1) sepia(1) hue-rotate(50deg) saturate(3.4) brightness(1.08); }
+.serge[data-portret="radioactief"] img { animation: ademen 4.5s ease-in-out infinite, radioactief 2.2s ease-in-out infinite; }
+@keyframes radioactief {
+  0%, 100% { box-shadow: 0 0 0 4px var(--ring, #93c5fd), 0 0 14px 2px rgba(163, 230, 53, 0.45); }
+  50% { box-shadow: 0 0 0 4px var(--ring, #93c5fd), 0 0 38px 12px rgba(163, 230, 53, 0.75); }
+}
+/* Spook: half doorzichtig, en hij zweeft. */
+[data-portret="spook"] img, img[data-portret="spook"] { filter: grayscale(0.7) brightness(1.2) contrast(0.9); opacity: 0.72; }
+.serge[data-portret="spook"] img { animation: ademen 4.5s ease-in-out infinite, spookFlakker 7s steps(1, end) infinite; }
+@keyframes spookFlakker {
+  0%, 88%, 92%, 100% { opacity: 0.72; }
+  90% { opacity: 0.3; }
+}
+/* Kosmisch: sterren die om hem heen draaien, en een diepe paarse gloed. */
+[data-portret="kosmisch"] img, img[data-portret="kosmisch"] { filter: saturate(1.3) contrast(1.1) hue-rotate(-20deg); }
+.serge[data-portret="kosmisch"] img { animation: ademen 4.5s ease-in-out infinite, kosmischeGloed 4s ease-in-out infinite; }
+@keyframes kosmischeGloed {
+  0%, 100% { box-shadow: 0 0 0 4px var(--ring, #93c5fd), 0 0 24px 6px rgba(129, 140, 248, 0.55); }
+  50% { box-shadow: 0 0 0 4px var(--ring, #93c5fd), 0 0 48px 16px rgba(236, 72, 153, 0.55); }
+}
+.serge[data-portret="kosmisch"]::after {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  z-index: 2;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(2px 2px at 12% 30%, #fff, transparent),
+    radial-gradient(2px 2px at 85% 20%, #fde68a, transparent),
+    radial-gradient(1.5px 1.5px at 70% 88%, #fff, transparent),
+    radial-gradient(2px 2px at 25% 82%, #c4b5fd, transparent),
+    radial-gradient(1.5px 1.5px at 50% 4%, #fff, transparent),
+    radial-gradient(2px 2px at 95% 60%, #fbcfe8, transparent),
+    radial-gradient(1.5px 1.5px at 4% 58%, #fff, transparent),
+    radial-gradient(2.5px 2.5px at 38% 96%, #fde68a, transparent);
+  animation: draaien 18s linear infinite;
+}
+
+/* Storing: af en toe schiet het beeld uit elkaar. Met `translate` en niet met
+   transform, anders botst het met het ademen van de foto. */
+.serge[data-portret="storing"] img { animation: ademen 4.5s ease-in-out infinite, storing 3.4s steps(1, end) infinite; }
+@keyframes storing {
+  0%, 84%, 100% { translate: 0 0; }
+  86% { translate: 5px 0; filter: saturate(1.6) contrast(1.2) drop-shadow(-9px 0 0 rgba(255, 0, 90, 0.75)) drop-shadow(9px 0 0 rgba(0, 220, 255, 0.75)); }
+  89% { translate: -6px 1px; filter: saturate(1.4) hue-rotate(40deg) drop-shadow(7px 0 0 rgba(255, 0, 90, 0.7)) drop-shadow(-7px 0 0 rgba(0, 220, 255, 0.7)); }
+  92% { translate: 2px 0; }
+}
+
+/* Gouden beeld en Hologram krijgen een laag over de foto. */
+.serge[data-portret="goudbeeld"]::after,
+.serge[data-portret="hologram"]::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  z-index: 2;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.serge[data-portret="goudbeeld"]::after {
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 251, 235, 0.6) 50%, transparent 62%);
+  background-size: 260% 100%;
+  animation: glans 4.8s ease-in-out infinite;
+}
+.serge[data-portret="hologram"]::after {
+  background: repeating-linear-gradient(to bottom, rgba(103, 232, 249, 0.22) 0 2px, transparent 2px 5px);
+  animation: flikker 5s steps(1, end) infinite;
+}
+.serge[data-portret="hologram"] img { opacity: 0.88; }
+@keyframes flikker {
+  0%, 46%, 50%, 100% { opacity: 1; }
+  48% { opacity: 0.35; }
+}
 
 [data-ring="blauw"] { --ring: #93c5fd; }
 [data-ring="goud"] { --ring: #f59e0b; }
@@ -351,6 +1253,19 @@ body[data-achtergrond="diepteruimte"]::after {
 [data-ring="koper"] { --ring: #d97706; }
 [data-ring="zwart"] { --ring: #111827; }
 [data-ring="regenboog"] { --ring: transparent; }
+[data-ring="lichtpuls"] { --ring: #0e2a47; }
+[data-ring="diamant"] { --ring: #e0f2fe; }
+[data-ring="plasma"] { --ring: transparent; }
+[data-ring="t568b"] { --ring: transparent; }
+[data-ring="radar"] { --ring: #052e16; }
+[data-ring="ijs"] { --ring: #e0f2fe; }
+[data-ring="vuur"] { --ring: transparent; }
+[data-ring="hartslag"] { --ring: #ef4444; }
+[data-ring="pulsar"] { --ring: #67e8f9; }
+[data-ring="hoogspanning"] { --ring: #a5f3fc; }
+[data-ring="satelliet"] { --ring: #1e3a8a; }
+[data-ring="melkweg"] { --ring: transparent; }
+[data-ring="zonnekroon"] { --ring: #fde68a; }
 
 .serge img {
   position: relative;
@@ -382,8 +1297,141 @@ body[data-achtergrond="diepteruimte"]::after {
   background: conic-gradient(#052e16 0 62%, #22c55e 78%, #bbf7d0 86%, #22c55e 92%, #052e16 100%);
   animation-duration: 3.4s;
 }
+/* Lichtpuls: drie pulsen die door een donkere ring jagen. */
+.serge[data-ring="lichtpuls"]::before {
+  opacity: 1;
+  background: conic-gradient(#0e2a47 0 18%, #67e8f9 24%, #0e2a47 30% 51%, #a7f3d0 57%, #0e2a47 63% 84%, #f0f9ff 90%, #0e2a47 96%);
+  animation-duration: 2.2s;
+}
+/* Diamant: harde facetten die langzaam draaien. */
+.serge[data-ring="diamant"]::before {
+  opacity: 1;
+  background: conic-gradient(#f0f9ff 0 8%, #93c5fd 8% 17%, #ffffff 17% 23%, #c4b5fd 23% 33%, #e0f2fe 33% 41%, #67e8f9 41% 50%, #ffffff 50% 56%, #a5b4fc 56% 66%, #f0f9ff 66% 74%, #7dd3fc 74% 83%, #ffffff 83% 90%, #ddd6fe 90%);
+  animation-duration: 14s;
+}
+/* Plasma: een gloeiende ring die zachtjes groter en kleiner wordt. */
+.serge[data-ring="plasma"]::before {
+  opacity: 1;
+  background: conic-gradient(#f0abfc, #818cf8, #22d3ee, #a78bfa, #f472b6, #f0abfc);
+  filter: blur(4px) saturate(1.3);
+  animation: draaien 3s linear infinite, plasma 1.8s ease-in-out infinite alternate;
+}
+@keyframes plasma {
+  to { scale: 1.07; }
+}
+/* T568B: wit-oranje, oranje, wit-groen, blauw, wit-blauw, groen, wit-bruin, bruin. */
+.serge[data-ring="t568b"]::before {
+  opacity: 1;
+  background: conic-gradient(#fdf4e7 0 3%, #f97316 3% 9.5%, #fdf4e7 9.5% 12.5%,
+    #f97316 12.5% 25%, #f5fbf6 25% 28%, #22c55e 28% 34.5%, #f5fbf6 34.5% 37.5%, #2563eb 37.5% 50%,
+    #f5f8ff 50% 53%, #2563eb 53% 59.5%, #f5f8ff 59.5% 62.5%, #22c55e 62.5% 75%,
+    #f7f1ec 75% 78%, #92400e 78% 84.5%, #f7f1ec 84.5% 87.5%, #92400e 87.5% 100%);
+  animation-duration: 12s;
+}
+/* Radar: een straal die rondzwaait en een groen spoor achterlaat. */
+.serge[data-ring="radar"]::before {
+  opacity: 1;
+  background: conic-gradient(#052e16 0 70%, rgba(74, 222, 128, 0.25) 82%, #4ade80 99%, #dcfce7 100%);
+  animation-duration: 2.6s;
+}
+/* IJs: bleek en koud, met een wolk rijp eromheen. */
+.serge[data-ring="ijs"]::before {
+  opacity: 1;
+  background: conic-gradient(#f0f9ff, #bae6fd 15%, #ffffff 30%, #7dd3fc 48%, #e0f2fe 62%, #ffffff 80%, #bae6fd 90%, #f0f9ff);
+  animation-duration: 20s;
+}
+.serge[data-ring="ijs"] img { box-shadow: 0 0 22px 4px rgba(186, 230, 253, 0.75), 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
+/* Vuurring: rood en oranje die opflakkeren. */
+.serge[data-ring="vuur"]::before {
+  opacity: 1;
+  background: conic-gradient(#fde047, #f97316, #dc2626, #fb923c, #facc15, #ef4444, #f97316, #fde047);
+  filter: blur(3px) saturate(1.4);
+  animation: draaien 2.2s linear infinite, flakkeren 0.9s steps(3, end) infinite alternate;
+}
+@keyframes flakkeren {
+  0% { scale: 1; }
+  50% { scale: 1.05; }
+  100% { scale: 1.02; }
+}
+/* Hartslag: twee snelle slagen, dan rust. */
+.serge[data-ring="hartslag"] img { animation: ademen 4.5s ease-in-out infinite, hartslag 1.5s ease-in-out infinite; }
+@keyframes hartslag {
+  0%, 40%, 100% { box-shadow: 0 0 0 4px #ef4444, 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
+  10% { box-shadow: 0 0 0 10px #ef4444, 0 0 26px 6px rgba(239, 68, 68, 0.55); }
+  20% { box-shadow: 0 0 0 5px #ef4444, 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
+  30% { box-shadow: 0 0 0 9px #ef4444, 0 0 22px 4px rgba(239, 68, 68, 0.45); }
+}
+/* Pulsar: golven die telkens van de foto wegrollen. */
+.serge[data-ring="pulsar"]::before {
+  opacity: 1;
+  inset: -4px;
+  border: 3px solid #67e8f9;
+  animation: pulsar 1.8s cubic-bezier(0.2, 0.7, 0.3, 1) infinite;
+}
+@keyframes pulsar {
+  from { transform: scale(1); opacity: 0.95; }
+  to { transform: scale(1.32); opacity: 0; }
+}
+/* Hoogspanning: gekartelde vonken die snel rond de rand flitsen. */
+.serge[data-ring="hoogspanning"]::before {
+  opacity: 1;
+  background: repeating-conic-gradient(from 0deg, #ecfeff 0 3deg, transparent 3deg 11deg, #22d3ee 11deg 13deg, transparent 13deg 24deg);
+  -webkit-mask: radial-gradient(circle, transparent 60%, #000 61%);
+  mask: radial-gradient(circle, transparent 60%, #000 61%);
+  filter: drop-shadow(0 0 6px #22d3ee);
+  animation: draaien 0.9s steps(6, end) infinite, spanning 0.35s steps(2, end) infinite;
+}
+@keyframes spanning {
+  0% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.serge[data-ring="hoogspanning"] img { box-shadow: 0 0 0 4px #a5f3fc, 0 0 20px 4px rgba(34, 211, 238, 0.55); }
+/* Satelliet: een lichtje in een baan om de foto, met een dunne baanlijn. */
+.serge[data-ring="satelliet"]::before {
+  opacity: 1;
+  inset: -16px;
+  background: radial-gradient(circle at 50% 3%, #ffffff 0 4px, #93c5fd 5px, rgba(147, 197, 253, 0) 11px);
+  box-shadow: inset 0 0 0 1px rgba(147, 197, 253, 0.45);
+  animation-duration: 5s;
+}
+/* Melkweg: een draaiend sterrenstelsel achter de foto. */
+.serge[data-ring="melkweg"]::before {
+  opacity: 1;
+  inset: -16px;
+  background:
+    radial-gradient(1.5px 1.5px at 20% 30%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 75% 18%, #fff, transparent),
+    radial-gradient(2px 2px at 85% 70%, #fde68a, transparent),
+    radial-gradient(1.5px 1.5px at 30% 85%, #fff, transparent),
+    conic-gradient(from 0deg, #1e1b4b, #7c3aed, #ec4899, #1e1b4b, #2563eb, #22d3ee, #1e1b4b);
+  filter: saturate(1.3);
+  animation-duration: 16s;
+}
+/* Zonnekroon: stralen van licht die langzaam rond draaien, en een gloed die ademt. */
+.serge[data-ring="zonnekroon"]::before {
+  opacity: 1;
+  inset: -26px;
+  background: repeating-conic-gradient(from 0deg, rgba(253, 230, 138, 0.95) 0 5deg, rgba(253, 230, 138, 0) 5deg 15deg);
+  -webkit-mask: radial-gradient(circle, transparent 46%, #000 50%, #000 58%, transparent 72%);
+  mask: radial-gradient(circle, transparent 46%, #000 50%, #000 58%, transparent 72%);
+  animation-duration: 28s;
+}
+.serge[data-ring="zonnekroon"] img { animation: ademen 4.5s ease-in-out infinite, zonnegloed 3s ease-in-out infinite; }
+@keyframes zonnegloed {
+  0%, 100% { box-shadow: 0 0 0 4px #fde68a, 0 0 22px 6px rgba(251, 191, 36, 0.55); }
+  50% { box-shadow: 0 0 0 5px #fff7d6, 0 0 46px 16px rgba(251, 191, 36, 0.8); }
+}
+.serge[data-ring="melkweg"] img,
+.serge[data-ring="satelliet"] img { box-shadow: 0 0 0 3px var(--ring), 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
+
 .serge[data-ring="goud"] img,
-.serge[data-ring="matrix"] img { box-shadow: 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
+.serge[data-ring="matrix"] img,
+.serge[data-ring="t568b"] img,
+.serge[data-ring="radar"] img,
+.serge[data-ring="vuur"] img,
+.serge[data-ring="lichtpuls"] img,
+.serge[data-ring="diamant"] img,
+.serge[data-ring="plasma"] img { box-shadow: 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
 
 /* Alarmrood knippert niet, het ademt. */
 .serge[data-ring="rood"] img { animation: ademen 4.5s ease-in-out infinite, alarm 2.2s ease-in-out infinite; }
@@ -405,6 +1453,12 @@ body[data-achtergrond="diepteruimte"]::after {
   color: var(--inkt-licht);
   margin: 14px 0 10px;
 }
+.skin-bediening { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin: 14px 0 12px; }
+.segmented.skin-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; width: 100%; }
+.segmented.skin-tabs button { font-size: 14px; padding: 7px 6px; text-align: center; }
+.skin-tabs small { display: block; font-size: 11.5px; font-weight: 600; color: var(--inkt-licht); }
+.skin-tabs button.on small { color: inherit; opacity: 0.85; }
+#skin-hint { margin-bottom: 10px; }
 .skinrij { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 10px; }
 .skin {
   display: flex;
@@ -443,6 +1497,73 @@ body[data-achtergrond="diepteruimte"]::after {
   border-color: transparent;
 }
 .skin-preview[data-ring="regenboog"] img { transform: scale(0.78); border-radius: 50%; }
+.skin-preview[data-ring="lichtpuls"],
+.skin-preview[data-ring="diamant"],
+.skin-preview[data-ring="plasma"] { box-shadow: none; border-color: transparent; }
+.skin-preview[data-ring="lichtpuls"] { background: conic-gradient(#0e2a47 0 18%, #67e8f9 24%, #0e2a47 30% 51%, #a7f3d0 57%, #0e2a47 63% 84%, #f0f9ff 90%, #0e2a47 96%); }
+.skin-preview[data-ring="diamant"] { background: conic-gradient(#f0f9ff 0 12%, #93c5fd 12% 25%, #ffffff 25% 37%, #c4b5fd 37% 50%, #e0f2fe 50% 62%, #67e8f9 62% 75%, #ffffff 75% 87%, #a5b4fc 87%); }
+.skin-preview[data-ring="plasma"] { background: conic-gradient(#f0abfc, #818cf8, #22d3ee, #a78bfa, #f472b6, #f0abfc); }
+.skin-preview[data-ring="lichtpuls"] img,
+.skin-preview[data-ring="diamant"] img,
+.skin-preview[data-ring="plasma"] img { transform: scale(0.78); border-radius: 50%; }
+.skin-preview[data-ring="t568b"],
+.skin-preview[data-ring="radar"],
+.skin-preview[data-ring="ijs"],
+.skin-preview[data-ring="vuur"] { box-shadow: none; border-color: transparent; }
+.skin-preview[data-ring="t568b"] { background: conic-gradient(#fdf4e7 0 12.5%, #f97316 12.5% 25%, #f5fbf6 25% 37.5%, #2563eb 37.5% 50%, #f5f8ff 50% 62.5%, #22c55e 62.5% 75%, #f7f1ec 75% 87.5%, #92400e 87.5%); }
+.skin-preview[data-ring="radar"] { background: conic-gradient(#052e16 0 70%, #4ade80 99%, #dcfce7); }
+.skin-preview[data-ring="ijs"] { background: conic-gradient(#f0f9ff, #bae6fd, #ffffff, #7dd3fc, #f0f9ff); }
+.skin-preview[data-ring="vuur"] { background: conic-gradient(#fde047, #f97316, #dc2626, #fb923c, #fde047); }
+.skin-preview[data-ring="t568b"] img,
+.skin-preview[data-ring="radar"] img,
+.skin-preview[data-ring="ijs"] img,
+.skin-preview[data-ring="vuur"] img { transform: scale(0.78); border-radius: 50%; }
+.skin-preview:is([data-ring="melkweg"], [data-ring="zonnekroon"], [data-ring="hoogspanning"], [data-ring="pulsar"]) { box-shadow: none; border-color: transparent; }
+.skin-preview[data-ring="melkweg"] { background: conic-gradient(#1e1b4b, #7c3aed, #ec4899, #1e1b4b, #2563eb, #22d3ee, #1e1b4b); }
+.skin-preview[data-ring="zonnekroon"] { background: repeating-conic-gradient(#fde68a 0 8deg, #f59e0b 8deg 20deg); }
+.skin-preview[data-ring="hoogspanning"] { background: repeating-conic-gradient(#ecfeff 0 6deg, #0e7490 6deg 18deg); }
+.skin-preview[data-ring="pulsar"] { background: radial-gradient(circle, #67e8f9 60%, #cffafe 70%, #67e8f9 80%); }
+.skin-preview:is([data-ring="melkweg"], [data-ring="zonnekroon"], [data-ring="hoogspanning"], [data-ring="pulsar"]) img { transform: scale(0.78); border-radius: 50%; }
+.skin-preview[data-achtergrond="blokjes"] { background-image: linear-gradient(90deg, transparent 18px, #facc15 18px 30px, transparent 30px), linear-gradient(transparent 32px, #a78bfa 32px 40px, #22d3ee 40px), linear-gradient(#111827, #030712); }
+.skin-preview[data-achtergrond="aquarium"] { background-image: linear-gradient(transparent 80%, #c2a878 80%), linear-gradient(#0ea5e9, #0c4a6e); }
+.skin-preview[data-achtergrond="aquarium"]::after { content: "🐠"; font-size: 20px; }
+.skin-preview[data-achtergrond="meteoren"] { background-image: linear-gradient(145deg, transparent 38%, rgba(255, 255, 255, 0.9) 40%, transparent 44%), radial-gradient(circle at 70% 70%, #fff 0 1px, transparent 1.5px), linear-gradient(#0f172a, #020617); }
+.skin-preview[data-achtergrond="vuurwerk"] { background-image: repeating-conic-gradient(from 0deg at 50% 40%, #f472b6 0 6deg, transparent 6deg 30deg), linear-gradient(#0b1026, #01030a); }
+.skin-preview[data-achtergrond="heelal"] { background-image: radial-gradient(circle, #fde68a 0 3px, transparent 6px), conic-gradient(from 20deg, #0a0418, #7c3aed, #0a0418, #f0abfc, #0a0418, #818cf8, #0a0418); }
+.skin-preview[data-achtergrond="lavalamp"] { background-image: radial-gradient(circle at 35% 70%, #fde047 0 6px, #f97316 12px, transparent 16px), radial-gradient(circle at 65% 30%, #fb7185 0 5px, #f97316 10px, transparent 14px), linear-gradient(#7c2d12, #3b0764); }
+.skin-preview[data-achtergrond="datacenter"] { background-image: radial-gradient(circle at 70% 30%, #4ade80 0 1.5px, transparent 2px), radial-gradient(circle at 70% 55%, #fbbf24 0 1.5px, transparent 2px), radial-gradient(circle at 30% 45%, #4ade80 0 1.5px, transparent 2px), repeating-linear-gradient(90deg, #111c2b 0 20px, #03060c 20px 24px); }
+.skin-preview[data-achtergrond="zeebodem"] { background-image: radial-gradient(circle at 40% 40%, transparent 2px, rgba(186, 230, 253, 0.8) 2.5px, transparent 3.5px), linear-gradient(transparent 70%, #0b1a24 70%), linear-gradient(#0e4a6e, #020c18); }
+.skin-preview[data-achtergrond="warp"] { background-image: repeating-conic-gradient(from 0deg at 50% 50%, rgba(224, 231, 255, 0.9) 0 1deg, transparent 1deg 18deg), radial-gradient(circle, #0a0620 30%, #000); }
+.skin-preview[data-achtergrond="synthwave"] {
+  background-image:
+    radial-gradient(circle at 50% 62%, #fde68a 0, #fb923c 7px, #ec4899 12px, transparent 12.5px),
+    linear-gradient(to bottom, #1e1045, #a21caf 58%, #1a0b33 62%);
+}
+.skin-preview[data-achtergrond="noorderlicht"] {
+  background-image: radial-gradient(60% 40% at 35% 45%, rgba(52, 211, 153, 0.8), transparent 70%), radial-gradient(50% 40% at 70% 40%, rgba(167, 139, 250, 0.7), transparent 70%), linear-gradient(#0f2d3f, #020617);
+}
+.skin-preview[data-achtergrond="glasvezel"] {
+  background-image: repeating-linear-gradient(115deg, transparent 0 5px, rgba(103, 232, 249, 0.55) 5px 6px), linear-gradient(135deg, #0b1e3a, #02040c);
+}
+.skin-preview[data-achtergrond="netwerk"] {
+  background-image: radial-gradient(circle at 30% 35%, #67e8f9 0 2px, transparent 3px), radial-gradient(circle at 68% 30%, #bfdbfe 0 2px, transparent 3px), radial-gradient(circle at 55% 70%, #6ee7a8 0 2px, transparent 3px), linear-gradient(135deg, #0c2447, #020617);
+}
+/* Klikeffect en klikgeluid: een teken in het rondje. Titel: een naamplaatje. */
+.skin-preview.teken { background: var(--blauw-900); color: #e0f2fe; font-size: 20px; font-weight: 700; line-height: 1; }
+.skin-preview.plaatje {
+  width: auto;
+  max-width: 100%;
+  height: 30px;
+  margin: 11px 0;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .skin-preview[data-achtergrond] {
   background-image: linear-gradient(135deg, var(--lucht), var(--blauw) 45%, var(--indigo));
@@ -540,7 +1661,7 @@ body[data-achtergrond="diepteruimte"]::after {
   line-height: 1;
   letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
-  color: var(--blauw-900);
+  color: var(--teller);
 }
 .counter strong.pop { animation: pop 320ms cubic-bezier(0.2, 0.9, 0.3, 1); }
 @keyframes pop {
@@ -574,9 +1695,12 @@ body[data-achtergrond="diepteruimte"]::after {
   position: relative;
   transition: transform var(--sneller);
 }
+/* De maat van de foto staat op de plek eromheen, zodat het accessoire
+   dezelfde maat kent. */
+.serge-plek { --foto: clamp(200px, 18vw, 268px); }
 .serge img {
-  width: clamp(200px, 18vw, 268px);
-  height: clamp(200px, 18vw, 268px);
+  width: var(--foto);
+  height: var(--foto);
   border-radius: 50%;
   object-fit: cover;
   border: 6px solid #fff;
@@ -596,6 +1720,75 @@ body[data-achtergrond="diepteruimte"]::after {
   0% { transform: scale(0.93) rotate(-1.5deg); }
   55% { transform: scale(1.04) rotate(1deg); }
   100% { transform: scale(1) rotate(0); }
+}
+
+/* Het maatje zit rechtsonder naast de foto en dobbert zachtjes. */
+.serge-plek { position: relative; line-height: 0; }
+.maatje {
+  position: absolute;
+  right: -10px;
+  bottom: 2px;
+  z-index: 3;
+  width: 58px;
+  height: 58px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: var(--blauw-100);
+  box-shadow: var(--schaduw-m);
+  font-size: 31px;
+  line-height: 1;
+  cursor: pointer;
+  animation: dobberen 3.2s ease-in-out infinite;
+}
+.maatje:hover { background: #fff; }
+.maatje.hop { animation: hop 520ms cubic-bezier(0.16, 1, 0.3, 1), dobberen 3.2s ease-in-out 520ms infinite; }
+@keyframes dobberen {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -5px; }
+}
+@keyframes hop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.22) rotate(-8deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+.maatje-ballon {
+  position: absolute;
+  right: -14px;
+  bottom: 70px;
+  z-index: 4;
+  width: max-content;
+  max-width: 230px;
+  padding: 9px 13px;
+  border-radius: 14px;
+  /* Vaste kleuren: de ballon is altijd wit, ook op een donker paneelthema,
+     dus de tekst mag de themakleur niet volgen. */
+  background: #fff;
+  color: #10233c;
+  box-shadow: 0 0 0 1px rgba(16, 35, 60, 0.12), var(--schaduw-m);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: left;
+  /* Klikken gaat gewoon door naar Serge eronder. */
+  pointer-events: none;
+}
+.maatje-ballon::after {
+  content: "";
+  position: absolute;
+  right: 34px;
+  bottom: -7px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  transform: rotate(45deg);
+}
+.maatje-ballon.in { animation: ballonIn 260ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes ballonIn {
+  from { opacity: 0; transform: translateY(6px) scale(0.92); }
+  to { opacity: 1; transform: none; }
 }
 
 .clicker-hint {
@@ -622,7 +1815,7 @@ body[data-achtergrond="diepteruimte"]::after {
   border-radius: 999px;
   background: var(--goud-vlak);
   border: 2px solid var(--goud-rand);
-  color: #7c3d00;
+  color: var(--goud-tekst);
   font-size: 15px;
   font-weight: 600;
   cursor: help;
@@ -633,7 +1826,7 @@ body[data-achtergrond="diepteruimte"]::after {
 .buff.slecht {
   background: var(--rood-vlak);
   border-color: var(--rood-rand);
-  color: #8c1c16;
+  color: var(--rood-tekst);
 }
 .buff time { font-variant-numeric: tabular-nums; opacity: 0.8; font-weight: 500; }
 
@@ -962,7 +2155,7 @@ body[data-achtergrond="diepteruimte"]::after {
   color: var(--inkt-zacht);
   cursor: pointer;
 }
-.toggle[aria-pressed="true"] { background: var(--rood-vlak); border-color: var(--rood-rand); color: #8c1c16; }
+.toggle[aria-pressed="true"] { background: var(--rood-vlak); border-color: var(--rood-rand); color: var(--rood-tekst); }
 
 .shoplist {
   display: grid;
@@ -987,7 +2180,7 @@ body[data-achtergrond="diepteruimte"]::after {
 }
 .shopitem:hover { background: var(--vlak-zacht); border-color: var(--lijn-sterk); }
 /* Alleen wat je nú kunt kopen licht op. De rest zakt weg. */
-.shopitem.betaalbaar { border-color: var(--blauw-300); background: #f4f9ff; }
+.shopitem.betaalbaar { border-color: var(--blauw-300); background: var(--blauw-50); }
 .shopitem.betaalbaar:hover { transform: translateY(-1px); box-shadow: var(--schaduw-s); }
 .shopitem:active { transform: translateY(1px); }
 .shopitem.kanniet { cursor: not-allowed; opacity: 0.5; }
@@ -1103,7 +2296,7 @@ body[data-achtergrond="diepteruimte"]::after {
 .uptegel.gekozen { border-color: var(--blauw-600); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.22); }
 .uptegel.kanniet { opacity: 0.5; cursor: not-allowed; }
 .uptegel.soort-goud.betaalbaar { background: var(--goud-vlak); border-color: var(--goud-rand); }
-.uptegel.soort-team.betaalbaar { background: #f5f0ff; border-color: #c4b5fd; }
+.uptegel.soort-team.betaalbaar { background: var(--paars-vlak); border-color: var(--paars-rand); }
 .uptegel.soort-studie.betaalbaar { background: var(--groen-vlak); border-color: var(--groen-rand); }
 .uptegel i {
   position: absolute;
@@ -1155,7 +2348,7 @@ body[data-achtergrond="diepteruimte"]::after {
 /* ---------- Prestaties ---------- */
 
 .koffie {
-  background: linear-gradient(135deg, #fff7ed, #fef3c7);
+  background: linear-gradient(135deg, var(--koffie-van), var(--koffie-tot));
   border: 2px solid var(--goud-rand);
   border-radius: var(--r-m);
   padding: 13px 14px;
@@ -1167,7 +2360,7 @@ body[data-achtergrond="diepteruimte"]::after {
   font-weight: 700;
   font-size: 17px;
   margin-bottom: 10px;
-  color: #7c3d00;
+  color: var(--goud-tekst);
 }
 .koffie-head span:last-child { font-weight: 600; font-variant-numeric: tabular-nums; }
 .meter { height: 12px; background: rgba(180, 83, 9, 0.16); border-radius: 999px; overflow: hidden; }
@@ -1180,7 +2373,7 @@ body[data-achtergrond="diepteruimte"]::after {
   background: linear-gradient(90deg, #92400e, #d97706);
   transition: transform var(--soepel);
 }
-.koffie .panel-intro { margin-top: 10px; color: #7c3d00; }
+.koffie .panel-intro { margin-top: 10px; color: var(--goud-tekst); }
 
 .achlijst {
   display: flex;
@@ -1218,9 +2411,9 @@ body[data-achtergrond="diepteruimte"]::after {
 .ach.uit .ach-ikoon { filter: grayscale(1); opacity: 0.4; }
 .ach.uit .ach-tekst strong { color: var(--inkt-zacht); }
 .ach.aan { background: var(--goud-vlak); border-color: var(--goud-rand); }
-.ach.aan .ach-tekst span { color: #8a5a00; }
-.ach.egg.aan { background: #f5f0ff; border-color: #c4b5fd; }
-.ach.egg.aan .ach-tekst span { color: #5b21b6; }
+.ach.aan .ach-tekst span { color: var(--goud-tekst-zacht); }
+.ach.egg.aan { background: var(--paars-vlak); border-color: var(--paars-rand); }
+.ach.egg.aan .ach-tekst span { color: var(--paars-tekst); }
 
 /* ---------- Studie ---------- */
 
@@ -1240,7 +2433,7 @@ body[data-achtergrond="diepteruimte"]::after {
 }
 .graduate p { color: var(--inkt-zacht); font-size: 15px; }
 .graduate .rij { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 12px; }
-.graduate .statlijst div { border-bottom: 1px solid rgba(21, 128, 61, 0.15); padding-bottom: 6px; }
+.graduate .statlijst div { border-bottom: 1px solid color-mix(in srgb, var(--groen) 18%, transparent); padding-bottom: 6px; }
 
 .tree { display: flex; flex-direction: column; gap: 20px; }
 .branch h4 {
@@ -1268,8 +2461,30 @@ body[data-achtergrond="diepteruimte"]::after {
 .node.bezit { background: var(--groen-vlak); border-color: var(--groen); }
 .node.kan { border-color: var(--blauw-600); background: var(--blauw-100); animation: gloedBlauw 1.8s ease-in-out infinite; }
 .node.kanniet { opacity: 0.45; cursor: not-allowed; }
-.draad { flex: 1; height: 3px; background: var(--lijn); border-radius: 3px; }
-.draad.aan { background: var(--groen); }
+/* De boom: takken als labels links, knooppunten in een raster rechts, en
+   de lijnen ertussen in één SVG die meeschaalt. Op een smal scherm schuift
+   de boom zijwaarts. */
+.tree { overflow-x: auto; padding-bottom: 4px; }
+.boom { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 4px; min-width: 440px; }
+.boom-takken { display: grid; grid-template-rows: repeat(var(--rijen), 52px); }
+.boom-tak { display: flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 700; color: var(--inkt-zacht); white-space: nowrap; cursor: help; }
+.boom-veld { position: relative; height: calc(var(--rijen) * 52px); }
+.boom-lijnen { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.boom-lijnen line { stroke: var(--lijn-sterk); stroke-width: 3; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.boom-lijnen line.aan { stroke: var(--blauw-300); }
+.boom-lijnen line.vol { stroke: var(--groen); }
+.boom .node {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+  font-size: 18px;
+  transform: translate(-50%, -50%);
+}
+.boom .node:hover { transform: translate(-50%, -50%) scale(1.1); }
+.boom .node.groot { width: 48px; height: 48px; font-size: 22px; border-width: 4px; }
+.boom .node.top { width: 56px; height: 56px; font-size: 26px; }
+.boom .node.top.bezit { border-color: var(--goud-rand); background: var(--goud-vlak); box-shadow: 0 0 18px rgba(245, 158, 11, 0.55); }
 
 @keyframes gloedBlauw {
   0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
@@ -1300,7 +2515,7 @@ body[data-achtergrond="diepteruimte"]::after {
 
 .btn {
   border: 0;
-  background: var(--blauw-600);
+  background: var(--knop);
   color: #fff;
   padding: 12px 20px;
   border-radius: var(--r-m);
@@ -1309,14 +2524,14 @@ body[data-achtergrond="diepteruimte"]::after {
   cursor: pointer;
   transition: background var(--sneller), transform var(--sneller);
 }
-.btn:hover { background: var(--blauw-700); }
+.btn:hover { background: var(--knop-hover); }
 .btn:active { transform: translateY(1px); }
 .btn.ghost { background: var(--vlak); border: 2px solid var(--lijn-sterk); color: var(--inkt-zacht); padding: 10px 18px; }
 .btn.ghost:hover { background: var(--vlak-zacht); color: var(--inkt); }
-.btn.gevaar { background: var(--rood); }
-.btn.gevaar:hover { background: #8c1c16; }
-.btn.groen { background: var(--groen); }
-.btn.groen:hover { background: #116632; }
+.btn.gevaar { background: var(--rood-knop); }
+.btn.gevaar:hover { background: var(--rood-knop-hover); }
+.btn.groen { background: var(--groen-knop); }
+.btn.groen:hover { background: var(--groen-knop-hover); }
 .btn.small { padding: 8px 14px; font-size: 14.5px; }
 /* Na de kleurvarianten, zodat een uitgeschakelde groene of rode knop ook
    grijs wordt in plaats van donkere tekst op een kleur te houden. */
@@ -1448,6 +2663,23 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
   font-size: 15px;
 }
 .vraag b { color: #fff; font-size: 17px; font-weight: 600; }
+.vraag-label { display: block; margin-bottom: 6px; color: #8fb4cf; font-family: "IBM Plex Sans", system-ui, sans-serif; font-size: 13px; font-weight: 600; }
+.quiz-onderwerpen { display: flex; flex-wrap: wrap; gap: 6px; }
+.quiz-onderwerpen button {
+  padding: 6px 11px;
+  border: 1px solid var(--lijn-sterk);
+  border-radius: 999px;
+  background: var(--vlak);
+  color: var(--inkt-zacht);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--sneller), border-color var(--sneller), color var(--sneller);
+}
+.quiz-onderwerpen button:hover { border-color: var(--blauw-300); color: var(--inkt); }
+.quiz-onderwerpen button.on { background: var(--knop); border-color: var(--knop); color: #fff; }
+.quiz-oefen:empty { display: none; }
 .quiz-opties { display: grid; gap: 8px; }
 .quiz-optie {
   text-align: left;
@@ -1708,7 +2940,7 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
 .beurs-knop:hover:not([disabled]) { background: rgba(219, 234, 254, 0.13); }
 .beurs-knop.koop { background: var(--blauw-600); border-color: var(--blauw-600); color: #fff; }
 .beurs-knop.koop small { color: #dbeafe; }
-.beurs-knop.koop:hover:not([disabled]) { background: var(--blauw-700); border-color: var(--blauw-700); }
+.beurs-knop.koop:hover:not([disabled]) { background: var(--knop-hover); border-color: var(--knop-hover); }
 .beurs-knop[disabled] { opacity: 0.4; cursor: not-allowed; }
 .beurs .segmented { background: rgba(219, 234, 254, 0.04); border-color: rgba(219, 234, 254, 0.14); flex-wrap: wrap; }
 .beurs .segmented button { color: var(--beurs-zacht); font-size: 13.5px; padding: 6px 11px; }
@@ -1860,7 +3092,7 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
 .kast-knop:hover:not([disabled]) { background: rgba(219, 234, 254, 0.13); }
 .kast-knop.hoofd { flex: 1 1 150px; background: var(--blauw-600); border-color: var(--blauw-600); color: #fff; }
 .kast-knop.hoofd small { color: #dbeafe; }
-.kast-knop.hoofd:hover:not([disabled]) { background: var(--blauw-700); border-color: var(--blauw-700); }
+.kast-knop.hoofd:hover:not([disabled]) { background: var(--knop-hover); border-color: var(--knop-hover); }
 .kast-knop.stil { background: none; border-color: transparent; color: var(--kast-zacht); font-weight: 600; }
 .kast-knop.stil:hover:not([disabled]) { background: rgba(219, 234, 254, 0.08); color: #fff; }
 .kast-knop[disabled] { cursor: not-allowed; background: rgba(219, 234, 254, 0.03); border-color: rgba(219, 234, 254, 0.12); color: var(--kast-mat); }
@@ -1943,7 +3175,7 @@ button.kast-bon:hover { background: rgba(96, 165, 250, 0.16); border-color: rgba
   cursor: pointer;
   transition: border-color var(--sneller), background var(--sneller), transform var(--sneller);
 }
-.cursus-item:hover { border-color: var(--blauw-300); background: #f4f9ff; transform: translateY(-1px); }
+.cursus-item:hover { border-color: var(--blauw-300); background: var(--blauw-50); transform: translateY(-1px); }
 .cursus-item.gelezen { background: var(--vlak-zacht); }
 .cursus-nr {
   width: 28px;
@@ -1991,7 +3223,7 @@ button.kast-bon:hover { background: rgba(96, 165, 250, 0.16); border-color: rgba
   border: 1px solid var(--goud-rand);
   border-radius: var(--r-m);
   padding: 11px 14px;
-  color: #7c3d00;
+  color: var(--goud-tekst);
 }
 .cursus-tabelvak { overflow-x: auto; }
 .cursus-tabel { border-collapse: collapse; width: 100%; font-size: 13.5px; }
@@ -2096,6 +3328,264 @@ button.kast-bon:hover { background: rgba(96, 165, 250, 0.16); border-color: rgba
 @keyframes vonk {
   from { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
   to { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.3) rotate(180deg); }
+}
+
+/* De andere klikeffecten (Uiterlijk). Elk deeltje verdwijnt vanzelf. */
+.fx-bit,
+.fx-ping,
+.fx-pakket,
+.fx-confetti,
+.fx-flits,
+.fx-vuur { position: absolute; pointer-events: none; }
+.fx-bit {
+  font: 600 17px/1 "IBM Plex Mono", ui-monospace, monospace;
+  color: #e0f2fe;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.95);
+  animation: fxWeg 850ms cubic-bezier(0.15, 0.8, 0.3, 1) both;
+}
+@keyframes fxWeg {
+  from { opacity: 1; transform: translate(-50%, -50%); }
+  to { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--draai, 0deg)); }
+}
+.fx-ping {
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  border: 3px solid #7dd3fc;
+  border-radius: 50%;
+  animation: fxPing 900ms cubic-bezier(0.1, 0.7, 0.3, 1) both;
+}
+.fx-ping.na { border-color: #e0f2fe; animation-delay: 160ms; }
+@keyframes fxPing {
+  from { opacity: 0.95; transform: scale(0.3); }
+  to { opacity: 0; transform: scale(3.4); }
+}
+.fx-pakket {
+  width: 16px;
+  height: 11px;
+  margin: -5px 0 0 -8px;
+  border-radius: 2px;
+  background: linear-gradient(var(--kop) 0 4px, #f0f9ff 4px);
+  box-shadow: 0 3px 8px rgba(11, 37, 69, 0.35);
+  animation: fxBoog 950ms cubic-bezier(0.3, 0.6, 0.5, 1) both;
+}
+@keyframes fxBoog {
+  0% { transform: translate(0, 0); }
+  45% { transform: translate(calc(var(--dx) * 0.55), var(--hoog)) rotate(10deg); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--val)) rotate(45deg); }
+}
+.fx-confetti {
+  width: 7px;
+  height: 12px;
+  margin: -6px 0 0 -3px;
+  border-radius: 1px;
+  animation: fxConfetti 1300ms cubic-bezier(0.2, 0.7, 0.4, 1) both;
+}
+@keyframes fxConfetti {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  30% { transform: translate(calc(var(--dx) * 0.6), var(--hoog)) rotate(calc(var(--draai) * 0.3)); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--val)) rotate(var(--draai)); }
+}
+.fx-flits {
+  width: 80px;
+  height: 80px;
+  margin: -40px 0 0 -40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 251, 235, 0.95), rgba(251, 191, 36, 0.5) 40%, transparent 70%);
+  animation: fxFlits 500ms ease-out both;
+}
+@keyframes fxFlits {
+  from { opacity: 1; transform: scale(0.4); }
+  to { opacity: 0; transform: scale(1.7); }
+}
+.fx-vuur {
+  width: 18px;
+  height: 3px;
+  margin: -1.5px 0 0 -9px;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.9);
+  animation: fxVuur 1000ms cubic-bezier(0.1, 0.8, 0.3, 1) both;
+}
+@keyframes fxVuur {
+  from { opacity: 1; transform: translate(0, 0) rotate(var(--hoek)); }
+  70% { opacity: 1; }
+  to { opacity: 0; transform: translate(var(--dx), calc(var(--dy) + 34px)) rotate(var(--hoek)); }
+}
+
+.fx-hart,
+.fx-emoji,
+.fx-glitch,
+.fx-laser,
+.fx-gat,
+.fx-zuig { position: absolute; pointer-events: none; }
+.fx-hart {
+  font-size: var(--grootte);
+  line-height: 1;
+  text-shadow: 0 2px 6px rgba(190, 18, 60, 0.35);
+  animation: fxHart 1300ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+@keyframes fxHart {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+  15% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  60% { transform: translate(calc(-50% + var(--dx) * 0.6), calc(-50% + var(--dy) * 0.6)) rotate(-10deg); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(10deg); }
+}
+.fx-emoji { font-size: 24px; line-height: 1; animation: fxWeg 950ms cubic-bezier(0.15, 0.8, 0.3, 1) both; }
+.fx-glitch { mix-blend-mode: screen; animation: fxGlitch 380ms steps(4, end) both; }
+@keyframes fxGlitch {
+  0% { opacity: 1; translate: 0 0; }
+  25% { translate: 12px 0; }
+  50% { opacity: 0.8; translate: -16px 2px; }
+  75% { translate: 6px -1px; }
+  100% { opacity: 0; translate: -4px 0; }
+}
+.fx-laser {
+  width: 170px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #fff, #fb7185 25%, #e11d48 70%, rgba(225, 29, 72, 0));
+  box-shadow: 0 0 14px 2px rgba(244, 63, 94, 0.95);
+  transform-origin: 0 50%;
+  animation: fxLaser 800ms cubic-bezier(0.1, 0.8, 0.3, 1) both;
+}
+@keyframes fxLaser {
+  0% { opacity: 1; transform: rotate(var(--hoek)) scaleX(0); }
+  30% { opacity: 1; transform: rotate(var(--hoek)) scaleX(1); }
+  65% { opacity: 1; transform: rotate(var(--hoek)) translateX(20px) scaleX(0.9); }
+  100% { opacity: 0; transform: rotate(var(--hoek)) translateX(70px) scaleX(0.3); }
+}
+.fx-gat {
+  width: 70px;
+  height: 70px;
+  margin: -35px 0 0 -35px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #000 42%, rgba(167, 139, 250, 0.9) 50%, rgba(240, 171, 252, 0.4) 60%, transparent 70%);
+  animation: fxGat 800ms cubic-bezier(0.5, 0, 0.3, 1) both;
+}
+@keyframes fxGat {
+  0% { opacity: 0; transform: scale(0.2) rotate(0deg); }
+  30% { opacity: 1; transform: scale(1) rotate(90deg); }
+  100% { opacity: 0; transform: scale(0) rotate(360deg); }
+}
+.fx-zuig {
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  animation: fxZuig 750ms cubic-bezier(0.6, 0, 0.9, 0.6) both;
+}
+@keyframes fxZuig {
+  from { opacity: 1; transform: translate(var(--dx), var(--dy)); }
+  to { opacity: 0.2; transform: translate(0, 0) scale(0.2); }
+}
+
+.fx-bubbel,
+.fx-pixel,
+.fx-schok,
+.fx-schicht,
+.fx-nova,
+.fx-schokgolf,
+.fx-oerflits,
+.fx-ster { position: absolute; pointer-events: none; }
+.fx-bubbel {
+  width: var(--grootte);
+  height: var(--grootte);
+  margin: calc(var(--grootte) / -2) 0 0 calc(var(--grootte) / -2);
+  border-radius: 50%;
+  border: 1.5px solid rgba(186, 230, 253, 0.95);
+  background: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.9) 0 12%, rgba(186, 230, 253, 0.15) 40%, transparent 70%);
+  animation: fxBubbel 1400ms ease-out both;
+}
+@keyframes fxBubbel {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.4); }
+  15% { opacity: 1; transform: translate(0, -10px) scale(1); }
+  50% { transform: translate(calc(var(--dx) * 0.5), calc(var(--dy) * 0.5)) scale(1.05); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.2); }
+}
+.fx-pixel {
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  animation: fxPixel 700ms steps(5, end) both;
+}
+@keyframes fxPixel {
+  from { opacity: 1; transform: translate(0, 0); }
+  to { opacity: 0; transform: translate(var(--dx), var(--dy)); }
+}
+.fx-schok {
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  border-radius: 50%;
+  border: 5px solid transparent;
+  background: conic-gradient(#f472b6, #facc15, #4ade80, #38bdf8, #a78bfa, #f472b6) border-box;
+  -webkit-mask: radial-gradient(circle, transparent 60%, #000 62%);
+  mask: radial-gradient(circle, transparent 60%, #000 62%);
+  animation: fxSchok 800ms cubic-bezier(0.1, 0.7, 0.3, 1) both;
+}
+@keyframes fxSchok {
+  from { opacity: 1; transform: scale(0.3) rotate(0deg); }
+  to { opacity: 0; transform: scale(3.2) rotate(120deg); }
+}
+.fx-schicht {
+  margin-top: -20px;
+  overflow: visible;
+  transform-origin: 0 50%;
+  transform: rotate(var(--hoek));
+  animation: fxSchicht 450ms steps(3, end) both;
+}
+.fx-schicht path { fill: none; stroke: #e0f2fe; stroke-width: 3; stroke-linejoin: round; filter: drop-shadow(0 0 4px #38bdf8) drop-shadow(0 0 10px #818cf8); }
+@keyframes fxSchicht {
+  0% { opacity: 1; }
+  40% { opacity: 0.4; }
+  60% { opacity: 1; }
+  100% { opacity: 0; }
+}
+.fx-nova {
+  width: 90px;
+  height: 90px;
+  margin: -45px 0 0 -45px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0 18%, rgba(191, 219, 254, 0.9) 35%, rgba(167, 139, 250, 0.5) 55%, transparent 72%);
+  animation: fxNova 900ms cubic-bezier(0.6, 0, 0.2, 1) both;
+}
+@keyframes fxNova {
+  0% { opacity: 0; transform: scale(1.4); }
+  25% { opacity: 1; transform: scale(0.35); }
+  60% { opacity: 1; transform: scale(1.6); }
+  100% { opacity: 0; transform: scale(2.2); }
+}
+.fx-schokgolf {
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border-radius: 50%;
+  border: 2px solid rgba(224, 231, 255, 0.9);
+  box-shadow: 0 0 18px rgba(167, 139, 250, 0.8), inset 0 0 12px rgba(167, 139, 250, 0.6);
+  animation: fxSchokgolf 900ms cubic-bezier(0.1, 0.8, 0.3, 1) both;
+}
+@keyframes fxSchokgolf {
+  from { opacity: 1; transform: scale(0.5); }
+  to { opacity: 0; transform: scale(6); }
+}
+.fx-oerflits {
+  width: 140px;
+  height: 140px;
+  margin: -70px 0 0 -70px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0 20%, rgba(253, 230, 138, 0.85) 38%, rgba(244, 114, 182, 0.45) 55%, transparent 72%);
+  animation: fxOerflits 700ms ease-out both;
+}
+@keyframes fxOerflits {
+  from { opacity: 0.95; transform: scale(0.2); }
+  to { opacity: 0; transform: scale(2); }
+}
+.fx-ster {
+  font-size: 18px;
+  line-height: 1;
+  text-shadow: 0 0 8px currentColor;
+  animation: fxWeg 1200ms cubic-bezier(0.1, 0.8, 0.3, 1) both;
 }
 
 .packet {
@@ -2263,7 +3753,12 @@ button.kast-bon:hover { background: rgba(96, 165, 250, 0.16); border-color: rgba
 
 @media (max-width: 620px) {
   body { font-size: 15.5px; }
-  .topbar { padding: 18px 96px 14px; }
+  /* Op een telefoon staat het logo links en de knoppen ernaast. Gecentreerd
+     botste een breed logo tegen de knoppen. */
+  .topbar { justify-content: space-between; gap: 12px; padding: 16px 14px 12px; }
+  .titel { align-items: flex-start; min-width: 0; }
+  .wordmark { font-size: clamp(24px, 7.4vw, 30px); text-align: left; }
+  .kop-knoppen { position: static; transform: none; flex: none; }
   .stage { padding: 14px 14px 16px; gap: 11px; border-radius: var(--r-l); }
   .status { padding: 14px; gap: 12px; }
   .counter-sub { margin-top: 2px; font-size: 15px; }
@@ -2273,7 +3768,8 @@ button.kast-bon:hover { background: rgba(96, 165, 250, 0.16); border-color: rgba
   .board { padding: 0 12px 24px; gap: 14px; }
   .panel { border-radius: var(--r-l); }
   .counter strong { font-size: 42px; }
-  .serge img { width: 172px; height: 172px; border-width: 5px; }
+  .serge-plek { --foto: 172px; }
+  .serge img { border-width: 5px; }
   .toaster { left: 12px; right: 12px; bottom: 12px; align-items: stretch; }
   .toast { max-width: none; }
   .tabpanels > section { padding: 14px; }
@@ -2312,5 +3808,1942 @@ body.rustig .packet { animation: packetIn 200ms ease-out both; }
 body.rustig .serge img { animation: none; }
 body.rustig::after { animation: none; }
 body.rustig .serge::before { animation: none; }
+body.rustig .serge::after { animation: none; }
+body.rustig .maatje { animation: none; }
+body.rustig :is(.rang-legendarisch, .rang-mythisch, .rang-goddelijk, .skin.kaart-mythisch, .skin.kaart-goddelijk) { animation: none; }
 body.rustig .buff, body.rustig .node.kan, body.rustig .kast-led, body.rustig .pip { animation: none; }
 body.rustig .beurs-koers, body.rustig .beurs-grootkoers { animation: none; }
+
+/* Panelen met titelbalk, punaises of een bewegende laag hebben een
+   gepositioneerd paneel nodig. Waar het rechterpaneel sticky is, is het dat
+   al; in de andere indelingen staat het static en zetten we het relatief. */
+@media (min-width: 901px) and (min-height: 620px), (max-width: 900px) {
+  /* top: 0, anders wordt de 16px die voor sticky bedoeld is een verschuiving
+     naar beneden, en staat het paneel lager dan de andere twee. */
+  body:is([data-paneel="retro"], [data-paneel="kurk"], [data-paneel="crt"], [data-paneel="aurora"], [data-paneel="hologram"], [data-paneel="sterren"], [data-paneel="hemelpoort"], [data-paneel="ijspaleis"]) .panel { position: relative; top: 0; }
+}
+
+/* =====================================================================
+   Uiterlijk, deel 2: logo, accessoire, teller, schermfilter en packet.
+   ===================================================================== */
+
+/* ---------- Logo ---------- */
+
+.wordmark[data-logo="kapitalen"] { letter-spacing: 0.06em; }
+
+.wordmark[data-logo="handtekening"] .w1 {
+  display: inline-block;
+  font-family: "Snell Roundhand", "Segoe Script", "Brush Script MT", "Bradley Hand", cursive;
+  font-size: 1.3em;
+  font-weight: 700;
+  color: #e0f2fe;
+  transform: rotate(-6deg);
+}
+
+.wordmark[data-logo="terminal"] {
+  padding: 0.1em 0.45em;
+  border-radius: 12px;
+  background: #06182b;
+  box-shadow: 0 0 0 1px rgba(110, 231, 168, 0.35), var(--schaduw-m);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: clamp(22px, 3.2vw, 34px);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-shadow: none;
+}
+.wordmark[data-logo="terminal"] .w1 { color: #6ee7a8; }
+.wordmark[data-logo="terminal"] .w2 { color: #dbeafe; }
+.wordmark[data-logo="terminal"] .cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 0.95em;
+  margin-left: 0.12em;
+  vertical-align: -0.1em;
+  background: #6ee7a8;
+  animation: knipperCursor 1.1s steps(1, end) infinite;
+}
+@keyframes knipperCursor {
+  50% { opacity: 0; }
+}
+
+.wordmark[data-logo="enterprise"] small {
+  white-space: nowrap;
+  padding: 0.2em 0.6em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 0.36em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+}
+
+.wordmark[data-logo="exe"] {
+  padding: 0.06em 0.45em;
+  border: 3px solid;
+  border-color: #ffffff #404040 #404040 #ffffff;
+  background: #c3c3c3;
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.35);
+  font-family: Tahoma, Verdana, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+  text-shadow: none;
+}
+.wordmark[data-logo="exe"] .w1 { color: #000080; }
+.wordmark[data-logo="exe"] .w2 { color: #000000; }
+
+.wordmark[data-logo="leet"] {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #4ade80;
+  text-shadow: 0 0 12px rgba(74, 222, 128, 0.75), 0 2px 0 #052e16;
+}
+.wordmark[data-logo="leet"] .w1 { color: #bbf7d0; }
+
+/* Tokio: een rode zon achter de naam. */
+.wordmark[data-logo="japans"] {
+  position: relative;
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+  letter-spacing: 0.04em;
+}
+.wordmark[data-logo="japans"]::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  width: 3.2em;
+  height: 3.2em;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.92) 0 46%, rgba(239, 68, 68, 0.35) 58%, rgba(239, 68, 68, 0) 70%);
+  transform: translate(-50%, -50%);
+}
+.wordmark[data-logo="japans"] :is(.w1, .w2) { color: #fff; text-shadow: 0 2px 8px rgba(69, 10, 10, 0.55); }
+
+.wordmark[data-logo="romeins"] {
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: 0.12em;
+  color: #fde68a;
+  text-shadow: 0 1px 0 #92400e, 0 3px 10px rgba(0, 0, 0, 0.45);
+}
+.wordmark[data-logo="romeins"] .w1 { color: #fff7d6; }
+
+/* Stadiongolf: elke letter springt op zijn beurt. */
+.wordmark[data-logo="golf"] i {
+  display: inline-block;
+  font-style: normal;
+  animation: golf 2.4s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 90ms);
+}
+@keyframes golf {
+  0%, 30%, 100% { transform: translateY(0); }
+  12% { transform: translateY(-0.28em); }
+}
+
+.wordmark[data-logo="neon"] { font-weight: 600; letter-spacing: 0.02em; text-shadow: none; }
+.wordmark[data-logo="neon"] .w1 { color: #fdf2f8; text-shadow: 0 0 4px #fff, 0 0 12px #f472b6, 0 0 26px #ec4899, 0 0 44px #db2777; }
+.wordmark[data-logo="neon"] .w2 {
+  color: #ecfeff;
+  text-shadow: 0 0 4px #fff, 0 0 12px #22d3ee, 0 0 26px #06b6d4, 0 0 44px #0891b2;
+  animation: neonHapering 5s steps(1, end) infinite;
+}
+@keyframes neonHapering {
+  0%, 86%, 88%, 92%, 100% { opacity: 1; }
+  87%, 91% { opacity: 0.35; }
+}
+
+/* Logo's met een kleurverloop in de letters. De schaduw komt dan uit een
+   filter; een tekstschaduw zou over het verloop heen vallen. */
+.wordmark:is([data-logo="metal"], [data-logo="regenboog"], [data-logo="vuur"], [data-logo="goud"], [data-logo="kosmisch"], [data-logo="hemels"]) { text-shadow: none; }
+.wordmark:is([data-logo="metal"], [data-logo="regenboog"], [data-logo="vuur"], [data-logo="goud"], [data-logo="kosmisch"], [data-logo="hemels"]) :is(.w1, .w2) {
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.wordmark[data-logo="metal"] { font-style: italic; filter: drop-shadow(0 2px 0 #0f172a) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5)); }
+.wordmark[data-logo="metal"] :is(.w1, .w2) { background-image: linear-gradient(180deg, #f8fafc 0%, #cbd5e1 45%, #475569 50%, #e2e8f0 70%, #94a3b8 100%); }
+.wordmark[data-logo="regenboog"] { filter: drop-shadow(0 2px 8px rgba(11, 37, 69, 0.45)); }
+.wordmark[data-logo="regenboog"] :is(.w1, .w2) {
+  background-image: linear-gradient(90deg, #f472b6, #facc15, #4ade80, #38bdf8, #a78bfa, #f472b6);
+  background-size: 200% 100%;
+  animation: tekstVerloop 4s linear infinite;
+}
+@keyframes tekstVerloop {
+  to { background-position: -200% 0; }
+}
+.wordmark[data-logo="vuur"] { animation: vuurGloed 0.9s steps(3, end) infinite alternate; }
+.wordmark[data-logo="vuur"] :is(.w1, .w2) {
+  background-image: linear-gradient(0deg, #dc2626 0%, #f97316 40%, #fde047 80%, #fff7cc 100%);
+  background-size: 100% 200%;
+  animation: vuurTekst 1.6s ease-in-out infinite alternate;
+}
+@keyframes vuurTekst {
+  to { background-position: 0 100%; }
+}
+@keyframes vuurGloed {
+  from { filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.8)) drop-shadow(0 -4px 14px rgba(220, 38, 38, 0.6)); }
+  to { filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.9)) drop-shadow(0 -8px 22px rgba(249, 115, 22, 0.7)); }
+}
+.wordmark[data-logo="goud"] { filter: drop-shadow(0 2px 0 #78350f) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45)); }
+.wordmark[data-logo="goud"] :is(.w1, .w2) {
+  background-image: linear-gradient(110deg, #b45309 0%, #f59e0b 25%, #fef3c7 45%, #f59e0b 60%, #b45309 100%);
+  background-size: 250% 100%;
+  animation: goudTekst 3.5s linear infinite;
+}
+@keyframes goudTekst {
+  from { background-position: 100% 0; }
+  to { background-position: -150% 0; }
+}
+.wordmark[data-logo="kosmisch"] { position: relative; filter: drop-shadow(0 0 12px rgba(167, 139, 250, 0.7)); }
+.wordmark[data-logo="kosmisch"] :is(.w1, .w2) {
+  background-image: linear-gradient(90deg, #c4b5fd, #f0abfc, #818cf8, #22d3ee, #c4b5fd);
+  background-size: 300% 100%;
+  animation: tekstVerloop 8s linear infinite;
+}
+.wordmark[data-logo="kosmisch"]::after {
+  content: "";
+  position: absolute;
+  inset: -25% -8%;
+  pointer-events: none;
+  background:
+    radial-gradient(2px 2px at 6% 30%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 22% 90%, #fde68a, transparent),
+    radial-gradient(2px 2px at 48% 6%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 70% 92%, #c4b5fd, transparent),
+    radial-gradient(2px 2px at 94% 24%, #fff, transparent);
+  animation: twinkelen 2.5s ease-in-out infinite alternate;
+}
+.wordmark[data-logo="hemels"] { position: relative; animation: hemelsLogo 3s ease-in-out infinite; }
+.wordmark[data-logo="hemels"] :is(.w1, .w2) { background-image: linear-gradient(180deg, #ffffff, #fef3c7 50%, #fbbf24); }
+.wordmark[data-logo="hemels"]::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  width: 3.6em;
+  height: 3.6em;
+  background: repeating-conic-gradient(rgba(253, 230, 138, 0.6) 0 6deg, transparent 6deg 18deg);
+  -webkit-mask: radial-gradient(circle, #000 18%, transparent 70%);
+  mask: radial-gradient(circle, #000 18%, transparent 70%);
+  animation: stralenDraaien 30s linear infinite;
+}
+@keyframes stralenDraaien {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes hemelsLogo {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(253, 230, 138, 0.7)); }
+  50% { filter: drop-shadow(0 0 22px rgba(253, 230, 138, 1)); }
+}
+
+/* Glitch: twee verschoven kopieën die af en toe door het beeld schieten. */
+.wordmark[data-logo="glitch"] .glitch { position: relative; display: inline-block; }
+.wordmark[data-logo="glitch"] .glitch::before,
+.wordmark[data-logo="glitch"] .glitch::after {
+  content: attr(data-tekst);
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.wordmark[data-logo="glitch"] .glitch::before { color: #22d3ee; animation: glitchA 2.6s steps(1, end) infinite; }
+.wordmark[data-logo="glitch"] .glitch::after { color: #f43f5e; animation: glitchB 3.3s steps(1, end) infinite; }
+@keyframes glitchA {
+  0%, 88%, 100% { opacity: 0; transform: none; clip-path: inset(0); }
+  90% { opacity: 0.9; transform: translate(-5px, -1px); clip-path: inset(8% 0 58% 0); }
+  94% { opacity: 0.9; transform: translate(4px, 1px); clip-path: inset(62% 0 6% 0); }
+  97% { opacity: 0.8; transform: translate(-2px, 0); clip-path: inset(36% 0 36% 0); }
+}
+@keyframes glitchB {
+  0%, 80%, 100% { opacity: 0; transform: none; clip-path: inset(0); }
+  82% { opacity: 0.85; transform: translate(5px, 1px); clip-path: inset(46% 0 22% 0); }
+  86% { opacity: 0.85; transform: translate(-4px, -1px); clip-path: inset(12% 0 70% 0); }
+}
+
+/* Het logo in het menu: klein, op de blauwe lucht van het spel. */
+.skin-preview.logo-voorbeeld {
+  width: auto;
+  max-width: 100%;
+  height: 40px;
+  margin: 6px 0;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 10px;
+  box-shadow: none;
+  background: linear-gradient(135deg, #38bdf8, #3b82f6 45%, #4f46e5);
+  white-space: nowrap;
+}
+.wordmark.mini,
+.wordmark.mini[data-logo] { font-size: 12px; line-height: 1.2; }
+.wordmark.mini[data-logo="exe"] { border-width: 2px; box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35); }
+.wordmark.mini:is([data-logo="terminal"], [data-logo="enterprise"], [data-logo="romeins"]) { font-size: 10px; }
+
+/* ---------- Accessoire ---------- */
+/* Een laag over de foto. Plek en maat staan als variabelen, zodat dezelfde
+   regels ook het voorbeeldje in het menu tekenen. */
+
+.accessoire { position: absolute; inset: 0; z-index: 3; pointer-events: none; line-height: 1; }
+.accessoire .teken {
+  position: absolute;
+  left: var(--x, 50%);
+  top: var(--y, 20%);
+  font-size: calc(var(--foto) * var(--maat, 0.3));
+  transform: translate(-50%, -50%) rotate(var(--draai, 0deg));
+  filter: drop-shadow(0 4px 6px rgba(11, 37, 69, 0.35));
+}
+.accessoire[data-accessoire="pet"] { --x: 48%; --y: 12%; --maat: 0.36; }
+.accessoire[data-accessoire="strik"] { --x: 50%; --y: 88%; --maat: 0.22; }
+.accessoire[data-accessoire="baret"] { --x: 47%; --y: 13%; --maat: 0.3; --draai: -10deg; }
+.accessoire[data-accessoire="helm"] { --x: 47%; --y: 12%; --maat: 0.36; }
+.accessoire[data-accessoire="hogehoed"] { --x: 47%; --y: 9%; --maat: 0.32; }
+.accessoire[data-accessoire="regenwolk"] { --x: 50%; --y: -9%; --maat: 0.32; }
+.accessoire[data-accessoire="antenne"] { --x: 44%; --y: 2%; --maat: 0.28; }
+.accessoire[data-accessoire="lampje"] { --x: 50%; --y: -10%; --maat: 0.26; }
+.accessoire[data-accessoire="kroon"] { --x: 47%; --y: 10%; --maat: 0.28; }
+
+/* Het regenwolkje drijft heen en weer boven zijn hoofd. */
+.accessoire[data-accessoire="regenwolk"] .teken { animation: wolkDrijven 6s ease-in-out infinite alternate; }
+@keyframes wolkDrijven {
+  from { translate: -12% 0; }
+  to { translate: 12% 0; }
+}
+/* Het lampje gaat aan en uit. */
+.accessoire[data-accessoire="lampje"] .teken { animation: lampje 2.8s steps(1, end) infinite; }
+@keyframes lampje {
+  0%, 60% { filter: drop-shadow(0 0 14px rgba(253, 224, 71, 0.95)) brightness(1.15); }
+  61%, 100% { filter: grayscale(0.7) brightness(0.8) drop-shadow(0 4px 6px rgba(11, 37, 69, 0.35)); }
+}
+/* De kroon fonkelt. */
+.accessoire[data-accessoire="kroon"] .teken { animation: kroonFonkel 2.6s ease-in-out infinite; }
+@keyframes kroonFonkel {
+  0%, 100% { filter: drop-shadow(0 4px 6px rgba(11, 37, 69, 0.35)) brightness(1); }
+  50% { filter: drop-shadow(0 0 14px rgba(253, 224, 71, 0.95)) brightness(1.2); }
+}
+/* De antenne zendt: twee ringen die van de schotel wegrollen. */
+.accessoire .signaal {
+  position: absolute;
+  left: 50%;
+  top: -8%;
+  width: calc(var(--foto) * 0.12);
+  height: calc(var(--foto) * 0.12);
+}
+.accessoire .signaal::before,
+.accessoire .signaal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid #38bdf8;
+  animation: signaal 1.8s ease-out infinite;
+}
+.accessoire .signaal::after { animation-delay: 0.9s; }
+@keyframes signaal {
+  from { transform: scale(0.4); opacity: 1; }
+  to { transform: scale(2.4); opacity: 0; }
+}
+/* De koptelefoon: een beugel over zijn hoofd en twee oorschelpen op zijn
+   oren. De emoji heeft de schelpen onderaan, over zijn gezicht; daarom zelf
+   getekend. De tweede schelp is een schaduwkopie van de eerste. */
+.accessoire[data-accessoire="koptelefoon"]::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 5%;
+  width: 66%;
+  height: 46%;
+  border: calc(var(--foto) * 0.042) solid #1f2937;
+  border-bottom: 0;
+  border-radius: 50% 50% 0 0 / 70% 70% 0 0;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 3px 4px rgba(11, 37, 69, 0.35));
+}
+.accessoire[data-accessoire="koptelefoon"]::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  top: 37%;
+  width: 14%;
+  height: 25%;
+  border-radius: 42%;
+  background: #ef4444;
+  box-shadow: inset 0 calc(var(--foto) * -0.02) 0 rgba(0, 0, 0, 0.25), calc(var(--foto) * 0.66) 0 0 #ef4444;
+}
+
+/* Het aureool: een gouden ring die boven zijn hoofd gloeit. */
+.accessoire[data-accessoire="aureool"]::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -1%;
+  width: 46%;
+  height: 12%;
+  border: calc(var(--foto) * 0.022) solid #fde68a;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: aureool 3s ease-in-out infinite;
+}
+@keyframes aureool {
+  0%, 100% { box-shadow: 0 0 10px 2px rgba(253, 224, 71, 0.6), inset 0 0 8px rgba(253, 224, 71, 0.6); }
+  50% { box-shadow: 0 0 24px 8px rgba(253, 224, 71, 0.95), inset 0 0 14px rgba(253, 224, 71, 0.9); }
+}
+/* Drie planeten in een platte baan rond zijn hoofd. De baan is een cirkel die
+   in de hoogte is samengedrukt; de planeten draaien terug en worden terug
+   uitgerekt, zodat ze rechtop en rond blijven. */
+.accessoire .baan {
+  position: absolute;
+  left: 49%;
+  top: 8%;
+  width: 72%;
+  aspect-ratio: 1;
+  border: 2px dashed rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scaleY(0.32);
+}
+.accessoire .ring { position: absolute; inset: 0; animation: baanDraaien 9s linear infinite; }
+.accessoire .ring i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: calc(var(--foto) * -0.07) 0 0 calc(var(--foto) * -0.07);
+  font-size: calc(var(--foto) * 0.14);
+  font-style: normal;
+  line-height: 1;
+  animation: planeet 9s linear infinite;
+}
+.accessoire .ring i:nth-child(1) { --a: 0deg; }
+.accessoire .ring i:nth-child(2) { --a: 120deg; }
+.accessoire .ring i:nth-child(3) { --a: 240deg; }
+@keyframes baanDraaien {
+  to { transform: rotate(360deg); }
+}
+@keyframes planeet {
+  from { transform: rotate(var(--a)) translateY(calc(var(--foto) * var(--straal, -0.36))) rotate(calc(-1 * var(--a))) scaleY(3.125); }
+  to { transform: rotate(var(--a)) translateY(calc(var(--foto) * var(--straal, -0.36))) rotate(calc(-1 * var(--a) - 360deg)) scaleY(3.125); }
+}
+
+/* Het voorbeeldje: de foto met het accessoire erop, en een hoed mag uitsteken. */
+.skin-preview.acc-voorbeeld { --foto: 46px; position: relative; overflow: visible; }
+.skin-preview.acc-voorbeeld img { border-radius: 50%; }
+
+/* ---------- Teller ---------- */
+/* De stijlen zetten hun doorlopende animatie in een variabele, zodat het
+   kleine sprongetje bij een klik er gewoon bij kan. */
+
+.counter[data-teller] strong { animation: var(--teller-animatie, none); }
+.counter[data-teller] strong.pop { animation: pop 320ms cubic-bezier(0.2, 0.9, 0.3, 1), var(--teller-animatie, none); }
+.counter.mini strong { font-size: 20px; }
+
+/* Rekenmachine: donkere cijfers op een grijsgroen lcd-schermpje. */
+.counter[data-teller="lcd"] strong {
+  display: inline-block;
+  padding: 0.1em 0.35em 0.04em;
+  border-radius: 12px;
+  background: linear-gradient(#a3b18a, #8f9d76);
+  box-shadow: inset 0 0 0 3px #5f6b4c, inset 0 4px 10px rgba(0, 0, 0, 0.35);
+  color: #1b2412;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-shadow: 2px 2px 0 rgba(27, 36, 18, 0.18);
+}
+.counter[data-teller="matrix"] strong {
+  display: inline-block;
+  padding: 0.1em 0.35em 0.04em;
+  border-radius: 12px;
+  background: #020b05;
+  box-shadow: inset 0 0 0 2px rgba(74, 222, 128, 0.35);
+  color: #86efac;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-shadow: 0 0 12px rgba(74, 222, 128, 0.85);
+  --teller-animatie: neonHapering 7s steps(1, end) infinite;
+}
+.counter[data-teller="arcade"] strong {
+  color: #facc15;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-shadow: 3px 3px 0 #dc2626, 6px 6px 0 #1d4ed8;
+}
+/* Een donkere roze kern, zodat het ook op een wit paneel leesbaar blijft. */
+.counter[data-teller="neon"] strong {
+  color: #db2777;
+  text-shadow: 0 0 6px rgba(244, 114, 182, 0.9), 0 0 18px rgba(236, 72, 153, 0.7), 0 0 34px rgba(219, 39, 119, 0.5);
+  --teller-animatie: neonHapering 6s steps(1, end) infinite;
+}
+.counter:is([data-teller="goud"], [data-teller="regenboog"], [data-teller="ijs"], [data-teller="vuur"], [data-teller="hologram"], [data-teller="kosmisch"], [data-teller="hemels"]) strong {
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.counter[data-teller="goud"] strong {
+  background-image: linear-gradient(110deg, #92400e 0%, #d97706 25%, #fcd34d 45%, #d97706 60%, #92400e 100%);
+  background-size: 250% 100%;
+  filter: drop-shadow(0 2px 0 rgba(120, 53, 15, 0.35));
+  --teller-animatie: goudTekst 3.5s linear infinite;
+}
+.counter[data-teller="regenboog"] strong {
+  background-image: linear-gradient(90deg, #db2777, #d97706, #16a34a, #0284c7, #7c3aed, #db2777);
+  background-size: 200% 100%;
+  --teller-animatie: tekstVerloop 4s linear infinite;
+}
+.counter[data-teller="ijs"] strong {
+  background-image: linear-gradient(180deg, #0c4a6e, #0284c7 55%, #7dd3fc);
+  filter: drop-shadow(0 0 10px rgba(125, 211, 252, 0.8));
+}
+.counter[data-teller="vuur"] strong {
+  background-image: linear-gradient(0deg, #b91c1c 0%, #ea580c 45%, #f59e0b 80%, #fde047 100%);
+  background-size: 100% 200%;
+  --teller-animatie: vuurTekst 1.6s ease-in-out infinite alternate, vuurGloed 0.9s steps(3, end) infinite alternate;
+}
+.counter[data-teller="hologram"] strong {
+  background-image: repeating-linear-gradient(180deg, #0891b2 0 3px, rgba(8, 145, 178, 0.45) 3px 5px);
+  filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.7));
+  --teller-animatie: holoHapering 5s steps(1, end) infinite;
+}
+.counter[data-teller="kosmisch"] strong {
+  background-image: linear-gradient(90deg, #7c3aed, #db2777, #2563eb, #0891b2, #7c3aed);
+  background-size: 300% 100%;
+  filter: drop-shadow(0 0 10px rgba(167, 139, 250, 0.6));
+  --teller-animatie: tekstVerloop 8s linear infinite;
+}
+.counter[data-teller="hemels"] strong {
+  background-image: linear-gradient(180deg, #92400e, #d97706 50%, #fbbf24);
+  --teller-animatie: hemelsLogo 3s ease-in-out infinite;
+}
+.skin-preview.teller-voorbeeld {
+  width: auto;
+  max-width: 100%;
+  height: 40px;
+  margin: 6px 0;
+  padding: 0 8px;
+  border: 1px solid var(--lijn);
+  border-radius: 10px;
+  box-shadow: none;
+  background: var(--vlak);
+  white-space: nowrap;
+}
+
+/* ---------- Schermfilter ---------- */
+/* Twee lagen over de pagina, onder de meldingen en de gouden packets: een
+   kleurlaag die met de pagina mengt, en een gewone laag voor lijnen,
+   randen, korrel en bewegende banden. */
+
+.filterkleur,
+.filterlaag { position: fixed; inset: 0; z-index: 50; pointer-events: none; display: none; }
+body:not([data-filter="geen"]) :is(.filterkleur, .filterlaag) { display: block; }
+
+.skin-preview.filter-voorbeeld {
+  position: relative;
+  background:
+    linear-gradient(#fff, #fff) 50% 60% / 56% 38% no-repeat,
+    linear-gradient(135deg, #38bdf8, #3b82f6 45%, #4f46e5);
+}
+.filter-voorbeeld :is(.kleur, .laag) { position: absolute; inset: 0; }
+
+:is(body[data-filter="vignet"] .filterlaag, .filter-voorbeeld[data-filter="vignet"] .laag) {
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
+}
+:is(body[data-filter="avond"] .filterkleur, .filter-voorbeeld[data-filter="avond"] .kleur) {
+  background: rgba(255, 140, 40, 0.2);
+  mix-blend-mode: multiply;
+}
+:is(body[data-filter="sepia"] .filterkleur, .filter-voorbeeld[data-filter="sepia"] .kleur) {
+  background: #a0703a;
+  mix-blend-mode: color;
+  opacity: 0.6;
+}
+:is(body[data-filter="sepia"] .filterlaag, .filter-voorbeeld[data-filter="sepia"] .laag) {
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(60, 35, 10, 0.45) 100%);
+}
+:is(body[data-filter="scanlijnen"] .filterlaag, .filter-voorbeeld[data-filter="scanlijnen"] .laag) {
+  background:
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.14) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
+}
+:is(body[data-filter="korrel"] .filterlaag, .filter-voorbeeld[data-filter="korrel"] .laag) {
+  background: url(img/korrel.png);
+  opacity: 0.5;
+  animation: korrel 0.5s steps(4, end) infinite;
+}
+@keyframes korrel {
+  0% { background-position: 0 0; }
+  25% { background-position: -37px 21px; }
+  50% { background-position: 53px -44px; }
+  75% { background-position: -18px -61px; }
+  100% { background-position: 0 0; }
+}
+/* Videoband: lijnen, gekleurde randen, een storingsbalk die door het beeld
+   rolt, en PLAY in de hoek. */
+:is(body[data-filter="vhs"] .filterlaag, .filter-voorbeeld[data-filter="vhs"] .laag) {
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0 1px, transparent 1px 4px),
+    linear-gradient(90deg, rgba(255, 0, 110, 0.1), transparent 18%, transparent 82%, rgba(0, 210, 255, 0.1));
+}
+:is(body[data-filter="vhs"] .filterlaag, .filter-voorbeeld[data-filter="vhs"] .laag)::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 16%;
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.1) 40%, rgba(255, 255, 255, 0.18) 50%, rgba(255, 255, 255, 0.1) 60%, transparent);
+  animation: vhsBand 7s linear infinite;
+}
+@keyframes vhsBand {
+  from { transform: translateY(-120%); }
+  to { transform: translateY(720%); }
+}
+body[data-filter="vhs"] .filterlaag::after {
+  content: "▶ PLAY";
+  position: absolute;
+  top: 18px;
+  left: 22px;
+  color: #fff;
+  font: 600 18px/1 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  text-shadow: 2px 0 #ff00aa, -2px 0 #00e1ff;
+  opacity: 0.85;
+  animation: knipperCursor 2s steps(1, end) infinite;
+}
+:is(body[data-filter="nachtkijker"] .filterkleur, .filter-voorbeeld[data-filter="nachtkijker"] .kleur) {
+  background: #22c55e;
+  mix-blend-mode: color;
+}
+:is(body[data-filter="nachtkijker"] .filterlaag, .filter-voorbeeld[data-filter="nachtkijker"] .laag) {
+  background:
+    repeating-linear-gradient(to bottom, rgba(0, 30, 0, 0.12) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 45%, rgba(0, 18, 0, 0.75) 100%);
+}
+:is(body[data-filter="gameboy"] .filterkleur, .filter-voorbeeld[data-filter="gameboy"] .kleur) {
+  background: #9bbc0f;
+  mix-blend-mode: color;
+}
+:is(body[data-filter="gameboy"] .filterlaag, .filter-voorbeeld[data-filter="gameboy"] .laag) {
+  background:
+    repeating-linear-gradient(to right, rgba(15, 56, 15, 0.12) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(to bottom, rgba(15, 56, 15, 0.12) 0 1px, transparent 1px 3px);
+}
+:is(body[data-filter="onderwater"] .filterkleur, .filter-voorbeeld[data-filter="onderwater"] .kleur) {
+  background: #0891b2;
+  mix-blend-mode: color;
+  opacity: 0.5;
+}
+:is(body[data-filter="onderwater"] .filterlaag, .filter-voorbeeld[data-filter="onderwater"] .laag) { overflow: hidden; }
+:is(body[data-filter="onderwater"] .filterlaag, .filter-voorbeeld[data-filter="onderwater"] .laag)::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(9% 6% at 20% 30%, rgba(255, 255, 255, 0.14), transparent 70%),
+    radial-gradient(12% 7% at 45% 55%, rgba(255, 255, 255, 0.1), transparent 70%),
+    radial-gradient(8% 5% at 70% 25%, rgba(255, 255, 255, 0.13), transparent 70%),
+    radial-gradient(10% 6% at 80% 70%, rgba(255, 255, 255, 0.1), transparent 70%),
+    radial-gradient(11% 7% at 30% 80%, rgba(255, 255, 255, 0.12), transparent 70%);
+  background-size: 40% 40%;
+  animation: lichtvlekken 14s ease-in-out infinite alternate;
+}
+@keyframes lichtvlekken {
+  from { transform: translate(0, 0) rotate(0deg); }
+  to { transform: translate(6%, 4%) rotate(6deg); }
+}
+:is(body[data-filter="folie"] .filterkleur, .filter-voorbeeld[data-filter="folie"] .kleur) {
+  background: linear-gradient(115deg, rgba(255, 0, 150, 0.55), rgba(0, 255, 255, 0.55), rgba(255, 255, 0, 0.55), rgba(0, 255, 120, 0.55), rgba(140, 90, 255, 0.55), rgba(255, 0, 150, 0.55));
+  background-size: 300% 300%;
+  mix-blend-mode: soft-light;
+  animation: folie 10s ease-in-out infinite alternate;
+}
+@keyframes folie {
+  from { background-position: 0% 0%; }
+  to { background-position: 100% 100%; }
+}
+
+/* ---------- Gouden packet ---------- */
+/* Dezelfde regels gelden voor het packet zelf en het voorbeeldje in het menu. */
+
+/* Een eigen stapel, anders vallen de lagen met z-index -1 achter de kaart. */
+.packet-voorbeeld { position: relative; isolation: isolate; font-size: 22px; line-height: 1; }
+.skin-preview.packet-voorbeeld { border: 0; box-shadow: none; overflow: visible; background: radial-gradient(circle at 35% 30%, #fef08a, #f59e0b 62%, #b45309); }
+:is(.packet, .packet-voorbeeld).stijl-cadeau {
+  border-radius: 16px;
+  background:
+    linear-gradient(90deg, transparent 43%, #facc15 43% 57%, transparent 57%),
+    linear-gradient(transparent 43%, #facc15 43% 57%, transparent 57%),
+    linear-gradient(135deg, #fb7185, #e11d48 60%, #9f1239);
+}
+.packet.stijl-cadeau { box-shadow: 0 8px 22px -6px rgba(159, 18, 57, 0.7), 0 0 0 5px rgba(255, 255, 255, 0.6); }
+:is(.packet, .packet-voorbeeld).stijl-cadeau::after {
+  content: "🎀";
+  position: absolute;
+  left: 50%;
+  top: -0.35em;
+  font-size: 0.9em;
+  transform: translateX(-50%);
+}
+:is(.packet, .packet-voorbeeld).stijl-munt {
+  background:
+    radial-gradient(circle, #fde68a 0 52%, #f59e0b 53% 60%, #fde68a 61% 62%, transparent 63%),
+    repeating-conic-gradient(#b45309 0 4deg, #f59e0b 4deg 8deg);
+  color: #92400e;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  text-shadow: 0 1px 0 #fef3c7;
+}
+.packet.stijl-munt { animation: packetIn 320ms cubic-bezier(0.16, 0.9, 0.28, 1) both, zweven 3.2s ease-in-out 320ms infinite, muntDraai 2.2s linear infinite; }
+.packet-voorbeeld.stijl-munt { animation: muntDraai 2.2s linear infinite; }
+@keyframes muntDraai {
+  from { rotate: y 0deg; }
+  to { rotate: y 360deg; }
+}
+:is(.packet, .packet-voorbeeld).stijl-diskette { border-radius: 12px; background: linear-gradient(135deg, #3b82f6, #1e3a8a); }
+.packet.stijl-diskette { box-shadow: 0 8px 22px -6px rgba(30, 58, 138, 0.75), 0 0 0 5px rgba(255, 255, 255, 0.6); }
+:is(.packet, .packet-voorbeeld).stijl-ster {
+  border-radius: 0;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  background: radial-gradient(circle at 50% 40%, #fef9c3, #facc15 50%, #d97706);
+}
+.packet.stijl-ster {
+  box-shadow: none;
+  filter: drop-shadow(0 6px 10px rgba(180, 83, 9, 0.6));
+  animation: packetIn 320ms cubic-bezier(0.16, 0.9, 0.28, 1) both, zweven 3.2s ease-in-out 320ms infinite, sterDraai 8s linear infinite;
+}
+.packet-voorbeeld.stijl-ster { animation: sterDraai 8s linear infinite; }
+@keyframes sterDraai {
+  to { rotate: 360deg; }
+}
+:is(.packet, .packet-voorbeeld).stijl-pizza { background: radial-gradient(circle at 35% 30%, #fed7aa, #fb923c 62%, #c2410c); }
+:is(.packet, .packet-voorbeeld).stijl-kat { background: radial-gradient(circle at 35% 30%, #ddd6fe, #8b5cf6 62%, #5b21b6); }
+:is(.packet, .packet-voorbeeld).stijl-kat::before,
+:is(.packet, .packet-voorbeeld).stijl-kat::after {
+  content: "";
+  position: absolute;
+  top: -6%;
+  z-index: -1;
+  width: 32%;
+  height: 32%;
+  border-radius: 4px;
+  background: #7c3aed;
+  transform: rotate(45deg);
+}
+:is(.packet, .packet-voorbeeld).stijl-kat::before { left: 8%; }
+:is(.packet, .packet-voorbeeld).stijl-kat::after { right: 8%; }
+:is(.packet, .packet-voorbeeld).stijl-diamant { background: conic-gradient(from 20deg, #cffafe, #22d3ee, #ecfeff, #0891b2, #a5f3fc, #06b6d4, #cffafe); }
+.packet.stijl-diamant { box-shadow: 0 0 22px rgba(34, 211, 238, 0.7), 0 0 0 5px rgba(255, 255, 255, 0.7); }
+:is(.packet, .packet-voorbeeld).stijl-serge { background-size: cover; background-position: center; }
+.packet.stijl-serge {
+  box-shadow: 0 0 0 5px #fbbf24, 0 0 0 8px #fff, 0 8px 22px -6px rgba(180, 83, 9, 0.75);
+  animation: packetIn 320ms cubic-bezier(0.16, 0.9, 0.28, 1) both, zweven 3.2s ease-in-out 320ms infinite, wiebel 1.4s ease-in-out infinite;
+}
+.skin-preview.packet-voorbeeld.stijl-serge { box-shadow: 0 0 0 3px #fbbf24; }
+@keyframes wiebel {
+  0%, 100% { rotate: -8deg; }
+  50% { rotate: 8deg; }
+}
+:is(.packet, .packet-voorbeeld).stijl-zon { background: radial-gradient(circle, #fff7cc 0 30%, #fde047 45%, #f59e0b 70%); }
+.packet.stijl-zon { box-shadow: 0 0 30px 8px rgba(250, 204, 21, 0.6); }
+:is(.packet, .packet-voorbeeld).stijl-zon::before {
+  content: "";
+  position: absolute;
+  inset: -22%;
+  z-index: -1;
+  border-radius: 50%;
+  background: repeating-conic-gradient(#fde047 0 10deg, transparent 10deg 30deg);
+  -webkit-mask: radial-gradient(circle, transparent 55%, #000 56%);
+  mask: radial-gradient(circle, transparent 55%, #000 56%);
+  animation: draaien 6s linear infinite;
+}
+:is(.packet, .packet-voorbeeld).stijl-regenboog { background: none; }
+.packet.stijl-regenboog { box-shadow: 0 0 26px rgba(167, 139, 250, 0.7), 0 0 0 5px rgba(255, 255, 255, 0.7); }
+:is(.packet, .packet-voorbeeld).stijl-regenboog::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 50%;
+  background: conic-gradient(#f472b6, #facc15, #4ade80, #38bdf8, #a78bfa, #f472b6);
+  animation: draaien 3s linear infinite;
+}
+
+/* ---------- Menu met zestien soorten ---------- */
+
+.segmented.skin-tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 520px) {
+  .segmented.skin-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* Met animaties uit staat alles hierboven stil. */
+body.rustig :is(
+  .wordmark i, .wordmark .w1, .wordmark .w2, .wordmark .cursor, .wordmark::before, .wordmark::after, .wordmark .glitch::before, .wordmark .glitch::after,
+  .accessoire .teken, .accessoire .signaal::before, .accessoire .signaal::after, .accessoire::before, .accessoire .ring, .accessoire .ring i,
+  .counter strong, .filterlaag, .filterlaag::before, .filterlaag::after, .filterkleur,
+  .packet-voorbeeld, .packet-voorbeeld::before
+) { animation: none !important; }
+body.rustig .wordmark { animation: none !important; }
+body.rustig .accessoire .ring i { transform: rotate(var(--a)) translateY(calc(var(--foto) * var(--straal, -0.36))) rotate(calc(-1 * var(--a))) scaleY(3.125); }
+
+/* =====================================================================
+   Uiterlijk, deel 3: getekende accessoires, houding, accentkleur,
+   zweeftekst, meldingen, klikreeks, muisaanwijzer en opstartscherm.
+   ===================================================================== */
+
+/* ---------- Menu in vier groepen ---------- */
+
+.skin-groepen { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; width: 100%; }
+.skin-groepen button {
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  padding: 8px 4px 7px;
+  border: 2px solid var(--lijn);
+  border-radius: var(--r-s);
+  background: var(--vlak);
+  color: var(--inkt);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: border-color var(--sneller), background var(--sneller);
+}
+.skin-groepen button span { font-size: 20px; line-height: 1.1; }
+.skin-groepen button small { font-size: 11.5px; font-weight: 600; color: var(--inkt-licht); }
+.skin-groepen button:hover { border-color: var(--lijn-sterk); }
+.skin-groepen button.on { border-color: var(--blauw-600); background: var(--blauw-100); color: var(--blauw-700); }
+.skin-groepen button.on small { color: inherit; }
+.segmented.skin-tabs { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); }
+@media (max-width: 520px) {
+  .segmented.skin-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .skin-groepen button { font-size: 13px; }
+}
+
+/* ---------- Accessoire: getekende hoeden en oren ---------- */
+/* Plek, breedte en draaiing staan in variabelen, net als bij de emoji. */
+
+.accessoire .acc-svg {
+  position: absolute;
+  left: var(--x, 50%);
+  top: var(--y, 20%);
+  width: calc(var(--foto) * var(--breed, 0.4));
+  height: auto;
+  overflow: visible;
+  transform: translate(-50%, -50%) rotate(var(--draai, 0deg));
+  filter: drop-shadow(0 3px 4px rgba(11, 37, 69, 0.35));
+}
+.accessoire[data-accessoire="feesthoed"] { --x: 43%; --y: 1%; --breed: 0.22; --draai: -14deg; }
+.accessoire[data-accessoire="kattenoren"] { --x: 44%; --y: 5%; --breed: 0.52; }
+.accessoire[data-accessoire="propeller"] { --x: 44%; --y: 6%; --breed: 0.5; }
+.accessoire[data-accessoire="ninja"] { --x: 49%; --y: 20%; --breed: 0.6; }
+.accessoire[data-accessoire="kerstmuts"] { --x: 46%; --y: 6%; --breed: 0.52; --draai: -6deg; }
+.accessoire[data-accessoire="heksenhoed"] { --x: 44%; --y: 3%; --breed: 0.6; --draai: -4deg; }
+.accessoire[data-accessoire="hoorns"] { --x: 44%; --y: 1%; --breed: 0.5; }
+.accessoire[data-accessoire="eenhoorn"] { --x: 45%; --y: 2%; --breed: 0.13; --draai: 4deg; }
+.accessoire[data-accessoire="vlammen"] { --x: 44%; --y: 2%; --breed: 0.5; }
+.accessoire[data-accessoire="wifi"] { --x: 44%; --y: -3%; --breed: 0.22; }
+.accessoire[data-accessoire="vogeltje"] { --x: 52%; --y: 0%; --maat: 0.2; }
+/* Hoge hoeden krijgen wat extra ruimte boven de foto, zodat ze niet tegen
+   het getal of de regel "per klik" aan komen. */
+.serge-plek:has(.accessoire:is([data-accessoire="heksenhoed"], [data-accessoire="kerstmuts"], [data-accessoire="feesthoed"], [data-accessoire="eenhoorn"], [data-accessoire="vlammen"], [data-accessoire="wifi"], [data-accessoire="ruimtehelm"], [data-accessoire="hogehoed"], [data-accessoire="regenwolk"], [data-accessoire="lampje"])) { margin-top: 18px; }
+
+/* Kattenoren: af en toe trilt het rechteroor. */
+.acc-svg.kattenoren .oor { transform-box: fill-box; transform-origin: 50% 100%; }
+.acc-svg.kattenoren .rechts { animation: oorTrillen 4.2s ease-in-out infinite; }
+@keyframes oorTrillen {
+  0%, 86%, 100% { transform: rotate(0); }
+  89% { transform: rotate(9deg); }
+  92% { transform: rotate(-4deg); }
+  95% { transform: rotate(6deg); }
+}
+/* Propellerpet: van voren gezien draait een propeller door smaller te worden,
+   om te slaan en weer breder te worden. */
+.acc-svg.propeller .wiek { transform-box: fill-box; transform-origin: 50% 50%; animation: wiek 0.34s ease-in-out infinite; }
+@keyframes wiek {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(-1); }
+}
+/* Ninjaband: de slippen wapperen. */
+.acc-svg.ninja .slippen { transform-origin: 118px 30px; animation: wapperen 0.9s ease-in-out infinite alternate; }
+@keyframes wapperen {
+  from { transform: rotate(-9deg); }
+  to { transform: rotate(7deg); }
+}
+/* Kerstmuts en heksenhoed: de punt zwiept een beetje. */
+.acc-svg:is(.kerstmuts, .heksenhoed) { transform-origin: 50% 88%; animation: puntZwiep 3.6s ease-in-out infinite; }
+@keyframes puntZwiep {
+  0%, 100% { rotate: 0deg; }
+  50% { rotate: 4deg; }
+}
+/* Eenhoorn: hij glanst in alle kleuren, en aan de punt fonkelt iets. */
+.acc-svg.eenhoorn { animation: eenhoornGlans 6s linear infinite; }
+@keyframes eenhoornGlans {
+  from { filter: drop-shadow(0 0 6px rgba(244, 114, 182, 0.75)) hue-rotate(0deg); }
+  to { filter: drop-shadow(0 0 6px rgba(244, 114, 182, 0.75)) hue-rotate(360deg); }
+}
+.acc-svg.eenhoorn .glim { transform-box: fill-box; transform-origin: center; animation: glim 1.8s ease-in-out infinite; }
+@keyframes glim {
+  0%, 100% { transform: scale(0.3) rotate(0); opacity: 0; }
+  50% { transform: scale(1) rotate(45deg); opacity: 1; }
+}
+/* Vlammenkroon: elke vlam flakkert op zijn eigen tempo. */
+.acc-svg.vlammen { filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.8)); }
+.acc-svg.vlammen .vlam { transform-box: fill-box; transform-origin: 50% 100%; animation: flakker 0.9s ease-in-out infinite alternate; animation-delay: calc(var(--i) * -0.23s); }
+@keyframes flakker {
+  0% { transform: scale(1, 1) skewX(0deg); }
+  35% { transform: scale(0.94, 1.08) skewX(-3deg); }
+  70% { transform: scale(1.04, 0.93) skewX(2deg); }
+  100% { transform: scale(0.97, 1.05) skewX(-1deg); }
+}
+/* Wifi: de streepjes lichten na elkaar op, als een verbinding die zoekt. */
+.acc-svg.wifi { filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.55)); }
+.acc-svg.wifi .boog { animation: wifi 2.4s ease-in-out infinite; animation-delay: calc(var(--i) * 0.3s); }
+@keyframes wifi {
+  0%, 100% { opacity: 0.25; }
+  30%, 70% { opacity: 1; }
+}
+/* Het vogeltje huppelt en kijkt af en toe de andere kant op. */
+.accessoire[data-accessoire="vogeltje"] .teken { animation: vogelHup 3.4s ease-in-out infinite; }
+@keyframes vogelHup {
+  0%, 38%, 100% { translate: 0 0; scale: 1 1; }
+  44% { translate: 0 -22%; scale: 1 1.06; }
+  50% { translate: 0 0; scale: 1.1 0.9; }
+  54% { translate: 0 0; scale: 1 1; }
+  66%, 88% { translate: 0 0; scale: -1 1; }
+}
+/* Duizelig: sterretjes in een kleine, snelle baan. */
+.accessoire .baan.duizel { top: 12%; width: 56%; border-color: transparent; --straal: -0.28; }
+.accessoire .baan.duizel .ring { animation-duration: 2.6s; }
+.accessoire .baan.duizel .ring i {
+  font-size: calc(var(--foto) * 0.12);
+  margin: calc(var(--foto) * -0.06) 0 0 calc(var(--foto) * -0.06);
+  animation-duration: 2.6s;
+}
+/* Ruimtehelm: een glazen bol met een glimlicht, en een kraag onderaan. */
+.accessoire[data-accessoire="ruimtehelm"]::before {
+  content: "";
+  position: absolute;
+  inset: -9%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.8) 0 4%, rgba(255, 255, 255, 0.22) 10%, transparent 20%),
+    radial-gradient(circle at 72% 78%, rgba(255, 255, 255, 0.35) 0 3%, transparent 9%),
+    radial-gradient(circle, transparent 62%, rgba(186, 230, 253, 0.3) 74%, rgba(125, 211, 252, 0.45) 100%);
+  border: calc(var(--foto) * 0.03) solid rgba(226, 232, 240, 0.95);
+  box-shadow: inset 0 0 0 2px rgba(148, 163, 184, 0.8), 0 0 18px rgba(56, 189, 248, 0.4);
+}
+.accessoire[data-accessoire="ruimtehelm"]::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 1%;
+  width: 62%;
+  height: 13%;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 22% 22% / 70% 70% 30% 30%;
+  background: linear-gradient(#f8fafc, #cbd5e1 55%, #94a3b8);
+  border: 2px solid #64748b;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* ---------- Houding ---------- */
+/* De hele knop beweegt, met de losse eigenschappen rotate, translate en
+   scale. Zo botst het niet met het indrukken, dat transform gebruikt.
+   Het voorbeeldje in het menu beweegt op dezelfde manier. */
+
+:is(.serge, .houding-voorbeeld)[data-houding="wiebel"] { animation: hWiebel 3.2s ease-in-out infinite; }
+@keyframes hWiebel {
+  0%, 100% { rotate: -3deg; }
+  50% { rotate: 3deg; }
+}
+:is(.serge, .houding-voorbeeld)[data-houding="knikken"] { transform-origin: 50% 90%; animation: hKnik 0.8s ease-in-out infinite; }
+@keyframes hKnik {
+  0%, 60%, 100% { translate: 0 0; scale: 1 1; }
+  25% { translate: 0 1.5%; scale: 1.01 0.985; }
+}
+:is(.serge, .houding-voorbeeld)[data-houding="pudding"] { transform-origin: 50% 100%; animation: hPudding 2.6s ease-in-out infinite; }
+@keyframes hPudding {
+  0%, 70%, 100% { scale: 1 1; }
+  12% { scale: 1.07 0.93; }
+  24% { scale: 0.95 1.05; }
+  36% { scale: 1.03 0.97; }
+  48% { scale: 0.99 1.01; }
+}
+:is(.serge, .houding-voorbeeld)[data-houding="dansen"] { transform-origin: 50% 100%; animation: hDansen 1.1s ease-in-out infinite; }
+@keyframes hDansen {
+  0%, 100% { rotate: -6deg; translate: -2% 0; }
+  25%, 75% { rotate: 0deg; translate: 0 -3%; }
+  50% { rotate: 6deg; translate: 2% 0; }
+}
+:is(.serge, .houding-voorbeeld)[data-houding="tol"] { animation: hTol 6s cubic-bezier(0.5, 0, 0.3, 1) infinite; }
+@keyframes hTol {
+  0%, 76% { rotate: 0deg; }
+  94%, 100% { rotate: 360deg; }
+}
+:is(.serge, .houding-voorbeeld)[data-houding="cafeine"] { animation: hCafeine 2.8s linear infinite; }
+@keyframes hCafeine {
+  0%, 27%, 100% { translate: 0 0; }
+  2% { translate: -2px 1px; }
+  4% { translate: 2px -1px; }
+  6% { translate: -1px -2px; }
+  8% { translate: 2px 2px; }
+  10% { translate: -2px 0; }
+  12% { translate: 1px 1px; }
+  14% { translate: -1px -1px; }
+  16% { translate: 2px 0; }
+  18% { translate: 0 2px; }
+  20% { translate: -2px -1px; }
+  22% { translate: 1px 2px; }
+  24% { translate: -1px 0; }
+}
+:is(.serge, .houding-voorbeeld)[data-houding="haperen"] { animation: hHaperen 4.2s steps(1, end) infinite; }
+@keyframes hHaperen {
+  0%, 89%, 100% { translate: 0 0; filter: none; }
+  90% { translate: 3% 0; filter: drop-shadow(-5px 0 0 rgba(255, 0, 90, 0.7)) drop-shadow(5px 0 0 rgba(0, 220, 255, 0.7)); }
+  92% { translate: -2.5% 1%; filter: drop-shadow(4px 0 0 rgba(255, 0, 90, 0.7)) drop-shadow(-4px 0 0 rgba(0, 220, 255, 0.7)); }
+  94% { translate: 1% -0.5%; filter: none; }
+  96% { translate: -1.5% 0; filter: drop-shadow(-3px 0 0 rgba(255, 0, 90, 0.6)); }
+  97% { translate: 0 0; filter: none; }
+}
+:is(.serge, .houding-voorbeeld)[data-houding="stuiter"] { transform-origin: 50% 100%; animation: hStuiter 1s infinite; }
+@keyframes hStuiter {
+  0%, 100% { translate: 0 0; scale: 1.07 0.92; animation-timing-function: cubic-bezier(0.2, 0.7, 0.4, 1); }
+  14% { translate: 0 -2%; scale: 0.97 1.04; animation-timing-function: cubic-bezier(0.2, 0.7, 0.4, 1); }
+  50% { translate: 0 -7%; scale: 1 1; animation-timing-function: cubic-bezier(0.6, 0, 0.8, 0.4); }
+  92% { translate: 0 -0.5%; scale: 0.98 1.02; }
+}
+:is(.serge, .houding-voorbeeld)[data-houding="disco"] { transform-origin: 50% 100%; animation: hDisco 0.9s ease-in-out infinite, hKleur 3s linear infinite; }
+@keyframes hDisco {
+  0%, 100% { rotate: -7deg; translate: 0 0; }
+  25%, 75% { rotate: 0deg; translate: 0 -3%; }
+  50% { rotate: 7deg; translate: 0 0; }
+}
+@keyframes hKleur {
+  from { filter: hue-rotate(0deg) saturate(1.3); }
+  to { filter: hue-rotate(360deg) saturate(1.3); }
+}
+:is(.serge, .houding-voorbeeld)[data-houding="zen"] { animation: hZen 6s ease-in-out infinite; }
+@keyframes hZen {
+  0%, 100% { scale: 1; filter: drop-shadow(0 0 0 rgba(253, 230, 138, 0)); }
+  50% { scale: 1.045; filter: drop-shadow(0 0 22px rgba(253, 230, 138, 0.9)); }
+}
+:is(.serge, .houding-voorbeeld)[data-houding="hypnose"] { transform-origin: 50% -55%; animation: hHypnose 2.8s ease-in-out infinite, hHypnoseGloed 2.8s ease-in-out infinite; }
+@keyframes hHypnose {
+  0%, 100% { rotate: -7deg; }
+  50% { rotate: 7deg; }
+}
+@keyframes hHypnoseGloed {
+  0%, 50%, 100% { filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.4)); }
+  25%, 75% { filter: drop-shadow(0 0 20px rgba(167, 139, 250, 0.85)); }
+}
+.skin-preview.houding-voorbeeld { overflow: visible; }
+.skin-preview.houding-voorbeeld img { border-radius: 50%; }
+
+/* ---------- Accentkleur ---------- */
+/* Alleen de blauwe reeks en de knoppen; de achtergrond en donkere vlakken
+   blijven. --knop staat op :root als var(--blauw-600) en wordt daar al
+   uitgerekend, dus die zetten we hier opnieuw. */
+
+body[data-accent="paars"] { --blauw-700: #6d28d9; --blauw-600: #7c3aed; --blauw-500: #8b5cf6; --blauw-400: #a78bfa; --blauw-300: #c4b5fd; --blauw-100: #ede9fe; --blauw-50: #f8f5ff; --knop: #7c3aed; --knop-hover: #6d28d9; }
+body[data-accent="groen"] { --blauw-700: #065f46; --blauw-600: #047857; --blauw-500: #10b981; --blauw-400: #34d399; --blauw-300: #6ee7b7; --blauw-100: #d1fae5; --blauw-50: #f0fdf8; --knop: #047857; --knop-hover: #065f46; }
+body[data-accent="turkoois"] { --blauw-700: #115e59; --blauw-600: #0f766e; --blauw-500: #14b8a6; --blauw-400: #2dd4bf; --blauw-300: #5eead4; --blauw-100: #ccfbf1; --blauw-50: #f0fdfa; --knop: #0f766e; --knop-hover: #115e59; }
+body[data-accent="oranje"] { --blauw-700: #9a3412; --blauw-600: #c2410c; --blauw-500: #f97316; --blauw-400: #fb923c; --blauw-300: #fdba74; --blauw-100: #ffedd5; --blauw-50: #fff8f1; --knop: #c2410c; --knop-hover: #9a3412; }
+body[data-accent="roze"] { --blauw-700: #9d174d; --blauw-600: #be185d; --blauw-500: #ec4899; --blauw-400: #f472b6; --blauw-300: #f9a8d4; --blauw-100: #fce7f3; --blauw-50: #fdf2f8; --knop: #be185d; --knop-hover: #9d174d; }
+body[data-accent="rood"] { --blauw-700: #991b1b; --blauw-600: #b91c1c; --blauw-500: #ef4444; --blauw-400: #f87171; --blauw-300: #fca5a5; --blauw-100: #fee2e2; --blauw-50: #fff5f5; --knop: #b91c1c; --knop-hover: #991b1b; }
+body[data-accent="goud"] { --blauw-700: #92400e; --blauw-600: #b45309; --blauw-500: #f59e0b; --blauw-400: #fbbf24; --blauw-300: #fcd34d; --blauw-100: #fef3c7; --blauw-50: #fffbeb; --knop: #b45309; --knop-hover: #92400e; }
+body[data-accent="inkt"] { --blauw-700: #111827; --blauw-600: #1f2937; --blauw-500: #4b5563; --blauw-400: #6b7280; --blauw-300: #9ca3af; --blauw-100: #e5e7eb; --blauw-50: #f9fafb; --knop: #1f2937; --knop-hover: #111827; }
+body[data-accent="neon"] { --blauw-700: #a21caf; --blauw-600: #c026d3; --blauw-500: #d946ef; --blauw-400: #22d3ee; --blauw-300: #67e8f9; --blauw-100: #fae8ff; --blauw-50: #fdf4ff; --knop: #c026d3; --knop-hover: #a21caf; }
+/* Regenboog: de tint schuift in stapjes van twaalf graden door de kleuren.
+   oklch houdt de helderheid gelijk, dus wit blijft overal leesbaar. Stapjes,
+   omdat elke verandering de hele pagina opnieuw laat uitrekenen. */
+@property --tint {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 262;
+}
+body[data-accent="regenboog"] {
+  --blauw-700: oklch(0.43 0.19 var(--tint));
+  --blauw-600: oklch(0.5 0.2 var(--tint));
+  --blauw-500: oklch(0.62 0.19 var(--tint));
+  --blauw-400: oklch(0.72 0.15 var(--tint));
+  --blauw-300: oklch(0.82 0.1 var(--tint));
+  --blauw-100: oklch(0.94 0.04 var(--tint));
+  --blauw-50: oklch(0.975 0.015 var(--tint));
+  --knop: oklch(0.5 0.2 var(--tint));
+  --knop-hover: oklch(0.43 0.19 var(--tint));
+  animation: tint 90s steps(30) infinite;
+}
+@keyframes tint {
+  from { --tint: 262; }
+  to { --tint: 622; }
+}
+body.rustig[data-accent="regenboog"] { animation: none; }
+.skin-preview.accent-voorbeeld { background: var(--vlak); display: grid; grid-template-rows: 1fr 1fr; gap: 4px; padding: 9px 7px; place-items: stretch; }
+.skin-preview.accent-voorbeeld i { display: block; border-radius: 5px; background: var(--a); }
+.skin-preview.accent-voorbeeld i:last-child { width: 62%; opacity: 0.55; }
+.skin-preview.accent-voorbeeld.regenboog i { background: linear-gradient(90deg, #dc2626, #d97706, #16a34a, #0891b2, #4f46e5, #c026d3); }
+
+/* ---------- Zweeftekst ---------- */
+
+.zweef.zweef-kaal {
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  font-size: 22px;
+  font-weight: 800;
+  text-shadow: 0 2px 0 #0b2545, 0 0 10px rgba(11, 37, 69, 0.6);
+}
+.zweef.zweef-terminal {
+  background: #050805;
+  color: #4ade80;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.45), 0 6px 16px -6px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 0 6px rgba(74, 222, 128, 0.7);
+}
+.zweef.zweef-terminal::before { content: "$ "; color: #86efac; }
+.zweef.zweef-neon {
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  font-size: 23px;
+  font-weight: 800;
+  color: #fdf4ff;
+  text-shadow: 0 0 4px #f0abfc, 0 0 10px #e879f9, 0 0 22px #d946ef;
+  animation: zweef 1.15s cubic-bezier(0.15, 0.85, 0.25, 1) both, neonZoem 0.5s steps(1, end) both;
+}
+@keyframes neonZoem {
+  0%, 40%, 100% { color: #fdf4ff; }
+  20%, 60% { color: rgba(253, 244, 255, 0.4); }
+}
+.zweef.zweef-strip {
+  background: none;
+  box-shadow: none;
+  padding: 10px 16px;
+  font-family: Impact, "Arial Black", "IBM Plex Sans", sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: #fde047;
+  -webkit-text-stroke: 1.5px #111;
+  text-shadow: 3px 3px 0 #111;
+  isolation: isolate;
+  animation: zweefStrip 1.1s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+.zweef.zweef-strip::before {
+  content: "";
+  position: absolute;
+  inset: -12% -8%;
+  z-index: -1;
+  background: #ef4444;
+  clip-path: polygon(50% 0, 60% 22%, 84% 6%, 78% 32%, 100% 36%, 82% 54%, 98% 76%, 72% 72%, 70% 100%, 52% 80%, 34% 100%, 30% 74%, 4% 82%, 18% 56%, 0 38%, 24% 32%, 14% 6%, 40% 20%);
+}
+@keyframes zweefStrip {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.3) rotate(var(--draai)); }
+  18% { opacity: 1; transform: translate(-50%, -16px) scale(1.25) rotate(var(--draai)); }
+  30% { transform: translate(-50%, -20px) scale(1) rotate(var(--draai)); }
+  75% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -70px) scale(0.95) rotate(var(--draai)); }
+}
+.zweef.zweef-pixel {
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 21px;
+  font-weight: 700;
+  text-shadow: 2px 0 0 #111, -2px 0 0 #111, 0 2px 0 #111, 0 -2px 0 #111, 4px 4px 0 #f43f5e;
+  animation: zweefPixel 1s steps(6, end) both;
+}
+@keyframes zweefPixel {
+  from { opacity: 1; transform: translate(-50%, 0); }
+  85% { opacity: 1; }
+  to { opacity: 0; transform: translate(-50%, -84px); }
+}
+.zweef.zweef-bel {
+  background: radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.95) 0 7%, rgba(255, 255, 255, 0.25) 18%, rgba(186, 230, 253, 0.35) 60%, rgba(125, 211, 252, 0.65) 100%);
+  color: var(--blauw-900);
+  padding: 16px 16px;
+  min-width: 58px;
+  text-align: center;
+  font-size: 15px;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.75), 0 4px 12px -4px rgba(14, 165, 233, 0.5);
+  animation: zweefBel 1.4s ease-out both;
+}
+@keyframes zweefBel {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.4); }
+  15% { opacity: 1; transform: translate(-50%, -12px) scale(1); }
+  40% { transform: translate(calc(-50% + 8px), -40px) scale(1.05, 0.95); }
+  70% { opacity: 1; transform: translate(calc(-50% - 6px), -70px) scale(0.96, 1.04); }
+  86% { opacity: 0.9; transform: translate(-50%, -84px) scale(1.25); }
+  100% { opacity: 0; transform: translate(-50%, -88px) scale(1.6); }
+}
+.zweef.zweef-goud {
+  background: linear-gradient(135deg, #fef3c7, #fbbf24 45%, #d97706 62%, #fde68a);
+  color: #4a2500;
+  box-shadow: inset 0 0 0 2px #fff7cc, 0 6px 18px -4px rgba(217, 119, 6, 0.7);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.zweef.zweef-goud::before { content: "🪙 "; }
+.zweef.zweef-vuur {
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  font-size: 25px;
+  font-weight: 900;
+  color: #fff7ed;
+  text-shadow: 0 0 4px #fde047, 0 -4px 8px #f97316, 0 -10px 16px #ef4444, 0 -16px 24px rgba(239, 68, 68, 0.5);
+  animation: zweefVuur 0.95s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+@keyframes zweefVuur {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.6); }
+  15% { opacity: 1; transform: translate(-50%, -16px) scale(1.15); }
+  100% { opacity: 0; transform: translate(-50%, -124px) scale(0.9); }
+}
+.zweef.zweef-glitch {
+  background: #0b0b12;
+  border-radius: 3px;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  box-shadow: none;
+  text-shadow: -2px 0 #ff005a, 2px 0 #00dcff;
+  animation: zweef 1.15s cubic-bezier(0.15, 0.85, 0.25, 1) both, zweefGlitch 0.5s steps(1, end) infinite;
+}
+@keyframes zweefGlitch {
+  0% { text-shadow: -2px 0 #ff005a, 2px 0 #00dcff; clip-path: none; }
+  25% { text-shadow: 3px 0 #ff005a, -3px 0 #00dcff; clip-path: inset(10% 0 40% 0); }
+  50% { text-shadow: -1px 0 #ff005a, 1px 0 #00dcff; clip-path: none; }
+  75% { text-shadow: 2px 1px #ff005a, -2px -1px #00dcff; clip-path: inset(50% 0 5% 0); }
+}
+.zweef.zweef-regenboog {
+  background: linear-gradient(90deg, #f472b6, #fb923c, #facc15, #4ade80, #38bdf8, #a78bfa, #f472b6);
+  background-size: 200% 100%;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 18px -6px rgba(167, 139, 250, 0.8);
+  animation: zweefBoog 1.3s cubic-bezier(0.2, 0.7, 0.3, 1) both, regenboogSchuif 1s linear infinite;
+}
+@keyframes zweefBoog {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.7); }
+  15% { opacity: 1; transform: translate(calc(-50% + var(--dx) * 0.3), -24px) scale(1) rotate(var(--draai)); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx) * 2), -92px) scale(0.9) rotate(calc(var(--draai) * 2)); }
+}
+@keyframes regenboogSchuif {
+  to { background-position: 200% 0; }
+}
+.zweef.zweef-sterren {
+  background:
+    radial-gradient(1.5px 1.5px at 18% 30%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 62% 72%, #fff, transparent),
+    radial-gradient(1px 1px at 84% 26%, #fff, transparent),
+    linear-gradient(90deg, #a5b4fc, #f0abfc, #fde68a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  box-shadow: none;
+  padding: 0;
+  font-size: 25px;
+  font-weight: 900;
+  filter: drop-shadow(0 0 6px rgba(165, 180, 252, 0.85));
+  animation: zweefSter 1.6s ease-out both;
+}
+@keyframes zweefSter {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.8); filter: drop-shadow(0 0 6px rgba(165, 180, 252, 0.85)); }
+  20% { opacity: 1; transform: translate(-50%, -20px) scale(1); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), -72px) scale(1.35); filter: blur(3px) drop-shadow(0 0 10px rgba(240, 171, 252, 0.9)); }
+}
+.zweef.zweef-hemels {
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  font-size: 23px;
+  font-weight: 800;
+  color: #fffbeb;
+  text-shadow: 0 0 6px #fde68a, 0 0 16px #fbbf24, 0 0 28px rgba(251, 191, 36, 0.6);
+  isolation: isolate;
+  animation: zweefHemel 1.5s ease-out both;
+}
+.zweef.zweef-hemels::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  z-index: -1;
+  width: 10px;
+  height: 140px;
+  transform: translateX(-50%);
+  background: linear-gradient(to top, rgba(253, 230, 138, 0.85), transparent);
+  filter: blur(3px);
+}
+@keyframes zweefHemel {
+  0% { opacity: 0; transform: translate(-50%, 10px) scale(0.9); }
+  20% { opacity: 1; transform: translate(-50%, -18px) scale(1.05); }
+  100% { opacity: 0; transform: translate(-50%, -104px) scale(1); }
+}
+/* Het voorbeeldje: stil, klein en midden in een stukje lucht. */
+.skin-preview.zweef-voorbeeld { background: linear-gradient(160deg, #38bdf8, #4f46e5); overflow: hidden; }
+.zweef-voorbeeld .zweef {
+  position: relative;
+  animation: none;
+  transform: rotate(-4deg);
+  font-size: 12.5px;
+  padding: 3px 7px;
+  -webkit-text-stroke-width: 0.5px;
+}
+.zweef-voorbeeld .zweef.zweef-strip { padding: 5px 7px; font-size: 14px; }
+.zweef-voorbeeld .zweef.zweef-bel { padding: 8px 6px; min-width: 0; }
+.zweef-voorbeeld .zweef.zweef-goud::before { content: none; }
+.zweef-voorbeeld .zweef.zweef-hemels::before { height: 40px; }
+.zweef-voorbeeld .zweef:is(.zweef-kaal, .zweef-neon, .zweef-pixel, .zweef-vuur, .zweef-sterren, .zweef-hemels) { font-size: 15px; padding: 0; }
+
+/* ---------- Meldingen ---------- */
+/* De stijl hangt als klasse aan de melding zelf. Een melding met een eigen
+   animatie moet bij het weggaan toch de uitgang krijgen. */
+
+.toast[class*="stijl-"] { position: relative; }
+.toast.weg[class*="stijl-"] { animation: toastUit 220ms ease-in both; }
+
+/* Donker: de kleur van het nieuws zit in de titel en in een zachte gloed. */
+.toast.stijl-donker { background: #0b1a30; color: #e8eff9; border: 1px solid #1e3a5f; box-shadow: 0 0 22px -6px var(--toon, rgba(96, 165, 250, 0.7)), var(--schaduw-l); }
+.toast.stijl-donker h4 { color: var(--toon-tekst, #bfdbfe); }
+.toast.stijl-donker p { color: #b8c6dc; }
+.toast.stijl-donker.goed { --toon: rgba(34, 197, 94, 0.7); --toon-tekst: #86efac; }
+.toast.stijl-donker.slecht { --toon: rgba(239, 68, 68, 0.7); --toon-tekst: #fca5a5; }
+.toast.stijl-donker.goud { --toon: rgba(245, 158, 11, 0.7); --toon-tekst: #fcd34d; }
+
+.toast.stijl-postit {
+  background: #fef08a;
+  color: #3f3a1a;
+  border: 0;
+  border-radius: 2px;
+  padding-top: 20px;
+  font-family: "Bradley Hand", "Segoe Print", "Chalkboard SE", "Comic Neue", cursive;
+  rotate: -1.5deg;
+  box-shadow: 2px 7px 14px -6px rgba(0, 0, 0, 0.5);
+}
+.toast.stijl-postit:nth-child(even) { background: #fbcfe8; rotate: 1.2deg; }
+.toast.stijl-postit::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 70px;
+  height: 18px;
+  translate: -50% 0;
+  rotate: 2deg;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+.toast.stijl-postit h4 { font-size: 17px; }
+.toast.stijl-postit p { color: #57502a; }
+
+.toast.stijl-syslog {
+  background: #050805;
+  color: #86efac;
+  border: 1px solid #14532d;
+  border-radius: 4px;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+}
+.toast.stijl-syslog .ikoon { display: none; }
+.toast.stijl-syslog h4 { font-size: 13.5px; font-weight: 600; color: #4ade80; }
+.toast.stijl-syslog h4::before { content: "%SERGE-6-INFO: "; color: #22c55e; opacity: 0.8; }
+.toast.stijl-syslog.goed h4::before { content: "%SERGE-5-OK: "; }
+.toast.stijl-syslog.slecht h4::before { content: "%SERGE-3-ALARM: "; color: #f87171; opacity: 1; }
+.toast.stijl-syslog.goud h4::before { content: "%SERGE-4-GOUD: "; color: #facc15; opacity: 1; }
+.toast.stijl-syslog p { font-size: 13px; color: #a7f3d0; }
+
+.toast.stijl-sms {
+  background: #2563eb;
+  color: #fff;
+  border: 0;
+  border-radius: 20px 20px 20px 6px;
+  padding: 10px 16px 12px;
+  box-shadow: 0 8px 20px -8px rgba(37, 99, 235, 0.65);
+}
+.toast.stijl-sms::before { content: "Serge · nu"; display: block; font-size: 11.5px; font-weight: 700; opacity: 0.82; margin-bottom: 2px; }
+.toast.stijl-sms.goed { background: #15803d; }
+.toast.stijl-sms.slecht { background: #b91c1c; }
+.toast.stijl-sms.goud { background: #b45309; }
+.toast.stijl-sms h4 { font-size: 15px; }
+.toast.stijl-sms p { color: rgba(255, 255, 255, 0.9); }
+
+.toast.stijl-krant {
+  background: #f5f0e4;
+  color: #1c1917;
+  border: 0;
+  border-top: 4px double #1c1917;
+  border-bottom: 1px solid #1c1917;
+  border-radius: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.5);
+}
+.toast.stijl-krant::before { content: "EXTRA EDITIE"; display: block; font: 700 10.5px/1 "IBM Plex Sans", sans-serif; letter-spacing: 0.2em; color: #b91c1c; margin-bottom: 6px; }
+.toast.stijl-krant h4 { font-size: 18px; font-weight: 900; line-height: 1.15; }
+.toast.stijl-krant p { color: #44403c; font-style: italic; }
+.toast.stijl-krant .ikoon { filter: grayscale(1) contrast(1.2); }
+
+.toast.stijl-venster {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "titel titel" "ikoon tekst";
+  align-items: center;
+  min-width: 260px;
+  padding: 0 0 12px;
+  background: #c0c0c0;
+  color: #111;
+  border: 0;
+  border-radius: 0;
+  font-family: Tahoma, "MS Sans Serif", "IBM Plex Sans", sans-serif;
+  box-shadow: inset -1px -1px 0 #0a0a0a, inset 1px 1px 0 #fff, inset -2px -2px 0 #808080, inset 2px 2px 0 #dfdfdf, 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+.toast.stijl-venster h4 { grid-area: titel; margin: 3px 3px 10px; padding: 4px 30px 4px 8px; background: linear-gradient(90deg, #000080, #1084d0); color: #fff; font-size: 13px; }
+.toast.stijl-venster::after {
+  content: "×";
+  position: absolute;
+  top: 6px;
+  right: 7px;
+  width: 18px;
+  height: 16px;
+  background: #c0c0c0;
+  color: #111;
+  font: 700 13px/16px sans-serif;
+  text-align: center;
+  box-shadow: inset -1px -1px 0 #0a0a0a, inset 1px 1px 0 #fff;
+}
+.toast.stijl-venster .ikoon { grid-area: ikoon; margin: 0 10px 0 12px; }
+.toast.stijl-venster p { grid-area: tekst; margin: 0 14px 0 12px; color: #111; font-size: 13.5px; }
+.toast.stijl-venster .ikoon + h4 + p { margin-left: 0; }
+
+body[data-melding="trofee"] .toaster { left: 12px; right: 12px; align-items: center; }
+.toast.stijl-trofee {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  align-items: center;
+  width: max-content;
+  max-width: min(100%, 440px);
+  padding: 10px 26px 10px 10px;
+  background: linear-gradient(90deg, #111827, #1f2937);
+  color: #f9fafb;
+  border: 0;
+  border-radius: 38px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  animation: trofeeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.toast.stijl-trofee .ikoon {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin: 0;
+  border-radius: 50%;
+  font-size: 23px;
+  background: radial-gradient(circle at 35% 30%, #fde68a, #f59e0b 60%, #b45309);
+  box-shadow: 0 0 0 3px rgba(253, 230, 138, 0.35);
+}
+.toast.stijl-trofee.slecht .ikoon { background: radial-gradient(circle at 35% 30%, #fca5a5, #ef4444 60%, #991b1b); box-shadow: 0 0 0 3px rgba(252, 165, 165, 0.35); }
+.toast.stijl-trofee h4 { font-size: 15px; }
+.toast.stijl-trofee.goud h4::before { content: "Prestatie · "; color: #fbbf24; }
+.toast.stijl-trofee p { color: #d1d5db; margin-top: 1px; }
+.toast.stijl-trofee::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%);
+  background-size: 250% 100%;
+  animation: trofeeGlans 1.6s 0.4s ease-in-out both;
+  pointer-events: none;
+}
+@keyframes trofeeIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.9); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes trofeeGlans {
+  from { background-position: 150% 0; }
+  to { background-position: -50% 0; }
+}
+
+.toast.stijl-neon {
+  background: #0b0620;
+  color: #fdf4ff;
+  border: 2px solid #f0abfc;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #e879f9, inset 0 0 10px rgba(232, 121, 249, 0.5), 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+  animation: toastIn var(--soepel) both, neonAan 0.9s steps(1, end) both;
+}
+.toast.stijl-neon.slecht { border-color: #fca5a5; box-shadow: 0 0 10px #ef4444, inset 0 0 10px rgba(239, 68, 68, 0.5), 0 10px 30px -10px rgba(0, 0, 0, 0.7); }
+.toast.stijl-neon.goud { border-color: #fde047; box-shadow: 0 0 10px #facc15, inset 0 0 10px rgba(250, 204, 21, 0.45), 0 10px 30px -10px rgba(0, 0, 0, 0.7); }
+.toast.stijl-neon h4 { color: #fdf4ff; text-shadow: 0 0 6px #f0abfc, 0 0 14px #d946ef; }
+.toast.stijl-neon p { color: #a5f3fc; text-shadow: 0 0 6px rgba(34, 211, 238, 0.6); }
+@keyframes neonAan {
+  0% { opacity: 0; }
+  10%, 25%, 40%, 100% { opacity: 1; }
+  15% { opacity: 0.2; }
+  30% { opacity: 0.4; }
+}
+
+.toast.stijl-perkament {
+  margin: 8px 0;
+  padding: 18px 22px 16px;
+  background: radial-gradient(ellipse at center, #fbf1d6 40%, #efd9a7 85%, #d9b77a);
+  color: #3b2206;
+  border: 0;
+  border-radius: 4px;
+  font-family: Georgia, "Iowan Old Style", serif;
+  box-shadow: 0 12px 24px -12px rgba(59, 34, 6, 0.7);
+}
+.toast.stijl-perkament::before,
+.toast.stijl-perkament::after {
+  content: "";
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(#c79a5b, #8a5a24 60%, #c79a5b);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.toast.stijl-perkament::before { top: -6px; }
+.toast.stijl-perkament::after { bottom: -6px; }
+.toast.stijl-perkament h4 { font-size: 17px; font-style: italic; }
+.toast.stijl-perkament p { color: #5b3a12; }
+.toast.stijl-perkament .ikoon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-top: 2px;
+  border-radius: 50%;
+  font-size: 19px;
+  background: radial-gradient(circle at 35% 30%, #ef4444, #991b1b 70%);
+  box-shadow: 0 0 0 3px rgba(153, 27, 27, 0.35), 0 3px 6px rgba(0, 0, 0, 0.35);
+}
+
+.toast.stijl-hologram {
+  overflow: hidden;
+  background: rgba(8, 47, 73, 0.6);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: #cffafe;
+  border: 1px solid rgba(103, 232, 249, 0.75);
+  border-radius: 8px;
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.45), inset 0 0 20px rgba(34, 211, 238, 0.2);
+  animation: toastIn var(--soepel) both, holoFlikker 4s steps(1, end) infinite;
+}
+.toast.stijl-hologram::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(to bottom, rgba(103, 232, 249, 0.12) 0 2px, transparent 2px 4px);
+  pointer-events: none;
+  animation: holoScan 2.5s linear infinite;
+}
+.toast.stijl-hologram h4 { color: #a5f3fc; letter-spacing: 0.03em; text-shadow: 0 0 8px rgba(34, 211, 238, 0.9); }
+.toast.stijl-hologram p { color: #67e8f9; }
+@keyframes holoFlikker {
+  0%, 92%, 96%, 100% { opacity: 1; }
+  94% { opacity: 0.55; }
+}
+@keyframes holoScan {
+  to { background-position: 0 40px; }
+}
+
+.toast.stijl-hemels {
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 0%, #fffdf5, #fff7d6 60%, #fde68a);
+  color: #5a3a00;
+  border: 2px solid #fcd34d;
+  border-radius: 18px;
+  box-shadow: 0 0 24px rgba(253, 224, 71, 0.65), 0 10px 30px -10px rgba(180, 83, 9, 0.5);
+  animation: hemelDaal 0.7s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+.toast.stijl-hemels::before {
+  content: "";
+  position: absolute;
+  inset: -80%;
+  background: repeating-conic-gradient(rgba(253, 224, 71, 0.3) 0 8deg, transparent 8deg 24deg);
+  animation: draaien 14s linear infinite;
+  pointer-events: none;
+}
+.toast.stijl-hemels > * { position: relative; }
+.toast.stijl-hemels h4 { color: #6b3f00; }
+.toast.stijl-hemels p { color: #7c4a00; }
+@keyframes hemelDaal {
+  from { opacity: 0; transform: translateY(-40px) scale(0.95); filter: brightness(1.6); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+/* Het voorbeeldje: een piepkleine melding, zonder animatie. */
+.skin-preview.melding-voorbeeld { width: 104px; border-radius: 12px; background: linear-gradient(160deg, #e0f2fe, #c7d2fe); padding: 0 6px; }
+.melding-voorbeeld .toast.mini {
+  max-width: none;
+  margin: 0;
+  padding: 7px 10px;
+  border-width: 1.5px;
+  box-shadow: 0 3px 8px -3px rgba(11, 37, 69, 0.4);
+  animation: none;
+  rotate: -2deg;
+}
+.melding-voorbeeld .toast.mini h4 { font-size: 11.5px; line-height: 1.2; margin: 0; padding: 0; }
+.melding-voorbeeld .toast.mini:is(.stijl-trofee, .stijl-venster, .stijl-sms) { padding: 6px 10px; display: block; border-radius: 999px; }
+.melding-voorbeeld .toast.mini.stijl-venster { border-radius: 0; padding: 0 0 4px; }
+.melding-voorbeeld .toast.mini.stijl-venster h4 { margin: 2px; padding: 2px 6px; font-size: 10.5px; }
+.melding-voorbeeld .toast.mini.stijl-sms { border-radius: 12px 12px 12px 4px; }
+.melding-voorbeeld .toast.mini:is(.stijl-sms, .stijl-krant)::before,
+.melding-voorbeeld .toast.mini.stijl-venster::after,
+.melding-voorbeeld .toast.mini.stijl-syslog h4::before { content: none; }
+.melding-voorbeeld .toast.mini.stijl-perkament { padding: 8px 10px; }
+.melding-voorbeeld .toast.mini.stijl-perkament::before,
+.melding-voorbeeld .toast.mini.stijl-perkament::after { left: -4px; right: -4px; height: 6px; }
+.melding-voorbeeld .toast.mini.stijl-perkament::before { top: -3px; }
+.melding-voorbeeld .toast.mini.stijl-perkament::after { bottom: -3px; }
+.melding-voorbeeld .toast.mini.stijl-postit { padding-top: 10px; }
+.melding-voorbeeld .toast.mini.stijl-postit::before { width: 30px; height: 8px; top: -4px; }
+
+/* ---------- Klikreeks ---------- */
+
+.combo {
+  position: absolute;
+  right: -16%;
+  top: 0;
+  z-index: 4;
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  margin: 0;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  rotate: 8deg;
+}
+.combo[hidden] { display: none; }
+.combo b { font-weight: 900; }
+.combo small { font-size: 13px; font-weight: 800; }
+.combo.tik { animation: comboTik 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.4); }
+.combo.mijlpaal { animation: comboMijlpaal 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.3); }
+.combo.weg { animation: comboWeg 0.3s ease-in both; }
+@keyframes comboTik {
+  from { scale: 1.3; }
+  to { scale: 1; }
+}
+@keyframes comboMijlpaal {
+  0% { scale: 0.6; }
+  40% { scale: 1.6; }
+  100% { scale: 1; }
+}
+@keyframes comboWeg {
+  to { opacity: 0; translate: 0 -14px; }
+}
+.combo[data-combo="arcade"] b {
+  font: 900 26px/1 "IBM Plex Mono", ui-monospace, monospace;
+  color: color-mix(in oklab, #fde047, #fb923c calc(var(--hitte, 0) * 100%));
+  -webkit-text-stroke: 1px #7f1d1d;
+  text-shadow: 2px 2px 0 #7f1d1d, -1px -1px 0 #7f1d1d, 1px -1px 0 #7f1d1d, -1px 1px 0 #7f1d1d, 4px 4px 0 rgba(11, 37, 69, 0.35);
+}
+.combo[data-combo="vechtspel"] b {
+  font: italic 900 32px/1 Impact, "Arial Black", sans-serif;
+  background: linear-gradient(#fef08a, #f59e0b 50%, #dc2626);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 1px #450a0a;
+  filter: drop-shadow(2px 3px 0 #450a0a);
+}
+.combo[data-combo="vechtspel"] small { font: italic 900 17px/1 Impact, "Arial Black", sans-serif; color: #fff; -webkit-text-stroke: 1px #7f1d1d; text-shadow: 2px 2px 0 #7f1d1d; }
+.combo[data-combo="ritme"] { rotate: 0deg; }
+.combo[data-combo="ritme"] b { font: 800 28px/1 "IBM Plex Sans", sans-serif; color: #0b2545; text-shadow: 0 0 10px #67e8f9, 0 0 2px #fff; }
+.combo[data-combo="ritme"] small {
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  background: linear-gradient(90deg, #22d3ee, #a78bfa, #f472b6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 0 #0b2545);
+}
+.combo[data-combo="sport"] { rotate: -3deg; gap: 0; justify-items: start; }
+.combo[data-combo="sport"] b { background: #dc2626; color: #fff; padding: 4px 9px; font-size: 16px; text-transform: uppercase; letter-spacing: 0.04em; }
+.combo[data-combo="sport"] small { background: #0b2545; color: #fff; padding: 5px 9px; font-size: 12.5px; font-weight: 700; max-width: 190px; white-space: normal; line-height: 1.25; }
+.combo[data-combo="serge"] { rotate: -6deg; }
+.combo[data-combo="serge"] b {
+  display: grid;
+  place-items: center;
+  min-width: 52px;
+  height: 52px;
+  padding: 0 8px;
+  border: 3px solid #dc2626;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #dc2626;
+  font: 700 26px/1 "Bradley Hand", "Segoe Print", "Chalkboard SE", cursive;
+}
+.combo[data-combo="serge"] small { background: rgba(255, 255, 255, 0.92); color: #b91c1c; padding: 3px 7px; border-radius: 4px; font: 700 15px/1.2 "Bradley Hand", "Segoe Print", "Chalkboard SE", cursive; }
+.combo[data-combo="kracht"] b { font: italic 900 22px/1 Impact, "Arial Black", sans-serif; color: #fef08a; letter-spacing: 0.03em; text-shadow: 0 0 8px #facc15, 0 0 18px #f59e0b, 2px 2px 0 #7c2d12; }
+.combo[data-combo="kracht"] small { background: #dc2626; color: #fff; padding: 4px 7px; font: italic 900 14px/1 Impact, "Arial Black", sans-serif; animation: krachtTril 0.12s steps(2) infinite; }
+.combo[data-combo="kracht"]::before {
+  content: "";
+  position: absolute;
+  inset: -40% -25%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(250, 204, 21, calc(0.25 + var(--hitte, 0) * 0.5)), transparent);
+  animation: aura 0.4s ease-in-out infinite alternate;
+}
+@keyframes krachtTril {
+  0% { translate: -1px 0; }
+  100% { translate: 1px 1px; }
+}
+@keyframes aura {
+  to { scale: 1.15; }
+}
+.combo[data-combo="hemels"] { rotate: 0deg; }
+.combo[data-combo="hemels"] b { font: 700 32px/1 Georgia, "Iowan Old Style", serif; color: #fde68a; letter-spacing: 0.05em; -webkit-text-stroke: 1px #92400e; text-shadow: 0 0 10px #fbbf24, 0 2px 0 #92400e; }
+.combo[data-combo="hemels"]::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -14px;
+  width: 64%;
+  height: 10px;
+  translate: -50% 0;
+  border: 3px solid #fde68a;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #fde68a;
+}
+.skin-preview.combo-voorbeeld { background: linear-gradient(160deg, #38bdf8, #4f46e5); }
+.combo-voorbeeld .combo { position: relative; right: auto; top: auto; rotate: 0deg; animation: none; }
+.combo-voorbeeld .combo b { font-size: 14px !important; min-width: 0 !important; height: auto !important; padding: 2px 4px !important; border-width: 2px !important; -webkit-text-stroke-width: 0.8px; text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5); }
+.combo-voorbeeld .combo::before { display: none; }
+
+/* ---------- Muisaanwijzer ---------- */
+/* Overal dezelfde aanwijzer, ook op knoppen. In tekstvakken blijft het een
+   tekstcursor, anders zie je niet waar je typt. */
+
+body[data-cursor],
+body[data-cursor] * { cursor: var(--cursor), auto; }
+body[data-cursor] :is(input:not([type="checkbox"], [type="range"]), textarea, select) { cursor: text; }
+body[data-cursor] select { cursor: pointer; }
+.skin-preview.cursor-voorbeeld { background: linear-gradient(160deg, #f6f9fd, #dbeafe); }
+.skin-preview.cursor-voorbeeld img { width: 32px; height: 32px; object-fit: contain; }
+
+/* ---------- Opstartscherm ---------- */
+
+.opstart {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  text-align: center;
+  animation: opIn 0.25s ease-out both;
+}
+.opstart.weg { animation: opUit 0.38s ease-in both; }
+.opstart::backdrop { background: transparent; }
+.opstart.stil,
+.opstart.stil *,
+.opstart.stil *::before,
+.opstart.stil *::after { animation-duration: 0s !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; }
+@keyframes opIn {
+  from { opacity: 0; }
+}
+@keyframes opUit {
+  to { opacity: 0; }
+}
+
+.opstart:is([data-opstart="ios"], [data-opstart="bios"]) { background: #000; place-items: start; text-align: left; }
+.op-console {
+  margin: 0;
+  padding: clamp(16px, 4vw, 48px);
+  color: #d4d4d4;
+  font: 500 clamp(11px, 1.5vw, 16px)/1.45 "IBM Plex Mono", ui-monospace, monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.opstart[data-opstart="bios"] .op-console { color: #bdbdbd; }
+.opstart[data-opstart="bios"]::after {
+  content: "★ SERGE\A  ENERGIE";
+  white-space: pre;
+  position: absolute;
+  top: clamp(16px, 4vw, 48px);
+  right: clamp(16px, 4vw, 48px);
+  padding: 8px 12px;
+  border: 2px solid #4ade80;
+  color: #4ade80;
+  font: 700 clamp(12px, 1.6vw, 18px)/1.2 "IBM Plex Mono", ui-monospace, monospace;
+}
+
+.opstart[data-opstart="arcade"] { background: #000; color: #fff; font-family: "IBM Plex Mono", ui-monospace, monospace; }
+.opstart[data-opstart="arcade"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 3px);
+  pointer-events: none;
+}
+.op-score { position: absolute; top: 22px; left: 0; right: 0; display: flex; justify-content: space-around; font-weight: 700; letter-spacing: 0.12em; color: #f87171; }
+.op-score span:last-child { color: #fde047; }
+.op-titel { display: grid; gap: 6px; font: 900 clamp(44px, 11vw, 116px)/0.95 "IBM Plex Sans", sans-serif; letter-spacing: 0.04em; animation: arcadeIn 0.8s steps(8, end) both; }
+.op-titel span:first-child { color: #fde047; text-shadow: 4px 4px 0 #dc2626, 8px 8px 0 #7c3aed; }
+.op-titel span:last-child { color: #38bdf8; text-shadow: 4px 4px 0 #1d4ed8, 8px 8px 0 #7c3aed; }
+@keyframes arcadeIn {
+  from { transform: translateY(-60vh); }
+}
+.op-munt { margin-top: 30px; font-weight: 700; letter-spacing: 0.3em; animation: knipper 0.8s steps(1, end) infinite; }
+.op-start { margin-top: 10px; font-weight: 700; letter-spacing: 0.3em; color: #4ade80; opacity: 0; animation: knipper 0.5s 1.4s steps(1, end) infinite; }
+@keyframes knipper {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.op-voet { position: absolute; bottom: 22px; left: 24px; right: 24px; display: flex; justify-content: space-between; color: #a3a3a3; font-size: 13px; letter-spacing: 0.15em; }
+
+.opstart[data-opstart="retro"] { background: linear-gradient(#1e6fd9, #7fb6ff 70%, #d7e9ff); color: #fff; }
+.op-wolken {
+  position: absolute;
+  inset: -10%;
+  background:
+    radial-gradient(ellipse 18% 9% at 20% 30%, rgba(255, 255, 255, 0.9), transparent 70%),
+    radial-gradient(ellipse 13% 7% at 28% 26%, #fff, transparent 70%),
+    radial-gradient(ellipse 22% 10% at 75% 62%, rgba(255, 255, 255, 0.85), transparent 70%),
+    radial-gradient(ellipse 12% 6% at 66% 58%, #fff, transparent 70%),
+    radial-gradient(ellipse 16% 8% at 45% 86%, rgba(255, 255, 255, 0.8), transparent 70%),
+    radial-gradient(ellipse 10% 5% at 86% 18%, rgba(255, 255, 255, 0.8), transparent 70%);
+  animation: wolkenDrijven 16s linear infinite alternate;
+}
+@keyframes wolkenDrijven {
+  to { transform: translateX(8%); }
+}
+.op-logo { position: relative; display: flex; align-items: center; gap: 18px; font: italic 700 clamp(40px, 8vw, 88px)/1 "IBM Plex Sans", sans-serif; text-shadow: 2px 3px 0 rgba(0, 0, 0, 0.25); }
+.op-logo sup { margin-left: 4px; font-size: 0.45em; color: #ffe066; }
+.op-embleem { display: grid; place-items: center; width: 1.25em; height: 1.25em; border-radius: 0.22em; background: linear-gradient(145deg, #fff, #dbeafe); box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.35); font-size: 0.8em; font-style: normal; text-shadow: none; transform: rotate(-6deg); }
+.op-laad { position: absolute; bottom: 14%; width: min(60vw, 420px); height: 18px; border: 2px solid rgba(255, 255, 255, 0.85); border-radius: 3px; overflow: hidden; background: rgba(0, 0, 0, 0.15); }
+.op-laad i { display: block; width: 30%; height: 100%; background: repeating-linear-gradient(90deg, #1d4ed8 0 14px, transparent 14px 18px); animation: laadSchuif 1.2s linear infinite; }
+@keyframes laadSchuif {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(340%); }
+}
+.op-klein { position: absolute; bottom: 6%; margin: 0; padding: 0 16px; font-size: 13px; color: #1e3a8a; }
+
+.opstart[data-opstart="film"] { background: #000; color: #f5f5f4; font-family: Georgia, "Times New Roman", serif; }
+.opstart[data-opstart="film"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("img/korrel.png");
+  opacity: 0.1;
+  pointer-events: none;
+  animation: korrelSchuif 0.3s steps(3) infinite;
+}
+@keyframes korrelSchuif {
+  to { background-position: 60px 40px; }
+}
+.op-regel { position: absolute; margin: 0; padding: 0 24px; font-size: clamp(13px, 2vw, 20px); letter-spacing: 0.35em; opacity: 0; }
+.op-regel.een { animation: filmRegel 1.3s 0.1s ease-in-out both; }
+.op-regel.twee { animation: filmRegel 1.3s 1.35s ease-in-out both; }
+.op-regel.drie { animation: filmRegel 1.1s 2.55s ease-in-out both; }
+@keyframes filmRegel {
+  0% { opacity: 0; transform: scale(0.98); }
+  25%, 75% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.02); }
+}
+.op-film {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  font: 800 clamp(44px, 10vw, 120px)/0.95 "IBM Plex Sans", sans-serif;
+  letter-spacing: 0.08em;
+  background: linear-gradient(180deg, #fff7d6, #fbbf24 55%, #b45309);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0;
+  animation: filmTitel 1.2s 3.5s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+.op-film::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -20%;
+  width: 140%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #fff, #7dd3fc, transparent);
+  filter: blur(1px);
+  opacity: 0;
+  animation: flare 1.2s 3.6s ease-out both;
+}
+@keyframes filmTitel {
+  from { opacity: 0; transform: scale(1.4); filter: blur(8px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+@keyframes flare {
+  0% { opacity: 0; transform: scaleX(0.2); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: scaleX(1); }
+}
+
+.opstart[data-opstart="hemels"] { background: radial-gradient(ellipse at 50% 40%, #fffdf2, #fff3c4 45%, #fcd97a 80%, #f5b94a); color: #7c4a00; }
+.op-stralen {
+  position: absolute;
+  inset: -50%;
+  background: repeating-conic-gradient(rgba(255, 255, 255, 0.6) 0 6deg, transparent 6deg 18deg);
+  -webkit-mask: radial-gradient(circle, #000 15%, transparent 60%);
+  mask: radial-gradient(circle, #000 15%, transparent 60%);
+  animation: draaien 30s linear infinite;
+}
+.op-wolk {
+  position: absolute;
+  top: -10%;
+  bottom: -10%;
+  width: 62%;
+  background:
+    radial-gradient(ellipse 50% 30% at 70% 50%, #fff 40%, transparent 70%),
+    radial-gradient(ellipse 42% 26% at 58% 26%, #fff 40%, transparent 70%),
+    radial-gradient(ellipse 46% 28% at 64% 76%, #fff 40%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 30% 50%, #fffaf0 50%, transparent 72%);
+}
+.op-wolk.links { left: 0; animation: wolkOpen 2.4s 0.3s cubic-bezier(0.6, 0, 0.3, 1) both; }
+.op-wolk.rechts { right: 0; transform: scaleX(-1); animation: wolkOpenRechts 2.4s 0.3s cubic-bezier(0.6, 0, 0.3, 1) both; }
+@keyframes wolkOpen {
+  to { transform: translateX(-80%); }
+}
+@keyframes wolkOpenRechts {
+  from { transform: scaleX(-1); }
+  to { transform: scaleX(-1) translateX(-80%); }
+}
+.op-ontwaakt {
+  position: relative;
+  margin: 0;
+  font: 700 clamp(28px, 6vw, 64px)/1 Georgia, "Iowan Old Style", serif;
+  letter-spacing: 0.06em;
+  color: #92400e;
+  text-shadow: 0 0 20px #fff, 0 0 40px #fde68a;
+  opacity: 0;
+  animation: ontwaak 1.6s 1.4s ease-out both;
+}
+@keyframes ontwaak {
+  from { opacity: 0; transform: translateY(12px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+.skin-preview.opstart-voorbeeld { font-size: 22px; background: #000; }
+.skin-preview.opstart-voorbeeld[data-opstart="geen"] { background: var(--vlak-zacht); color: var(--blauw-600); }
+.skin-preview.opstart-voorbeeld[data-opstart="ios"] { background: #000; color: #4ade80; box-shadow: 0 0 0 2px #4ade80; }
+.skin-preview.opstart-voorbeeld[data-opstart="bios"] { background: #0000aa; }
+.skin-preview.opstart-voorbeeld[data-opstart="arcade"] { background: radial-gradient(circle, #312e81, #000); }
+.skin-preview.opstart-voorbeeld[data-opstart="retro"] { background: linear-gradient(#1e6fd9, #d7e9ff); }
+.skin-preview.opstart-voorbeeld[data-opstart="film"] { background: radial-gradient(circle, #44403c, #000); }
+.skin-preview.opstart-voorbeeld[data-opstart="hemels"] { background: radial-gradient(circle, #fffdf2, #fcd97a); }
+
+/* Met animaties uit staat alles uit deel 3 stil. */
+body.rustig :is(
+  .serge[data-houding], .houding-voorbeeld, .acc-svg, .acc-svg *, .accessoire .teken,
+  .combo, .combo *, .combo::before, .toast[class*="stijl-"], .toast[class*="stijl-"]::before, .toast[class*="stijl-"]::after
+) { animation: none !important; }
