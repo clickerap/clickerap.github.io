@@ -19,12 +19,12 @@ export const KLASSIEK = [
   "Glasvezelkabels gloeien van de activiteit, de bandbreedte is enorm!",
   "Quantum Link tot stand gebracht. De toekomst van netwerken is hier.",
   "Een datacenter is zojuist geüpgraded. Meer packets onderweg!",
-  "Serge's Brein verwerkt miljarden packets per seconde. Indrukwekkend.",
+  "Het datacenter verwerkt miljarden packets per seconde. Indrukwekkend.",
   "Active Directory is nu online, alle gebruikers zijn geauthenticeerd.",
   "Proxmox Cluster: nieuwe virtuele machines worden uitgerold.",
-  "Hyper-V Farm is uitgebreid, de virtualisatie is ongeëvenaard.",
+  "Het vSphere Cluster is uitgebreid, de virtualisatie is ongeëvenaard.",
   "Een gouden packet is gespot! Snel klikken!",
-  "De Singularity is nabij... of is het al begonnen?",
+  "De Singulariteit is nabij... of is het al begonnen?",
   "Netwerkverkeer stijgt exponentieel, Serge houdt het nauwlettend in de gaten.",
   "Nieuwe security patch geïnstalleerd. De verdediging is sterker dan ooit.",
   "Energieverbruik van het datacenter is historisch hoog, maar de efficiëntie ook.",
@@ -36,8 +36,8 @@ export const KLASSIEK = [
   "Serge is een legende in de netwerkindustrie, zijn naam klinkt overal.",
 ];
 
-// Deze verschenen vroeger pas na Evolve; nu komen ze langzaam vaker voorbij
-// naarmate je verder komt.
+// Deze verschenen vroeger pas na Evolve; nu komen ze erbij zodra je voorbij
+// het miljard bent of een keer bent afgestudeerd.
 export const TRANSCENDENT = [
   "Serge is nu één met het universum.",
   "Regenbogen stromen door de glasvezelkabels.",

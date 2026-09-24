@@ -1,7 +1,7 @@
 // Verborgen dingen. Niets hiervan staat in de uitleg, alles geeft een prestatie.
 // Wie de lijst wil weten, moet de broncode maar lezen — dat mag.
 
-import { G, D, findEgg, earn, recompute } from "./state.js";
+import { G, D, findEgg, earn, recompute, UPGRADES, ACHIEVEMENTS } from "./state.js";
 import { on, emit } from "./bus.js";
 import { toast, sparks, chord } from "./ui/fx.js";
 import { fmt } from "./format.js";
@@ -94,7 +94,7 @@ export function initEggs() {
     }
   });
 
-  // Klokgebonden: wordt elke minuut nagekeken.
+  // Klokgebonden: wordt elke twintig seconden nagekeken.
   const klok = () => {
     const nu = new Date();
     if (nu.getHours() === 13 && nu.getMinutes() === 37) {
@@ -197,19 +197,13 @@ function uitvoeren(raw) {
       return { text: `${b.name}: ${fmt(n)}.` };
     }
     case "upgrades": {
-      import("./data/upgrades.js").then(({ UPGRADES }) => {
-        for (const u of UPGRADES) G.upgrades[u.id] = true;
-        G.stats.upgrades = UPGRADES.length;
-        recompute();
-      });
+      for (const u of UPGRADES) G.upgrades[u.id] = true;
+      recompute();
       return { text: "Alle upgrades vrijgegeven." };
     }
     case "prestaties": {
-      import("./data/achievements.js").then(({ ACHIEVEMENTS }) => {
-        for (const a of ACHIEVEMENTS) G.achievements[a.id] = true;
-        G.stats.achievements = ACHIEVEMENTS.length;
-        recompute();
-      });
+      for (const a of ACHIEVEMENTS) G.achievements[a.id] = true;
+      recompute();
       return { text: "Alle prestaties vrijgegeven." };
     }
     case "punten": {

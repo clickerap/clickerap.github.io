@@ -4,16 +4,18 @@
 import { G, D, earn, unlock } from "../state.js";
 import { fmt, fmtTime } from "../format.js";
 import { toast, blip, chord } from "../ui/fx.js";
+import { INFO_KNOP } from "./info.js";
 
 const COOLDOWN = 150; // seconden tussen twee beloonde vragen
+const UITLEG_MS = 2600; // hoe lang het antwoord in beeld blijft
 
-function intToIp(n) {
+export function intToIp(n) {
   return [(n >>> 24) & 255, (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join(".");
 }
-function ipToInt(ip) {
+export function ipToInt(ip) {
   return ip.split(".").reduce((acc, part) => ((acc << 8) + Number(part)) >>> 0, 0) >>> 0;
 }
-function maskInt(prefix) {
+export function maskInt(prefix) {
   return prefix === 0 ? 0 : (0xffffffff << (32 - prefix)) >>> 0;
 }
 function randomIp(prefix) {
@@ -39,7 +41,7 @@ function shuffle(list) {
   return out;
 }
 
-const GENERATORS = [
+export const GENERATORS = [
   // Netwerkadres
   () => {
     const prefix = 8 + rnd(22);
@@ -122,16 +124,11 @@ const GENERATORS = [
   },
 ];
 
-let huidig = null;
-let beantwoord = false;
-
-function nieuweVraag() {
+export function nieuweVraag() {
   const gen = GENERATORS[rnd(GENERATORS.length)]();
-  huidig = { ...gen, opties: shuffle([gen.goed, ...gen.fout]).slice(0, 4) };
-  if (!huidig.opties.includes(huidig.goed)) huidig.opties[0] = huidig.goed;
-  huidig.opties = shuffle(huidig.opties);
-  beantwoord = false;
-  return huidig;
+  const opties = shuffle([gen.goed, ...gen.fout]).slice(0, 4);
+  if (!opties.includes(gen.goed)) opties[0] = gen.goed;
+  return { ...gen, opties: shuffle(opties) };
 }
 
 function beloning() {
@@ -140,86 +137,142 @@ function beloning() {
   return basis * reeks * D.minigameReward;
 }
 
+// De open vraag blijft staan tot je hem beantwoordt, ook als je even naar
+// een andere opdracht gaat. Na een antwoord blijft de uitleg kort in beeld.
+let huidig = null;
+let uitslag = null;
+
 export const quiz = {
   id: "quiz",
   name: "Overhoring",
   icon: "📝",
   eis: "Vraagt 5.000 packets",
   unlocked: () => G.stats.lifetime >= 5e3,
+  info: [
+    { kop: "Wat is het", tekst: "Serge stelt één subnetvraag tegelijk, met vier antwoorden om uit te kiezen. De hoofdstukken over IP-adressen en subnetten in de cursus helpen." },
+    {
+      kop: "Soorten vragen",
+      punten: [
+        "Het netwerkadres of het broadcastadres van een adres met een prefix.",
+        "Hoeveel bruikbare hostadressen een prefix heeft.",
+        "Welk subnetmasker bij een prefix hoort.",
+        "Het kleinste subnet waar een aantal hosts in past.",
+        "Of twee adressen in hetzelfde subnet zitten.",
+      ],
+    },
+    {
+      kop: "Beloning",
+      punten: [
+        "Een goed antwoord levert anderhalve minuut van je productie op, en minstens 500 packets.",
+        "Elk goed antwoord op rij telt 12% extra, tot drie keer zoveel.",
+        `Na een goed antwoord komt de volgende vraag na ${COOLDOWN / 60 === 2.5 ? "tweeënhalve minuut" : `${COOLDOWN} seconden`}. Na een fout antwoord wacht je half zo lang, en begint je reeks opnieuw.`,
+      ],
+    },
+  ],
+
   render(root) {
-    const q = G.minigames.quiz;
-    const klaar = Date.now() >= (q.nextAt || 0);
     root.innerHTML = `
       <div class="labo-kop">
         <h3>Serge's overhoring</h3>
-        <span>reeks ${fmt(q.streak)} · beste ${fmt(q.best)}</span>
+        ${INFO_KNOP}
+        <span id="quiz-reeks"></span>
       </div>
       <p class="labo-uitleg">Eén subnetvraag per keer. Goed antwoord levert packets op en je reeks telt door. Fout antwoord zet de reeks op nul.</p>
       <div class="vraag" id="quiz-vraag"></div>
       <div class="quiz-opties" id="quiz-opties"></div>
-      <p class="melding" id="quiz-melding"></p>`;
+      <p class="melding" id="quiz-melding" role="status"></p>`;
+    this.vul(root);
+  },
 
+  vul(root) {
+    const q = G.minigames.quiz;
     const vraagEl = root.querySelector("#quiz-vraag");
     const optiesEl = root.querySelector("#quiz-opties");
     const melding = root.querySelector("#quiz-melding");
+    root.querySelector("#quiz-reeks").textContent = `reeks ${fmt(q.streak)} · beste ${fmt(q.best)}`;
+    optiesEl.innerHTML = "";
+    if (uitslag && Date.now() >= uitslag.tot) uitslag = null;
 
-    if (!klaar) {
-      vraagEl.textContent = "Serge zoekt een nieuwe vraag.";
-      optiesEl.innerHTML = "";
-      const tik = () => {
-        const over = ((q.nextAt || 0) - Date.now()) / 1000;
-        if (over <= 0) {
-          this.render(root);
-          return;
-        }
-        melding.textContent = `Volgende vraag over ${fmtTime(over)}.`;
-        setTimeout(tik, 1000);
-      };
-      tik();
+    if (uitslag) {
+      vraagEl.innerHTML = "<b></b>";
+      vraagEl.firstChild.textContent = uitslag.vraag.vraag;
+      for (const optie of uitslag.vraag.opties) {
+        const knop = document.createElement("button");
+        knop.type = "button";
+        knop.className = "quiz-optie";
+        knop.disabled = true;
+        knop.textContent = optie;
+        if (optie === uitslag.vraag.goed) knop.classList.add("goed");
+        else if (optie === uitslag.gekozen) knop.classList.add("fout");
+        optiesEl.append(knop);
+      }
+      melding.classList.toggle("fout", !uitslag.goed);
+      melding.textContent = uitslag.tekst;
       return;
     }
 
-    const vraag = nieuweVraag();
-    vraagEl.innerHTML = `<b>${vraag.vraag}</b>`;
-    optiesEl.innerHTML = "";
-    for (const optie of vraag.opties) {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "quiz-optie";
-      btn.textContent = optie;
-      btn.addEventListener("click", () => {
-        if (beantwoord) return;
-        beantwoord = true;
-        const goed = optie === vraag.goed;
-        for (const knop of optiesEl.children) {
-          if (knop.textContent === vraag.goed) knop.classList.add("goed");
-          else if (knop === btn) knop.classList.add("fout");
-        }
-        if (goed) {
-          const winst = beloning();
-          earn(winst);
-          q.streak++;
-          q.correct++;
-          q.best = Math.max(q.best, q.streak);
-          q.nextAt = Date.now() + COOLDOWN * 1000;
-          melding.classList.remove("fout");
-          melding.textContent = `Goed. ${fmt(winst)} packets erbij. ${vraag.uitleg}`;
-          chord([620, 820, 1040]);
-          unlock("quiz-1");
-          if (q.streak >= 10) unlock("quiz-10");
-          if (q.streak >= 25) unlock("quiz-25");
-        } else {
-          q.wrong++;
-          q.streak = 0;
-          q.nextAt = Date.now() + (COOLDOWN / 2) * 1000;
-          melding.classList.add("fout");
-          melding.textContent = `Fout. ${vraag.uitleg}`;
-          blip(200, 0.16, 0.05);
-          toast({ title: "Serge zucht", text: "Nog eens rustig nakijken.", icon: "📐" });
-        }
-        setTimeout(() => this.render(root), 2600);
-      });
-      optiesEl.append(btn);
+    const over = ((q.nextAt || 0) - Date.now()) / 1000;
+    if (over > 0) {
+      vraagEl.textContent = "Serge zoekt een nieuwe vraag.";
+      melding.classList.remove("fout");
+      melding.textContent = `Volgende vraag over ${fmtTime(over)}.`;
+      return;
     }
+
+    if (!huidig) huidig = nieuweVraag();
+    vraagEl.innerHTML = "<b></b>";
+    vraagEl.firstChild.textContent = huidig.vraag;
+    melding.textContent = "";
+    for (const optie of huidig.opties) {
+      const knop = document.createElement("button");
+      knop.type = "button";
+      knop.className = "quiz-optie";
+      knop.textContent = optie;
+      knop.addEventListener("click", () => this.antwoord(root, optie));
+      optiesEl.append(knop);
+    }
+  },
+
+  antwoord(root, optie) {
+    if (!huidig) return;
+    const q = G.minigames.quiz;
+    const vraag = huidig;
+    huidig = null;
+    const goed = optie === vraag.goed;
+    let tekst;
+    if (goed) {
+      const winst = beloning();
+      earn(winst);
+      q.streak++;
+      q.correct++;
+      q.best = Math.max(q.best, q.streak);
+      q.nextAt = Date.now() + COOLDOWN * 1000;
+      tekst = `Goed. ${fmt(winst)} packets erbij. ${vraag.uitleg}`;
+      chord([620, 820, 1040]);
+      unlock("quiz-1");
+      if (q.streak >= 10) unlock("quiz-10");
+      if (q.streak >= 25) unlock("quiz-25");
+    } else {
+      q.wrong++;
+      q.streak = 0;
+      q.nextAt = Date.now() + (COOLDOWN / 2) * 1000;
+      tekst = `Fout. ${vraag.uitleg}`;
+      blip(200, 0.16, 0.05);
+      toast({ title: "Serge zucht", text: "Nog eens rustig nakijken.", icon: "📐" });
+    }
+    uitslag = { vraag, gekozen: optie, goed, tekst, tot: Date.now() + UITLEG_MS };
+    this.vul(root);
+  },
+
+  // Loopt alleen zolang de overhoring in beeld is.
+  update(root) {
+    if (uitslag) {
+      if (Date.now() >= uitslag.tot) {
+        uitslag = null;
+        this.vul(root);
+      }
+      return;
+    }
+    if (!huidig) this.vul(root);
   },
 };

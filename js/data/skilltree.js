@@ -44,13 +44,23 @@ export const NODES = [
 
 export const NODE_BY_ID = Object.fromEntries(NODES.map((n) => [n.id, n]));
 
+// Bij hoeveel packets totaal je eerste studiepunt komt. Het tabblad Studie gaat
+// open bij een tiende daarvan, zodat je ziet waar je naartoe werkt.
+export const ECTS_BASIS = 1e10;
+export const STUDIE_OPEN = ECTS_BASIS / 10;
+
+// Elk studiepunt dat je ooit kreeg, geeft blijvend 10% extra productie, ook
+// als je het alweer hebt uitgegeven. Bij 1% was afstuderen trager dan gewoon
+// doorspelen.
+export const BONUS_PER_PUNT = 0.1;
+
 // Studiepunten die je zou krijgen bij het afstuderen, met wat je nu hebt.
 export function ectsFor(lifetime, gainMult = 1) {
-  if (lifetime < 1e12) return 0;
-  return Math.floor(Math.cbrt(lifetime / 1e12) * gainMult);
+  if (lifetime < ECTS_BASIS) return 0;
+  return Math.floor(Math.cbrt(lifetime / ECTS_BASIS) * gainMult);
 }
 
 // Hoeveel je in totaal nodig hebt voor `n` studiepunten.
 export function lifetimeForEcts(n, gainMult = 1) {
-  return Math.pow(n / gainMult, 3) * 1e12;
+  return Math.pow(n / gainMult, 3) * ECTS_BASIS;
 }

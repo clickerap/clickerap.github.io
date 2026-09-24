@@ -4,7 +4,7 @@
 // effect  wordt door state.recompute() toegepast, nooit uitgevoerd als code
 // req     wanneer de upgrade in de lijst verschijnt (g = het spelstaat-object)
 
-import { BUILDINGS, TIER_AT, TIER_COST } from "./buildings.js";
+import { BUILDINGS, BUILDING_BY_ID, TIER_AT, TIER_COST } from "./buildings.js";
 
 function tierUpgrades() {
   const out = [];
@@ -253,7 +253,8 @@ const KOFFIE_UPGRADES = [
   req: (g) => g.stats.achievements >= 5 + i * 8,
 }));
 
-// Synergie: het ene gebouw maakt het andere beter.
+// Synergie: het ene gebouw maakt het andere beter, 1% per exemplaar.
+const SYNERGIE_PER_STUK = 0.01;
 const SYNERGY_PAIRS = [
   ["syn-trunk", "Uplink-trunk", "🔗", "router", "switch", 4e6, "Elke switch duwt je routers vooruit."],
   ["syn-uplink", "Glasvezel-uplink", "🪢", "fiber", "router", 4e7, "Routers vragen om meer glas."],
@@ -270,9 +271,9 @@ const SYNERGY_PAIRS = [
   name,
   icon,
   desc,
-  note: null,
+  note: `Elk exemplaar van ${BUILDING_BY_ID[from].name} geeft ${BUILDING_BY_ID[to].name} ${SYNERGIE_PER_STUK * 100}% extra.`,
   cost,
-  effect: { synergy: { to, from, per: 0.001 } },
+  effect: { synergy: { to, from, per: SYNERGIE_PER_STUK } },
   req: (g) => (g.buildings[to] || 0) >= 10 && (g.buildings[from] || 0) >= 25,
 }));
 

@@ -7,8 +7,11 @@
 
 import { G, D, earn, unlock } from "../state.js";
 import { fmt, fmtTime } from "../format.js";
-import { toast, chord, blip } from "../ui/fx.js";
+import { toast, chord, blip, hoverCapable } from "../ui/fx.js";
 import { egg } from "../eggs.js";
+import { POORTEN, geldigAdres, normaliseerPoort } from "../data/terminal.js";
+import { VERSIE } from "../versie.js";
+import { INFO_KNOP } from "./info.js";
 
 const PROMPTS = {
   user: (h) => `${h}>`,
@@ -17,16 +20,31 @@ const PROMPTS = {
   iface: (h, i) => `${h}(config-if${i ? `-${i}` : ""})#`,
 };
 
-const POORTEN = ["gi0/1", "gi0/2", "gi0/3", "gi0/4", "gi0/5", "gi0/6", "gi0/7", "gi0/8"];
 const COOLDOWN = 150;
+const MAX_REGELS = 300;
 
+// De uitvoer groeit regel voor regel. `reeks` gaat omhoog als hij geleegd of
+// ingekort wordt; dan moet het scherm helemaal opnieuw, anders alleen erbij.
 let uitvoer = [];
+let reeks = 0;
 let historie = [];
 let historiePos = -1;
 
 function schrijf(tekst, klasse = "uit") {
   uitvoer.push({ tekst, klasse });
-  if (uitvoer.length > 300) uitvoer = uitvoer.slice(-300);
+  if (uitvoer.length > MAX_REGELS) {
+    uitvoer = uitvoer.slice(-MAX_REGELS);
+    reeks++;
+  }
+}
+
+function leeg() {
+  uitvoer = [];
+  reeks++;
+}
+
+export function uitvoerRegels() {
+  return uitvoer.map((r) => r.tekst);
 }
 
 function staat() {
@@ -40,16 +58,6 @@ function staat() {
 function poort(cli, naam) {
   if (!cli.interfaces[naam]) cli.interfaces[naam] = { ip: null, mask: null, up: false, omschrijving: null };
   return cli.interfaces[naam];
-}
-
-// gi0/1, g0/1, gig0/1 en GigabitEthernet0/1 zijn hetzelfde ding.
-function normaliseerPoort(tekst) {
-  const m = String(tekst).toLowerCase().match(/^(?:g|gi|gig|gigabit|gigabitethernet)\s*(\d+\/\d+)$/);
-  return m ? `gi${m[1]}` : null;
-}
-
-function geldigAdres(tekst) {
-  return /^(\d{1,3}\.){3}\d{1,3}$/.test(tekst) && tekst.split(".").every((d) => Number(d) <= 255);
 }
 
 // --------------------------------------------------------------- Opdracht
@@ -96,8 +104,8 @@ function beloonOpdracht(cli) {
 // Elke tak is een woord dat hier mag staan. `arg` betekent: hierna volgt
 // iets vrijs (een naam, een adres). `doe` voert het uit.
 
-function grammatica(cli) {
-  const tonen = {
+function toonCommandos(cli) {
+  return {
     "ip": {
       hulp: "IP-informatie",
       kinderen: {
@@ -110,12 +118,34 @@ function grammatica(cli) {
     "mac": { hulp: "MAC-adressen", kinderen: { "address-table": { hulp: "Geleerde adressen", doe: () => schrijf("Alle adressen zijn geleerd. En weer vergeten. En weer geleerd.") } } },
     "clock": { hulp: "De klok", doe: () => schrijf(new Date().toLocaleString("nl-BE")) },
   };
+}
 
-  const gedeeld = {
-    "show": { hulp: "Informatie tonen", kinderen: tonen },
+// Wat in de bevoorrechte modus kan. Via "do" ook vanuit de configuratie.
+function execCommandos(cli) {
+  return {
+    "show": { hulp: "Informatie tonen", kinderen: toonCommandos(cli) },
     "ping": { hulp: "Bereikbaarheid testen", arg: "adres", doe: (a) => doePing(a[0]) },
-    "clear": { hulp: "Scherm leegmaken", doe: () => { uitvoer = []; } },
+    "write": { hulp: "Configuratie bewaren", kinderen: { memory: { hulp: "Naar startup-config", doe: () => bewaar(cli) } }, doe: () => bewaar(cli) },
+    "copy": {
+      hulp: "Configuratie kopiëren",
+      kinderen: {
+        "running-config": {
+          hulp: "De huidige configuratie",
+          kinderen: { "startup-config": { hulp: "Naar het opstartgeheugen", doe: () => bewaar(cli) } },
+        },
+      },
+    },
   };
+}
+
+function grammatica(cli) {
+  const gedeeld = {
+    "show": { hulp: "Informatie tonen", kinderen: toonCommandos(cli) },
+    "ping": { hulp: "Bereikbaarheid testen", arg: "adres", doe: (a) => doePing(a[0]) },
+    "clear": { hulp: "Scherm leegmaken", doe: () => leeg() },
+  };
+  const interfaceKiezen = { hulp: "Een interface kiezen", arg: "naam", doe: (a) => kiesPoort(cli, a.join("")) };
+  const doen = { hulp: "Een commando uit de bevoorrechte modus", kinderen: execCommandos(cli) };
 
   if (cli.mode === "user") {
     return { ...gedeeld, enable: { hulp: "Naar bevoorrechte modus", doe: () => { cli.mode = "enable"; schrijf("% Bevoorrechte modus actief.", "ok"); } } };
@@ -124,8 +154,8 @@ function grammatica(cli) {
   if (cli.mode === "enable") {
     return {
       ...gedeeld,
+      ...execCommandos(cli),
       configure: { hulp: "Configuratiemodus", kinderen: { terminal: { hulp: "Via deze terminal", doe: () => { cli.mode = "config"; schrijf("Enter configuration commands, one per line. End with CNTL/Z."); } } } },
-      write: { hulp: "Configuratie bewaren", kinderen: { memory: { hulp: "Naar startup-config", doe: () => bewaar(cli) } }, doe: () => bewaar(cli) },
       disable: { hulp: "Terug naar gebruikersmodus", doe: () => { cli.mode = "user"; } },
       reload: { hulp: "Opnieuw opstarten", doe: () => schrijf("% Dat gaan we niet doen tijdens de les.", "err") },
     };
@@ -134,8 +164,9 @@ function grammatica(cli) {
   if (cli.mode === "config") {
     return {
       ...gedeeld,
-      interface: { hulp: "Een interface kiezen", arg: "naam", doe: (a) => kiesPoort(cli, a[0]) },
-      hostname: { hulp: "De naam van dit apparaat", arg: "naam", doe: (a) => { cli.hostname = (a[0] || "SERGE").slice(0, 16).toUpperCase(); } },
+      do: doen,
+      interface: interfaceKiezen,
+      hostname: { hulp: "De naam van dit apparaat", arg: "naam", doe: (a) => zetHostnaam(cli, a[0]) },
       exit: { hulp: "Een niveau terug", doe: () => { cli.mode = "enable"; } },
       end: { hulp: "Terug naar bevoorrechte modus", doe: () => { cli.mode = "enable"; } },
     };
@@ -144,6 +175,8 @@ function grammatica(cli) {
   // interfacemodus
   return {
     ...gedeeld,
+    do: doen,
+    interface: interfaceKiezen,
     ip: { hulp: "Adressering", kinderen: { address: { hulp: "Adres en masker instellen", arg: "adres masker", doe: (a) => zetAdres(cli, a) } } },
     no: {
       hulp: "Iets ongedaan maken",
@@ -154,7 +187,7 @@ function grammatica(cli) {
       },
     },
     shutdown: { hulp: "De interface uitzetten", doe: () => zetUp(cli, false) },
-    description: { hulp: "Omschrijving instellen", arg: "tekst", doe: (a) => { poort(cli, cli.iface).omschrijving = a.join(" "); schrijf("% Omschrijving ingesteld. Serge waardeert dit meer dan je denkt.", "ok"); } },
+    description: { hulp: "Omschrijving instellen", arg: "tekst", doe: (a) => { poort(cli, cli.iface).omschrijving = a.join(" ").slice(0, 80); schrijf("% Omschrijving ingesteld. Serge waardeert dit meer dan je denkt.", "ok"); } },
     exit: { hulp: "Een niveau terug", doe: () => { cli.mode = "config"; cli.iface = null; } },
     end: { hulp: "Terug naar bevoorrechte modus", doe: () => { cli.mode = "enable"; cli.iface = null; } },
   };
@@ -189,7 +222,7 @@ function toonConfig(cli) {
 
 function toonVersie() {
   schrijf(
-    `Serge Clicker CLI, versie 2.0\nUptime: ${Math.floor(G.stats.playTime / 60)} minuten\nProductie: ${fmt(D.pps)} packets/seconde\nApparaten: ${fmt(D.totalBuildings)}`
+    `Serge Clicker CLI, versie ${VERSIE}\nUptime: ${Math.floor(G.stats.playTime / 60)} minuten\nProductie: ${fmt(D.pps)} packets/seconde\nApparaten: ${fmt(D.totalBuildings)}`
   );
 }
 
@@ -204,10 +237,19 @@ function doePing(doel = "8.8.8.8") {
 
 function kiesPoort(cli, naam) {
   const p = normaliseerPoort(naam || "");
-  if (!p) return schrijf("% Onbekende interface. Probeer gi0/1.", "err");
+  if (!p) return schrijf(`% Onbekende interface. Deze switch heeft ${POORTEN[0]} tot en met ${POORTEN[POORTEN.length - 1]}.`, "err");
   poort(cli, p);
   cli.iface = p;
   cli.mode = "iface";
+}
+
+// Zoals op een echt apparaat: begint met een letter, dan letters, cijfers en
+// streepjes.
+function zetHostnaam(cli, naam) {
+  if (!/^[a-z][a-z0-9-]{0,15}$/i.test(naam || "")) {
+    return schrijf("% Een hostnaam begint met een letter en bevat alleen letters, cijfers en streepjes, hooguit 16.", "err");
+  }
+  cli.hostname = naam.toUpperCase();
 }
 
 function zetAdres(cli, args) {
@@ -317,7 +359,7 @@ export function hulpVoor(regel, cli) {
 
 // -------------------------------------------------------------- Invoerregel
 
-function verwerk(regel, cli) {
+export function verwerk(regel, cli) {
   const invoer = regel.trim();
   if (!invoer) return;
   const laag = invoer.toLowerCase();
@@ -373,6 +415,31 @@ function toonHulp(paren) {
 }
 
 // ------------------------------------------------------------------ Paneel
+// De uitvoer wordt alleen bijgewerkt als er iets bij kwam, en alleen dan
+// scrollt hij mee naar onderen. Zo kun je terugscrollen en tekst selecteren.
+
+let getekend = { reeks: -1, aantal: 0 };
+
+function tekenUitvoer(root) {
+  const uitEl = root.querySelector("#term-uit");
+  const term = root.querySelector("#term");
+  if (!uitEl) return;
+  if (getekend.reeks !== reeks) {
+    uitEl.innerHTML = "";
+    getekend = { reeks, aantal: 0 };
+  }
+  if (getekend.aantal === uitvoer.length) return;
+  const nieuw = document.createDocumentFragment();
+  for (const regel of uitvoer.slice(getekend.aantal)) {
+    const div = document.createElement("div");
+    div.className = regel.klasse;
+    div.textContent = regel.tekst;
+    nieuw.append(div);
+  }
+  uitEl.append(nieuw);
+  getekend.aantal = uitvoer.length;
+  term.scrollTop = term.scrollHeight;
+}
 
 export const terminal = {
   id: "cli",
@@ -380,15 +447,34 @@ export const terminal = {
   unlocked: () => (G.buildings.switch || 0) >= 1,
   name: "Terminal",
   icon: "⌨️",
-  stop() {
-    clearInterval(this.tikker);
-    this.tikker = null;
-  },
+  info: [
+    { kop: "Wat is het", tekst: "Een switch die je opzet zoals een echte Cisco-switch: via de commandoregel. Bovenaan staat altijd een opdracht, bijvoorbeeld een poort een adres geven." },
+    {
+      kop: "Een opdracht afwerken",
+      punten: [
+        "`enable` (kort: `en`) brengt je naar de bevoorrechte modus.",
+        "`configure terminal` (`conf t`) opent de configuratiemodus.",
+        "`interface gi0/3` (`int gi0/3`) kiest de poort uit de opdracht.",
+        "`ip address 10.20.30.1 255.255.255.0` zet het adres en het masker.",
+        "`no shutdown` (`no shut`) zet de poort aan.",
+        "`end`, en dan `write memory` (`wr`), bewaart de configuratie. Pas dan kijkt Serge de opdracht na.",
+      ],
+    },
+    {
+      kop: "Handig",
+      punten: [
+        "Elk woord mag je afkorten zolang het nog eenduidig is.",
+        "Tab vult een woord aan, `?` toont wat er op die plek mag staan. Op een telefoon staan ze als knoppen onder de terminal.",
+        "`show ip interface brief` toont alle poorten, `show running-config` de hele configuratie.",
+        "Met de pijltjes omhoog en omlaag haal je vorige commando's terug.",
+      ],
+    },
+    { kop: "Beloning", tekst: `Een afgewerkte opdracht levert twee minuten van je productie op, en minstens 2.500 packets. De volgende opdracht komt ${COOLDOWN} seconden later.` },
+  ],
+
   render(root) {
-    clearInterval(this.tikker);
     const cli = staat();
-    const klaarVoorOpdracht = Date.now() >= (cli.nextAt || 0);
-    if (!cli.opdracht && klaarVoorOpdracht) nieuweOpdracht(cli);
+    if (!cli.opdracht && Date.now() >= (cli.nextAt || 0)) nieuweOpdracht(cli);
 
     if (!uitvoer.length) {
       schrijf("Serge Clicker CLI — afkortingen werken, Tab vult aan, ? toont de mogelijkheden.");
@@ -398,63 +484,57 @@ export const terminal = {
     root.innerHTML = `
       <div class="labo-kop">
         <h3>Terminal</h3>
+        ${INFO_KNOP}
         <span id="term-status"></span>
       </div>
       <p class="labo-uitleg" id="term-opdracht"></p>
       <div class="terminal" id="term">
-        <div id="term-uit"></div>
+        <div id="term-uit" role="log" aria-label="Uitvoer van de terminal"></div>
         <div class="terminal-regel">
           <span id="prompt"></span>
           <input id="term-in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Commando" />
         </div>
-      </div>`;
+      </div>
+      ${hoverCapable ? "" : `<div class="term-knoppen">
+        <button type="button" class="btn ghost small" data-toets="Tab">Tab</button>
+        <button type="button" class="btn ghost small" data-toets="?">?</button>
+      </div>`}`;
 
     const term = root.querySelector("#term");
-    const uitvoerEl = root.querySelector("#term-uit");
-    const statusEl = root.querySelector("#term-status");
-    const opdrachtEl = root.querySelector("#term-opdracht");
     const invoer = root.querySelector("#term-in");
-    const prompt = root.querySelector("#prompt");
 
-    const teken = () => {
-      uitvoerEl.innerHTML = uitvoer
-        .map((r) => `<div class="${r.klasse}">${r.tekst.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]))}</div>`)
-        .join("");
-      term.scrollTop = term.scrollHeight;
-      prompt.textContent = PROMPTS[cli.mode](cli.hostname, cli.iface);
-      const up = Object.values(cli.interfaces).filter((p) => p.up).length;
-      statusEl.textContent = `${up} ${up === 1 ? "poort" : "poorten"} up · ${cli.gedaan || 0} ${(cli.gedaan || 0) === 1 ? "opdracht" : "opdrachten"}`;
-      if (cli.opdracht) {
-        opdrachtEl.innerHTML = `<strong>Opdracht.</strong> ${opdrachtTekst(cli)}`;
-      } else {
-        const over = ((cli.nextAt || 0) - Date.now()) / 1000;
-        opdrachtEl.textContent = over > 0
-          ? `Serge schrijft een nieuwe opdracht uit. Nog ${fmtTime(over)}.`
-          : "Serge denkt na over je volgende opdracht.";
-      }
-    };
-
-    term.addEventListener("click", (e) => {
-      if (e.target !== invoer) invoer.focus();
-    });
-
-    invoer.addEventListener("keydown", (e) => {
-      if (e.key === "Tab") {
-        e.preventDefault();
+    const toets = (naam) => {
+      if (naam === "Tab") {
         const { regel, opties } = vulAan(invoer.value, cli);
         invoer.value = regel;
         if (opties.length) {
           schrijf(`${PROMPTS[cli.mode](cli.hostname, cli.iface)} ${invoer.value}`, "in");
           toonHulp(opties);
-          teken();
         }
-        return;
-      }
-      if (e.key === "?") {
-        e.preventDefault();
+      } else if (naam === "?") {
         schrijf(`${PROMPTS[cli.mode](cli.hostname, cli.iface)} ${invoer.value}?`, "in");
         toonHulp(hulpVoor(invoer.value, cli));
-        teken();
+      }
+      this.update(root);
+    };
+
+    term.addEventListener("click", (e) => {
+      // Tekst selecteren in de uitvoer mag; alleen een gewone klik zet de
+      // cursor terug in de invoer.
+      if (e.target !== invoer && !String(window.getSelection?.() || "")) invoer.focus();
+    });
+
+    for (const knop of root.querySelectorAll("[data-toets]")) {
+      knop.addEventListener("click", () => {
+        toets(knop.dataset.toets);
+        invoer.focus();
+      });
+    }
+
+    invoer.addEventListener("keydown", (e) => {
+      if (e.key === "Tab" || e.key === "?") {
+        e.preventDefault();
+        toets(e.key);
         return;
       }
       if (e.key === "Enter") {
@@ -466,7 +546,7 @@ export const terminal = {
         historiePos = -1;
         verwerk(regel, cli);
         invoer.value = "";
-        teken();
+        this.update(root);
         return;
       }
       if (e.key === "ArrowUp") {
@@ -480,7 +560,41 @@ export const terminal = {
       }
     });
 
-    teken();
-    this.tikker = setInterval(teken, 1000);
+    getekend = { reeks: -1, aantal: 0 };
+    this.update(root);
+  },
+
+  // Elke seconde: statusregel, opdracht en prompt. De uitvoer alleen als er
+  // iets bij kwam.
+  update(root) {
+    const cli = staat();
+    if (!cli.opdracht && Date.now() >= (cli.nextAt || 0)) {
+      nieuweOpdracht(cli);
+      schrijf("% Serge heeft een nieuwe opdracht uitgeschreven.", "ok");
+    }
+    tekenUitvoer(root);
+    const prompt = root.querySelector("#prompt");
+    const statusEl = root.querySelector("#term-status");
+    const opdrachtEl = root.querySelector("#term-opdracht");
+    if (!prompt) return;
+    const promptTekst = PROMPTS[cli.mode](cli.hostname, cli.iface);
+    if (prompt.textContent !== promptTekst) prompt.textContent = promptTekst;
+    const up = Object.values(cli.interfaces).filter((p) => p.up).length;
+    const status = `${up} ${up === 1 ? "poort" : "poorten"} up · ${cli.gedaan || 0} ${(cli.gedaan || 0) === 1 ? "opdracht" : "opdrachten"}`;
+    if (statusEl.textContent !== status) statusEl.textContent = status;
+    if (cli.opdracht) {
+      const tekst = opdrachtTekst(cli);
+      if (opdrachtEl.dataset.tekst !== tekst) {
+        opdrachtEl.dataset.tekst = tekst;
+        opdrachtEl.innerHTML = "<strong>Opdracht.</strong> <span></span>";
+        opdrachtEl.querySelector("span").textContent = tekst;
+      }
+    } else {
+      const over = ((cli.nextAt || 0) - Date.now()) / 1000;
+      opdrachtEl.dataset.tekst = "";
+      opdrachtEl.textContent = over > 0
+        ? `Serge schrijft een nieuwe opdracht uit. Nog ${fmtTime(over)}.`
+        : "Serge denkt na over je volgende opdracht.";
+    }
   },
 };

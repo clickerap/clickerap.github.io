@@ -1,0 +1,23 @@
+{
+  "name": "serge-clicker",
+  "private": true,
+  "description": "Klikspel over het netwerk van Serge. Statische site zonder build-stap.",
+  "type": "module",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "test": "node --test \"tests/unit/*.test.mjs\"",
+    "test:browser": "node --test --test-concurrency=1 \"tests/browser/*.test.mjs\"",
+    "lint": "eslint .",
+    "gids": "node tools/spelgids.mjs",
+    "balans": "node tools/balans.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.11.0",
+    "globals": "^17.12.0",
+    "playwright": "1.63.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

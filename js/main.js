@@ -1,16 +1,29 @@
 // Startpunt. Laadt de save, zet de interface op en start de motor.
 
 import { G, D, recompute, checkAchievements, earn, unlock } from "./state.js";
-import { load, save, offlineYield } from "./save.js";
-import { setNotation } from "./format.js";
-import { start, forceGolden, markActivity } from "./engine.js";
+import { load, save, offlineYield, neemTabbladOver } from "./save.js";
+import { setNotation, fmt, fmtTime } from "./format.js";
+import { start, forceGolden, markActivity, nextNews, nieuweRun } from "./engine.js";
 import { initShell, frameSync, showTab } from "./ui/shell.js";
 import { renderLabo, initLabo, stopLabo } from "./minigames/index.js";
 import { toast, dialog } from "./ui/fx.js";
-import { fmt, fmtTime } from "./format.js";
 import { initEggs, initConsole } from "./eggs.js";
-import { on, emit as emitBus } from "./bus.js";
-const emitNews = (tekst) => emitBus("news", tekst);
+import { on, emit } from "./bus.js";
+
+// Staat het spel al open in een ander tabblad op hetzelfde bestand, dan slaat
+// dat tabblad eerst op en stopt het. Pas daarna laden we.
+await neemTabbladOver({
+  bijOvername: () => {
+    dialog({
+      title: "Verder in een ander tabblad",
+      body: "<p>Je hebt Serge Clicker in een ander tabblad geopend. Dit tabblad slaat niets meer op, zodat ze elkaars voortgang niet overschrijven.</p><p>Herlaad deze pagina om hier verder te spelen.</p>",
+      actions: [
+        { label: "Sluiten", style: "ghost" },
+        { label: "Hier verder spelen", onClick: () => location.reload() },
+      ],
+    });
+  },
+});
 
 const resultaat = load();
 setNotation(G.options.notation);
@@ -26,9 +39,10 @@ on("tab", (naam) => {
   if (naam === "labo") renderLabo();
   else stopLabo();
 });
+// Het labo tekent zichzelf opnieuw zodra je het tabblad weer opent.
 on("graduated", () => {
+  nieuweRun();
   save();
-  renderLabo();
 });
 on("cheat:goud", forceGolden);
 
@@ -56,7 +70,14 @@ if (resultaat.migrated) {
   });
 }
 if (resultaat.corrupt) {
-  toast({ title: "Save onleesbaar", text: "Er is opnieuw begonnen. Sorry.", tone: "slecht" });
+  toast({ title: "Save onleesbaar", text: "Er is opnieuw begonnen. De oude save staat apart bewaard.", tone: "slecht" });
+}
+if (resultaat.opslag === false) {
+  toast({
+    title: "Opslaan lukt niet",
+    text: "Deze browser blokkeert opslag. Je kunt spelen, maar je voortgang blijft niet bewaard.",
+    tone: "slecht",
+  });
 }
 if (!resultaat.loaded) {
   showTab("winkel");
@@ -71,7 +92,9 @@ for (const type of ["pointerdown", "keydown"]) {
   document.addEventListener(type, markActivity, { passive: true });
 }
 
-window.addEventListener("beforeunload", () => save());
+// pagehide vuurt ook op telefoons betrouwbaar, en laat de back/forward-cache
+// intact (beforeunload doet dat in Firefox niet).
+window.addEventListener("pagehide", () => save());
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden") save();
 });
@@ -79,7 +102,7 @@ document.addEventListener("visibilitychange", () => {
 start();
 
 // Meteen een eerste logregel, niet pas na twaalf seconden.
-import("./engine.js").then(({ nextNews }) => emitNews(nextNews()));
+emit("news", nextNews());
 
 // Voor wie in de console rondkijkt: hallo. Er valt hier meer te vinden.
 window.serge = {
@@ -89,5 +112,5 @@ window.serge = {
   get packets() {
     return G.packets;
   },
-  hint: "Zeven keer op het versienummer onder 'Meer'.",
+  hint: "Zeven keer op het versienummer, onder het tandwiel.",
 };

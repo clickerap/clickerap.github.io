@@ -2,11 +2,15 @@
 // Alles wat vanzelf gebeurt, gebeurt hier.
 
 import { G, D, recompute, earn, checkAchievements, checkSkins, refreshSeen, unlock, touch } from "./state.js";
-import { BUFFS, BUFF_BY_ID, HAZARDS, INCIDENTS } from "./data/buffs.js";
+import { BUFFS, BUFF_BY_ID, HAZARDS, INCIDENTS, INCIDENT_BY_ID, strafId } from "./data/buffs.js";
 import { GENERIC, SERGE, CONTEXTUAL, MILESTONE, KLASSIEK, TRANSCENDENT } from "./data/news.js";
 import { BUILDINGS } from "./data/buildings.js";
 import { emit } from "./bus.js";
 import { save } from "./save.js";
+
+// Hoe lang een achtergrondtab maximaal meetelt, en hoe vaak je mag klikken.
+const INHAAL_MAX = 3600;
+const KLIKKEN_PER_SECONDE = 20;
 
 let lastTick = performance.now();
 let sinceCheck = 0;
@@ -16,6 +20,7 @@ let goldenAt = 0;
 let incidentAt = 0;
 let lastActivity = Date.now();
 let hiddenAt = 0;
+let laatsteFout = 0;
 
 export function markActivity() {
   lastActivity = Date.now();
@@ -33,14 +38,45 @@ function handleVisibility() {
     return;
   }
   if (!hiddenAt) return;
-  const weg = (Date.now() - hiddenAt) / 1000;
+  const nu = Date.now();
+  const weg = (nu - hiddenAt) / 1000;
+  const van = hiddenAt;
   hiddenAt = 0;
   lastTick = performance.now();
-  if (weg > 3 && D.pps > 0) {
-    const ingehaald = D.pps * Math.min(weg, 3600);
-    earn(ingehaald);
-    if (weg > 60) emit("toast", { title: "Bijgewerkt", text: `Je netwerk draaide door terwijl dit tabblad op de achtergrond stond.` });
+  if (weg > 1) {
+    haalIn(van, nu);
+    if (weg > 60) emit("toast", { title: "Bijgewerkt", text: "Je netwerk draaide door terwijl dit tabblad op de achtergrond stond." });
   }
+}
+
+// Rekent de tijd tussen `van` en `tot` af, in stukken: telkens tot de
+// eerstvolgende buff of straf afloopt (of een storing uit de hand loopt), met
+// de productie van dat moment. Een buff telt zo alleen zolang hij duurde.
+export function haalIn(van, tot) {
+  const eind = Math.min(tot, van + INHAAL_MAX * 1000);
+  let t = van;
+  const verloopt = (b) => (b.charges ? false : b.until <= t);
+  if (G.buffs.some(verloopt)) {
+    G.buffs = G.buffs.filter((b) => !verloopt(b));
+    recompute();
+  }
+  let veranderd = false;
+  while (t < eind) {
+    const grenzen = G.buffs.filter((b) => !b.charges && b.until > t).map((b) => b.until);
+    if (G.incident && G.incident.until > t) grenzen.push(G.incident.until);
+    const volgende = Math.min(eind, ...grenzen);
+    if (D.pps > 0) earn((D.pps * (volgende - t)) / 1000);
+    t = volgende;
+    if (G.incident && G.incident.until <= t) resolveIncident("timeout", G.incident.until, t);
+    const voor = G.buffs.length;
+    G.buffs = G.buffs.filter((b) => !verloopt(b));
+    if (G.buffs.length !== voor) {
+      recompute();
+      veranderd = true;
+    }
+  }
+  if (veranderd) emit("buffs:changed");
+  return G.packets;
 }
 
 export function start() {
@@ -49,14 +85,22 @@ export function start() {
   scheduleGolden();
   scheduleIncident();
   requestAnimationFrame(frame);
-  if (D.startBuff && G.stats.runLifetime < 1000) activateBuff(pickBuff());
 }
 
+// Het volgende frame wordt eerst ingepland. Een fout in één tick mag de
+// productie nooit voorgoed stilleggen.
 function frame(now) {
+  requestAnimationFrame(frame);
   const dt = Math.min(1, Math.max(0, (now - lastTick) / 1000));
   lastTick = now;
-  tick(dt);
-  requestAnimationFrame(frame);
+  try {
+    tick(dt);
+  } catch (err) {
+    if (Date.now() - laatsteFout > 5000) {
+      laatsteFout = Date.now();
+      console.error("Fout in de spelklok", err);
+    }
+  }
 }
 
 function tick(dt) {
@@ -76,7 +120,7 @@ function tick(dt) {
     startIncident();
   }
   if (G.incident) {
-    if (nowMs >= G.incident.until) resolveIncident("timeout");
+    if (nowMs >= G.incident.until) resolveIncident("timeout", G.incident.until);
     else if (D.autoIncident && nowMs - G.incident.startedAt >= 30000) resolveIncident("auto");
   }
 
@@ -105,8 +149,17 @@ function tick(dt) {
 }
 
 // --- Klikken ---
+// Meer dan twintig kliks per seconde haalt geen mens; wat erboven zit is een
+// ingedrukte toets of een autoclicker, en telt niet mee.
+
+const klikTijden = [];
 
 export function click(meta = {}) {
+  const nu = performance.now();
+  while (klikTijden.length && nu - klikTijden[0] >= 1000) klikTijden.shift();
+  if (klikTijden.length >= KLIKKEN_PER_SECONDE) return 0;
+  klikTijden.push(nu);
+
   markActivity();
   const value = D.clickValue;
   earn(value, { handmade: true });
@@ -148,24 +201,22 @@ export function activateBuff(def) {
     emit("buff:instant", { def, amount });
     return { def, amount };
   }
-  const entry = {
-    id: def.id,
-    effect: def.effect,
-    building: null,
-  };
+  const entry = { id: def.id };
   if (def.effect?.randomBuildingMult) {
-    const owned = BUILDINGS.filter((b) => (G.buildings[b.id] || 0) > 0);
-    if (!owned.length) return activateBuff(BUFF_BY_ID.burst);
-    entry.building = owned[Math.floor(Math.random() * owned.length)].id;
+    const kandidaten = teOverklokken();
+    if (!kandidaten.length) return activateBuff(BUFF_BY_ID.burst);
+    entry.building = kandidaten[Math.floor(Math.random() * kandidaten.length)].id;
   }
   if (def.charges) {
     entry.charges = def.charges;
   } else {
     entry.until = Date.now() + def.duration * 1000 * D.buffDuration;
   }
-  // Dezelfde buff nog eens? Dan verlengen in plaats van stapelen.
-  const existing = G.buffs.find((b) => b.id === def.id && !b.charges);
-  if (existing && entry.until) {
+  // Dezelfde buff nog eens? Dan verlengen of ladingen erbij, niet stapelen.
+  const existing = G.buffs.find((b) => b.id === def.id);
+  if (existing && entry.charges && existing.charges) {
+    existing.charges += entry.charges;
+  } else if (existing && entry.until && existing.until && existing.building === entry.building) {
     existing.until = Math.max(existing.until, entry.until);
   } else {
     G.buffs.push(entry);
@@ -176,6 +227,24 @@ export function activateBuff(def) {
   return entry;
 }
 
+// Overklok kiest uit de apparaten die minstens 5% van je productie leveren.
+// Anders valt hij laat in het spel bijna altijd op een patchkabel die niets
+// meer toevoegt.
+function teOverklokken() {
+  const bezit = BUILDINGS.filter((b) => (G.buildings[b.id] || 0) > 0);
+  if (!(D.pps > 0)) return bezit;
+  const tellen = bezit.filter((b) => ((D.perBuilding[b.id] || 0) * G.buildings[b.id]) / D.pps >= 0.05);
+  return tellen.length ? tellen : bezit;
+}
+
+// Elke nieuwe run na het afstuderen krijgt één gratis buff, als je
+// "Gouden regen" in de studieboom hebt.
+export function nieuweRun() {
+  if (D.startBuff) activateBuff(pickBuff());
+}
+
+// Het effect van een straf wordt in recompute() afgeleid, inclusief je
+// DDoS-bescherming. Hier staat alleen wat en tot wanneer.
 export function activateHazard(def) {
   if (def.instant) {
     const factor = def.loss * (1 - D.ddosResist);
@@ -184,13 +253,7 @@ export function activateHazard(def) {
     emit("hazard:instant", { def, lost });
     return;
   }
-  const strength = 1 - (1 - (def.effect.ppsMult ?? def.effect.clickMult ?? 1)) * (1 - D.ddosResist);
-  const entry = {
-    id: def.id,
-    hazard: true,
-    effect: def.effect.ppsMult ? { ppsMult: strength } : { clickMult: strength },
-    until: Date.now() + def.duration * 1000,
-  };
+  const entry = { id: def.id, until: Date.now() + def.duration * 1000 };
   G.buffs.push(entry);
   recompute();
   emit("buff:start", { def, entry });
@@ -206,11 +269,6 @@ function expireBuffs() {
     recompute();
     emit("buffs:changed");
   }
-}
-
-export function buffLabel(entry) {
-  const def = BUFF_BY_ID[entry.id] || HAZARDS.find((h) => h.id === entry.id);
-  return def || { name: entry.id, icon: "❔" };
 }
 
 // --- Gouden packets ---
@@ -262,7 +320,7 @@ export function goldenExpired(info) {
   if (info.hazard) {
     G.stats.ddosSeen++;
     G.stats.ddosIgnored++;
-    if (G.stats.ddosIgnored === 1) unlock("goud-ddos");
+    unlock("goud-ddos");
   }
   scheduleGolden();
 }
@@ -302,51 +360,57 @@ export function ignoreIncident() {
   resolveIncident("ignored");
 }
 
-function applyIncidentPenalty(id) {
-  const def = INCIDENTS.find((i) => i.id === id);
+// De straf loopt vanaf het moment dat de storing uit de hand liep. Was dat
+// terwijl je weg was, dan kan hij alweer (deels) voorbij zijn. `nu` is de tijd
+// waarop gerekend wordt; bij het inhalen ligt die in het verleden.
+function applyIncidentPenalty(id, vanaf, nu) {
+  const def = INCIDENT_BY_ID[id];
   if (!def) return;
-  G.buffs.push({
-    id: `incident-${def.id}`,
-    hazard: true,
-    effect: { ppsMult: def.penalty.ppsMult },
-    until: Date.now() + def.penalty.duration * 1000,
-  });
+  const until = vanaf + def.penalty.duration * 1000;
+  if (until <= nu) return;
+  G.buffs.push({ id: strafId(def.id), until });
   recompute();
   emit("buffs:changed");
 }
 
-function resolveIncident(how) {
+function resolveIncident(how, tijdstip = Date.now(), nu = Date.now()) {
   if (!G.incident) return;
   const id = G.incident.id;
   G.incident = null;
-  if (how === "ignored" || how === "timeout") applyIncidentPenalty(id);
+  if (how === "ignored" || how === "timeout") applyIncidentPenalty(id, tijdstip, nu);
   scheduleIncident();
   touch();
   emit("incident:end", { how });
 }
 
 // --- Logbalk ---
+// Regels over je eigen spel (je mijlpaal, je apparaten) komen ongeveer één
+// op de drie keer voorbij; de rest komt uit de vaste lijsten.
 
+const EIGEN_KANS = 0.35;
 let lastNews = "";
 
 export function nextNews() {
-  const pool = [];
-  const tier = Math.min(MILESTONE.length - 1, Math.floor(Math.log10(Math.max(1, G.stats.lifetime)) / 3));
-  pool.push(...KLASSIEK);
-  pool.push(...GENERIC);
-  pool.push(...SERGE);
-  pool.push(MILESTONE[tier]);
+  const vast = [...KLASSIEK, ...GENERIC, ...SERGE];
   // De regels van voorbij het miljard komen er pas bij als je zover bent.
-  if (G.prestige >= 1 || G.stats.lifetime >= 1e9) pool.push(...TRANSCENDENT);
+  if (G.prestige >= 1 || G.stats.lifetime >= 1e9) vast.push(...TRANSCENDENT);
+
+  const tier = Math.min(MILESTONE.length - 1, Math.floor(Math.log10(Math.max(1, G.stats.lifetime)) / 3));
+  const eigen = [MILESTONE[tier]];
   const owned = BUILDINGS.filter((b) => (G.buildings[b.id] || 0) >= 10);
   if (owned.length) {
     const b = owned[Math.floor(Math.random() * owned.length)];
     const template = CONTEXTUAL[Math.floor(Math.random() * CONTEXTUAL.length)];
-    pool.push(template.replace("{n}", G.buildings[b.id]).replace("{b}", b.name.toLowerCase()));
+    eigen.push(template.replaceAll("{n}", G.buildings[b.id]).replaceAll("{b}", b.name.toLowerCase()));
   }
-  let pick = pool[Math.floor(Math.random() * pool.length)];
+
+  const kies = () => {
+    const pool = Math.random() < EIGEN_KANS ? eigen : vast;
+    return pool[Math.floor(Math.random() * pool.length)];
+  };
+  let pick = kies();
   let guard = 0;
-  while (pick === lastNews && guard++ < 4) pick = pool[Math.floor(Math.random() * pool.length)];
+  while (pick === lastNews && guard++ < 4) pick = kies();
   lastNews = pick;
   return pick;
 }

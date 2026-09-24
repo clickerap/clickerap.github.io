@@ -51,7 +51,7 @@ export const BUFFS = [
     id: "lucky",
     name: "Meevaller",
     icon: "🎁",
-    desc: "Een kwartier productie in één keer op je rekening.",
+    desc: "Tot een kwartier productie ineens, maar nooit meer dan 15% van wat je al hebt.",
     instant: true,
     weight: 16,
   },
@@ -139,3 +139,54 @@ export const INCIDENTS = [
     penalty: { ppsMult: 0.75, duration: 90 },
   },
 ];
+
+export const HAZARD_BY_ID = Object.fromEntries(HAZARDS.map((h) => [h.id, h]));
+export const INCIDENT_BY_ID = Object.fromEntries(INCIDENTS.map((i) => [i.id, i]));
+
+// Een storing die je liet lopen, staat als straf tussen de buffs.
+export const strafId = (incidentId) => `incident-${incidentId}`;
+
+function incidentVanStraf(id) {
+  const incident = INCIDENT_BY_ID[String(id).replace(/^incident-/, "")];
+  return incident && strafId(incident.id) === id ? incident : null;
+}
+
+export function bekendeBuff(id) {
+  return !!(BUFF_BY_ID[id] || HAZARD_BY_ID[id] || incidentVanStraf(id));
+}
+
+// Wat een actieve buff doet. Het effect wordt nooit opgeslagen maar altijd uit
+// de definities afgeleid, zodat een straf ook een herlaadbeurt overleeft.
+//   kracht     hoeveel sterker gouden buffs werken (upgrades en studieboom);
+//              de bonus bovenop x1 groeit mee: x7 wordt bij 1,3 dus x8,8
+//   weerstand  de DDoS-bescherming uit je upgrades, tegen straffen
+export function effectVan(entry, { kracht = 1, weerstand = 0 } = {}) {
+  const buff = BUFF_BY_ID[entry.id];
+  if (buff) {
+    if (!buff.effect) return null;
+    const sterker = {};
+    for (const [sleutel, waarde] of Object.entries(buff.effect)) sterker[sleutel] = 1 + (waarde - 1) * kracht;
+    return sterker;
+  }
+  const hazard = HAZARD_BY_ID[entry.id];
+  if (hazard?.effect) {
+    const zachter = {};
+    for (const [sleutel, waarde] of Object.entries(hazard.effect)) {
+      zachter[sleutel] = 1 - (1 - waarde) * (1 - weerstand);
+    }
+    return zachter;
+  }
+  const incident = incidentVanStraf(entry.id);
+  return incident ? { ppsMult: incident.penalty.ppsMult } : null;
+}
+
+// Naam, icoon en uitleg van een actieve buff, voor de balk en de tooltip.
+export function buffUiterlijk(entry) {
+  const buff = BUFF_BY_ID[entry.id];
+  if (buff) return { icon: buff.icon, name: buff.name, desc: buff.desc, slecht: false };
+  const hazard = HAZARD_BY_ID[entry.id];
+  if (hazard) return { icon: hazard.icon, name: hazard.name, desc: hazard.desc, slecht: true };
+  const incident = incidentVanStraf(entry.id);
+  if (incident) return { icon: "⚠️", name: "Storing", desc: incident.text, slecht: true };
+  return { icon: "❔", name: "Onbekend", desc: "", slecht: false };
+}

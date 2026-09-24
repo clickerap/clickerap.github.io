@@ -1,6 +1,6 @@
 // De vijf tabbladen: winkel, upgrades, prestaties, studie en meer.
 // Elk paneel bouwt zijn DOM één keer op en werkt daarna alleen tekst en
-// klassen bij, zodat hover en scrollpositie blijven staan.
+// klassen bij, zodat hover, focus en scrollpositie blijven staan.
 
 import {
   G, D, BUILDINGS, BUILDING_BY_ID, VAKKEN, ACHIEVEMENTS, NODES,
@@ -8,12 +8,14 @@ import {
   buyNode, graduate, ectsOnGraduate, koffieRank, skinUnlocked, kiesSkin,
 } from "../state.js";
 import { UPGRADE_BY_ID } from "../data/upgrades.js";
-import { UITERLIJK, SOORTNAMEN } from "../data/uiterlijk.js";
+import { UITERLIJK, SOORTNAMEN, fotoVoor } from "../data/uiterlijk.js";
 import { CATEGORIEEN } from "../data/achievements.js";
-import { BRANCHES, lifetimeForEcts } from "../data/skilltree.js";
+import { BRANCHES, lifetimeForEcts, BONUS_PER_PUNT } from "../data/skilltree.js";
 import { fmt, fmtLong, fmtPct, fmtTime, fmtEta } from "../format.js";
 import { attachTooltip, refreshTooltip, toast, blip, dialog, hoverCapable } from "./fx.js";
 import { emit } from "../bus.js";
+import { esc } from "../html.js";
+import { VERSIE } from "../versie.js";
 
 const ROMEINS = ["", "I", "II", "III", "IV", "V"];
 const shopEl = document.getElementById("shop");
@@ -31,6 +33,14 @@ const rows = new Map();
 let shopSignature = "";
 let upgradeSignature = "";
 let achSignature = "";
+
+// Alleen schrijven wat echt veranderde; dat scheelt de browser werk.
+function zet(el, tekst) {
+  if (el.textContent !== tekst) el.textContent = tekst;
+}
+function zetAttr(el, naam, waarde) {
+  if (el.getAttribute(naam) !== waarde) el.setAttribute(naam, waarde);
+}
 
 // ---------------------------------------------------------------- Winkel
 
@@ -63,7 +73,7 @@ function buildingTooltip(b) {
   const owned = G.buildings[b.id] || 0;
   const each = D.perBuilding[b.id] || 0;
   const share = D.pps > 0 ? (each * owned) / D.pps : 0;
-  const { price } = priceOf(b.id, G.options.buyAmount, G.options.sellMode);
+  const { amount, price } = priceOf(b.id, G.options.buyAmount, G.options.sellMode);
   const regels = [`<div class="regel"><span>Vak</span><span>${VAKKEN[b.vak].icon} ${VAKKEN[b.vak].name}</span></div>`];
   if (owned > 0) {
     regels.push(`<div class="regel"><span>Samen</span><span>${fmt(each * owned)} p/s</span></div>`);
@@ -73,7 +83,6 @@ function buildingTooltip(b) {
     regels.push(`<div class="regel"><span>Bonus uit upgrades</span><span>x${fmt(D.buildingMult[b.id], { decimals: 2 })}</span></div>`);
   }
   const missing = price - G.packets;
-  const { amount } = priceOf(b.id, G.options.buyAmount, G.options.sellMode);
   return `
     <h4>${b.icon} ${b.name}</h4>
     <div class="regel"><span>Levert</span><span>${fmt(each)} p/s per stuk</span></div>
@@ -103,7 +112,7 @@ function renderShop() {
       li.className = `shop-locked vak-${b.vak}`;
       li.innerHTML = `
         <div class="slot-kop">
-          <span class="shop-ikoon">🔒</span>
+          <span class="shop-ikoon" aria-hidden="true">🔒</span>
           <span><strong>${b.name}</strong><em></em></span>
         </div>
         <div class="slot-meter"><span></span></div>
@@ -122,7 +131,7 @@ function renderShop() {
     btn.type = "button";
     btn.className = `shopitem vak-${b.vak}`;
     btn.innerHTML = `
-      <span class="shop-ikoon">${b.icon}</span>
+      <span class="shop-ikoon" aria-hidden="true">${b.icon}</span>
       <span class="shop-naam">
         <strong>${b.name}</strong>
         <span class="shop-regel"><span class="shop-prijs"></span> <span class="effect"></span></span>
@@ -145,7 +154,7 @@ function syncShop() {
   for (const [key, ref] of rows) {
     if (ref.locked) {
       const stand = slotStand(ref.locked);
-      ref.tekst.textContent = stand.tekst;
+      zet(ref.tekst, stand.tekst);
       ref.meter.style.transform = `scaleX(${stand.deel})`;
       continue;
     }
@@ -154,23 +163,23 @@ function syncShop() {
     const { amount, price } = priceOf(key, G.options.buyAmount, G.options.sellMode);
     const kan = G.options.sellMode ? owned > 0 : price <= G.packets && amount > 0;
 
-    ref.bezit.textContent = fmt(owned);
-    ref.effect.textContent = `· +${fmt(D.perBuilding[b.id] || b.basePps)}/s elk`;
-    ref.prijs.textContent = G.options.sellMode
+    zet(ref.bezit, fmt(owned));
+    zet(ref.effect, `· +${fmt(D.perBuilding[b.id] || b.basePps)}/s elk`);
+    zet(ref.prijs, G.options.sellMode
       ? owned > 0 ? `+${fmt(price)} terug` : "niets te verkopen"
-      : `${fmt(price)}${amount > 1 ? ` (${fmt(amount)}x)` : ""}`;
+      : `${fmt(price)}${amount > 1 ? ` (${fmt(amount)}x)` : ""}`);
     ref.btn.classList.toggle("betaalbaar", kan && !G.options.sellMode);
     ref.btn.classList.toggle("verkoop", G.options.sellMode && owned > 0);
     ref.btn.classList.toggle("heeft", owned > 0);
     ref.btn.classList.toggle("kanniet", !kan);
-    ref.btn.setAttribute("aria-disabled", String(!kan));
+    zetAttr(ref.btn, "aria-disabled", String(!kan));
   }
 }
 
 function handleBuy(id) {
   const amount = G.options.buyAmount;
   if (G.options.sellMode) {
-    const sold = sellBuilding(id, amount === "max" ? "max" : amount);
+    const sold = sellBuilding(id, amount);
     if (sold) {
       blip(340, 0.06);
       emit("bought", { id, amount: -sold });
@@ -178,7 +187,7 @@ function handleBuy(id) {
     refreshTooltip();
     return;
   }
-  const bought = buyBuilding(id, amount === "max" ? "max" : amount);
+  const bought = buyBuilding(id, amount);
   if (bought) {
     blip(520 + Math.min(240, bought * 4), 0.05);
     emit("bought", { id, amount: bought });
@@ -310,11 +319,11 @@ function renderUpgrades() {
     const kan = G.packets >= u.cost;
     tegel.classList.toggle("betaalbaar", kan);
     tegel.classList.toggle("kanniet", !kan);
-    tegel.setAttribute("aria-disabled", String(!kan));
+    zetAttr(tegel, "aria-disabled", String(!kan));
     if (kan) betaalbaar++;
   }
   pipUpgrades.hidden = betaalbaar === 0;
-  pipUpgrades.textContent = String(betaalbaar);
+  zet(pipUpgrades, String(betaalbaar));
 
   // De balk onderaan moet meelopen: prijs haalbaar of niet, en het ding kan
   // net gekocht zijn door iemand anders in de lijst.
@@ -328,12 +337,12 @@ function renderUpgrades() {
 // ------------------------------------------------------------ Prestaties
 
 function renderAchievements() {
-  const signature = `${G.stats.achievements}/${ACHIEVEMENTS.length}#${achFilter}`;
+  const signature = `${D.aantalPrestaties}/${ACHIEVEMENTS.length}#${achFilter}`;
   if (signature === achSignature) return;
   achSignature = signature;
 
   document.getElementById("koffie-rank").textContent = `☕ ${koffieRank()}`;
-  document.getElementById("koffie-count").textContent = `${G.stats.achievements}/${ACHIEVEMENTS.length}`;
+  document.getElementById("koffie-count").textContent = `${D.aantalPrestaties}/${ACHIEVEMENTS.length}`;
   document.getElementById("koffie-bar").style.transform = `scaleX(${D.koffie})`;
   document.getElementById("koffie-note").textContent = D.koffieMult > 1.001
     ? `Je assistenten leveren nu x${fmt(D.koffieMult, { decimals: 2 })} op alles. Meer prestaties is meer koffie is meer productie.`
@@ -363,7 +372,7 @@ function renderAchievements() {
         const el = document.createElement("div");
         el.className = "ach uit";
         el.innerHTML = `
-          <span class="ach-ikoon">❔</span>
+          <span class="ach-ikoon" aria-hidden="true">❔</span>
           <span class="ach-tekst"><strong>Nog ${rest} te vinden</strong><span>Ze staan nergens uitgelegd. Klik op rare plekken, typ rare dingen.</span></span>`;
         achLijst.append(el);
       }
@@ -378,7 +387,7 @@ function achRij(a, heeft) {
   const el = document.createElement("div");
   el.className = `ach ${heeft ? "aan" : "uit"}${a.egg ? " egg" : ""}`;
   el.innerHTML = `
-    <span class="ach-ikoon">${a.icon}</span>
+    <span class="ach-ikoon" aria-hidden="true">${a.icon}</span>
     <span class="ach-tekst"><strong>${a.name}</strong> <span>· ${a.desc}</span></span>`;
   attachTooltip(el, () => `<h4>${a.icon} ${a.name}</h4><p class="cursief">${a.desc}</p>
     <div class="regel prijsregel">${heeft ? "Behaald" : "Nog niet behaald"}</div>`);
@@ -389,41 +398,48 @@ achFilterEl.addEventListener("click", (e) => {
   const knop = e.target.closest("button");
   if (!knop) return;
   achFilter = knop.dataset.filter;
-  for (const b of achFilterEl.children) b.classList.toggle("on", b === knop);
+  for (const b of achFilterEl.children) {
+    b.classList.toggle("on", b === knop);
+    b.setAttribute("aria-pressed", String(b === knop));
+  }
   renderAchievements();
 });
 
 // ---------------------------------------------------------------- Studie
+// De afstudeerkaart wordt één keer opgebouwd en daarna live bijgewerkt,
+// zolang het tabblad openstaat.
 
 const treeEl = document.getElementById("tree");
 const graduateCard = document.getElementById("graduate-card");
 let treeBuilt = false;
+let kaart = null;
+let studieSleutel = "";
 
-function renderStudie() {
-  const winst = ectsOnGraduate();
-  const volgende = lifetimeForEcts(G.prestige + winst + 1, D.ectsGain);
+function bouwKaart() {
   graduateCard.innerHTML = `
     <div class="rij">
       <div>
         <h3>🎓 Afstuderen</h3>
         <p>Je begint opnieuw met niets, maar houdt je prestaties, je studieboom en je punten.</p>
       </div>
-      <div class="cijfer">${fmt(winst)}</div>
+      <div class="cijfer" data-veld="winst"></div>
     </div>
     <div class="statlijst">
-      <div><span>Studiepunten</span><strong>${fmt(G.ects)} vrij · ${fmt(G.prestige)} totaal</strong></div>
-      <div><span>Bonus uit punten</span><strong>+${fmtPct(G.prestige * 0.01, 0)} op alles</strong></div>
-      <div><span>Volgend punt bij</span><strong>${fmtLong(volgende)} totaal</strong></div>
+      <div><span>Studiepunten</span><strong data-veld="punten"></strong></div>
+      <div><span>Bonus uit punten</span><strong data-veld="bonus"></strong></div>
+      <div><span>Volgend punt bij</span><strong data-veld="volgende"></strong></div>
     </div>
-    <button type="button" class="btn groen vol" id="graduate-btn" style="margin-top:14px" ${winst > 0 ? "" : "disabled"}>
-      ${winst > 0 ? `Afstuderen voor ${fmt(winst)} studiepunten` : "Nog niet genoeg verdiend"}
-    </button>`;
+    <button type="button" class="btn groen vol" id="graduate-btn" style="margin-top:14px"></button>`;
+  const veld = (naam) => graduateCard.querySelector(`[data-veld="${naam}"]`);
+  kaart = { winst: veld("winst"), punten: veld("punten"), bonus: veld("bonus"), volgende: veld("volgende"), knop: graduateCard.querySelector("#graduate-btn") };
 
-  graduateCard.querySelector("#graduate-btn").addEventListener("click", () => {
+  kaart.knop.addEventListener("click", () => {
+    const winst = ectsOnGraduate();
+    if (winst <= 0) return;
     dialog({
       title: "Afstuderen?",
       body: `<p>Je verliest je packets, je apparaten en je upgrades van deze run.</p>
-             <p>Je houdt <strong>${fmt(G.stats.achievements)} prestaties</strong>, je volledige studieboom en je krijgt er <strong>${fmt(winst)} studiepunten</strong> bij.</p>`,
+             <p>Je houdt <strong>${fmt(D.aantalPrestaties)} prestaties</strong>, je volledige studieboom en je krijgt er <strong>${fmt(winst)} studiepunten</strong> bij.</p>`,
       actions: [
         { label: "Toch niet", style: "ghost" },
         {
@@ -431,6 +447,7 @@ function renderStudie() {
           style: "groen",
           onClick: () => {
             const gained = graduate();
+            if (!gained) return;
             treeBuilt = false;
             resetPanels();
             toast({ title: "Diploma behaald", text: `${fmt(gained)} studiepunten erbij. Je netwerk begint opnieuw.`, icon: "🎓", tone: "goed" });
@@ -440,9 +457,28 @@ function renderStudie() {
       ],
     });
   });
+}
 
-  if (!treeBuilt) buildTree();
+export function syncStudie(forceer = false) {
+  if (!kaart) return;
+  const winst = ectsOnGraduate();
+  const volgende = lifetimeForEcts(G.prestige + winst + 1, D.ectsGain);
+  const sleutel = `${winst}|${G.ects}|${G.prestige}|${volgende}`;
+  if (!forceer && sleutel === studieSleutel) return;
+  studieSleutel = sleutel;
+  zet(kaart.winst, fmt(winst));
+  zet(kaart.punten, `${fmt(G.ects)} vrij · ${fmt(G.prestige)} totaal`);
+  zet(kaart.bonus, `+${fmtPct(G.prestige * BONUS_PER_PUNT, 0)} op alles`);
+  zet(kaart.volgende, `${fmtLong(volgende)} totaal`);
+  kaart.knop.disabled = winst <= 0;
+  zet(kaart.knop, winst > 0 ? `Afstuderen voor ${fmt(winst)} studiepunten` : "Nog niet genoeg verdiend");
   syncTree();
+}
+
+function renderStudie() {
+  if (!kaart) bouwKaart();
+  if (!treeBuilt) buildTree();
+  syncStudie(true);
 }
 
 function buildTree() {
@@ -472,7 +508,7 @@ function buildTree() {
         if (buyNode(node.id)) {
           blip(880, 0.12);
           toast({ title: node.name, text: node.note, icon: node.icon, tone: "goed" });
-          renderStudie();
+          syncStudie(true);
         }
       });
       attachTooltip(btn, () => {
@@ -506,7 +542,7 @@ function syncTree() {
     btn.classList.toggle("bezit", bezit);
     btn.classList.toggle("kan", kan);
     btn.classList.toggle("kanniet", !kan && !bezit);
-    btn.setAttribute("aria-disabled", String(!kan));
+    zetAttr(btn, "aria-disabled", String(!kan));
   }
   for (const draad of treeEl.querySelectorAll(".draad")) {
     const node = NODES.find((n) => n.id === draad.dataset.after);
@@ -519,6 +555,8 @@ function syncTree() {
 const meerEl = document.getElementById("meer-body");
 let skinTelling = 0;
 let meerBuilt = false;
+const statEls = new Map();
+const vakEls = new Map();
 
 // De rijen staan vast, alleen de waarden worden bijgewerkt. Anders verspringt
 // het venster twee keer per seconde en kun je niets selecteren.
@@ -531,8 +569,8 @@ const STATRIJEN = [
   ["lifetime", "Totaal ooit", () => fmt(G.stats.lifetime)],
   ["run", "Deze run", () => fmt(G.stats.runLifetime)],
   ["apparaten", "Apparaten", () => fmt(D.totalBuildings)],
-  ["upgrades", "Upgrades", () => fmt(G.stats.upgrades)],
-  ["prestaties", "Prestaties", () => `${fmt(G.stats.achievements)} / ${ACHIEVEMENTS.length}`],
+  ["upgrades", "Upgrades", () => fmt(D.aantalUpgrades)],
+  ["prestaties", "Prestaties", () => `${fmt(D.aantalPrestaties)} / ${ACHIEVEMENTS.length}`],
   ["goud", "Gouden packets", () => fmt(G.stats.goldenClicks)],
   ["ddos", "Rode packets genegeerd", () => fmt(G.stats.ddosIgnored)],
   ["diploma", "Keer afgestudeerd", () => fmt(G.stats.prestiges)],
@@ -551,40 +589,29 @@ function renderMeer() {
     skinTelling = Object.keys(G.skins).length;
     renderUiterlijk();
   }
-  for (const [sleutel, , waarde] of STATRIJEN) {
-    const el = meerEl.querySelector(`[data-stat="${sleutel}"]`);
-    const tekst = waarde();
-    if (el && el.textContent !== tekst) el.textContent = tekst;
-  }
-  for (const [id] of Object.entries(VAKKEN)) {
-    const el = meerEl.querySelector(`[data-vak="${id}"]`);
-    if (!el) continue;
+  for (const [sleutel, , waarde] of STATRIJEN) zet(statEls.get(sleutel), waarde());
+  for (const [id, el] of vakEls) {
     const n = D.vakOwned[id] || 0;
-    const tekst = `${fmt(n)} apparaten · +${fmtPct(Math.floor(n / 25) * 0.02, 0)}`;
-    if (el.textContent !== tekst) el.textContent = tekst;
+    zet(el, `${fmt(n)} apparaten · +${fmtPct(Math.floor(n / 25) * 0.02, 0)}`);
   }
 }
 
-const PORTRET_BRON = {
-  evolved: "Gemini_Generated_Image_jsk7ebjsk7ebjsk7.png",
-};
 // De ring- en portretvoorbeeldjes tonen elkaars huidige keuze, zodat je ziet
 // hoe de combinatie eruitziet voor je hem kiest.
-const STANDAARD_BRON = "35616611_186097762080080_1909471807589580800_n.jpg";
-
 function skinKnop(soort, skin) {
   const open = skinUnlocked(soort, skin.id);
   const gekozen = G.uiterlijk[soort] === skin.id;
-  const foto = `<img src="${PORTRET_BRON[skin.id] || STANDAARD_BRON}" alt="" />`;
+  const portret = soort === "portret" ? skin.id : G.uiterlijk.portret;
+  const foto = `<img src="${esc(fotoVoor(portret))}" alt="" />`;
   const preview = soort === "achtergrond"
-    ? `<span class="skin-preview" data-achtergrond="${skin.id}"></span>`
+    ? `<span class="skin-preview" data-achtergrond="${esc(skin.id)}"></span>`
     : soort === "ring"
-      ? `<span class="skin-preview" data-ring="${skin.id}" data-portret="${G.uiterlijk.portret}">${foto}</span>`
-      : `<span class="skin-preview" data-portret="${skin.id}" data-ring="${G.uiterlijk.ring}">${foto}</span>`;
+      ? `<span class="skin-preview" data-ring="${esc(skin.id)}" data-portret="${esc(G.uiterlijk.portret)}">${foto}</span>`
+      : `<span class="skin-preview" data-portret="${esc(skin.id)}" data-ring="${esc(G.uiterlijk.ring)}">${foto}</span>`;
   return `
-    <button type="button" class="skin${open ? "" : " op-slot"}" data-soort="${soort}" data-id="${skin.id}"
+    <button type="button" class="skin${open ? "" : " op-slot"}" data-soort="${soort}" data-id="${esc(skin.id)}"
             aria-pressed="${gekozen}" aria-disabled="${!open}"
-            title="${open ? skin.beschrijving : skin.hoe}">
+            title="${esc(open ? skin.beschrijving : skin.hoe)}">
       ${preview}
       <span class="skin-naam">${open ? skin.naam : "Op slot"}</span>
       <span class="skin-hoe">${open ? skin.beschrijving : skin.hoe}</span>
@@ -592,15 +619,15 @@ function skinKnop(soort, skin) {
 }
 
 function renderUiterlijk() {
-  const kaart = meerEl.querySelector("#uiterlijk-kaart");
-  if (!kaart) return;
+  const kaartEl = meerEl.querySelector("#uiterlijk-kaart");
+  if (!kaartEl) return;
   let totaal = 0;
   for (const soort of Object.keys(UITERLIJK)) {
-    kaart.querySelector(`.skinrij[data-soort="${soort}"]`).innerHTML =
+    kaartEl.querySelector(`.skinrij[data-soort="${soort}"]`).innerHTML =
       UITERLIJK[soort].map((skin) => skinKnop(soort, skin)).join("");
     totaal += UITERLIJK[soort].length;
   }
-  kaart.querySelector("#uiterlijk-telling").textContent =
+  kaartEl.querySelector("#uiterlijk-telling").textContent =
     `${Object.keys(G.skins).length} van de ${totaal} vrijgespeeld`;
 }
 
@@ -613,7 +640,7 @@ function buildMeer() {
       ${Object.keys(UITERLIJK)
         .map((soort) => `<h4 class="skin-kop">${SOORTNAMEN[soort]}</h4><div class="skinrij" data-soort="${soort}"></div>`)
         .join("")}
-      <h4 class="skin-kop">Netwerknaam</h4>
+      <h4 class="skin-kop"><label for="opt-netwerknaam">Netwerknaam</label></h4>
       <input class="veld" id="opt-netwerknaam" maxlength="24" placeholder="Bijvoorbeeld: Serge-net" autocomplete="off" />
       <p class="panel-intro" style="margin-top:8px">Komt onder de titel van het spel te staan. Laat leeg om hem weg te laten.</p>
     </div>
@@ -661,15 +688,18 @@ function buildMeer() {
         <button type="button" class="btn" id="btn-save">Nu opslaan</button>
         <button type="button" class="btn ghost" id="btn-export">Kopieer code</button>
         <button type="button" class="btn ghost" id="btn-import">Code invoeren</button>
+        <button type="button" class="btn ghost" id="btn-herstel" hidden>Import ongedaan maken</button>
         <button type="button" class="btn gevaar" id="btn-wipe">Alles wissen</button>
       </div>
-      <p class="melding" id="opslag-melding"></p>
+      <p class="melding" id="opslag-melding" role="status"></p>
       <p class="panel-intro" style="margin-top:10px">Je voortgang staat in deze browser en wordt elke twintig seconden bewaard. Met de code neem je hem mee naar een ander toestel.</p>
     </div>
     <div class="kaart">
       <h3>Over</h3>
-      <p class="panel-intro">Serge Clicker <span id="versie" style="cursor:default">v2.0</span> — gemaakt voor de klas.</p>
+      <p class="panel-intro">Serge Clicker <span id="versie" style="cursor:default">v${VERSIE}</span> — gemaakt voor de klas.</p>
     </div>`;
+  for (const [sleutel] of STATRIJEN) statEls.set(sleutel, meerEl.querySelector(`[data-stat="${sleutel}"]`));
+  for (const id of Object.keys(VAKKEN)) vakEls.set(id, meerEl.querySelector(`[data-vak="${id}"]`));
   meerEl.addEventListener("click", (e) => {
     const knop = e.target.closest(".skin");
     if (!knop) return;
@@ -704,7 +734,8 @@ export function resetPanels() {
   shopSignature = "";
   upgradeSignature = "";
   achSignature = "";
+  studieSleutel = "";
   treeBuilt = false;
 }
 
-export { renderShop, renderUpgrades, renderAchievements, renderStudie, renderMeer, syncTree };
+export { renderShop, renderUpgrades, renderAchievements, renderStudie, renderMeer };

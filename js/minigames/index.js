@@ -1,4 +1,13 @@
-// Het labo: vier opdrachten achter één tabblad, één tegelijk in beeld.
+// Het labo: vijf opdrachten achter één tabblad, één tegelijk in beeld.
+//
+// Het contract voor een opdracht:
+//   render(root)   bouwt de opdracht op in root
+//   update(root)   optioneel; wordt elke seconde aangeroepen zolang de
+//                  opdracht in beeld is, voor klokjes en koersen
+//   stop()         optioneel; opruimen als de opdracht uit beeld gaat
+//   info           uitleg voor de knop "Hoe werkt het?" (zie info.js)
+// Opdrachten starten zelf geen timers. Zo kan er nooit een opdracht over een
+// andere heen tekenen, en draait er niets als het labo dicht is.
 
 import { G } from "../state.js";
 import { quiz } from "./quiz.js";
@@ -7,32 +16,46 @@ import { market, startMarkt } from "./market.js";
 import { patch } from "./patch.js";
 import { cursus } from "./cursus.js";
 import { emit } from "../bus.js";
+import { dialog } from "../ui/fx.js";
+import { infoHtml } from "./info.js";
 
 export const GAMES = [cursus, quiz, terminal, market, patch];
 
 const picker = document.getElementById("labo-picker");
 const stage = document.getElementById("labo-stage");
 let actief = null;
-let hertekenTimer = null;
+let updateTimer = null;
 let pickerTimer = null;
+
+function knopInhoud(game, open) {
+  return `<b aria-hidden="true">${open ? game.icon : "🔒"}</b>${game.name}${open ? "" : `<small>${game.eis}</small>`}`;
+}
 
 function kies(game) {
   if (!game.unlocked()) return;
+  actief?.stop?.();
   actief = game;
   G.minigames.laatste = game.id;
-  for (const btn of picker.children) btn.classList.toggle("on", btn.dataset.id === game.id);
-  teken();
+  for (const btn of picker.children) {
+    const aan = btn.dataset.id === game.id;
+    btn.classList.toggle("on", aan);
+    btn.setAttribute("aria-pressed", String(aan));
+  }
+  game.render(stage);
+  clearInterval(updateTimer);
+  updateTimer = setInterval(() => actief?.update?.(stage), 1000);
 }
 
-function teken() {
-  clearInterval(hertekenTimer);
-  if (!actief) return;
-  actief.stop?.();
-  actief.render(stage);
-  // De markt en de patchkast lopen door; die tekenen we periodiek opnieuw.
-  if (actief.id === "market") hertekenTimer = setInterval(() => actief.render(stage), 5000);
-  if (actief.id === "patch") hertekenTimer = setInterval(() => actief.render(stage), 4000);
-}
+// De knop "Hoe werkt het?" zit in de kop van elke opdracht. Eén luisteraar op
+// het podium is genoeg, ook als de opdracht zichzelf opnieuw opbouwt.
+stage.addEventListener("click", (e) => {
+  if (!e.target.closest("[data-info]") || !actief?.info) return;
+  dialog({
+    title: `${actief.icon} ${actief.name}: zo werkt het`,
+    body: infoHtml(actief.info),
+    actions: [{ label: "Duidelijk", style: "ghost" }],
+  });
+});
 
 export function renderLabo() {
   picker.innerHTML = "";
@@ -42,7 +65,8 @@ export function renderLabo() {
     btn.type = "button";
     btn.dataset.id = game.id;
     btn.disabled = !open;
-    btn.innerHTML = `<b>${open ? game.icon : "🔒"}</b>${game.name}${open ? "" : `<small>${game.eis}</small>`}`;
+    btn.setAttribute("aria-pressed", "false");
+    btn.innerHTML = knopInhoud(game, open);
     btn.addEventListener("click", () => kies(game));
     picker.append(btn);
   }
@@ -61,15 +85,17 @@ function syncPicker() {
     const open = game.unlocked();
     if (btn.disabled === !open) continue;
     btn.disabled = !open;
-    btn.innerHTML = `<b>${open ? game.icon : "🔒"}</b>${game.name}${open ? "" : `<small>${game.eis}</small>`}`;
+    btn.innerHTML = knopInhoud(game, open);
     if (open && !actief) kies(game);
   }
 }
 
 export function stopLabo() {
   actief?.stop?.();
-  clearInterval(hertekenTimer);
+  actief = null;
+  clearInterval(updateTimer);
   clearInterval(pickerTimer);
+  updateTimer = null;
   pickerTimer = null;
 }
 

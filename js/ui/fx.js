@@ -1,12 +1,16 @@
-// Tooltips, meldingen en klik-effecten.
+// Tooltips, meldingen, vensters en klik-effecten.
+//
+// Het DOM wordt pas aangeraakt als er echt iets getoond wordt. Daardoor kunnen
+// de tests de spelmodules ook buiten de browser importeren.
 
 import { G } from "../state.js";
 
-const tooltipEl = document.getElementById("tooltip");
-const toaster = document.getElementById("toaster");
-const fxLayer = document.getElementById("fx");
+const heeftDom = typeof document !== "undefined";
+const $ = (id) => document.getElementById(id);
 
-export const hoverCapable = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+export const hoverCapable = typeof window !== "undefined" && !!window.matchMedia?.("(hover: hover) and (pointer: fine)").matches;
+
+// --- Tooltips ---
 
 let activeSource = null;
 let activeRender = null;
@@ -19,15 +23,17 @@ export function attachTooltip(el, render) {
   el.addEventListener("blur", () => hideTooltip(el));
 }
 
-export function showTooltip(el, render) {
+function showTooltip(el, render) {
   activeSource = el;
   activeRender = render;
+  const tooltipEl = $("tooltip");
   tooltipEl.innerHTML = render();
   tooltipEl.hidden = false;
   position(el);
 }
 
 function position(el) {
+  const tooltipEl = $("tooltip");
   const rect = el.getBoundingClientRect();
   const tip = tooltipEl.getBoundingClientRect();
   const gutter = 12;
@@ -42,11 +48,11 @@ function position(el) {
   tooltipEl.style.top = `${Math.round(top)}px`;
 }
 
-export function hideTooltip(el) {
+function hideTooltip(el) {
   if (el && activeSource !== el) return;
   activeSource = null;
   activeRender = null;
-  tooltipEl.hidden = true;
+  $("tooltip").hidden = true;
 }
 
 // Na een aankoop verandert de prijs; de tooltip die openstaat moet mee.
@@ -56,16 +62,19 @@ export function refreshTooltip() {
     hideTooltip();
     return;
   }
-  tooltipEl.innerHTML = activeRender();
+  $("tooltip").innerHTML = activeRender();
   position(activeSource);
 }
 
 // --- Meldingen ---
 
 export function toast({ title, text, icon = "", tone = "" }) {
+  if (!heeftDom) return;
+  const toaster = $("toaster");
   const el = document.createElement("div");
   el.className = `toast ${tone}`.trim();
-  el.innerHTML = `${icon ? `<span class="ikoon">${icon}</span>` : ""}<h4></h4>${text ? "<p></p>" : ""}`;
+  el.innerHTML = `${icon ? `<span class="ikoon" aria-hidden="true"></span>` : ""}<h4></h4>${text ? "<p></p>" : ""}`;
+  if (icon) el.querySelector(".ikoon").textContent = icon;
   el.querySelector("h4").textContent = title;
   if (text) el.querySelector("p").textContent = text;
   toaster.append(el);
@@ -78,22 +87,33 @@ export function toast({ title, text, icon = "", tone = "" }) {
   while (toaster.children.length > max) toaster.firstElementChild.remove();
 }
 
+// Iets voorlezen voor wie een schermlezer gebruikt, zonder het te tonen.
+export function kondigAan(tekst) {
+  if (!heeftDom) return;
+  const el = $("aankondiging");
+  el.textContent = "";
+  // Eerst leegmaken, dan vullen: zo wordt dezelfde zin ook twee keer gelezen.
+  setTimeout(() => (el.textContent = tekst), 50);
+}
+
 // --- Klik-effecten ---
 
 export function floatText(x, y, text) {
+  if (!heeftDom) return;
   const el = document.createElement("span");
   el.className = "zweef";
   el.textContent = text;
   el.style.left = `${x}px`;
   el.style.top = `${y}px`;
-  fxLayer.append(el);
+  $("fx").append(el);
   setTimeout(() => el.remove(), 1200);
 }
 
 const VONKKLEUREN = ["#38bdf8", "#3b82f6", "#6366f1", "#22d3ee", "#facc15"];
 
 export function sparks(x, y, count = 8) {
-  if (!G.options.motion) return;
+  if (!heeftDom || !G.options.motion) return;
+  const laag = $("fx");
   for (let i = 0; i < count; i++) {
     const el = document.createElement("span");
     el.className = "vonk";
@@ -104,7 +124,7 @@ export function sparks(x, y, count = 8) {
     el.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
     el.style.setProperty("--dy", `${Math.sin(angle) * dist}px`);
     el.style.background = VONKKLEUREN[Math.floor(Math.random() * VONKKLEUREN.length)];
-    fxLayer.append(el);
+    laag.append(el);
     setTimeout(() => el.remove(), 700);
   }
 }
@@ -115,7 +135,7 @@ export function sparks(x, y, count = 8) {
 let audio = null;
 function ctx() {
   if (!audio) {
-    const Ctor = window.AudioContext || window.webkitAudioContext;
+    const Ctor = typeof window !== "undefined" && (window.AudioContext || window.webkitAudioContext);
     if (!Ctor) return null;
     audio = new Ctor();
   }
@@ -142,42 +162,58 @@ export function chord(freqs, duration = 0.25) {
   freqs.forEach((f, i) => setTimeout(() => blip(f, duration, 0.04), i * 60));
 }
 
-// --- Dialoog ---
+// --- Vensters ---
+// Eén <dialog>, met een wachtrij: komen er twee vensters tegelijk (welkom
+// terug en een nieuw portret), dan zie je ze na elkaar in plaats van dat het
+// tweede het eerste wegdrukt. showModal() houdt de focus binnen het venster
+// en zet hem na het sluiten terug waar hij stond.
 
-const modal = document.getElementById("modal");
-const modalTitle = document.getElementById("modal-title");
-const modalBody = document.getElementById("modal-body");
-const modalActions = document.getElementById("modal-actions");
-let lastFocus = null;
+const wachtrij = [];
+let huidig = null;
+let voorbereid = false;
 
-export function dialog({ title, body, actions }) {
-  lastFocus = document.activeElement;
-  modalTitle.textContent = title;
-  modalBody.innerHTML = body;
-  modalActions.innerHTML = "";
+function bereidVoor() {
+  if (voorbereid) return;
+  voorbereid = true;
+  const modal = $("modal");
+  modal.addEventListener("close", () => {
+    huidig = null;
+    toonVolgende();
+  });
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.close();
+  });
+}
+
+export function dialog(opties) {
+  if (!heeftDom) return;
+  bereidVoor();
+  wachtrij.push(opties);
+  if (!huidig) toonVolgende();
+}
+
+function toonVolgende() {
+  huidig = wachtrij.shift() || null;
+  if (!huidig) return;
+  const { title, body, actions = [] } = huidig;
+  const modal = $("modal");
+  const lichaam = $("modal-body");
+  const knoppen = $("modal-actions");
+  $("modal-title").textContent = title;
+  lichaam.innerHTML = body;
+  knoppen.innerHTML = "";
   for (const action of actions) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = `btn ${action.style || "ghost"}`;
     btn.textContent = action.label;
     btn.addEventListener("click", () => {
-      closeDialog();
-      action.onClick?.(modalBody);
+      // Een actie die false teruggeeft houdt het venster open, bijvoorbeeld
+      // om een foutmelding te tonen.
+      if (action.onClick?.(lichaam) === false) return;
+      if (modal.open) modal.close();
     });
-    modalActions.append(btn);
+    knoppen.append(btn);
   }
-  modal.hidden = false;
-  modalActions.querySelector("button")?.focus();
+  modal.showModal();
 }
-
-export function closeDialog() {
-  modal.hidden = true;
-  lastFocus?.focus?.();
-}
-
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) closeDialog();
-});
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !modal.hidden) closeDialog();
-});

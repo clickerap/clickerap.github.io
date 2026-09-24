@@ -126,8 +126,13 @@ ach("cli-config", "Running config", "💾", "Rond je eerste opdracht in de termi
 ach("cli-tien", "Vaste hand op de CLI", "🧑‍💻", "Rond tien opdrachten in de terminal af.", null, { manual: true });
 ach("beurs-winst", "Koop laag, verkoop hoog", "📈", "Maak winst op de bandbreedtemarkt.", null, { manual: true });
 ach("beurs-fortuin", "Marktmanipulatie", "🤑", "Verdien een fortuin op de markt in één sessie.", null, { manual: true });
-ach("patch-1", "Eerste kabel geplant", "🌱", "Plant iets in de patchkast.", null, { manual: true });
-ach("patch-protocol", "Nieuw protocol", "🧬", "Ontdek een protocol door kruising.", null, { manual: true });
+ach("beurs-tien", "Beursvloer", "🔔", "Verkoop tien keer met winst op de markt.", null, { manual: true });
+ach("beurs-automaat", "Automatische piloot", "🤖", "Laat een winstorder of verliesgrens voor je verkopen.", null, { manual: true });
+ach("beurs-gerucht", "Voorkennis", "🗞️", "Koop op een gerucht dat uitkomt, en verkoop met winst.", null, { manual: true });
+ach("patch-1", "Eerste werkorder", "🗒️", "Lever je eerste werkorder in de patchkast op.", null, { manual: true });
+ach("patch-luchtdicht", "Luchtdicht", "🌬️", "Lever een werkorder op waarbij de hele kabelgoot vol ligt.", null, { manual: true });
+ach("patch-meester", "Kabelmeester", "🎖️", "Lever een goot van 8 bij 8 luchtdicht op, zonder hulp van Serge.", null, { manual: true });
+ach("patch-protocol", "Nieuw protocol", "🧬", "Ontdek een protocol in de patchkast.", null, { manual: true });
 ach("patch-alles", "Volledige patchkast", "🗃️", "Ontdek elk protocol.", null, { manual: true });
 
 // --- Overig ---

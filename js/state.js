@@ -6,13 +6,24 @@
 import { BUILDINGS, BUILDING_BY_ID, VAKKEN, costOf, bulkCost, affordableAmount, refundOf } from "./data/buildings.js";
 import { UPGRADES, UPGRADE_BY_ID } from "./data/upgrades.js";
 import { ACHIEVEMENTS, ACHIEVEMENT_BY_ID, EGG_COUNT, KOFFIE_RANKS } from "./data/achievements.js";
-import { NODES, NODE_BY_ID, ectsFor } from "./data/skilltree.js";
-import { BUFF_BY_ID } from "./data/buffs.js";
+import { NODES, NODE_BY_ID, ectsFor, BONUS_PER_PUNT } from "./data/skilltree.js";
+import { effectVan } from "./data/buffs.js";
 import { UITERLIJK, ALLE_SKINS, STANDAARD } from "./data/uiterlijk.js";
+
+export const SAVE_VERSION = 5;
+
+// "Koffie op" vraagt een vol koffiepeil. Hij telt daarom zelf niet mee,
+// anders zou hij zichzelf nodig hebben.
+const KOFFIE_VOL = "koffie-vol";
+
+// Wie op systeemniveau om minder beweging vraagt, begint met animaties uit.
+function wilMinderBeweging() {
+  return typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
 
 export function freshState() {
   return {
-    version: 2,
+    version: SAVE_VERSION,
     packets: 0,
     buildings: {},
     upgrades: {},
@@ -30,13 +41,10 @@ export function freshState() {
       lifetime: 0,
       runLifetime: 0,
       runStarted: Date.now(),
-      upgrades: 0,
-      achievements: 0,
       goldenClicks: 0,
       goldenValue: 0,
       ddosSeen: 0,
       ddosIgnored: 0,
-      eggs: 0,
       sold: 0,
       handmade: 0,
       prestiges: 0,
@@ -48,18 +56,18 @@ export function freshState() {
     options: {
       notation: "kort",
       sound: false,
-      motion: true,
+      motion: !wilMinderBeweging(),
       buyAmount: 1,
       sellMode: false,
-      theme: "blauw",
       netwerknaam: "",
     },
     minigames: {
       quiz: { streak: 0, best: 0, correct: 0, wrong: 0, nextAt: 0 },
-      cli: { hostname: "SERGE", mode: "user", interfaces: {}, opdracht: null, nextAt: 0, gedaan: 0 },
-      market: { cash: 0, holdings: {}, prices: null, profit: 0, tick: 0 },
-      patch: { grid: null, discovered: {}, plantedEver: 0 },
+      cli: { hostname: "SERGE", mode: "user", iface: null, interfaces: {}, opdracht: null, nextAt: 0, gedaan: 0 },
+      market: { holdings: {}, prices: null, historie: null, trend: {}, nieuws: [], geruchten: [], stats: { verkopen: 0, gewonnen: 0, besteWinst: 0 }, profit: 0, tick: 0 },
+      patch: { discovered: {}, gedaan: 0, luchtdicht: 0, nummer: 0, wachtrij: [], volgendeAt: 0, huidig: null },
       cursus: { gelezen: {}, open: null },
+      laatste: null,
     },
     seen: {},
     lastSeen: Date.now(),
@@ -73,13 +81,18 @@ export const G = freshState();
 export const D = {
   pps: 0,
   clickValue: 0,
+  clickFromPps: 0,
   perBuilding: {},
   buildingMult: {},
   totalBuildings: 0,
   vakOwned: {},
+  aantalPrestaties: 0,
+  aantalUpgrades: 0,
+  aantalEggs: 0,
   koffie: 0,
   koffieMult: 1,
   prestigeMult: 1,
+  allMult: 1,
   buffPps: 1,
   buffClick: 1,
   offlineCap: 2 * 3600,
@@ -107,13 +120,15 @@ export function touch() {
 }
 
 // Het spelstaat-object zoals data-bestanden het verwachten (req-functies).
+// De tellers van prestaties, upgrades en eggs worden uit de lijsten afgeleid,
+// zodat ze nooit uit de pas kunnen lopen.
 function reqView() {
   return {
     buildings: G.buildings,
     upgrades: G.upgrades,
     achievements: G.achievements,
     nodes: G.nodes,
-    stats: G.stats,
+    stats: { ...G.stats, achievements: D.aantalPrestaties, upgrades: D.aantalUpgrades, eggs: D.aantalEggs },
     prestige: G.prestige,
     pps: D.pps,
     koffie: D.koffie,
@@ -123,8 +138,19 @@ function reqView() {
   };
 }
 
-export function view() {
-  return reqView();
+function tel(lijst, geldig) {
+  let n = 0;
+  for (const id in lijst) if (lijst[id] && geldig(id)) n++;
+  return n;
+}
+
+// Een voorwaarde uit de data mag het spel nooit laten vastlopen.
+function veilig(test, v) {
+  try {
+    return !!test(v);
+  } catch {
+    return false;
+  }
 }
 
 export function recompute() {
@@ -200,6 +226,10 @@ export function recompute() {
   D.totalBuildings = total;
   D.vakOwned = vakOwned;
 
+  D.aantalPrestaties = tel(G.achievements, (id) => ACHIEVEMENT_BY_ID[id]);
+  D.aantalUpgrades = tel(G.upgrades, (id) => UPGRADE_BY_ID[id]);
+  D.aantalEggs = tel(G.eggs, (id) => ACHIEVEMENT_BY_ID[id]?.egg);
+
   // Vakniveau: elke 25 apparaten in een vak geeft dat vak 2% erbij.
   for (const vak of Object.keys(VAKKEN)) {
     mods.vakMult[vak] *= 1 + Math.floor(vakOwned[vak] / 25) * 0.02;
@@ -212,18 +242,17 @@ export function recompute() {
   }
 
   // Koffiepeil: hoeveel prestaties je hebt, ten opzichte van alles wat er is.
-  const achCount = G.stats.achievements;
-  D.koffie = Math.min(1, achCount / ACHIEVEMENTS.length);
+  const koffieTeller = D.aantalPrestaties - (G.achievements[KOFFIE_VOL] ? 1 : 0);
+  D.koffie = Math.min(1, koffieTeller / (ACHIEVEMENTS.length - 1));
   D.koffieMult = 1 + D.koffie * mods.koffiePower * 4;
-  D.prestigeMult = 1 + G.prestige * 0.01;
+  D.prestigeMult = 1 + G.prestige * BONUS_PER_PUNT;
 
-  // Buffs
+  // Buffs en straffen. Het effect komt altijd uit de definities.
   let buffPps = 1;
   let buffClick = 1;
   const overclocked = {};
   for (const buff of G.buffs) {
-    const def = BUFF_BY_ID[buff.id] || buff.def;
-    const effect = buff.effect || def?.effect;
+    const effect = effectVan(buff, { kracht: mods.goldenPower, weerstand: mods.ddosResist });
     if (!effect) continue;
     if (effect.ppsMult) buffPps *= effect.ppsMult;
     if (effect.clickMult) buffClick *= effect.clickMult;
@@ -246,8 +275,10 @@ export function recompute() {
   }
   D.pps = pps;
 
-  const baseClick = (1 + mods.clickFlat) * mods.clickMult * globalMult * buffClick;
-  D.clickValue = baseClick + pps * mods.clickFromPps;
+  // Een klikbuff (of -straf) geldt voor de hele klik, ook voor het deel dat
+  // uit je productie komt. Laat in het spel is dat bijna de hele klik.
+  const baseClick = (1 + mods.clickFlat) * mods.clickMult * globalMult;
+  D.clickValue = (baseClick + pps * mods.clickFromPps) * buffClick;
   D.clickFromPps = mods.clickFromPps;
 
   D.goldenFreq = mods.goldenFreq;
@@ -271,9 +302,10 @@ export function recompute() {
 }
 
 // --- Verdienen en uitgeven ---
+// Alleen eindige, positieve bedragen. Een NaN mag de voorraad nooit bereiken.
 
 export function earn(amount, { lifetime = true, handmade = false } = {}) {
-  if (!(amount > 0)) return;
+  if (!(amount > 0) || !Number.isFinite(amount)) return;
   G.packets += amount;
   if (lifetime) {
     G.stats.lifetime += amount;
@@ -283,6 +315,7 @@ export function earn(amount, { lifetime = true, handmade = false } = {}) {
 }
 
 export function spend(amount) {
+  if (!(amount >= 0) || !Number.isFinite(amount)) return false;
   if (G.packets < amount) return false;
   G.packets -= amount;
   return true;
@@ -290,12 +323,19 @@ export function spend(amount) {
 
 // --- Gebouwen ---
 
+// 1, 10, 100 of "max". Al het andere telt als 1.
+function aantalVan(amount, max) {
+  if (amount === "max") return max;
+  const n = Math.floor(Number(amount));
+  return n > 0 ? n : 1;
+}
+
 export function buyBuilding(id, amount = 1) {
   const b = BUILDING_BY_ID[id];
   if (!b) return 0;
   const owned = G.buildings[id] || 0;
-  const n = amount === "max" ? affordableAmount(b, owned, G.packets) : amount;
-  if (n <= 0) return 0;
+  const n = aantalVan(amount, affordableAmount(b, owned, G.packets));
+  if (!(n > 0)) return 0;
   const cost = bulkCost(b, owned, n);
   if (!spend(cost)) return 0;
   G.buildings[id] = owned + n;
@@ -307,8 +347,8 @@ export function sellBuilding(id, amount = 1) {
   const b = BUILDING_BY_ID[id];
   if (!b) return 0;
   const owned = G.buildings[id] || 0;
-  const n = amount === "max" ? owned : Math.min(owned, amount);
-  if (n <= 0) return 0;
+  const n = Math.min(owned, aantalVan(amount, owned));
+  if (!(n > 0)) return 0;
   earn(refundOf(b, owned, n), { lifetime: false });
   G.buildings[id] = owned - n;
   G.stats.sold += n;
@@ -320,10 +360,10 @@ export function priceOf(id, amount = 1, selling = false) {
   const b = BUILDING_BY_ID[id];
   const owned = G.buildings[id] || 0;
   if (selling) {
-    const n = amount === "max" ? owned : Math.min(owned, amount);
+    const n = Math.min(owned, aantalVan(amount, owned));
     return { amount: n, price: refundOf(b, owned, n) };
   }
-  const n = amount === "max" ? affordableAmount(b, owned, G.packets) : amount;
+  const n = aantalVan(amount, affordableAmount(b, owned, G.packets));
   return { amount: n, price: bulkCost(b, owned, Math.max(n, 1)) };
 }
 
@@ -332,21 +372,22 @@ export function nextCost(id) {
 }
 
 // --- Upgrades ---
+// De lijst wordt hooguit één keer per seconde opnieuw uitgerekend, of meteen
+// als er iets veranderde. De interface vraagt hem tien keer per seconde op.
+
+let upgradeCache = null;
 
 export function availableUpgrades() {
+  const nu = Date.now();
+  if (upgradeCache && upgradeCache.rev === revision && nu - upgradeCache.tijd < 1000) return upgradeCache.lijst;
   const v = reqView();
   const out = [];
   for (const u of UPGRADES) {
     if (G.upgrades[u.id]) continue;
-    let ok = false;
-    try {
-      ok = u.req ? !!u.req(v) : true;
-    } catch {
-      ok = false;
-    }
-    if (ok) out.push(u);
+    if (!u.req || veilig(u.req, v)) out.push(u);
   }
   out.sort((a, b) => a.cost - b.cost);
+  upgradeCache = { rev: revision, tijd: nu, lijst: out };
   return out;
 }
 
@@ -355,7 +396,6 @@ export function buyUpgrade(id) {
   if (!u || G.upgrades[id]) return false;
   if (!spend(u.cost)) return false;
   G.upgrades[id] = true;
-  G.stats.upgrades++;
   recompute();
   return true;
 }
@@ -372,10 +412,14 @@ export function unlock(id) {
   const a = ACHIEVEMENT_BY_ID[id];
   if (!a) return false;
   G.achievements[id] = true;
-  G.stats.achievements++;
-  if (a.egg) G.stats.eggs++;
   recompute();
-  for (const fn of achievementListeners) fn(a);
+  for (const fn of achievementListeners) {
+    try {
+      fn(a);
+    } catch (err) {
+      console.error(`Fout bij het melden van prestatie "${id}"`, err);
+    }
+  }
   return true;
 }
 
@@ -383,13 +427,7 @@ export function checkAchievements() {
   const v = reqView();
   for (const a of ACHIEVEMENTS) {
     if (G.achievements[a.id] || !a.test) continue;
-    let hit = false;
-    try {
-      hit = !!a.test(v);
-    } catch {
-      hit = false;
-    }
-    if (hit) unlock(a.id);
+    if (veilig(a.test, v)) unlock(a.id);
   }
 }
 
@@ -445,13 +483,10 @@ export function graduate() {
     ...fresh.stats,
     clicks: keep.stats.clicks,
     lifetime: keep.stats.lifetime,
-    upgrades: 0,
-    achievements: keep.stats.achievements,
     goldenClicks: keep.stats.goldenClicks,
     goldenValue: keep.stats.goldenValue,
     ddosSeen: keep.stats.ddosSeen,
     ddosIgnored: keep.stats.ddosIgnored,
-    eggs: keep.stats.eggs,
     handmade: keep.stats.handmade,
     prestiges: keep.stats.prestiges + 1,
     playTime: keep.stats.playTime,
@@ -479,7 +514,7 @@ export function buyNode(id) {
 }
 
 // --- Zichtbaarheid in de winkel ---
-// Een gebouw blijft zichtbaar zodra je ooit de helft van de prijs had.
+// Een gebouw blijft zichtbaar zodra je ooit 40% van de prijs had.
 
 export function refreshSeen() {
   let changed = false;
@@ -515,14 +550,7 @@ export function checkSkins() {
   const v = reqView();
   for (const skin of ALLE_SKINS) {
     const key = skinKey(skin.soort, skin.id);
-    if (G.skins[key]) continue;
-    let ok = false;
-    try {
-      ok = !!skin.eis(v);
-    } catch {
-      ok = false;
-    }
-    if (!ok) continue;
+    if (G.skins[key] || !veilig(skin.eis, v)) continue;
     G.skins[key] = true;
     touch();
     for (const fn of skinListeners) fn(skin);
@@ -546,10 +574,6 @@ export function kiesSkin(soort, id) {
   G.uiterlijk[soort] = id;
   touch();
   return true;
-}
-
-export function isEggFound(id) {
-  return !!G.eggs[id];
 }
 
 export function findEgg(id) {

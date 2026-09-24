@@ -3,14 +3,19 @@
 
 <head>
   <meta charset="UTF-8" />
+  <!-- Alleen scripts, stijlen, beelden en lettertypes van deze site zelf.
+       Een ingespoten onerror- of script-tag doet zo niets. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Serge Clicker</title>
   <meta name="description" content="Bouw het netwerk van Serge uit, van patchkabel tot singulariteit." />
   <meta name="theme-color" content="#0d2b4d" />
-  <link rel="icon" href="35616611_186097762080080_1909471807589580800_n.jpg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <!-- Nieuwe bestandsnamen: een browser die het oude pictogram onthield, haalt dit opnieuw op. -->
+  <link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+  <link rel="preload" href="fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -38,7 +43,7 @@
 
       <div class="clicker">
         <button type="button" id="serge" class="serge" aria-label="Klik op Serge om packets te versturen">
-          <img src="35616611_186097762080080_1909471807589580800_n.jpg" alt="" id="serge-img" draggable="false" />
+          <img src="img/serge.jpg" alt="" id="serge-img" width="320" height="320" draggable="false" />
         </button>
         <p class="clicker-hint" id="clicker-hint">Klik om te beginnen</p>
       </div>
@@ -95,24 +100,24 @@
     </section>
 
     <aside class="panel" aria-label="Beheer">
-      <nav class="tabs" role="tablist" id="tabs">
-        <button role="tab" id="winkel-tab" data-tab="winkel" aria-selected="true" aria-controls="winkel">Winkel</button>
-        <button role="tab" data-tab="upgrades" aria-selected="false" aria-controls="upgrades">
+      <nav class="tabs" role="tablist" id="tabs" aria-label="Onderdelen">
+        <button type="button" role="tab" id="winkel-tab" data-tab="winkel" aria-selected="true" aria-controls="winkel" tabindex="0">Winkel</button>
+        <button type="button" role="tab" id="upgrades-tab" data-tab="upgrades" aria-selected="false" aria-controls="upgrades" tabindex="-1">
           Upgrades <span class="pip" id="pip-upgrades" hidden>0</span>
         </button>
-        <button role="tab" data-tab="prestaties" aria-selected="false" aria-controls="prestaties">Prestaties</button>
-        <button role="tab" data-tab="labo" aria-selected="false" aria-controls="labo">Labo</button>
-        <button role="tab" data-tab="studie" aria-selected="false" aria-controls="studie">Studie</button>
+        <button type="button" role="tab" id="prestaties-tab" data-tab="prestaties" aria-selected="false" aria-controls="prestaties" tabindex="-1">Prestaties</button>
+        <button type="button" role="tab" id="labo-tab" data-tab="labo" aria-selected="false" aria-controls="labo" tabindex="-1">Labo</button>
+        <button type="button" role="tab" id="studie-tab" data-tab="studie" aria-selected="false" aria-controls="studie" tabindex="-1">Studie</button>
       </nav>
 
       <div class="tabpanels" id="tabpanels">
         <section role="tabpanel" id="winkel" aria-labelledby="winkel-tab">
           <div class="shopbar">
             <div class="segmented" role="group" aria-label="Aantal per aankoop">
-              <button type="button" data-amount="1" class="on">1</button>
-              <button type="button" data-amount="10">10</button>
-              <button type="button" data-amount="100">100</button>
-              <button type="button" data-amount="max">max</button>
+              <button type="button" data-amount="1" class="on" aria-pressed="true">1</button>
+              <button type="button" data-amount="10" aria-pressed="false">10</button>
+              <button type="button" data-amount="100" aria-pressed="false">100</button>
+              <button type="button" data-amount="max" aria-pressed="false">max</button>
             </div>
             <button type="button" class="toggle" id="sell-toggle" aria-pressed="false">Verkopen</button>
           </div>
@@ -129,7 +134,7 @@
           </div>
         </section>
 
-        <section role="tabpanel" id="upgrades" hidden>
+        <section role="tabpanel" id="upgrades" aria-labelledby="upgrades-tab" hidden>
           <p class="panel-intro" id="upgrade-intro">Upgrades verschijnen zodra je er een verdient.</p>
           <div class="uptegels" id="upgrade-tegels"></div>
           <details class="owned">
@@ -139,7 +144,7 @@
           <div class="upinfo" id="upgrade-info"></div>
         </section>
 
-        <section role="tabpanel" id="prestaties" hidden>
+        <section role="tabpanel" id="prestaties" aria-labelledby="prestaties-tab" hidden>
           <div class="koffie">
             <div class="koffie-head">
               <span id="koffie-rank">Geen koffie</span>
@@ -149,19 +154,19 @@
             <p class="panel-intro" id="koffie-note">Elke prestatie zet je koffiepeil hoger.</p>
           </div>
           <div class="segmented klein" role="group" aria-label="Welke prestaties tonen" id="ach-filter">
-            <button type="button" data-filter="alles" class="on">Alles</button>
-            <button type="button" data-filter="open">Nog te doen</button>
-            <button type="button" data-filter="klaar">Behaald</button>
+            <button type="button" data-filter="alles" class="on" aria-pressed="true">Alles</button>
+            <button type="button" data-filter="open" aria-pressed="false">Nog te doen</button>
+            <button type="button" data-filter="klaar" aria-pressed="false">Behaald</button>
           </div>
           <div class="achlijst" id="ach-lijst"></div>
         </section>
 
-        <section role="tabpanel" id="labo" hidden>
+        <section role="tabpanel" id="labo" aria-labelledby="labo-tab" hidden>
           <div class="labo-picker" id="labo-picker"></div>
           <div class="labo-stage" id="labo-stage"></div>
         </section>
 
-        <section role="tabpanel" id="studie" hidden>
+        <section role="tabpanel" id="studie" aria-labelledby="studie-tab" hidden>
           <div class="graduate" id="graduate-card"></div>
           <div class="tree" id="tree"></div>
         </section>
@@ -170,27 +175,28 @@
     </aside>
   </main>
 
-  <div class="sheet" id="sheet" hidden>
-    <div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+  <dialog class="sheet" id="sheet" aria-labelledby="sheet-title">
+    <div class="sheet-card">
       <div class="sheet-kop">
         <h2 id="sheet-title">Statistieken en instellingen</h2>
         <button type="button" class="sheet-sluit" id="sheet-sluit" aria-label="Sluiten">&times;</button>
       </div>
       <div class="stack sheet-body" id="meer-body"></div>
     </div>
-  </div>
+  </dialog>
 
   <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
   <div class="toaster" id="toaster" aria-live="polite"></div>
   <div class="fx" id="fx" aria-hidden="true"></div>
+  <p class="voor-schermlezers" id="aankondiging" aria-live="assertive"></p>
 
-  <div class="modal" id="modal" hidden>
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <dialog class="modal" id="modal" aria-labelledby="modal-title">
+    <div class="modal-card">
       <h2 id="modal-title"></h2>
       <div id="modal-body"></div>
       <div class="modal-actions" id="modal-actions"></div>
     </div>
-  </div>
+  </dialog>
 
   <script type="module" src="js/main.js"></script>
   <noscript>

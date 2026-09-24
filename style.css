@@ -1,6 +1,58 @@
 /* Serge Clicker — eigen stylesheet, geen framework.
    Kleur en maat staan hier bovenaan; de rest volgt daaruit. */
 
+/* IBM Plex, zelf gehost (SIL Open Font License, zie fonts/OFL.txt). Er gaat
+   zo geen verzoek naar een externe server. Plex Sans is een variabel
+   lettertype: één bestand voor alle gewichten. */
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(fonts/ibm-plex-sans-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(fonts/ibm-plex-sans-latin-ext.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/ibm-plex-mono-400-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/ibm-plex-mono-400-latin-ext.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/ibm-plex-mono-600-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/ibm-plex-mono-600-latin-ext.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 :root {
   /* Achtergrond, zoals de eerste versie: lucht naar indigo */
   --lucht: #38bdf8;
@@ -11,12 +63,14 @@
   --blauw-700: #1d4ed8;
   --blauw-600: #2563eb;
   --blauw-500: #3b82f6;
+  --blauw-400: #60a5fa;
   --blauw-300: #93c5fd;
   --blauw-100: #dbeafe;
 
   --inkt: #10233c;
   --inkt-zacht: #435a76;
-  --inkt-licht: #64799a;
+  /* 5,1:1 op wit en 4,8:1 op --vlak-zacht: genoeg voor kleine tekst. */
+  --inkt-licht: #5b6f8f;
   --lijn: #e2e8f0;
   --lijn-sterk: #cbd5e1;
   --vlak: #ffffff;
@@ -69,17 +123,32 @@ body {
   font-size: 16px;
   line-height: 1.5;
   color: var(--inkt);
-  background: linear-gradient(135deg, var(--lucht), var(--blauw) 45%, var(--indigo));
-  background-size: 220% 220%;
-  background-attachment: fixed;
-  animation: achtergrond 22s ease-in-out infinite;
+  background-color: var(--indigo);
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
 
+/* De bewegende kleurverloop zit op een eigen laag achter alles. Het beeld is
+   ruim twee keer zo breed als het venster en schuift heen en weer met een
+   transform; de browser hoeft daardoor niets opnieuw te schilderen, alleen
+   de laag te verplaatsen. */
+body::before {
+  content: "";
+  position: fixed;
+  top: -60vh;
+  left: 0;
+  width: 220vw;
+  height: 220vh;
+  z-index: -2;
+  pointer-events: none;
+  background: linear-gradient(135deg, var(--lucht), var(--blauw) 45%, var(--indigo));
+  will-change: transform;
+  animation: achtergrond 22s ease-in-out infinite;
+}
+
 @keyframes achtergrond {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(var(--schuif, -120vw)); }
 }
 
 h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.015em; }
@@ -174,21 +243,25 @@ button { font: inherit; color: inherit; }
 [data-achtergrond="staal"] { --lucht: #94a3b8; --blauw: #475569; --indigo: #0f172a; }
 [data-achtergrond="diepteruimte"] { --lucht: #1e3a8a; --blauw: #1e1b4b; --indigo: #020617; }
 [data-achtergrond="oceaan"] { --lucht: #22d3ee; --blauw: #0369a1; --indigo: #082f49; }
-[data-achtergrond="matrix"] { --lucht: #16a34a; --blauw: #052e16; --indigo: #000000; }
+[data-achtergrond="matrix"] { --lucht: #0b3a1d; --blauw: #041c0d; --indigo: #000000; }
 [data-achtergrond="nevel"] { --lucht: #a78bfa; --blauw: #6d28d9; --indigo: #2e1065; }
 [data-achtergrond="regenboog"] { --lucht: #f472b6; --blauw: #38bdf8; --indigo: #a78bfa; }
 
-body[data-achtergrond="regenboog"] {
-  background-image: linear-gradient(135deg, #f472b6, #fb923c 20%, #facc15 40%, #4ade80 60%, #38bdf8 80%, #a78bfa);
-  background-size: 320% 320%;
+/* Regenboog: een groter beeld dat sneller en verder schuift. */
+body[data-achtergrond="regenboog"]::before {
+  background: linear-gradient(135deg, #f472b6, #fb923c 20%, #facc15 40%, #4ade80 60%, #38bdf8 80%, #a78bfa);
+  top: -110vh;
+  width: 320vw;
+  height: 320vh;
+  --schuif: -220vw;
   animation-duration: 9s;
 }
 
 /* --- Bewegende achtergronden ---
-   Eén laag over de achtergrond heen, achter de kaarten. Elk thema zijn
+   Eén laag over het kleurverloop heen, achter de kaarten. Elk thema zijn
    eigen effect; met animaties uit blijft er een stilstaand beeld over. */
 
-body::before {
+body::after {
   content: "";
   position: fixed;
   inset: 0;
@@ -197,24 +270,20 @@ body::before {
   opacity: 0;
 }
 
-/* Matrix: regen van lichtgevende kolommen. */
-body[data-achtergrond="matrix"]::before {
-  opacity: 0.55;
-  background-image:
-    linear-gradient(180deg, transparent 0 38%, rgba(134, 239, 172, 0.85) 70%, transparent 100%),
-    repeating-linear-gradient(90deg, rgba(134, 239, 172, 0.55) 0 2px, transparent 2px 16px);
-  background-size: 100% 62vh, 100% 100%;
-  background-repeat: repeat-y, repeat;
-  background-blend-mode: multiply;
-  animation: matrixregen 6.5s linear infinite;
+/* Matrix: digitale regen op een eigen canvas (js/ui/regen.js). Het
+   kleurverloop eronder is dan niet nodig. */
+.matrixregen {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
 }
-@keyframes matrixregen {
-  from { background-position-y: 0; }
-  to { background-position-y: 62vh; }
-}
+body[data-achtergrond="matrix"]::before { display: none; }
 
 /* Regenboog: een trage glans die er schuin overheen trekt. */
-body[data-achtergrond="regenboog"]::before {
+body[data-achtergrond="regenboog"]::after {
   opacity: 1;
   background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.28) 50%, transparent 62%);
   background-size: 260% 100%;
@@ -226,7 +295,7 @@ body[data-achtergrond="regenboog"]::before {
 }
 
 /* Diepe ruimte: sterren die langzaam aan- en uitgaan. */
-body[data-achtergrond="diepteruimte"]::before {
+body[data-achtergrond="diepteruimte"]::after {
   opacity: 0.9;
   background-image:
     radial-gradient(1.5px 1.5px at 12% 18%, #fff, transparent),
@@ -380,6 +449,13 @@ body[data-achtergrond="diepteruimte"]::before {
 }
 .skin-preview[data-achtergrond="regenboog"] {
   background-image: linear-gradient(135deg, #f472b6, #fb923c 20%, #facc15 40%, #4ade80 60%, #38bdf8 80%, #a78bfa);
+}
+.skin-preview[data-achtergrond="matrix"]::after {
+  content: "ｱ1ﾈ0";
+  writing-mode: vertical-rl;
+  font: 600 10px/1 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 1px;
+  color: #4ade80;
 }
 .skin-naam { font-size: 13.5px; font-weight: 700; line-height: 1.25; }
 .skin-hoe { font-size: 12px; color: var(--inkt-licht); line-height: 1.3; }
@@ -1235,7 +1311,6 @@ body[data-achtergrond="diepteruimte"]::before {
 }
 .btn:hover { background: var(--blauw-700); }
 .btn:active { transform: translateY(1px); }
-.btn[disabled] { background: var(--lijn); color: var(--inkt-licht); cursor: not-allowed; }
 .btn.ghost { background: var(--vlak); border: 2px solid var(--lijn-sterk); color: var(--inkt-zacht); padding: 10px 18px; }
 .btn.ghost:hover { background: var(--vlak-zacht); color: var(--inkt); }
 .btn.gevaar { background: var(--rood); }
@@ -1243,6 +1318,11 @@ body[data-achtergrond="diepteruimte"]::before {
 .btn.groen { background: var(--groen); }
 .btn.groen:hover { background: #116632; }
 .btn.small { padding: 8px 14px; font-size: 14.5px; }
+/* Na de kleurvarianten, zodat een uitgeschakelde groene of rode knop ook
+   grijs wordt in plaats van donkere tekst op een kleur te houden. */
+.btn[disabled],
+.btn.groen[disabled],
+.btn.gevaar[disabled] { background: var(--lijn); color: var(--inkt-zacht); cursor: not-allowed; }
 .btn.vol { width: 100%; }
 
 .veld {
@@ -1293,7 +1373,6 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
    de volle paneelbreedte pakken. De rasters hierboven mogen dat juist wel. */
 
 #labo > *, #studie > * { width: 100%; max-width: 780px; margin-inline: auto; }
-.patchgrid { max-width: 460px; }
 .terminal { max-width: 700px; }
 
 
@@ -1320,10 +1399,45 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
 .labo-picker button small { font-weight: 500; font-size: 11.5px; color: var(--inkt-licht); }
 
 .labo-stage { display: flex; flex-direction: column; gap: 14px; }
-.labo-kop { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.labo-kop { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
 .labo-kop h3 { font-size: 19px; }
-.labo-kop span { font-size: 14px; color: var(--inkt-licht); font-variant-numeric: tabular-nums; }
-.labo-uitleg { font-size: 15px; color: var(--inkt-zacht); }
+.labo-kop > span { margin-left: auto; font-size: 14px; color: var(--inkt-licht); font-variant-numeric: tabular-nums; }
+.labo-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 4px 12px 4px 5px;
+  border: 1px solid var(--lijn-sterk);
+  border-radius: 999px;
+  background: var(--vlak);
+  color: var(--blauw-700);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--sneller), border-color var(--sneller);
+}
+.labo-info::before {
+  content: "?";
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--blauw-100);
+  font-weight: 700;
+}
+.labo-info:hover { background: var(--blauw-100); border-color: var(--blauw-300); }
+
+/* De uitleg in het venster: korte blokken met een tussenkop. */
+.labo-infotekst { display: flex; flex-direction: column; gap: 16px; max-height: min(60vh, 520px); overflow-y: auto; }
+.labo-infotekst h3 { font-size: 16px; margin-bottom: 4px; }
+.labo-infotekst p,
+.labo-infotekst li { font-size: 15px; line-height: 1.5; color: var(--inkt-zacht); }
+.labo-infotekst code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.92em; color: var(--inkt); background: var(--vlak-zacht); border: 1px solid var(--lijn); border-radius: 5px; padding: 0 4px; }
+.labo-infotekst ul { margin: 0; padding-left: 20px; list-style: disc; display: flex; flex-direction: column; gap: 5px; }
+.labo-uitleg { font-size: 15px; color: var(--inkt-zacht); text-wrap: pretty; }
 
 .vraag {
   background: var(--blauw-900);
@@ -1362,8 +1476,9 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
   overflow-y: auto;
   cursor: text;
 }
+#term-uit > div { white-space: pre-wrap; }
 .terminal .in { color: #fff; }
-.terminal .uit { color: #8fb4cf; white-space: pre-wrap; margin-top: 1px; }
+.terminal .uit { color: #8fb4cf; margin-top: 1px; }
 .terminal .err { color: #ff9c8f; }
 .terminal .ok { color: #6ee7a8; }
 .terminal-regel { display: flex; gap: 9px; align-items: baseline; margin-top: 5px; }
@@ -1379,90 +1494,438 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
   font-size: inherit;
   outline: none;
 }
+/* Op een telefoon ontbreken Tab en ?; deze knoppen doen hetzelfde. */
+.term-knoppen { display: flex; gap: 8px; max-width: 700px; }
+.term-knoppen .btn { font-family: "IBM Plex Mono", ui-monospace, monospace; min-width: 64px; }
 
-.markt { display: flex; flex-direction: column; gap: 10px; }
-.markt-rij {
-  display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(80px, 1fr) 72px auto;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 13px;
-  border: 2px solid var(--lijn);
-  border-radius: var(--r-m);
-  font-size: 15px;
-}
-.markt-rij .koers { font-variant-numeric: tabular-nums; font-weight: 700; text-align: right; }
-.markt-rij .op { color: var(--groen); }
-.markt-rij .neer { color: var(--rood); }
-.markt-rij .bezit { color: var(--inkt-zacht); text-align: right; font-variant-numeric: tabular-nums; font-size: 14px; }
-.markt-knoppen { display: flex; gap: 6px; }
-.markt-knoppen button {
-  border: 2px solid var(--lijn-sterk);
-  background: var(--vlak);
-  border-radius: 9px;
-  width: 34px;
-  height: 34px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 16px;
-  color: var(--inkt-zacht);
-}
-.markt-knoppen button:hover:not([disabled]) { background: var(--blauw-100); border-color: var(--blauw-300); color: var(--blauw-700); }
-.markt-knoppen button[disabled] { opacity: 0.4; cursor: not-allowed; }
-.spark { height: 26px; width: 100%; min-width: 60px; }
+/* ---------- Bandbreedtemarkt ----------
+   Een handelsscherm in de kleuren van de terminal: marineblauw, groen voor
+   stijgen, rood voor dalen, amber voor geruchten. */
 
-.patchgrid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 6px;
-  background: var(--vlak-zacht);
-  border: 2px solid var(--lijn);
-  border-radius: var(--r-m);
-  padding: 10px;
+.beurs {
+  --beurs-tekst: #dbeafe;
+  --beurs-zacht: #a5c8e4;
+  --beurs-mat: #8fb4cf;
+  --beurs-lijn: rgba(219, 234, 254, 0.1);
+  --beurs-op: #6ee7a8;
+  --beurs-neer: #ff9c8f;
+  --beurs-gerucht: #fcd34d;
+  background: #06182b;
+  color: var(--beurs-tekst);
+  border-radius: var(--r-l);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-variant-numeric: tabular-nums;
+  box-shadow: var(--schaduw-m);
 }
-.poort {
-  aspect-ratio: 1;
-  border-radius: 8px;
-  border: 2px solid var(--lijn-sterk);
-  background: var(--vlak);
-  display: grid;
-  place-items: center;
-  font-size: 18px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: border-color var(--sneller), transform var(--sneller);
-}
-.poort:hover { border-color: var(--blauw-600); transform: scale(1.05); }
-.poort .groei {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 4px;
-  transform-origin: left center;
-  background: var(--blauw-500);
-  transition: transform 1s linear;
-}
-.poort.rijp { border-color: var(--groen); background: var(--groen-vlak); animation: gloedGroen 1.8s ease-in-out infinite; }
-@keyframes gloedGroen {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(21, 128, 61, 0); }
-  50% { box-shadow: 0 0 0 5px rgba(21, 128, 61, 0.18); }
-}
-.zaadbalk { display: flex; flex-wrap: wrap; gap: 8px; }
-.zaad {
-  border: 2px solid var(--lijn);
+.beurs .op { color: var(--beurs-op); }
+.beurs .neer { color: var(--beurs-neer); }
+
+.beurs-status { font-size: 14px; color: var(--beurs-zacht); line-height: 1.6; }
+.beurs-status strong { color: #fff; font-size: 18px; font-weight: 700; }
+.beurs-status strong.neer { color: var(--beurs-neer); }
+
+.beurs-nieuws {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding: 10px 12px;
   border-radius: var(--r-s);
-  background: var(--vlak);
-  padding: 8px 12px;
+  background: rgba(219, 234, 254, 0.05);
   font-size: 14px;
-  cursor: pointer;
-  display: inline-flex;
-  gap: 7px;
-  align-items: center;
+  line-height: 1.45;
 }
-.zaad small { color: var(--inkt-licht); }
-.zaad.on { border-color: var(--blauw-600); background: var(--blauw-100); color: var(--blauw-700); font-weight: 700; }
+.beurs-nieuws time,
+.beurs-archief time {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--beurs-mat);
+}
+.beurs-nieuws time { margin-left: auto; }
+.beurs-tag {
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(219, 234, 254, 0.08);
+  color: var(--beurs-zacht);
+  white-space: nowrap;
+}
+.beurs-tag.op { background: rgba(110, 231, 168, 0.12); }
+.beurs-tag.neer { background: rgba(255, 156, 143, 0.12); }
+.beurs-tag.gerucht { background: rgba(252, 211, 77, 0.12); color: var(--beurs-gerucht); }
+
+.beurs-bord { display: flex; flex-direction: column; gap: 2px; }
+.beurs-bordkop,
+.beurs-rij {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 60px 54px 64px 46px;
+  align-items: center;
+  gap: 8px;
+}
+.beurs-bordkop {
+  padding: 0 10px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--beurs-mat);
+}
+.beurs-bordkop span:nth-child(n + 3) { text-align: right; }
+.beurs-rij {
+  width: 100%;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: var(--r-s);
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--sneller);
+}
+.beurs-rij:hover { background: rgba(219, 234, 254, 0.06); }
+.beurs-rij[aria-pressed="true"] { background: rgba(96, 165, 250, 0.16); box-shadow: inset 0 0 0 1px rgba(147, 197, 253, 0.45); }
+.beurs .beurs-rij:focus-visible { outline-color: #93c5fd; }
+.beurs-naam { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.beurs-koers,
+.beurs-delta,
+.beurs-positie { text-align: right; white-space: nowrap; }
+.beurs-koers { font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 600; color: #fff; border-radius: 4px; padding: 1px 3px; }
+.beurs-delta,
+.beurs-positie { font-size: 13px; }
+.beurs-positie:empty::after { content: "—"; color: var(--beurs-mat); }
+.beurs-mini { display: block; width: 100%; height: 22px; }
+.beurs-mini polyline,
+.beurs-grafiek polyline {
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.beurs-mini .op,
+.beurs-grafiek polyline.op { stroke: var(--beurs-op); }
+.beurs-mini .neer,
+.beurs-grafiek polyline.neer { stroke: var(--beurs-neer); }
+
+/* Het ene bewegende moment: een koers licht even op als hij verandert. */
+.beurs-koers.flits-op,
+.beurs-grootkoers.flits-op { animation: flitsOp 900ms cubic-bezier(0.16, 0.9, 0.28, 1); }
+.beurs-koers.flits-neer,
+.beurs-grootkoers.flits-neer { animation: flitsNeer 900ms cubic-bezier(0.16, 0.9, 0.28, 1); }
+@keyframes flitsOp {
+  from { background: rgba(110, 231, 168, 0.32); }
+  to { background: transparent; }
+}
+@keyframes flitsNeer {
+  from { background: rgba(255, 156, 143, 0.32); }
+  to { background: transparent; }
+}
+
+.beurs-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--beurs-lijn);
+}
+.beurs-detailkop { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.beurs-detailkop h4 { font-size: 18px; color: #fff; margin-right: auto; }
+.beurs-grootkoers {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #fff;
+  border-radius: 6px;
+  padding: 0 4px;
+}
+.beurs-profiel { font-size: 14px; color: var(--beurs-zacht); }
+.beurs-grafiekvak {
+  position: relative;
+  height: 136px;
+  border-radius: var(--r-s);
+  background: rgba(219, 234, 254, 0.03);
+  overflow: hidden;
+}
+.beurs-grafiek { display: block; width: 100%; height: 100%; }
+.beurs-grafiek .vlak.op { fill: rgba(110, 231, 168, 0.1); }
+.beurs-grafiek .vlak.neer { fill: rgba(255, 156, 143, 0.1); }
+.beurs-grafiek .instap { stroke: var(--beurs-gerucht); stroke-width: 1; stroke-dasharray: 5 4; vector-effect: non-scaling-stroke; }
+.beurs-as {
+  position: absolute;
+  right: 6px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: rgba(6, 24, 43, 0.82);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--beurs-mat);
+}
+.beurs-as.boven { top: 6px; }
+.beurs-as.onder { bottom: 6px; }
+.beurs-instap {
+  position: absolute;
+  left: 8px;
+  transform: translateY(-50%);
+  font-size: 11px;
+  font-weight: 700;
+  color: #06182b;
+  background: var(--beurs-gerucht);
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+.beurs-positieregel { font-size: 14.5px; }
+
+.beurs-order { display: flex; flex-direction: column; gap: 10px; }
+.beurs-orderregel { display: grid; grid-template-columns: 132px minmax(0, 1fr); align-items: center; gap: 10px; }
+.beurs-label { font-size: 13.5px; line-height: 1.3; color: var(--beurs-zacht); }
+.beurs-knoppen { display: flex; gap: 8px; flex-wrap: wrap; }
+.beurs-knop {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 68px;
+  padding: 7px 10px;
+  border: 1px solid rgba(219, 234, 254, 0.2);
+  border-radius: var(--r-s);
+  background: rgba(219, 234, 254, 0.06);
+  color: var(--beurs-tekst);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: background var(--sneller), border-color var(--sneller);
+}
+.beurs-knop small { font-size: 11px; font-weight: 500; color: var(--beurs-zacht); }
+.beurs-knop:hover:not([disabled]) { background: rgba(219, 234, 254, 0.13); }
+.beurs-knop.koop { background: var(--blauw-600); border-color: var(--blauw-600); color: #fff; }
+.beurs-knop.koop small { color: #dbeafe; }
+.beurs-knop.koop:hover:not([disabled]) { background: var(--blauw-700); border-color: var(--blauw-700); }
+.beurs-knop[disabled] { opacity: 0.4; cursor: not-allowed; }
+.beurs .segmented { background: rgba(219, 234, 254, 0.04); border-color: rgba(219, 234, 254, 0.14); flex-wrap: wrap; }
+.beurs .segmented button { color: var(--beurs-zacht); font-size: 13.5px; padding: 6px 11px; }
+.beurs .segmented button.on { background: var(--blauw-600); color: #fff; }
+.beurs .segmented button[disabled] { opacity: 0.4; cursor: not-allowed; }
+.beurs-hint { font-size: 13px; line-height: 1.5; color: var(--beurs-mat); }
+
+.beurs-archiefvak { padding-top: 14px; border-top: 1px solid var(--beurs-lijn); }
+.beurs-archiefkop { font-size: 14px; color: #fff; margin-bottom: 10px; }
+.beurs-archief { display: flex; flex-direction: column; gap: 9px; margin: 0; padding: 0; list-style: none; }
+.beurs-archief li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font-size: 13.5px; line-height: 1.45; color: var(--beurs-zacht); }
+.beurs-archief li time { margin-left: auto; }
+.beurs-archief .leeg { color: var(--beurs-mat); font-style: italic; }
+
+/* ---------- Patchkast ----------
+   Een kast in de kleuren van de terminal. De goot is een raster van vakken met
+   een kabelring in het midden; de kabels liggen erbovenop in de kleuren van
+   echte patchkabels. Het enige dat beweegt, zijn de lampjes van een verbinding
+   die opkomt, zoals op een switch. */
+
+.kast {
+  --kast-tekst: #dbeafe;
+  --kast-zacht: #a5c8e4;
+  --kast-mat: #8fb4cf;
+  --kast-lijn: rgba(219, 234, 254, 0.1);
+  --kast-link: #6ee7a8;
+  --kast-uit: #16324d;
+  background: #06182b;
+  color: var(--kast-tekst);
+  border-radius: var(--r-l);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-variant-numeric: tabular-nums;
+  box-shadow: var(--schaduw-m);
+}
+.kast :focus-visible { outline-color: #93c5fd; }
+
+.kast-order { display: flex; flex-direction: column; gap: 6px; }
+.kast-titel { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 12px; }
+.kast-titel h4 { font-size: 20px; line-height: 1.25; color: #fff; }
+.kast-titel span { font-size: 13.5px; color: var(--kast-mat); }
+.kast-notitie { font-size: 14.5px; color: var(--kast-zacht); }
+.kast-legende { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.kast-legende:empty { display: none; }
+.kast-legende li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 11px 3px 3px;
+  border-radius: 999px;
+  background: rgba(219, 234, 254, 0.06);
+  font-size: 13.5px;
+  color: var(--kast-zacht);
+  transition: background var(--sneller), color var(--sneller);
+}
+.kast-legende b {
+  min-width: 34px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--kleur);
+  color: #06182b;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.kast-legende li.aan { background: rgba(110, 231, 168, 0.12); color: #fff; }
+.kast-legende li.aan::after { content: "✓"; color: var(--kast-link); font-weight: 700; }
+
+.kast-bord {
+  position: relative;
+  padding: 10px;
+  border-radius: var(--r-m);
+  background: #0a2036;
+  box-shadow: inset 0 0 0 1px rgba(219, 234, 254, 0.07), inset 0 3px 12px rgba(0, 0, 0, 0.35);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.kast-bord[role="application"] { cursor: pointer; }
+.kast-bord.klaar { cursor: default; }
+.kast-bord:focus-visible { outline-offset: 3px; }
+.kast-svg { display: block; width: 100%; height: auto; aspect-ratio: 1; overflow: visible; }
+.kast-leeg { margin: 0; min-height: 220px; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--kast-zacht); }
+
+.kast-vak { fill: rgba(219, 234, 254, 0.035); }
+.kast-ring { fill: none; stroke: rgba(165, 200, 228, 0.22); stroke-width: 3; }
+
+.kabel-rand,
+.kabel,
+.kabel-glans { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.kabel-rand { stroke: #020b16; stroke-width: 46; }
+.kabel { stroke-width: 34; }
+.kabel-glans { stroke: rgba(255, 255, 255, 0.24); stroke-width: 5; transform: translate(-6px, -7px); }
+.kast-vinger { opacity: 0.22; pointer-events: none; }
+
+.kast-jack rect { stroke: #020b16; stroke-width: 5; }
+.kast-jack text {
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 27px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  fill: #06182b;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.kast-led { fill: var(--kast-uit); stroke: #020b16; stroke-width: 4; transition: fill 200ms; }
+.kast-led.aan { fill: var(--kast-link); }
+.kast-gloed { fill: rgba(110, 231, 168, 0.35); opacity: 0; transition: opacity 200ms; }
+.kast-gloed.aan { opacity: 1; }
+/* Drie keer knipperen en dan blijven branden: een link die opkomt. */
+.kast-led.knipper { animation: linkOp 900ms steps(1, end) both; }
+@keyframes linkOp {
+  0%, 34%, 68%, 100% { fill: var(--kast-link); }
+  17%, 51%, 85% { fill: var(--kast-uit); }
+}
+
+.kast-cursor { fill: none; stroke: #fff; stroke-width: 5; opacity: 0; pointer-events: none; }
+.kast-cursor.vast { stroke-width: 9; }
+.kast-bord:focus-visible .kast-cursor { opacity: 1; }
+
+.kast-status { font-size: 14px; line-height: 1.5; color: var(--kast-zacht); margin-top: -4px; }
+.kast-status.dicht { color: var(--kast-link); font-weight: 600; }
+
+.kast-knoppen { display: flex; flex-wrap: wrap; gap: 8px; }
+.kast-knop {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1px;
+  min-height: 50px;
+  padding: 7px 14px;
+  border: 1px solid rgba(219, 234, 254, 0.2);
+  border-radius: var(--r-s);
+  background: rgba(219, 234, 254, 0.06);
+  color: var(--kast-tekst);
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--sneller), border-color var(--sneller);
+}
+.kast-knop small { font-size: 12px; font-weight: 500; color: var(--kast-zacht); }
+.kast-knop:hover:not([disabled]) { background: rgba(219, 234, 254, 0.13); }
+.kast-knop.hoofd { flex: 1 1 150px; background: var(--blauw-600); border-color: var(--blauw-600); color: #fff; }
+.kast-knop.hoofd small { color: #dbeafe; }
+.kast-knop.hoofd:hover:not([disabled]) { background: var(--blauw-700); border-color: var(--blauw-700); }
+.kast-knop.stil { background: none; border-color: transparent; color: var(--kast-zacht); font-weight: 600; }
+.kast-knop.stil:hover:not([disabled]) { background: rgba(219, 234, 254, 0.08); color: #fff; }
+.kast-knop[disabled] { cursor: not-allowed; background: rgba(219, 234, 254, 0.03); border-color: rgba(219, 234, 254, 0.12); color: var(--kast-mat); }
+.kast-knop.hoofd[disabled] { border-color: rgba(96, 165, 250, 0.4); }
+.kast-knop.stil[disabled] { background: none; border-color: transparent; }
+.kast-knop[disabled] small { color: var(--kast-mat); }
+
+.kast-resultaat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: var(--r-m);
+  background: rgba(110, 231, 168, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(110, 231, 168, 0.25);
+  font-size: 14px;
+  color: var(--kast-zacht);
+}
+.kast-resultaat strong { font-size: 18px; color: #fff; }
+.kast-dicht { color: var(--kast-link); font-weight: 600; }
+.kast-nieuw { color: #fcd34d; font-weight: 600; }
+
+.kast-bak { display: flex; flex-direction: column; gap: 10px; padding-top: 14px; border-top: 1px solid var(--kast-lijn); }
+.kast-bak h4 { font-size: 14px; color: #fff; }
+.kast-bonnen { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.kast-bonnen > li { display: flex; }
+.kast-bon {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 1px solid rgba(219, 234, 254, 0.14);
+  border-radius: var(--r-s);
+  background: rgba(219, 234, 254, 0.05);
+  color: var(--kast-zacht);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: left;
+}
+.kast-bon b { font-size: 14px; font-weight: 600; color: #fff; }
+.kast-bon-loon { color: var(--kast-link); font-weight: 600; }
+button.kast-bon { cursor: pointer; transition: background var(--sneller), border-color var(--sneller), transform var(--sneller); }
+button.kast-bon:hover { background: rgba(96, 165, 250, 0.16); border-color: rgba(147, 197, 253, 0.55); transform: translateY(-1px); }
+.kast-bon.wacht { background: none; border-style: dashed; }
+
+.kast-proto { display: flex; flex-direction: column; gap: 10px; }
+.kast-proto-kop { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 12px; }
+.kast-proto-kop h4 { font-size: 16px; }
+.kast-proto-kop span { font-size: 13.5px; color: var(--inkt-licht); }
+.kast-proto-lijst { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin: 0; padding: 0; list-style: none; }
+.kast-proto-lijst li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 6px 10px;
+  border: 1px dashed var(--lijn-sterk);
+  border-radius: var(--r-s);
+  font-size: 13px;
+  line-height: 1.25;
+  color: var(--inkt-licht);
+}
+.kast-proto-lijst li.aan { border: 1px solid var(--groen-rand); background: var(--groen-vlak); color: var(--inkt); font-weight: 600; }
 
 /* ---------- Cursus ---------- */
 
@@ -1663,15 +2126,30 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
   50% { translate: 0 -11px; }
 }
 
-.sheet {
+/* Beide vensters zijn een <dialog>. Het element zelf is de donkere laag over
+   het scherm; de kaart erin is het eigenlijke venster. Een klik op de laag
+   sluit het venster. */
+.sheet,
+.modal {
   position: fixed;
   inset: 0;
-  z-index: 78;
-  background: rgba(11, 37, 69, 0.55);
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  color: inherit;
   display: grid;
   place-items: center;
   padding: 20px;
 }
+.sheet:not([open]),
+.modal:not([open]) { display: none; }
+.sheet::backdrop,
+.modal::backdrop { background: transparent; }
+
+.sheet { background: rgba(11, 37, 69, 0.55); }
 .sheet-card {
   background: var(--vlak);
   border-radius: var(--r-xl);
@@ -1712,14 +2190,19 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
   overscroll-behavior: contain;
 }
 
-.modal {
-  position: fixed;
-  inset: 0;
-  z-index: 80;
-  background: rgba(11, 37, 69, 0.6);
-  display: grid;
-  place-items: center;
-  padding: 20px;
+.modal { background: rgba(11, 37, 69, 0.6); }
+
+/* Alleen voor schermlezers: onzichtbaar, maar wel voorgelezen. */
+.voor-schermlezers {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 .modal-card {
   background: var(--vlak);
@@ -1734,6 +2217,7 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
 .modal-card p { color: var(--inkt-zacht); font-size: 15.5px; }
 .modal-card p + p { margin-top: 10px; }
 .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; flex-wrap: wrap; }
+.modal-card .veld { margin-top: 12px; }
 @keyframes modalIn {
   from { opacity: 0; transform: translateY(14px) scale(0.97); }
   to { opacity: 1; transform: none; }
@@ -1802,8 +2286,16 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
   .tabs { padding: 8px 6px 0; gap: 0; }
   .tabs button { padding: 10px 7px 12px; font-size: 13.5px; }
   .pip { min-width: 19px; padding: 1px 5px; margin-left: 3px; font-size: 11px; }
-  .markt-rij { grid-template-columns: minmax(0, 1fr) auto; row-gap: 8px; }
-  .markt-rij .spark { display: none; }
+  .beurs { padding: 12px; }
+  .beurs-bordkop,
+  .beurs-rij { grid-template-columns: minmax(0, 1fr) 54px 62px 44px; }
+  .beurs-bordkop span:nth-child(2),
+  .beurs-mini-vak { display: none; }
+  .beurs-orderregel { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .kast { padding: 12px; }
+  .kast-bord { padding: 6px; }
+  .kast-knop { flex: 1 1 0; }
+  .kast-knop.hoofd { flex-basis: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1812,12 +2304,13 @@ textarea.veld { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  body { animation: none; }
+  body::before { animation: none; }
 }
 
-body.rustig { animation: none; }
+body.rustig::before { animation: none; }
 body.rustig .packet { animation: packetIn 200ms ease-out both; }
 body.rustig .serge img { animation: none; }
-body.rustig::before { animation: none; }
+body.rustig::after { animation: none; }
 body.rustig .serge::before { animation: none; }
-body.rustig .buff, body.rustig .node.kan, body.rustig .poort.rijp, body.rustig .pip { animation: none; }
+body.rustig .buff, body.rustig .node.kan, body.rustig .kast-led, body.rustig .pip { animation: none; }
+body.rustig .beurs-koers, body.rustig .beurs-grootkoers { animation: none; }

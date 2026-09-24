@@ -2,7 +2,7 @@
 
 > **Let op: hier staat alles in, ook alle verborgen dingen.** Wil je zelf zoeken, lees dan niet verder dan het hoofdstuk over de studieboom.
 
-Dit bestand is gemaakt met `node tools/spelgids.mjs` en volgt de spelbestanden. Op dit moment: **22 apparaten**, **154 upgrades**, **123 prestaties** (waarvan 20 verborgen), **24 knooppunten** in de studieboom en **4 opdrachten** in het labo.
+Dit bestand is gemaakt met `node tools/spelgids.mjs` en volgt de spelbestanden. Op dit moment: **22 apparaten**, **154 upgrades**, **128 prestaties** (waarvan 20 verborgen), **24 knooppunten** in de studieboom en **5 onderdelen** in het labo.
 
 ## Hoe het spel werkt
 
@@ -10,7 +10,7 @@ Je klikt op Serge en verdient packets. Met packets koop je apparaten die vanzelf
 
 De volgorde waarin dingen vrijkomen:
 
-1. **Winkel** — meteen. Klik tot je zes packets hebt voor je eerste patchkabel.
+1. **Winkel** — meteen. Klik tot je 15 packets hebt voor je eerste patchkabel.
 
 2. **Upgrades** — zodra je er een verdient (tien kliks geeft de eerste al).
 
@@ -18,9 +18,9 @@ De volgorde waarin dingen vrijkomen:
 
 4. **Labo** — bij 5.000 packets totaal. Daarbinnen gaat elke opdracht apart open.
 
-5. **Studie** — bij 100 miljard packets totaal. Daarna kun je afstuderen.
+5. **Studie** — bij 1 miljard packets totaal. Vanaf 10 miljard kun je voor het eerst afstuderen.
 
-Sneltoetsen: **spatie** klikt, **1 / 2 / 3 / 4** zetten het aantal per aankoop op 1, 10, 100 of max. Het tandwiel rechtsboven opent statistieken, instellingen en opslag.
+Sneltoetsen: **spatie** klikt, **1 / 2 / 3 / 4** zetten het aantal per aankoop op 1, 10, 100 of max, en **G** pakt een gouden packet. Het tandwiel rechtsboven opent statistieken, instellingen en opslag.
 
 ## De apparaten
 
@@ -36,20 +36,20 @@ Elk volgend exemplaar van hetzelfde apparaat kost 15% meer dan het vorige. De op
 | 6 | 🏢 **Datacenter** | Datacenter | 1,4 miljoen | 1.400 p/s |
 | 7 | 🖥️ **Proxmox Cluster** | Datacenter | 20 miljoen | 7.800 p/s |
 | 8 | 🧊 **vSphere Cluster** | Datacenter | 330 miljoen | 44.000 p/s |
-| 9 | 🗂️ **Active Directory** | Security | 5,1 miljard | 260.000 p/s |
-| 10 | ☸️ **Kubernetes Cluster** | Cloud | 75 miljard | 1,6 miljoen p/s |
-| 11 | 🎛️ **SDN Controller** | Datacenter | 1 biljoen | 10 miljoen p/s |
-| 12 | 🧱 **Next-gen Firewall** | Security | 14 biljoen | 65 miljoen p/s |
-| 13 | 🛡️ **Security Operations** | Security | 170 biljoen | 430 miljoen p/s |
-| 14 | ☁️ **Hyperscaler-regio** | Cloud | 2,1 biljard | 2,9 miljard p/s |
-| 15 | 🌑 **Dark Fiber Mesh** | Netwerken | 26 biljard | 21 miljard p/s |
-| 16 | 🌊 **Zeekabel** | Netwerken | 310 biljard | 150 miljard p/s |
-| 17 | 🛰️ **Satellietconstellatie** | Netwerken | 7,1 triljoen | 1,1 biljoen p/s |
-| 18 | ⚛️ **Quantum Link** | Cloud | 120 triljoen | 8,3 biljoen p/s |
-| 19 | 🧠 **AI NetOps** | Cloud | 1,9 triljard | 64 biljoen p/s |
-| 20 | 🌞 **Dyson-datacenter** | Cloud | 54 triljard | 510 biljoen p/s |
-| 21 | 🌌 **Parallel VPN** | Cloud | 1,5 quadriljoen | 4,2 biljard p/s |
-| 22 | 🕳️ **Singulariteit** | Cloud | 42 quadriljoen | 35 biljard p/s |
+| 9 | 🗂️ **Active Directory** | Security | 2,8 miljard | 260.000 p/s |
+| 10 | ☸️ **Kubernetes Cluster** | Cloud | 25 miljard | 1,6 miljoen p/s |
+| 11 | 🎛️ **SDN Controller** | Datacenter | 230 miljard | 10 miljoen p/s |
+| 12 | 🧱 **Next-gen Firewall** | Security | 2,2 biljoen | 65 miljoen p/s |
+| 13 | 🛡️ **Security Operations** | Security | 21 biljoen | 430 miljoen p/s |
+| 14 | ☁️ **Hyperscaler-regio** | Cloud | 200 biljoen | 2,9 miljard p/s |
+| 15 | 🌑 **Dark Fiber Mesh** | Netwerken | 2,1 biljard | 21 miljard p/s |
+| 16 | 🌊 **Zeekabel** | Netwerken | 22 biljard | 150 miljard p/s |
+| 17 | 🛰️ **Satellietconstellatie** | Netwerken | 230 biljard | 1,1 biljoen p/s |
+| 18 | ⚛️ **Quantum Link** | Cloud | 2,6 triljoen | 8,3 biljoen p/s |
+| 19 | 🧠 **AI NetOps** | Cloud | 29 triljoen | 64 biljoen p/s |
+| 20 | 🌞 **Dyson-datacenter** | Cloud | 330 triljoen | 510 biljoen p/s |
+| 21 | 🌌 **Parallel VPN** | Cloud | 3,9 triljard | 4,2 biljard p/s |
+| 22 | 🕳️ **Singulariteit** | Cloud | 48 triljard | 35 biljard p/s |
 
 **Vakbonus.** Elk apparaat hoort bij een vak. Elke 25 apparaten binnen één vak geven dat hele vak 2% extra productie. De vier vakken: 🔀 Netwerken, 🏢 Datacenter, ☁️ Cloud, 🛡️ Security.
 
@@ -169,171 +169,171 @@ Elk apparaat heeft er vijf. Ze komen vrij bij 1, 5, 25, 50, 100 exemplaren en ko
 
 **🗂️ Active Directory**
 
-1. *Group Policy* — bij 1 stuks, 51 miljard packets. Achtergrondfoto's centraal geregeld, macht compleet.
+1. *Group Policy* — bij 1 stuks, 28 miljard packets. Achtergrondfoto's centraal geregeld, macht compleet.
 
-2. *Read-only domeincontroller* — bij 5 stuks, 510 miljard packets. Voor de locatie die je niet vertrouwt.
+2. *Read-only domeincontroller* — bij 5 stuks, 280 miljard packets. Voor de locatie die je niet vertrouwt.
 
-3. *Kerberos-hardening* — bij 25 stuks, 5,1 biljoen packets. Tickets die niemand meer namaakt.
+3. *Kerberos-hardening* — bij 25 stuks, 2,8 biljoen packets. Tickets die niemand meer namaakt.
 
-4. *Tiered admin-model* — bij 50 stuks, 76,5 biljoen packets. Domain admins loggen nergens anders meer op in.
+4. *Tiered admin-model* — bij 50 stuks, 42 biljoen packets. Domain admins loggen nergens anders meer op in.
 
-5. *Multi-forest trust* — bij 100 stuks, 1,02 biljard packets. Twee bedrijven, één inlog, nul rust.
+5. *Multi-forest trust* — bij 100 stuks, 560 biljoen packets. Twee bedrijven, één inlog, nul rust.
 
 **☸️ Kubernetes Cluster**
 
-1. *Helm-charts* — bij 1 stuks, 750 miljard packets. Eén commando, dertig YAML-bestanden minder.
+1. *Helm-charts* — bij 1 stuks, 250 miljard packets. Eén commando, dertig YAML-bestanden minder.
 
-2. *Autoscaler* — bij 5 stuks, 7,5 biljoen packets. Pods erbij als het druk is, eraf als niemand kijkt.
+2. *Autoscaler* — bij 5 stuks, 2,5 biljoen packets. Pods erbij als het druk is, eraf als niemand kijkt.
 
-3. *Service mesh* — bij 25 stuks, 75 biljoen packets. Elk pakketje krijgt onderweg een stempel.
+3. *Service mesh* — bij 25 stuks, 25 biljoen packets. Elk pakketje krijgt onderweg een stempel.
 
-4. *Operators* — bij 50 stuks, 1,13 biljard packets. De cluster beheert nu z'n eigen databases.
+4. *Operators* — bij 50 stuks, 375 biljoen packets. De cluster beheert nu z'n eigen databases.
 
-5. *Federatie* — bij 100 stuks, 15 biljard packets. Vijf clusters die doen alsof ze er één zijn.
+5. *Federatie* — bij 100 stuks, 5 biljard packets. Vijf clusters die doen alsof ze er één zijn.
 
 **🎛️ SDN Controller**
 
-1. *OpenFlow* — bij 1 stuks, 10 biljoen packets. Flows worden neergelegd, niet geleerd.
+1. *OpenFlow* — bij 1 stuks, 2,3 biljoen packets. Flows worden neergelegd, niet geleerd.
 
-2. *Intent-based beleid* — bij 5 stuks, 100 biljoen packets. Je zegt wat je wilt, niet hoe.
+2. *Intent-based beleid* — bij 5 stuks, 23 biljoen packets. Je zegt wat je wilt, niet hoe.
 
-3. *Telemetrie* — bij 25 stuks, 1 biljard packets. Elke poort vertelt tien keer per seconde hoe het gaat.
+3. *Telemetrie* — bij 25 stuks, 230 biljoen packets. Elke poort vertelt tien keer per seconde hoe het gaat.
 
-4. *Zero-touch provisioning* — bij 50 stuks, 15 biljard packets. Uitpakken, inpluggen, klaar.
+4. *Zero-touch provisioning* — bij 50 stuks, 3,45 biljard packets. Uitpakken, inpluggen, klaar.
 
-5. *Digitale tweeling* — bij 100 stuks, 200 biljard packets. Elke wijziging draait eerst in een kopie van je netwerk.
+5. *Digitale tweeling* — bij 100 stuks, 46 biljard packets. Elke wijziging draait eerst in een kopie van je netwerk.
 
 **🧱 Next-gen Firewall**
 
-1. *Deep packet inspection* — bij 1 stuks, 140 biljoen packets. Hij leest mee. Voor je eigen bestwil.
+1. *Deep packet inspection* — bij 1 stuks, 22 biljoen packets. Hij leest mee. Voor je eigen bestwil.
 
-2. *IPS-signatures* — bij 5 stuks, 1,4 biljard packets. Bekende aanvallen halen de logregel niet eens.
+2. *IPS-signatures* — bij 5 stuks, 220 biljoen packets. Bekende aanvallen halen de logregel niet eens.
 
-3. *TLS-inspectie* — bij 25 stuks, 14 biljard packets. Versleuteld verkeer is niet langer een blinde vlek.
+3. *TLS-inspectie* — bij 25 stuks, 2,2 biljard packets. Versleuteld verkeer is niet langer een blinde vlek.
 
-4. *Geo-blocking* — bij 50 stuks, 210 biljard packets. Halve wereldkaart uit, klachten binnen een dag.
+4. *Geo-blocking* — bij 50 stuks, 33 biljard packets. Halve wereldkaart uit, klachten binnen een dag.
 
-5. *Cluster met sessiesync* — bij 100 stuks, 2,8 triljoen packets. Failover zonder één verbroken sessie.
+5. *Cluster met sessiesync* — bij 100 stuks, 440 biljard packets. Failover zonder één verbroken sessie.
 
 **🛡️ Security Operations**
 
-1. *SIEM-correlatie* — bij 1 stuks, 1,7 biljard packets. Duizend losse logs worden één verhaal.
+1. *SIEM-correlatie* — bij 1 stuks, 210 biljoen packets. Duizend losse logs worden één verhaal.
 
-2. *Threat intel* — bij 5 stuks, 17 biljard packets. Je weet wat er komt voor het aankomt.
+2. *Threat intel* — bij 5 stuks, 2,1 biljard packets. Je weet wat er komt voor het aankomt.
 
-3. *Playbooks* — bij 25 stuks, 170 biljard packets. De eerste vijf stappen doet niemand meer met de hand.
+3. *Playbooks* — bij 25 stuks, 21 biljard packets. De eerste vijf stappen doet niemand meer met de hand.
 
-4. *Threat hunting* — bij 50 stuks, 2,55 triljoen packets. Zoeken naar wat geen alarm heeft afgegeven.
+4. *Threat hunting* — bij 50 stuks, 315 biljard packets. Zoeken naar wat geen alarm heeft afgegeven.
 
-5. *24/7-bezetting* — bij 100 stuks, 34 triljoen packets. Ook om 03:00 kijkt er iemand mee.
+5. *24/7-bezetting* — bij 100 stuks, 4,2 triljoen packets. Ook om 03:00 kijkt er iemand mee.
 
 **☁️ Hyperscaler-regio**
 
-1. *Reserved instances* — bij 1 stuks, 21 biljard packets. Drie jaar vastleggen, veertig procent goedkoper.
+1. *Reserved instances* — bij 1 stuks, 2 biljard packets. Drie jaar vastleggen, veertig procent goedkoper.
 
-2. *Edge-locaties* — bij 5 stuks, 210 biljard packets. De inhoud staat al in de stad van je gebruiker.
+2. *Edge-locaties* — bij 5 stuks, 20 biljard packets. De inhoud staat al in de stad van je gebruiker.
 
-3. *Eigen silicium* — bij 25 stuks, 2,1 triljoen packets. Chips die alleen jij mag kopen.
+3. *Eigen silicium* — bij 25 stuks, 200 biljard packets. Chips die alleen jij mag kopen.
 
-4. *Extra zone* — bij 50 stuks, 31,5 triljoen packets. Nog een gebouw dat tegelijk mag omvallen. Of niet.
+4. *Extra zone* — bij 50 stuks, 3 triljoen packets. Nog een gebouw dat tegelijk mag omvallen. Of niet.
 
-5. *Eigen zeekabel* — bij 100 stuks, 420 triljoen packets. Waarom huren als je kunt graven.
+5. *Eigen zeekabel* — bij 100 stuks, 40 triljoen packets. Waarom huren als je kunt graven.
 
 **🌑 Dark Fiber Mesh**
 
-1. *Eigen golflengtes* — bij 1 stuks, 260 biljard packets. Geen provider meer tussen jou en het licht.
+1. *Eigen golflengtes* — bij 1 stuks, 21 biljard packets. Geen provider meer tussen jou en het licht.
 
-2. *Ringtopologie* — bij 5 stuks, 2,6 triljoen packets. Kabel doorgesneden? Het verkeer gaat linksom.
+2. *Ringtopologie* — bij 5 stuks, 210 biljard packets. Kabel doorgesneden? Het verkeer gaat linksom.
 
-3. *Ultralaag-latentiepad* — bij 25 stuks, 26 triljoen packets. Recht door, ook als dat duurder graven is.
+3. *Ultralaag-latentiepad* — bij 25 stuks, 2,1 triljoen packets. Recht door, ook als dat duurder graven is.
 
-4. *Verzegelde lasmoffen* — bij 50 stuks, 390 triljoen packets. Grondwater komt er niet meer bij.
+4. *Verzegelde lasmoffen* — bij 50 stuks, 31,5 triljoen packets. Grondwater komt er niet meer bij.
 
-5. *Landelijke mesh* — bij 100 stuks, 5,2 triljard packets. Elke stad hangt aan drie andere.
+5. *Landelijke mesh* — bij 100 stuks, 420 triljoen packets. Elke stad hangt aan drie andere.
 
 **🌊 Zeekabel**
 
-1. *Repeaters* — bij 1 stuks, 3,1 triljoen packets. Om de tachtig kilometer krijgt het licht een duw.
+1. *Repeaters* — bij 1 stuks, 220 biljard packets. Om de tachtig kilometer krijgt het licht een duw.
 
-2. *Haaibestendige mantel* — bij 5 stuks, 31 triljoen packets. Getest. Meerdere keren. Onvrijwillig.
+2. *Haaibestendige mantel* — bij 5 stuks, 2,2 triljoen packets. Getest. Meerdere keren. Onvrijwillig.
 
-3. *Kabelschip op standby* — bij 25 stuks, 310 triljoen packets. Breuk op dinsdag, vaart uit op dinsdag.
+3. *Kabelschip op standby* — bij 25 stuks, 22 triljoen packets. Breuk op dinsdag, vaart uit op dinsdag.
 
-4. *Landingsstations* — bij 50 stuks, 4,65 triljard packets. Twee bunkers aan zee, allebei zwaarbewaakt.
+4. *Landingsstations* — bij 50 stuks, 330 triljoen packets. Twee bunkers aan zee, allebei zwaarbewaakt.
 
-5. *Trans-Pacifisch pad* — bij 100 stuks, 62 triljard packets. Achttienduizend kilometer in één stuk.
+5. *Trans-Pacifisch pad* — bij 100 stuks, 4,4 triljard packets. Achttienduizend kilometer in één stuk.
 
 **🛰️ Satellietconstellatie**
 
-1. *Lage baan* — bij 1 stuks, 71 triljoen packets. Vijfhonderd kilometer in plaats van vijfendertigduizend.
+1. *Lage baan* — bij 1 stuks, 2,3 triljoen packets. Vijfhonderd kilometer in plaats van vijfendertigduizend.
 
-2. *Laserlinks* — bij 5 stuks, 710 triljoen packets. Satellieten praten onderling, zonder grond.
+2. *Laserlinks* — bij 5 stuks, 23 triljoen packets. Satellieten praten onderling, zonder grond.
 
-3. *Fasegestuurde antennes* — bij 25 stuks, 7,1 triljard packets. Geen schotel die moet meedraaien.
+3. *Fasegestuurde antennes* — bij 25 stuks, 230 triljoen packets. Geen schotel die moet meedraaien.
 
-4. *Grondstationnetwerk* — bij 50 stuks, 107 triljard packets. Overal een landingspunt binnen bereik.
+4. *Grondstationnetwerk* — bij 50 stuks, 3,45 triljard packets. Overal een landingspunt binnen bereik.
 
-5. *Polaire banen* — bij 100 stuks, 1,42 quadriljoen packets. Ook Antarctica heeft nu ping.
+5. *Polaire banen* — bij 100 stuks, 46 triljard packets. Ook Antarctica heeft nu ping.
 
 **⚛️ Quantum Link**
 
-1. *Kwantumrepeaters* — bij 1 stuks, 1,2 triljard packets. Verstrengeling die een continent overleeft.
+1. *Kwantumrepeaters* — bij 1 stuks, 26 triljoen packets. Verstrengeling die een continent overleeft.
 
-2. *Sleuteldistributie* — bij 5 stuks, 12 triljard packets. Meeluisteren verandert de sleutel. Handig.
+2. *Sleuteldistributie* — bij 5 stuks, 260 triljoen packets. Meeluisteren verandert de sleutel. Handig.
 
-3. *Foutcorrectie* — bij 25 stuks, 120 triljard packets. Duizend fysieke qubits voor één die klopt.
+3. *Foutcorrectie* — bij 25 stuks, 2,6 triljard packets. Duizend fysieke qubits voor één die klopt.
 
-4. *Verstrengelingsfabriek* — bij 50 stuks, 1,8 quadriljoen packets. Paren op bestelling, per seconde.
+4. *Verstrengelingsfabriek* — bij 50 stuks, 39 triljard packets. Paren op bestelling, per seconde.
 
-5. *Planetaire backbone* — bij 100 stuks, 24 quadriljoen packets. De hele planeet, één kwantumnetwerk.
+5. *Planetaire backbone* — bij 100 stuks, 520 triljard packets. De hele planeet, één kwantumnetwerk.
 
 **🧠 AI NetOps**
 
-1. *Zelflerende routering* — bij 1 stuks, 19 triljard packets. Het pad van gisteren was niet het beste pad.
+1. *Zelflerende routering* — bij 1 stuks, 290 triljoen packets. Het pad van gisteren was niet het beste pad.
 
-2. *Voorspellend onderhoud* — bij 5 stuks, 190 triljard packets. De schijf wordt vervangen voor hij stukgaat.
+2. *Voorspellend onderhoud* — bij 5 stuks, 2,9 triljard packets. De schijf wordt vervangen voor hij stukgaat.
 
-3. *Autonome incidentafhandeling* — bij 25 stuks, 1,9 quadriljoen packets. Storing om 02:00, oplossing om 02:01.
+3. *Autonome incidentafhandeling* — bij 25 stuks, 29 triljard packets. Storing om 02:00, oplossing om 02:01.
 
-4. *Digitale collega* — bij 50 stuks, 28,5 quadriljoen packets. Praat mee in de stand-up, klaagt nooit.
+4. *Digitale collega* — bij 50 stuks, 435 triljard packets. Praat mee in de stand-up, klaagt nooit.
 
-5. *Eigen mening* — bij 100 stuks, 380 quadriljoen packets. Hij is het niet altijd eens met je ontwerp. Hij heeft vaak gelijk.
+5. *Eigen mening* — bij 100 stuks, 5,8 quadriljoen packets. Hij is het niet altijd eens met je ontwerp. Hij heeft vaak gelijk.
 
 **🌞 Dyson-datacenter**
 
-1. *Zonneschil* — bij 1 stuks, 540 triljard packets. Een procent van de ster, volledig benut.
+1. *Zonneschil* — bij 1 stuks, 3,3 triljard packets. Een procent van de ster, volledig benut.
 
-2. *Kunstmatige nacht* — bij 5 stuks, 5,4 quadriljoen packets. De warmte moet érgens heen.
+2. *Kunstmatige nacht* — bij 5 stuks, 33 triljard packets. De warmte moet érgens heen.
 
-3. *Sterkernkoeling* — bij 25 stuks, 54 quadriljoen packets. Koelen met iets wat kouder is dan de ruimte.
+3. *Sterkernkoeling* — bij 25 stuks, 330 triljard packets. Koelen met iets wat kouder is dan de ruimte.
 
-4. *Miljard collectoren* — bij 50 stuks, 810 quadriljoen packets. De zwerm is vanaf de aarde zichtbaar.
+4. *Miljard collectoren* — bij 50 stuks, 4,95 quadriljoen packets. De zwerm is vanaf de aarde zichtbaar.
 
-5. *Tweede ster* — bij 100 stuks, 10,8 quadriljard packets. Eén ster bleek niet genoeg voor de logbestanden.
+5. *Tweede ster* — bij 100 stuks, 66 quadriljoen packets. Eén ster bleek niet genoeg voor de logbestanden.
 
 **🌌 Parallel VPN**
 
-1. *Dimensionale peering* — bij 1 stuks, 15 quadriljoen packets. Gratis verkeer met de buuruniversa.
+1. *Dimensionale peering* — bij 1 stuks, 39 triljard packets. Gratis verkeer met de buuruniversa.
 
-2. *Anycast over werelden* — bij 5 stuks, 150 quadriljoen packets. Het dichtstbijzijnde universum antwoordt.
+2. *Anycast over werelden* — bij 5 stuks, 390 triljard packets. Het dichtstbijzijnde universum antwoordt.
 
-3. *Paradoxpreventie* — bij 25 stuks, 1,5 quadriljard packets. Je eigen packet mag je niet meer tegenkomen.
+3. *Paradoxpreventie* — bij 25 stuks, 3,9 quadriljoen packets. Je eigen packet mag je niet meer tegenkomen.
 
-4. *Universum-load-balancer* — bij 50 stuks, 22,5 quadriljard packets. Drukke werkelijkheden worden ontzien.
+4. *Universum-load-balancer* — bij 50 stuks, 58,5 quadriljoen packets. Drukke werkelijkheden worden ontzien.
 
-5. *Eigen tak* — bij 100 stuks, 300 quadriljard packets. Een universum dat alleen bestaat om te routeren.
+5. *Eigen tak* — bij 100 stuks, 780 quadriljoen packets. Een universum dat alleen bestaat om te routeren.
 
 **🕳️ Singulariteit**
 
-1. *Zelfherschrijvende kernel* — bij 1 stuks, 420 quadriljoen packets. De code van vanmorgen herkent hij niet meer.
+1. *Zelfherschrijvende kernel* — bij 1 stuks, 480 triljard packets. De code van vanmorgen herkent hij niet meer.
 
-2. *Bewustzijn als dienst* — bij 5 stuks, 4,2 quadriljard packets. Per seconde afgerekend.
+2. *Bewustzijn als dienst* — bij 5 stuks, 4,8 quadriljoen packets. Per seconde afgerekend.
 
-3. *Tijd als transportprotocol* — bij 25 stuks, 42 quadriljard packets. Aankomst voor vertrek, binnen de spec.
+3. *Tijd als transportprotocol* — bij 25 stuks, 48 quadriljoen packets. Aankomst voor vertrek, binnen de spec.
 
-4. *Alles is één packet* — bij 50 stuks, 630 quadriljard packets. Het universum past in één frame. Jumbo, uiteraard.
+4. *Alles is één packet* — bij 50 stuks, 720 quadriljoen packets. Het universum past in één frame. Jumbo, uiteraard.
 
-5. *Serge is het netwerk* — bij 100 stuks, 8,4 quintiljoen packets. Er valt niets meer uit te leggen. Alleen te zijn.
+5. *Serge is het netwerk* — bij 100 stuks, 9,6 quadriljard packets. Er valt niets meer uit te leggen. Alleen te zijn.
 
 ### Klik-upgrades
 
@@ -380,16 +380,16 @@ Elk apparaat heeft er vijf. Ze komen vrij bij 1, 5, 25, 50, 100 exemplaren en ko
 
 | Upgrade | Prijs | Effect |
 |---|---|---|
-| 🔗 **Uplink-trunk** | 4 miljoen | Elke switch duwt je routers vooruit. |
-| 🪢 **Glasvezel-uplink** | 40 miljoen | Routers vragen om meer glas. |
-| 🚪 **Rack-toegang** | 400 miljoen | Elk paar vezels eindigt in een rack. |
-| ❄️ **Koelbeleid** | 4 miljard | Meer racks, betere luchtscheiding. |
-| 📦 **Hypervisor-dichtheid** | 40 miljard | Elk datacenter propt er nodes bij. |
-| 🪪 **Identiteitsbeheer** | 400 miljard | Zonder AD logt niemand in op vCenter. |
-| 🐳 **Containerplatform** | 4 biljoen | De cluster draait op jouw eigen ijzer. |
-| 🕸️ **Overlay-netwerk** | 40 biljoen | Elke pod krijgt zijn eigen virtuele draad. |
-| 🚧 **Perimeterbeleid** | 400 biljoen | Het SOC schrijft de regels die de firewall draait. |
-| 🗺️ **Regio-uitbreiding** | 40 biljard | Elke donkere vezel opent een nieuwe regio. |
+| 🔗 **Uplink-trunk** | 4 miljoen | Elk exemplaar van Netwerk Switch geeft Core Router 1% extra. |
+| 🪢 **Glasvezel-uplink** | 40 miljoen | Elk exemplaar van Core Router geeft Glasvezel 1% extra. |
+| 🚪 **Rack-toegang** | 400 miljoen | Elk exemplaar van Glasvezel geeft Serverrack 1% extra. |
+| ❄️ **Koelbeleid** | 4 miljard | Elk exemplaar van Serverrack geeft Datacenter 1% extra. |
+| 📦 **Hypervisor-dichtheid** | 40 miljard | Elk exemplaar van Datacenter geeft Proxmox Cluster 1% extra. |
+| 🪪 **Identiteitsbeheer** | 400 miljard | Elk exemplaar van Active Directory geeft vSphere Cluster 1% extra. |
+| 🐳 **Containerplatform** | 4 biljoen | Elk exemplaar van Proxmox Cluster geeft Kubernetes Cluster 1% extra. |
+| 🕸️ **Overlay-netwerk** | 40 biljoen | Elk exemplaar van Kubernetes Cluster geeft SDN Controller 1% extra. |
+| 🚧 **Perimeterbeleid** | 400 biljoen | Elk exemplaar van Security Operations geeft Next-gen Firewall 1% extra. |
+| 🗺️ **Regio-uitbreiding** | 40 biljard | Elk exemplaar van Dark Fiber Mesh geeft Hyperscaler-regio 1% extra. |
 
 ### Specialisaties
 
@@ -422,7 +422,7 @@ Om de anderhalve tot vier minuten verschijnt er ergens op je scherm een packet. 
 | 🍃 **Meewind** | 300 s | Alles loopt vandaag net iets soepeler. |
 | ⚡ **Cache hit** | 10 kliks | De volgende tien kliks komen rechtstreeks uit het geheugen. |
 | 🔥 **Overklok** | 90 s | Eén type apparaat draait ver buiten spec. |
-| 🎁 **Meevaller** | meteen | Een kwartier productie in één keer |
+| 🎁 **Meevaller** | meteen | Tot een kwartier productie ineens, maar nooit meer dan 15% van wat je al hebt. |
 
 ### Rode packets
 
@@ -434,7 +434,7 @@ Rode packets verschijnen pas als je ooit een miljard packets hebt verdiend of é
 | 🔁 **Flappende poort** | 40 s | Up, down, up, down. Je kliks komen amper aan. |
 | 🕳️ **Packet loss** | meteen | Een deel van je voorraad haalt de overkant niet. |
 
-Laat je er een vanzelf verdwijnen, dan gebeurt er niets — en de eerste keer dat je dat doet levert het een prestatie op. Twee upgrades maken rode packets minder erg, en één maakt ze zelfs nuttig.
+Laat je er een vanzelf verdwijnen, dan gebeurt er niets — en de eerste keer dat je dat doet levert het een prestatie op. Twee upgrades maken rode packets minder erg, en één maakt ze zelfs nuttig. Een straf blijft staan als je de pagina herlaadt.
 
 ### Storingen
 
@@ -451,7 +451,7 @@ Af en toe gaat er iets stuk in je netwerk. Je krijgt dan onder Serge twee knoppe
 
 ## Koffie en assistenten
 
-Elke prestatie die je haalt, zet je koffiepeil hoger: 123 prestaties is een vol kopje. Op zichzelf doet dat niets — tot je assistenten koopt. Die worden sterker naarmate er meer koffie is, en dat is het krachtigste vermenigvuldiger van het hele spel.
+Elke prestatie die je haalt, zet je koffiepeil hoger: 127 prestaties is een vol kopje ("Koffie op" telt zelf niet mee). Op zichzelf doet dat niets — tot je assistenten koopt. Die worden sterker naarmate er meer koffie is, en dat is het krachtigste vermenigvuldiger van het hele spel.
 
 | Koffiepeil | Rang |
 |---|---|
@@ -467,11 +467,11 @@ Elke prestatie die je haalt, zet je koffiepeil hoger: 123 prestaties is een vol 
 
 ## Afstuderen en de studieboom
 
-Vanaf een biljoen packets totaal kun je afstuderen. Je verliest je packets, apparaten en upgrades, maar je houdt je prestaties, je koffiepeil en de hele studieboom — en je krijgt studiepunten.
+Vanaf 10 miljard packets totaal kun je afstuderen. Je verliest je packets, apparaten en upgrades, maar je houdt je prestaties, je koffiepeil en de hele studieboom — en je krijgt studiepunten.
 
-Het aantal punten is de derdemachtswortel van je totaal gedeeld door een biljoen. In gewone taal: elk volgend punt kost meer dan het vorige, dus verder spelen loont, maar oneindig doorgaan niet.
+Het aantal punten is de derdemachtswortel van je totaal gedeeld door 10 miljard. In gewone taal: elk volgend punt kost meer dan het vorige, dus verder spelen loont, maar oneindig doorgaan niet.
 
-Elk studiepunt geeft daarnaast blijvend 1% extra productie, ook de punten die je alweer uitgegeven hebt.
+Elk studiepunt geeft daarnaast blijvend 10% extra productie, ook de punten die je alweer uitgegeven hebt. Afstuderen loont het meest als je bonus uit studiepunten er minstens door verdubbelt.
 
 ### 🎓 Studie — Meer rendement uit elk diploma.
 
@@ -523,7 +523,7 @@ Vijf onderdelen achter één tabblad. De cursus staat er meteen; de rest gaat ap
 
 ### 📚 Cursus
 
-Altijd beschikbaar. 9 korte hoofdstukken over de basis van netwerken — geen spel, maar de theorie waar de overhoring en de terminal op leunen. Elk hoofdstuk dat je voor het eerst uitleest levert packets op: minstens 1.000, of dertig seconden van je productie.
+Altijd beschikbaar. 9 korte hoofdstukken over de basis van netwerken — geen spel, maar de theorie waar de overhoring en de terminal op leunen. Elk hoofdstuk dat je voor het eerst uitleest levert packets op: minstens 1.000, of dertig seconden van je productie. De knop daarvoor staat onderaan het hoofdstuk en gaat pas open na een korte leestijd.
 
 | Hoofdstuk | Waarover |
 |---|---|
@@ -565,46 +565,78 @@ end
 wr
 ```
 
+Ook de andere gewoontes van een echt apparaat werken: `copy run start` in plaats van `wr`, `do` voor commando's uit de bevoorrechte modus terwijl je aan het configureren bent (`do show ip int br`, `do wr`), `interface GigabitEthernet 0/1` met een spatie, en rechtstreeks van de ene interface naar de andere springen. Op een telefoon staan er knoppen voor Tab en ? onder de invoer.
+
 ### 📈 Bandbreedtemarkt
 
-Vraagt één serverrack. Zes goederen met koersen die elke vijf seconden bewegen, ook als je niet kijkt. Met **+** investeer je een tiende van je packets, met **−** verkoop je alles van dat goed. Wat je terugkrijgt hangt alleen af van hoe de koers bewoog sinds je instapte, dus je kunt de markt niet gebruiken om je productie te ontlopen.
+Vraagt één serverrack. Zes goederen met koersen die elke vijf seconden bewegen, ook als je naar iets anders kijkt. Je koopt voor 1, 5 of 15 minuten productie, met hooguit 15 minuten productie per goed. Zo groeit de markt mee met je netwerk, en niet met wat je hebt opgespaard. Verkopen kan voor de helft of alles. Alleen je winst telt mee als verdiend, je inleg niet.
 
-| Goed | Beweeglijkheid |
-|---|---|
-| 📶 Bandbreedte | 6% |
-| 🧮 Rekentijd | 7% |
-| 🧠 Geheugen | 5% |
-| 💾 Opslag-IOPS | 6% |
-| 🎮 GPU-uren | 11% |
-| 🏷️ IPv4-adressen | 9% |
+Na een aankoop kun je een positie vanzelf laten verkopen: bij +10%, +25%, +50% winst, of bij −10% of −25% verlies. Die orders gaan ook af als je naar een ander tabblad kijkt, zolang het spel openstaat.
 
-Af en toe komt er nieuws voorbij dat één koers hard omhoog of omlaag duwt. Koersen keren langzaam terug naar 100.
+| Goed | Beweeglijkheid | Karakter |
+|---|---|---|
+| 📶 Bandbreedte | 6% | Rustig. Beweegt vooral als er ergens een kabel breekt. |
+| 🧮 Rekentijd | 7% | Volgt nieuwe chips en drukke avonden. |
+| 🧠 Geheugen | 5% | Traag en voorspelbaar, tot er een fabriek stilvalt. |
+| 💾 Opslag-IOPS | 6% | Schiet omhoog als iedereen tegelijk backups terugzet. |
+| 🎮 GPU-uren | 11% | Heftig. Elke AI-hype zet de koers op zijn kop. |
+| 🏷️ IPv4-adressen | 9% | Schaars en grillig. IPv6 ligt altijd op de loer. |
+
+Nieuws duwt een koers meteen omhoog of omlaag. Geruchten werken pas later: na 20 tot 50 seconden blijkt of ze kloppen, en 7 op de 10 keer doen ze dat. Elk goed heeft daarnaast een trend die af en toe omslaat, en elke koers trekt langzaam terug naar 100.
+
+| Bericht | Goed | Effect |
+|---|---|---|
+| Een zeekabel ligt eruit. Bandbreedte schiet omhoog. | 📶 Bandbreedte | +35% |
+| Nieuwe zeekabel in gebruik. Bandbreedte in overvloed. | 📶 Bandbreedte | −25% |
+| *Gerucht:* Een grote backbone gaat volgende week in onderhoud. | 📶 Bandbreedte | +30% als het uitkomt |
+| *Gerucht:* Een provider zet een glasvezelring van tien terabit in de verkoop. | 📶 Bandbreedte | −22% als het uitkomt |
+| Nieuwe generatie processors aangekondigd. Rekentijd wordt goedkoper. | 🧮 Rekentijd | −30% |
+| Een populaire game lanceert vanavond. Iedereen wil rekentijd. | 🧮 Rekentijd | +30% |
+| *Gerucht:* Een chipfabriek kampt met productieproblemen. | 🧮 Rekentijd | +28% als het uitkomt |
+| Fabriek stil na een stroomstoring. Geheugen wordt schaars. | 🧠 Geheugen | +40% |
+| Een containerschip vol geheugenchips komt aan in Antwerpen. | 🧠 Geheugen | −25% |
+| *Gerucht:* Geheugenfabrikanten praten over prijsafspraken. | 🧠 Geheugen | +30% als het uitkomt |
+| Iedereen stapt over op flash. IOPS in de uitverkoop. | 💾 Opslag-IOPS | −32% |
+| Ransomware-golf: iedereen zet tegelijk backups terug. IOPS schaars. | 💾 Opslag-IOPS | +35% |
+| *Gerucht:* Een nieuwe generatie NVMe-schijven ligt al in het magazijn. | 💾 Opslag-IOPS | −25% als het uitkomt |
+| Weer een AI-bedrijf koopt alles op. GPU-uren onbetaalbaar. | 🎮 GPU-uren | +60% |
+| Het AI-bedrijf van vorige maand gaat failliet. Duizenden GPU's te koop. | 🎮 GPU-uren | −40% |
+| *Gerucht:* Een techreus traint volgende week een gigantisch model. | 🎮 GPU-uren | +45% als het uitkomt |
+| *Gerucht:* Een nieuwe chip maakt GPU's voor AI overbodig. | 🎮 GPU-uren | −30% als het uitkomt |
+| Een provider dumpt een /16 op de markt. IPv4 zakt in. | 🏷️ IPv4-adressen | −38% |
+| RIPE heeft geen adressen meer over. IPv4 gewilder dan ooit. | 🏷️ IPv4-adressen | +35% |
+| *Gerucht:* Een grote provider stapt volledig over op IPv6. | 🏷️ IPv4-adressen | −28% als het uitkomt |
+| *Gerucht:* Een cloudreus zoekt een miljoen extra IPv4-adressen. | 🏷️ IPv4-adressen | +30% als het uitkomt |
 
 ### 🗄️ Patchkast
 
-Vraagt één glasvezel. Een patchpaneel van 36 poorten. Je kiest een kabelsoort, legt hem in een vrije poort en wacht tot hij rijp is. Oogsten levert packets op.
+Vraagt één glasvezel. Serge legt werkorders uit de school in de bak: elke 150 seconden één, tot er 3 klaarliggen. Dat loopt ook door als het spel dicht is. Een werkorder is een kabelgoot met aansluitingen die per twee hetzelfde label en dezelfde kleur hebben. Je trekt een kabel van de ene aansluiting naar de andere, vak voor vak, zonder over een andere kabel of aansluiting te gaan. Sleep je over een andere kabel, dan wordt die afgeknipt.
 
-Het echte doel is kruisen: staan er bij de poort die je oogst twee **verschillende rijpe** kabels naast (boven, onder, links of rechts), en vormen die samen een recept, dan heb je 55% kans om dat protocol te ontdekken. Elk ontdekt protocol geef je blijvend 2% extra productie op alles, en je kunt het daarna zelf leggen.
+Liggen alle kabels, dan kun je opleveren. Ligt bovendien elk vak van de goot vol, dan is de goot **luchtdicht** en levert de order 50% meer op. Elke goot kan luchtdicht. Kom je er niet uit, dan legt **Vraag Serge** één kabel zoals in zijn oplossing; dat kost telkens 20% van het loon, tot je nog 40% overhoudt.
 
-| Kabel | Groeitijd | Opbrengst |
+Een order betaalt een vast aantal seconden van je productie, zonder tijdelijke buffs. Grotere goten gaan open naarmate je meer protocollen hebt:
+
+| Goot | Kabels | Loon | Luchtdicht | Open vanaf |
+|---|---|---|---|---|
+| 5 bij 5 | 3 of 4 | 60 s productie | 90 s productie | meteen |
+| 6 bij 6 | 4 of 5 | 90 s productie | 135 s productie | 1 protocol |
+| 7 bij 7 | 5 of 6 | 120 s productie | 180 s productie | 3 protocollen |
+| 8 bij 8 | 6 of 7 | 160 s productie | 240 s productie | 5 protocollen |
+
+De aansluitingen: **PC** (werkplek), **TEL** (telefoon), **AP** (access point), **CAM** (camera), **PRN** (printer), **BRD** (digibord), **UPL** (uplink), **NAS** (opslag).
+
+Na genoeg opgeleverde werkorders komt het volgende protocol vrij. Elk protocol geeft blijvend 2% extra productie op alles, ook na het afstuderen.
+
+| Protocol | Vrij na | Wat het is |
 |---|---|---|
-| 🟩 UTP | 75 s | 25x |
-| 🟫 Coax | 110 s | 45x |
-| 🟦 Glasvezel | 165 s | 90x |
-| 🟨 Stroomkabel | 55 s | 15x |
-
-**De recepten:**
-
-| Protocol | Kruising van | Groeitijd |
-|---|---|---|
-| 💍 **Token Ring** | UTP + Coax | 200 s |
-| 🔷 **Ethernet over glas** | UTP + Glasvezel | 190 s |
-| 🟠 **DOCSIS** | Coax + Glasvezel | 210 s |
-| ⚡ **Power over Ethernet** | UTP + Stroomkabel | 140 s |
-| 🔵 **FDDI** | Token Ring + Glasvezel | 260 s |
-| 🟣 **GPON** | DOCSIS + Ethernet over glas | 300 s |
-| 🟩 **InfiniBand** | FDDI + GPON | 360 s |
-| 🏧 **ATM** | InfiniBand + Token Ring | 420 s |
+| 💍 **Token Ring** | 2 werkorders | Een token gaat rond; wie hem heeft, mag zenden. |
+| 🔷 **Ethernet over glas** | 5 werkorders | Dezelfde frames, maar met licht in plaats van koper. |
+| ⚡ **Power over Ethernet** | 9 werkorders | Stroom en data door één kabel, ideaal voor camera's en access points. |
+| 🟠 **DOCSIS** | 14 werkorders | Internet over de coaxkabel van de televisie. |
+| 🔵 **FDDI** | 20 werkorders | Twee glasvezelringen die elkaars fouten opvangen. |
+| 🟣 **GPON** | 27 werkorders | Eén glasvezel die zich passief opsplitst naar tientallen woningen. |
+| 🟩 **InfiniBand** | 35 werkorders | Supersnelle verbindingen tussen servers in een rekencentrum. |
+| 🏧 **ATM** | 45 werkorders | Cellen van 53 bytes, lang de ruggengraat van telefoonnetten. |
 
 ## Uiterlijk
 
@@ -655,7 +687,7 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. Drie losse keuzes 
 | **Staal** — Grijs op grijs, zoals het rack zelf. | Haal 100 prestaties |
 | **Diepe ruimte** — Voorbij de laatste satelliet. | Koop je eerste singulariteit |
 | **Oceaan** — Diep water, met een kabel erdoorheen. | Koop je eerste zeekabel |
-| **Matrix** — Zwart met groen. Je weet waarom. | Voer rm -rf / uit in de terminal |
+| **Matrix** — Digitale regen, zwart met groen. Je weet waarom. | Voer rm -rf / uit in de terminal |
 | **Nevel** — Paars en stil, ergens ver weg. | Verzamel 25 studiepunten |
 | **Regenboog** — Alles tegelijk. Niet subtiel, wel verdiend. | Studeer één keer af |
 
@@ -663,7 +695,7 @@ De geëvolueerde Serge is de opvolger van de oude Evolve-knop: bij een miljard p
 
 ## Alle prestaties
 
-123 stuks. De verborgen staan in het volgende hoofdstuk.
+128 stuks. De verborgen staan in het volgende hoofdstuk.
 
 ### Klikken
 
@@ -798,8 +830,13 @@ De geëvolueerde Serge is de opvolger van de oude Evolve-knop: bij een miljard p
 | 🧑‍💻 **Vaste hand op de CLI** | Rond tien opdrachten in de terminal af. |
 | 📈 **Koop laag, verkoop hoog** | Maak winst op de bandbreedtemarkt. |
 | 🤑 **Marktmanipulatie** | Verdien een fortuin op de markt in één sessie. |
-| 🌱 **Eerste kabel geplant** | Plant iets in de patchkast. |
-| 🧬 **Nieuw protocol** | Ontdek een protocol door kruising. |
+| 🔔 **Beursvloer** | Verkoop tien keer met winst op de markt. |
+| 🤖 **Automatische piloot** | Laat een winstorder of verliesgrens voor je verkopen. |
+| 🗞️ **Voorkennis** | Koop op een gerucht dat uitkomt, en verkoop met winst. |
+| 🗒️ **Eerste werkorder** | Lever je eerste werkorder in de patchkast op. |
+| 🌬️ **Luchtdicht** | Lever een werkorder op waarbij de hele kabelgoot vol ligt. |
+| 🎖️ **Kabelmeester** | Lever een goot van 8 bij 8 luchtdicht op, zonder hulp van Serge. |
+| 🧬 **Nieuw protocol** | Ontdek een protocol in de patchkast. |
 | 🗃️ **Volledige patchkast** | Ontdek elk protocol. |
 
 ### Overig
@@ -834,7 +871,7 @@ Er zitten 20 verborgen dingen in het spel. Elk levert een eigen prestatie op en 
 | 🍝 Kabelsalade | Typ het woord `hackerman` |
 | 🕐 13:37 | Wees om 13:37 in het spel |
 | 🌃 Nachtdienst | Speel tussen drie en vier uur 's nachts |
-| 💍 Token Ring | Ontdek Token Ring in de patchkast (UTP naast Coax) |
+| 💍 Token Ring | Ontdek Token Ring in de patchkast: dat gebeurt na 2 opgeleverde werkorders |
 | 🔎 Kleine lettertjes | Klik drie keer op het versienummer onderaan het tandwiel-paneel |
 | 🚪 Achterdeur | Klik zeven keer op datzelfde versienummer |
 
@@ -864,13 +901,15 @@ Onzichtbaar maar aanwezig: in de browserconsole bestaat `serge.pps`, `serge.pack
 
 - Je voortgang staat in localStorage van je eigen browser en wordt elke twintig seconden bewaard, plus bij het sluiten van het tabblad.
 
-- Er zijn drie opslagbestanden. Met **Kopieer code** krijg je een tekstcode waarmee je je voortgang op een ander toestel kunt inladen.
+- Er zijn drie opslagbestanden. Met **Kopieer code** krijg je een tekstcode waarmee je je voortgang op een ander toestel kunt inladen. Een import kun je daarna nog ongedaan maken.
+
+- Open je het spel in twee tabbladen op hetzelfde bestand, dan slaat alleen het nieuwste tabblad nog op, zodat ze elkaars voortgang niet overschrijven.
 
 - Ben je weg geweest, dan krijg je een deel van je gemiste productie terug: standaard 40% over maximaal twee uur, op te schroeven tot 100% over 24 uur via de tak Beheer in de studieboom.
 
-- Staat het tabblad op de achtergrond, dan telt die tijd volledig mee tot een uur.
+- Staat het tabblad op de achtergrond, dan telt die tijd volledig mee tot een uur. Een buff telt daarbij alleen zolang hij duurde.
 
 - Saves van de allereerste versie van het spel worden automatisch omgezet: packets, apparaten, kliks en gouden packets komen mee, en wie destijds Evolve had gehaald krijgt daar een studiepunt voor.
 
-- Het spel gebruikt ES-modules, dus `index.html` los openen werkt niet. Via GitHub Pages of een lokale webserver wel.
+- Het spel gebruikt ES-modules, dus `index.html` los openen werkt niet. Via GitHub Pages of een lokale webserver wel (`npm start`).
 

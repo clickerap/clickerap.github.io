@@ -86,7 +86,9 @@ export function fmt(value, options = {}) {
 }
 
 // Voluit uitgeschreven, voor tooltips en tekstregels: "1,25 miljard".
-export function fmtLong(value) {
+// Met `decimals` vast je het aantal cijfers achter de komma: fmtLong(1e9, 0)
+// geeft "1 miljard".
+export function fmtLong(value, decimals = null) {
   if (!Number.isFinite(value)) return "oneindig";
   const abs = Math.abs(value);
   const sign = value < 0 ? "-" : "";
@@ -94,7 +96,8 @@ export function fmtLong(value) {
   const mag = magnitudeFor(abs);
   if (!mag) return sign + fixed(Math.floor(abs), 0);
   const scaled = abs / mag.value;
-  return `${sign}${fixed(scaled, scaled < 10 ? 2 : 1)} ${mag.word}`;
+  const d = decimals !== null ? decimals : scaled < 10 ? 2 : 1;
+  return `${sign}${fixed(scaled, d)} ${mag.word}`;
 }
 
 // Percentages: 0.075 -> "7,5%"

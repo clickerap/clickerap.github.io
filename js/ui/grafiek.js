@@ -1,5 +1,8 @@
 // De doorvoergrafiek: je productie van de afgelopen minuten, zoals elke
 // monitoringpagina hem tekent. Eén lijn, een vlak eronder, geen beweging.
+//
+// Bij het afstuderen wordt de grafiek bewust niet leeggemaakt: de terugval
+// naar nul hoort er gewoon in te staan.
 
 import { D } from "../state.js";
 import { fmt } from "../format.js";
@@ -22,19 +25,18 @@ export function meet(nu = Date.now()) {
   return true;
 }
 
-function rooster(top) {
+function rooster() {
   const lijnen = [];
   for (let i = 1; i < 4; i++) {
     const y = (HOOGTE / 4) * i;
     lijnen.push(`<line class="grafiek-rooster" x1="0" y1="${y}" x2="${BREEDTE}" y2="${y}" />`);
   }
-  void top;
   return lijnen.join("");
 }
 
 export function tekenGrafiek(svg, nuEl, piekEl, gemEl) {
   if (monsters.length < 2) {
-    svg.innerHTML = rooster(1);
+    svg.innerHTML = rooster();
     nuEl.textContent = `${fmt(D.pps)} p/s`;
     piekEl.textContent = "meten…";
     gemEl.textContent = "";
@@ -51,18 +53,11 @@ export function tekenGrafiek(svg, nuEl, piekEl, gemEl) {
   const punten = monsters.map((v, i) => `${(start + i * stap).toFixed(1)},${(HOOGTE - (v / top) * HOOGTE).toFixed(1)}`);
 
   svg.innerHTML = `
-    ${rooster(top)}
+    ${rooster()}
     <polygon class="grafiek-vlakje" points="${start.toFixed(1)},${HOOGTE} ${punten.join(" ")} ${BREEDTE},${HOOGTE}" />
     <polyline class="grafiek-lijn" points="${punten.join(" ")}" />`;
 
   nuEl.textContent = `${fmt(D.pps)} p/s`;
   piekEl.textContent = `piek ${fmt(piek)}`;
   gemEl.textContent = `gemiddeld ${fmt(gemiddeld)}`;
-}
-
-// Bewust niet aangeroepen bij het afstuderen: de terugval naar nul hoort
-// gewoon in de grafiek te staan.
-export function resetGrafiek() {
-  monsters.length = 0;
-  laatsteMeting = 0;
 }

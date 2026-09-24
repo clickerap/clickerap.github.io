@@ -105,10 +105,14 @@ export const ACHTERGRONDEN = [
   { id: "staal", naam: "Staal", beschrijving: "Grijs op grijs, zoals het rack zelf.", hoe: "Haal 100 prestaties", eis: (g) => g.stats.achievements >= 100 },
   { id: "diepteruimte", naam: "Diepe ruimte", beschrijving: "Voorbij de laatste satelliet.", hoe: "Koop je eerste singulariteit", eis: (g) => (g.buildings.singularity || 0) >= 1 },
   { id: "oceaan", naam: "Oceaan", beschrijving: "Diep water, met een kabel erdoorheen.", hoe: "Koop je eerste zeekabel", eis: (g) => (g.buildings.subsea || 0) >= 1 },
-  { id: "matrix", naam: "Matrix", beschrijving: "Zwart met groen. Je weet waarom.", hoe: "Voer rm -rf / uit in de terminal", eis: (g) => !!g.achievements["egg-rm"] },
+  { id: "matrix", naam: "Matrix", beschrijving: "Digitale regen, zwart met groen. Je weet waarom.", hoe: "Voer rm -rf / uit in de terminal", eis: (g) => !!g.achievements["egg-rm"] },
   { id: "nevel", naam: "Nevel", beschrijving: "Paars en stil, ergens ver weg.", hoe: "Verzamel 25 studiepunten", eis: (g) => g.prestige >= 25 },
   { id: "regenboog", naam: "Regenboog", beschrijving: "Alles tegelijk. Niet subtiel, wel verdiend.", hoe: "Studeer één keer af", eis: (g) => g.prestige >= 1 },
 ];
+
+// De twee foto's van Serge. Alle andere portretten zijn filters op de eerste.
+export const FOTO = { standaard: "img/serge.jpg", evolved: "img/serge-evolved.webp" };
+export const fotoVoor = (portret) => (portret === "evolved" ? FOTO.evolved : FOTO.standaard);
 
 export const UITERLIJK = { portret: PORTRETTEN, ring: RINGEN, achtergrond: ACHTERGRONDEN };
 export const SOORTNAMEN = { portret: "Portret", ring: "Ring", achtergrond: "Achtergrond" };

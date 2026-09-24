@@ -3,6 +3,11 @@
 // baseCost  kosten van het eerste exemplaar; elk volgend exemplaar kost x1.15
 // basePps   packets per seconde per exemplaar, voor upgrades en multipliers
 // tiers     de vijf gebouw-upgrades, elk verdubbelt de output van dit gebouw
+//
+// Vanaf Active Directory groeit de terugverdientijd (baseCost / basePps) met
+// een vaste factor 1,45 per apparaat. Daarvoor liep hij op tot x3,6 per stap,
+// en waren de laatste apparaten in de praktijk onbereikbaar. Nareken met
+// `npm run balans`.
 
 export const VAKKEN = {
   netwerken: { name: "Netwerken", icon: "🔀", hue: 199 },
@@ -150,7 +155,7 @@ export const BUILDINGS = [
     name: "Active Directory",
     icon: "🗂️",
     vak: "security",
-    baseCost: 5.1e9,
+    baseCost: 2.8e9,
     basePps: 2.6e5,
     blurb: "Iedereen is wie hij zegt dat hij is. Op papier.",
     tiers: [
@@ -166,7 +171,7 @@ export const BUILDINGS = [
     name: "Kubernetes Cluster",
     icon: "☸️",
     vak: "cloud",
-    baseCost: 7.5e10,
+    baseCost: 2.5e10,
     basePps: 1.6e6,
     blurb: "Je containers herstarten zichzelf. Steeds opnieuw.",
     tiers: [
@@ -182,7 +187,7 @@ export const BUILDINGS = [
     name: "SDN Controller",
     icon: "🎛️",
     vak: "sddc",
-    baseCost: 1e12,
+    baseCost: 2.3e11,
     basePps: 1e7,
     blurb: "De control plane weet alles, de data plane doet alles.",
     tiers: [
@@ -198,7 +203,7 @@ export const BUILDINGS = [
     name: "Next-gen Firewall",
     icon: "🧱",
     vak: "security",
-    baseCost: 1.4e13,
+    baseCost: 2.2e12,
     basePps: 6.5e7,
     blurb: "Standaard alles dicht. Daarna tweehonderd uitzonderingen.",
     tiers: [
@@ -214,7 +219,7 @@ export const BUILDINGS = [
     name: "Security Operations",
     icon: "🛡️",
     vak: "security",
-    baseCost: 1.7e14,
+    baseCost: 2.1e13,
     basePps: 4.3e8,
     blurb: "Drie schermen, twee analisten, één energiedrank.",
     tiers: [
@@ -230,7 +235,7 @@ export const BUILDINGS = [
     name: "Hyperscaler-regio",
     icon: "☁️",
     vak: "cloud",
-    baseCost: 2.1e15,
+    baseCost: 2e14,
     basePps: 2.9e9,
     blurb: "Drie beschikbaarheidszones en één factuur die niemand snapt.",
     tiers: [
@@ -246,7 +251,7 @@ export const BUILDINGS = [
     name: "Dark Fiber Mesh",
     icon: "🌑",
     vak: "netwerken",
-    baseCost: 2.6e16,
+    baseCost: 2.1e15,
     basePps: 2.1e10,
     blurb: "Glas dat al twintig jaar in de grond op je ligt te wachten.",
     tiers: [
@@ -262,7 +267,7 @@ export const BUILDINGS = [
     name: "Zeekabel",
     icon: "🌊",
     vak: "netwerken",
-    baseCost: 3.1e17,
+    baseCost: 2.2e16,
     basePps: 1.5e11,
     blurb: "Een kabel over de oceaanbodem. Haaien niet inbegrepen.",
     tiers: [
@@ -278,7 +283,7 @@ export const BUILDINGS = [
     name: "Satellietconstellatie",
     icon: "🛰️",
     vak: "netwerken",
-    baseCost: 7.1e18,
+    baseCost: 2.3e17,
     basePps: 1.1e12,
     blurb: "Laag genoeg voor 20 ms, hoog genoeg voor overal.",
     tiers: [
@@ -294,7 +299,7 @@ export const BUILDINGS = [
     name: "Quantum Link",
     icon: "⚛️",
     vak: "cloud",
-    baseCost: 1.2e20,
+    baseCost: 2.6e18,
     basePps: 8.3e12,
     blurb: "Verstrengeling maakt afstand een detail.",
     tiers: [
@@ -310,7 +315,7 @@ export const BUILDINGS = [
     name: "AI NetOps",
     icon: "🧠",
     vak: "cloud",
-    baseCost: 1.9e21,
+    baseCost: 2.9e19,
     basePps: 6.4e13,
     blurb: "De AI beheert het netwerk. En schrijft de changelog.",
     tiers: [
@@ -326,7 +331,7 @@ export const BUILDINGS = [
     name: "Dyson-datacenter",
     icon: "🌞",
     vak: "cloud",
-    baseCost: 5.4e22,
+    baseCost: 3.3e20,
     basePps: 5.1e14,
     blurb: "Rekencapaciteit ter grootte van een ster.",
     tiers: [
@@ -342,7 +347,7 @@ export const BUILDINGS = [
     name: "Parallel VPN",
     icon: "🌌",
     vak: "cloud",
-    baseCost: 1.5e24,
+    baseCost: 3.9e21,
     basePps: 4.2e15,
     blurb: "Je downloadt het internet van een universum waar het al af is.",
     tiers: [
@@ -358,7 +363,7 @@ export const BUILDINGS = [
     name: "Singulariteit",
     icon: "🕳️",
     vak: "cloud",
-    baseCost: 4.2e25,
+    baseCost: 4.8e22,
     basePps: 3.5e16,
     blurb: "Serge en het netwerk zijn niet langer te onderscheiden.",
     tiers: [

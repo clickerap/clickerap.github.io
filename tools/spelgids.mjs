@@ -9,10 +9,10 @@ import { writeFileSync } from "node:fs";
 import { BUILDINGS, VAKKEN, TIER_AT, TIER_COST } from "../js/data/buildings.js";
 import { UPGRADES } from "../js/data/upgrades.js";
 import { ACHIEVEMENTS, CATEGORIEEN, EGG_COUNT, KOFFIE_RANKS } from "../js/data/achievements.js";
-import { NODES, BRANCHES } from "../js/data/skilltree.js";
+import { NODES, BRANCHES, ECTS_BASIS, STUDIE_OPEN, BONUS_PER_PUNT } from "../js/data/skilltree.js";
 import { BUFFS, HAZARDS, INCIDENTS } from "../js/data/buffs.js";
-import { KABELS, PROTOCOLLEN } from "../js/data/patch.js";
-import { GOEDEREN } from "../js/data/market.js";
+import { VERBINDINGEN, MATEN, WERK, DREMPELS, PROTOCOLLEN } from "../js/data/patch.js";
+import { GOEDEREN, GOED_BY_ID, KOPPEN, MARKT } from "../js/data/market.js";
 import { UITERLIJK, SOORTNAMEN, ALLE_SKINS } from "../js/data/uiterlijk.js";
 import { HOOFDSTUKKEN } from "../js/data/cursus.js";
 
@@ -47,7 +47,7 @@ p("# Serge Clicker — volledige spelgids");
 p("");
 p("> **Let op: hier staat alles in, ook alle verborgen dingen.** Wil je zelf zoeken, lees dan niet verder dan het hoofdstuk over de studieboom.");
 p("");
-p(`Dit bestand is gemaakt met \`node tools/spelgids.mjs\` en volgt de spelbestanden. Op dit moment: **${BUILDINGS.length} apparaten**, **${UPGRADES.length} upgrades**, **${ACHIEVEMENTS.length} prestaties** (waarvan ${EGG_COUNT} verborgen), **${NODES.length} knooppunten** in de studieboom en **4 opdrachten** in het labo.`);
+p(`Dit bestand is gemaakt met \`node tools/spelgids.mjs\` en volgt de spelbestanden. Op dit moment: **${BUILDINGS.length} apparaten**, **${UPGRADES.length} upgrades**, **${ACHIEVEMENTS.length} prestaties** (waarvan ${EGG_COUNT} verborgen), **${NODES.length} knooppunten** in de studieboom en **5 onderdelen** in het labo.`);
 
 // -------------------------------------------------------------- Basis
 
@@ -56,13 +56,13 @@ p("Je klikt op Serge en verdient packets. Met packets koop je apparaten die vanz
 p("");
 p("De volgorde waarin dingen vrijkomen:");
 p("");
-p("1. **Winkel** — meteen. Klik tot je zes packets hebt voor je eerste patchkabel.");
+p(`1. **Winkel** — meteen. Klik tot je ${BUILDINGS[0].baseCost} packets hebt voor je eerste ${BUILDINGS[0].name.toLowerCase()}.`);
 p("2. **Upgrades** — zodra je er een verdient (tien kliks geeft de eerste al).");
 p("3. **Prestaties** — meteen zichtbaar, ze vullen zich vanzelf.");
 p("4. **Labo** — bij 5.000 packets totaal. Daarbinnen gaat elke opdracht apart open.");
-p("5. **Studie** — bij 100 miljard packets totaal. Daarna kun je afstuderen.");
+p(`5. **Studie** — bij ${getal(STUDIE_OPEN)} packets totaal. Vanaf ${getal(ECTS_BASIS)} kun je voor het eerst afstuderen.`);
 p("");
-p("Sneltoetsen: **spatie** klikt, **1 / 2 / 3 / 4** zetten het aantal per aankoop op 1, 10, 100 of max. Het tandwiel rechtsboven opent statistieken, instellingen en opslag.");
+p("Sneltoetsen: **spatie** klikt, **1 / 2 / 3 / 4** zetten het aantal per aankoop op 1, 10, 100 of max, en **G** pakt een gouden packet. Het tandwiel rechtsboven opent statistieken, instellingen en opslag.");
 
 // ---------------------------------------------------------- Apparaten
 
@@ -140,7 +140,7 @@ tabel(
   BUFFS.map((b) => [
     `${b.icon} **${b.name}**`,
     b.instant ? "meteen" : b.charges ? `${b.charges} kliks` : `${b.duration} s`,
-    b.instant ? "Een kwartier productie in één keer" : b.desc,
+    b.desc,
   ])
 );
 kop(3, "Rode packets");
@@ -150,7 +150,7 @@ tabel(
   ["Straf", "Duur", "Effect"],
   HAZARDS.map((h) => [`${h.icon} **${h.name}**`, h.instant ? "meteen" : `${h.duration} s`, h.desc])
 );
-p("Laat je er een vanzelf verdwijnen, dan gebeurt er niets — en de eerste keer dat je dat doet levert het een prestatie op. Twee upgrades maken rode packets minder erg, en één maakt ze zelfs nuttig.");
+p("Laat je er een vanzelf verdwijnen, dan gebeurt er niets — en de eerste keer dat je dat doet levert het een prestatie op. Twee upgrades maken rode packets minder erg, en één maakt ze zelfs nuttig. Een straf blijft staan als je de pagina herlaadt.");
 
 kop(3, "Storingen");
 p("Af en toe gaat er iets stuk in je netwerk. Je krijgt dan onder Serge twee knoppen: betalen voor noodherstel, of het laten lopen en 60 tot 100 seconden minder produceren. Reageer je niet binnen 45 seconden, dan geldt het als negeren.");
@@ -167,18 +167,18 @@ tabel(
 // ------------------------------------------------------------- Koffie
 
 kop(2, "Koffie en assistenten");
-p(`Elke prestatie die je haalt, zet je koffiepeil hoger: ${ACHIEVEMENTS.length} prestaties is een vol kopje. Op zichzelf doet dat niets — tot je assistenten koopt. Die worden sterker naarmate er meer koffie is, en dat is het krachtigste vermenigvuldiger van het hele spel.`);
+p(`Elke prestatie die je haalt, zet je koffiepeil hoger: ${ACHIEVEMENTS.length - 1} prestaties is een vol kopje ("Koffie op" telt zelf niet mee). Op zichzelf doet dat niets — tot je assistenten koopt. Die worden sterker naarmate er meer koffie is, en dat is het krachtigste vermenigvuldiger van het hele spel.`);
 p("");
 tabel(["Koffiepeil", "Rang"], KOFFIE_RANKS.map(([peil, naam]) => [`${Math.round(peil * 100)}%`, naam]));
 
 // ------------------------------------------------------------- Studie
 
 kop(2, "Afstuderen en de studieboom");
-p("Vanaf een biljoen packets totaal kun je afstuderen. Je verliest je packets, apparaten en upgrades, maar je houdt je prestaties, je koffiepeil en de hele studieboom — en je krijgt studiepunten.");
+p(`Vanaf ${getal(ECTS_BASIS)} packets totaal kun je afstuderen. Je verliest je packets, apparaten en upgrades, maar je houdt je prestaties, je koffiepeil en de hele studieboom — en je krijgt studiepunten.`);
 p("");
-p("Het aantal punten is de derdemachtswortel van je totaal gedeeld door een biljoen. In gewone taal: elk volgend punt kost meer dan het vorige, dus verder spelen loont, maar oneindig doorgaan niet.");
+p(`Het aantal punten is de derdemachtswortel van je totaal gedeeld door ${getal(ECTS_BASIS)}. In gewone taal: elk volgend punt kost meer dan het vorige, dus verder spelen loont, maar oneindig doorgaan niet.`);
 p("");
-p("Elk studiepunt geeft daarnaast blijvend 1% extra productie, ook de punten die je alweer uitgegeven hebt.");
+p(`Elk studiepunt geeft daarnaast blijvend ${Math.round(BONUS_PER_PUNT * 100)}% extra productie, ook de punten die je alweer uitgegeven hebt. Afstuderen loont het meest als je bonus uit studiepunten er minstens door verdubbelt.`);
 for (const tak of BRANCHES) {
   kop(3, `${tak.icon} ${tak.name} — ${tak.desc}`);
   tabel(
@@ -193,7 +193,7 @@ kop(2, "Het labo");
 p("Vijf onderdelen achter één tabblad. De cursus staat er meteen; de rest gaat apart open.");
 
 kop(3, "📚 Cursus");
-p(`Altijd beschikbaar. ${HOOFDSTUKKEN.length} korte hoofdstukken over de basis van netwerken — geen spel, maar de theorie waar de overhoring en de terminal op leunen. Elk hoofdstuk dat je voor het eerst uitleest levert packets op: minstens 1.000, of dertig seconden van je productie.`);
+p(`Altijd beschikbaar. ${HOOFDSTUKKEN.length} korte hoofdstukken over de basis van netwerken — geen spel, maar de theorie waar de overhoring en de terminal op leunen. Elk hoofdstuk dat je voor het eerst uitleest levert packets op: minstens 1.000, of dertig seconden van je productie. De knop daarvoor staat onderaan het hoofdstuk en gaat pas open na een korte leestijd.`);
 p("");
 tabel(
   ["Hoofdstuk", "Waarover"],
@@ -217,30 +217,53 @@ p("");
 p("De volledige reeks voor een opdracht ziet er zo uit:");
 p("");
 p(["```", "en", "conf t", "int gi0/3", "ip add 10.42.7.1 255.255.255.0", "no shut", "end", "wr", "```"].join("\n"));
+p("");
+p("Ook de andere gewoontes van een echt apparaat werken: `copy run start` in plaats van `wr`, `do` voor commando's uit de bevoorrechte modus terwijl je aan het configureren bent (`do show ip int br`, `do wr`), `interface GigabitEthernet 0/1` met een spatie, en rechtstreeks van de ene interface naar de andere springen. Op een telefoon staan er knoppen voor Tab en ? onder de invoer.");
 
 kop(3, "📈 Bandbreedtemarkt");
-p("Vraagt één serverrack. Zes goederen met koersen die elke vijf seconden bewegen, ook als je niet kijkt. Met **+** investeer je een tiende van je packets, met **−** verkoop je alles van dat goed. Wat je terugkrijgt hangt alleen af van hoe de koers bewoog sinds je instapte, dus je kunt de markt niet gebruiken om je productie te ontlopen.");
+p(`Vraagt één serverrack. Zes goederen met koersen die elke vijf seconden bewegen, ook als je naar iets anders kijkt. Je koopt voor ${MARKT.koopMinuten.join(", ").replace(/, (\d+)$/, " of $1")} minuten productie, met hooguit ${MARKT.limietMinuten} minuten productie per goed. Zo groeit de markt mee met je netwerk, en niet met wat je hebt opgespaard. Verkopen kan voor de helft of alles. Alleen je winst telt mee als verdiend, je inleg niet.`);
 p("");
-tabel(["Goed", "Beweeglijkheid"], GOEDEREN.map((g) => [`${g.icon} ${g.naam}`, `${Math.round(g.vol * 100)}%`]));
-p("Af en toe komt er nieuws voorbij dat één koers hard omhoog of omlaag duwt. Koersen keren langzaam terug naar 100.");
+p(`Na een aankoop kun je een positie vanzelf laten verkopen: bij ${MARKT.winstOrders.map((w) => `+${Math.round(w * 100)}%`).join(", ")} winst, of bij ${MARKT.verliesOrders.map((w) => `−${Math.round(w * 100)}%`).join(" of ")} verlies. Die orders gaan ook af als je naar een ander tabblad kijkt, zolang het spel openstaat.`);
+p("");
+tabel(
+  ["Goed", "Beweeglijkheid", "Karakter"],
+  GOEDEREN.map((g) => [`${g.icon} ${g.naam}`, `${Math.round(g.vol * 100)}%`, g.profiel])
+);
+p(`Nieuws duwt een koers meteen omhoog of omlaag. Geruchten werken pas later: na ${MARKT.geruchtNa.map((n) => n * MARKT.tikMs / 1000).join(" tot ")} seconden blijkt of ze kloppen, en ${Math.round(MARKT.geruchtWaar * 10)} op de 10 keer doen ze dat. Elk goed heeft daarnaast een trend die af en toe omslaat, en elke koers trekt langzaam terug naar 100.`);
+p("");
+tabel(
+  ["Bericht", "Goed", "Effect"],
+  KOPPEN.map((k) => [
+    `${k.gerucht ? "*Gerucht:* " : ""}${k.tekst}`,
+    `${GOED_BY_ID[k.goed].icon} ${GOED_BY_ID[k.goed].naam}`,
+    `${k.factor > 1 ? "+" : "−"}${Math.round(Math.abs(k.factor - 1) * 100)}%${k.gerucht ? " als het uitkomt" : ""}`,
+  ])
+);
 
 kop(3, "🗄️ Patchkast");
-p("Vraagt één glasvezel. Een patchpaneel van 36 poorten. Je kiest een kabelsoort, legt hem in een vrije poort en wacht tot hij rijp is. Oogsten levert packets op.");
+p(`Vraagt één glasvezel. Serge legt werkorders uit de school in de bak: elke ${WERK.interval} seconden één, tot er ${WERK.wachtrij} klaarliggen. Dat loopt ook door als het spel dicht is. Een werkorder is een kabelgoot met aansluitingen die per twee hetzelfde label en dezelfde kleur hebben. Je trekt een kabel van de ene aansluiting naar de andere, vak voor vak, zonder over een andere kabel of aansluiting te gaan. Sleep je over een andere kabel, dan wordt die afgeknipt.`);
 p("");
-p("Het echte doel is kruisen: staan er bij de poort die je oogst twee **verschillende rijpe** kabels naast (boven, onder, links of rechts), en vormen die samen een recept, dan heb je 55% kans om dat protocol te ontdekken. Elk ontdekt protocol geef je blijvend 2% extra productie op alles, en je kunt het daarna zelf leggen.");
+p(`Liggen alle kabels, dan kun je opleveren. Ligt bovendien elk vak van de goot vol, dan is de goot **luchtdicht** en levert de order ${Math.round((WERK.luchtdicht - 1) * 100)}% meer op. Elke goot kan luchtdicht. Kom je er niet uit, dan legt **Vraag Serge** één kabel zoals in zijn oplossing; dat kost telkens ${Math.round(WERK.hulpKost * 100)}% van het loon, tot je nog ${Math.round(WERK.hulpMinimum * 100)}% overhoudt.`);
+p("");
+p("Een order betaalt een vast aantal seconden van je productie, zonder tijdelijke buffs. Grotere goten gaan open naarmate je meer protocollen hebt:");
 p("");
 tabel(
-  ["Kabel", "Groeitijd", "Opbrengst"],
-  Object.values(KABELS).map((k) => [`${k.icon} ${k.naam}`, `${k.groei} s`, `${k.waarde}x`])
+  ["Goot", "Kabels", "Loon", "Luchtdicht", "Open vanaf"],
+  Object.entries(MATEN).map(([n, m]) => [
+    `${n} bij ${n}`,
+    `${m.paren[0]} of ${m.paren[1]}`,
+    `${m.seconden} s productie`,
+    `${m.seconden * WERK.luchtdicht} s productie`,
+    m.vanafProtocollen ? `${m.vanafProtocollen} ${m.vanafProtocollen === 1 ? "protocol" : "protocollen"}` : "meteen",
+  ])
 );
-p("**De recepten:**");
+p(`De aansluitingen: ${VERBINDINGEN.map((v) => `**${v.label}** (${v.naam})`).join(", ")}.`);
+p("");
+p("Na genoeg opgeleverde werkorders komt het volgende protocol vrij. Elk protocol geeft blijvend 2% extra productie op alles, ook na het afstuderen.");
 p("");
 tabel(
-  ["Protocol", "Kruising van", "Groeitijd"],
-  Object.entries(PROTOCOLLEN).map(([, def]) => {
-    const namen = def.paar.map((s) => (KABELS[s] || PROTOCOLLEN[s]).naam).join(" + ");
-    return [`${def.icon} **${def.naam}**`, namen, `${def.groei} s`];
-  })
+  ["Protocol", "Vrij na", "Wat het is"],
+  Object.values(PROTOCOLLEN).map((proto, i) => [`${proto.icon} **${proto.naam}**`, `${DREMPELS[i]} werkorders`, proto.uitleg])
 );
 
 // ----------------------------------------------------------- Uiterlijk
@@ -295,7 +318,7 @@ tabel(
     ["🍝 Kabelsalade", "Typ het woord `hackerman`"],
     ["🕐 13:37", "Wees om 13:37 in het spel"],
     ["🌃 Nachtdienst", "Speel tussen drie en vier uur 's nachts"],
-    ["💍 Token Ring", "Ontdek Token Ring in de patchkast (UTP naast Coax)"],
+    ["💍 Token Ring", `Ontdek Token Ring in de patchkast: dat gebeurt na ${DREMPELS[0]} opgeleverde werkorders`],
     ["🔎 Kleine lettertjes", "Klik drie keer op het versienummer onderaan het tandwiel-paneel"],
     ["🚪 Achterdeur", "Klik zeven keer op datzelfde versienummer"],
   ]
@@ -325,11 +348,12 @@ p("Onzichtbaar maar aanwezig: in de browserconsole bestaat `serge.pps`, `serge.p
 
 kop(2, "Technisch");
 p("- Je voortgang staat in localStorage van je eigen browser en wordt elke twintig seconden bewaard, plus bij het sluiten van het tabblad.");
-p("- Er zijn drie opslagbestanden. Met **Kopieer code** krijg je een tekstcode waarmee je je voortgang op een ander toestel kunt inladen.");
+p("- Er zijn drie opslagbestanden. Met **Kopieer code** krijg je een tekstcode waarmee je je voortgang op een ander toestel kunt inladen. Een import kun je daarna nog ongedaan maken.");
+p("- Open je het spel in twee tabbladen op hetzelfde bestand, dan slaat alleen het nieuwste tabblad nog op, zodat ze elkaars voortgang niet overschrijven.");
 p("- Ben je weg geweest, dan krijg je een deel van je gemiste productie terug: standaard 40% over maximaal twee uur, op te schroeven tot 100% over 24 uur via de tak Beheer in de studieboom.");
-p("- Staat het tabblad op de achtergrond, dan telt die tijd volledig mee tot een uur.");
+p("- Staat het tabblad op de achtergrond, dan telt die tijd volledig mee tot een uur. Een buff telt daarbij alleen zolang hij duurde.");
 p("- Saves van de allereerste versie van het spel worden automatisch omgezet: packets, apparaten, kliks en gouden packets komen mee, en wie destijds Evolve had gehaald krijgt daar een studiepunt voor.");
-p("- Het spel gebruikt ES-modules, dus `index.html` los openen werkt niet. Via GitHub Pages of een lokale webserver wel.");
+p("- Het spel gebruikt ES-modules, dus `index.html` los openen werkt niet. Via GitHub Pages of een lokale webserver wel (`npm start`).");
 
 // Dubbele lege regels opruimen; de helpers voegen er soms een te veel toe.
 const tekst = r.join("\n").replace(/\n{3,}/g, "\n\n").trimStart() + "\n";

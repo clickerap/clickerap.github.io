@@ -1,14 +1,18 @@
 // De schil: teller, Serge, buffs, logbalk, rack, tabbladen en gouden packets.
 
 import { G, D, BUILDINGS, VAKKEN, nextCost, availableUpgrades, onAchievement, onSkin, touch, rev } from "../state.js";
-import { BUFF_BY_ID, HAZARDS, INCIDENTS } from "../data/buffs.js";
+import { buffUiterlijk, effectVan, INCIDENT_BY_ID } from "../data/buffs.js";
+import { fotoVoor } from "../data/uiterlijk.js";
+import { STUDIE_OPEN } from "../data/skilltree.js";
 import { fmt, fmtLong, fmtTime, setNotation } from "../format.js";
 import { click, goldenClicked, goldenExpired, fixIncident, ignoreIncident } from "../engine.js";
 import { on, emit } from "../bus.js";
-import { toast, floatText, sparks, blip, chord, dialog, attachTooltip, hoverCapable } from "./fx.js";
-import { renderAll, syncFast, renderStudie, renderMeer, renderAchievements, resetPanels } from "./panels.js";
-import { save, wipe, exportSave, importSave, setSlot, currentSlot, slotSummary } from "../save.js";
+import { toast, floatText, sparks, blip, chord, dialog, attachTooltip, hoverCapable, kondigAan } from "./fx.js";
+import { renderAll, syncFast, renderStudie, syncStudie, renderMeer, renderAchievements, resetPanels } from "./panels.js";
+import { save, wipe, exportSave, importSave, wisselSlot, actiefBestand, slotSummary, backupInfo, herstelBackup } from "../save.js";
 import { meet, tekenGrafiek } from "./grafiek.js";
+import { esc } from "../html.js";
+import { stelRegenIn } from "./regen.js";
 
 const el = (id) => document.getElementById(id);
 const scoreEl = el("score");
@@ -21,28 +25,33 @@ const buffbar = el("buffbar");
 const newsEl = el("news");
 const incidentEl = el("incident");
 
-const EVOLVED_SRC = "Gemini_Generated_Image_jsk7ebjsk7ebjsk7.png";
-const STANDARD_SRC = "35616611_186097762080080_1909471807589580800_n.jpg";
+const vensterOpen = () => !!document.querySelector("dialog[open]");
 
 // ------------------------------------------------------------- Tabbladen
+// Het ARIA-patroon voor tabbladen: alleen de actieve tab zit in de
+// tabvolgorde, pijltjes, Home en End wandelen erdoorheen.
 
-const tabs = [...document.querySelectorAll("#tabs button")];
+const tabs = [...document.querySelectorAll("#tabs [role=tab]")];
 const panels = new Map(tabs.map((t) => [t.dataset.tab, el(t.getAttribute("aria-controls"))]));
 let activeTab = "winkel";
+
+export function actiefTabblad() {
+  return activeTab;
+}
 
 export function showTab(name) {
   if (!panels.has(name)) return;
   activeTab = name;
   for (const tab of tabs) {
-    const on = tab.dataset.tab === name;
-    tab.setAttribute("aria-selected", String(on));
-    panels.get(tab.dataset.tab).hidden = !on;
+    const aan = tab.dataset.tab === name;
+    tab.setAttribute("aria-selected", String(aan));
+    tab.tabIndex = aan ? 0 : -1;
+    panels.get(tab.dataset.tab).hidden = !aan;
   }
   if (name === "studie") renderStudie();
   if (name === "prestaties") renderAchievements();
   // Elk tabblad begint bovenaan; anders erf je de scrollpositie van het vorige.
-  const panelen = el("tabpanels");
-  panelen.scrollTop = 0;
+  el("tabpanels").scrollTop = 0;
   emit("tab", name);
 }
 
@@ -55,16 +64,17 @@ for (const tab of tabs) {
     showTab(tab.dataset.tab);
   });
   tab.addEventListener("keydown", (e) => {
-    const i = tabs.indexOf(tab);
-    const zichtbaar = tabs.filter((t) => !t.hidden);
-    const pos = zichtbaar.indexOf(tab);
-    if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-      e.preventDefault();
-      const next = zichtbaar[(pos + (e.key === "ArrowRight" ? 1 : zichtbaar.length - 1)) % zichtbaar.length];
-      next.focus();
-      if (!next.classList.contains("op-slot")) showTab(next.dataset.tab);
-    }
-    void i;
+    const pos = tabs.indexOf(tab);
+    const doel = {
+      ArrowRight: tabs[(pos + 1) % tabs.length],
+      ArrowLeft: tabs[(pos + tabs.length - 1) % tabs.length],
+      Home: tabs[0],
+      End: tabs[tabs.length - 1],
+    }[e.key];
+    if (!doel) return;
+    e.preventDefault();
+    doel.focus();
+    if (!doel.classList.contains("op-slot")) showTab(doel.dataset.tab);
   });
 }
 
@@ -73,14 +83,14 @@ const SLOTEN = {
     open: () => G.stats.lifetime >= 5e3 || G.stats.prestiges > 0,
     naam: "Het labo",
     eis: "Verdien in totaal 5.000 packets.",
-    tekst: "Vier opdrachten: een overhoring van Serge, een terminal, de bandbreedtemarkt en een patchkast.",
+    tekst: "Vijf onderdelen: de cursus, een overhoring van Serge, een terminal, de bandbreedtemarkt en een patchkast.",
     icoon: "🧪",
   },
   studie: {
-    open: () => G.prestige > 0 || G.stats.lifetime >= 1e11,
+    open: () => G.prestige > 0 || G.stats.lifetime >= STUDIE_OPEN,
     naam: "Studie",
-    eis: "Verdien in totaal 100 miljard packets.",
-    tekst: "Dan kun je afstuderen: opnieuw beginnen met studiepunten voor een boom vol blijvende bonussen.",
+    eis: `Verdien in totaal ${fmtLong(STUDIE_OPEN, 0)} packets.`,
+    tekst: "Dan zie je hoe ver je van je eerste diploma bent: opnieuw beginnen met studiepunten voor een boom vol blijvende bonussen.",
     icoon: "🎓",
   },
 };
@@ -111,9 +121,10 @@ function toonSlot(naam) {
 
 function clickSerge(event) {
   const value = click();
+  if (!value) return;
   const rect = sergeBtn.getBoundingClientRect();
-  const x = event?.clientX ?? rect.left + rect.width / 2;
-  const y = event?.clientY ?? rect.top + rect.height / 2;
+  const x = event?.clientX || rect.left + rect.width / 2;
+  const y = event?.clientY || rect.top + rect.height / 2;
   floatText(x, y - 10, `+${fmt(value)}`);
   sparks(x, y, G.options.motion ? 8 : 0);
   if (G.options.motion) {
@@ -134,31 +145,50 @@ sergeBtn.addEventListener("contextmenu", (e) => {
   e.preventDefault();
   emit("egg:rechtsklik");
 });
+// Een ingedrukte Enter of spatie herhaalt zichzelf; dat is geen klikken.
+sergeBtn.addEventListener("keydown", (e) => {
+  if (e.repeat && (e.key === "Enter" || e.key === " ")) e.preventDefault();
+});
+
+// Spatie klikt Serge, tenzij de focus op iets staat dat zelf op spatie
+// reageert. 1 tot 4 zetten het aantal per aankoop, G pakt een gouden packet.
+const REAGEERT_OP_SPATIE = "button, a[href], summary, [role=button], [role=tab], [role=switch]";
 
 document.addEventListener("keydown", (e) => {
-  if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-  if (e.code === "Space" && document.activeElement !== sergeBtn) {
+  if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || vensterOpen()) return;
+  const doel = e.target instanceof Element ? e.target : null;
+  if (doel?.closest("input, textarea, select, [contenteditable]")) return;
+  if (e.code === "Space") {
+    if (doel?.closest(REAGEERT_OP_SPATIE)) return;
     e.preventDefault();
-    clickSerge();
+    if (!e.repeat) clickSerge();
+    return;
   }
+  if (e.repeat) return;
   if (activeTab === "winkel" && ["1", "2", "3", "4"].includes(e.key)) {
-    const map = { 1: 1, 2: 10, 3: 100, 4: "max" };
-    setBuyAmount(map[e.key]);
+    setBuyAmount({ 1: 1, 2: 10, 3: 100, 4: "max" }[e.key]);
   }
+  if (e.key === "g" || e.key === "G") pakPacket();
 });
 
 // ------------------------------------------------------------ Winkelbalk
 
+const AANTALLEN = [1, 10, 100, "max"];
+const aantalKnoppen = [...document.querySelectorAll(".shopbar .segmented button")];
+
 function setBuyAmount(amount) {
-  G.options.buyAmount = amount;
-  for (const btn of document.querySelectorAll(".segmented button")) {
-    btn.classList.toggle("on", btn.dataset.amount === String(amount));
+  const geldig = AANTALLEN.includes(amount) ? amount : 1;
+  G.options.buyAmount = geldig;
+  for (const btn of aantalKnoppen) {
+    const aan = btn.dataset.amount === String(geldig);
+    btn.classList.toggle("on", aan);
+    btn.setAttribute("aria-pressed", String(aan));
   }
   touch();
   renderAll();
 }
 
-for (const btn of document.querySelectorAll(".segmented button")) {
+for (const btn of aantalKnoppen) {
   btn.addEventListener("click", () => setBuyAmount(btn.dataset.amount === "max" ? "max" : Number(btn.dataset.amount)));
 }
 
@@ -196,8 +226,8 @@ const buffTijden = new Map();
 
 // Wat een buff precies doet, in losse regels. Zowel de tooltip op desktop
 // als het venstertje op een telefoon tekenen dit.
-function buffInfo(entry, def) {
-  const e = entry.effect || def.effect || {};
+function buffInfo(entry) {
+  const e = effectVan(entry, { kracht: D.goldenPower, weerstand: D.ddosResist }) || {};
   const regels = [];
   if (e.ppsMult) regels.push(["Productie", `x${fmt(e.ppsMult, { decimals: 2 })}`]);
   if (e.clickMult) regels.push(["Per klik", `x${fmt(e.clickMult, { decimals: 2 })}`]);
@@ -218,18 +248,15 @@ export function syncBuffs() {
     buffbar.innerHTML = "";
     buffTijden.clear();
     for (const entry of G.buffs) {
-      const def = BUFF_BY_ID[entry.id]
-        || HAZARDS.find((h) => h.id === entry.id)
-        || incidentBuffDef(entry.id);
+      const def = buffUiterlijk(entry);
       const pil = document.createElement("span");
-      pil.className = `buff${entry.hazard ? " slecht" : ""}`;
-      pil.innerHTML = `<span>${def.icon}</span> ${def.name} <time></time>`;
-      const info = () => buffInfo(entry, def);
+      pil.className = `buff${def.slecht ? " slecht" : ""}`;
+      pil.innerHTML = `<span aria-hidden="true">${def.icon}</span> ${esc(def.name)} <time></time>`;
       attachTooltip(pil, () => {
-        const { regels, rest } = info();
-        return `<h4>${def.icon} ${def.name}</h4>
-          ${regels.map(([l, w]) => `<div class="regel"><span>${l}</span><span>${w}</span></div>`).join("")}
-          <p class="cursief">${def.desc}</p>
+        const { regels, rest } = buffInfo(entry);
+        return `<h4>${def.icon} ${esc(def.name)}</h4>
+          ${regels.map(([l, w]) => `<div class="regel"><span>${esc(l)}</span><span>${w}</span></div>`).join("")}
+          <p class="cursief">${esc(def.desc)}</p>
           <div class="regel prijsregel">${rest}</div>`;
       });
       // Zonder muis is er geen tooltip; daar opent een tik hetzelfde verhaal.
@@ -237,12 +264,12 @@ export function syncBuffs() {
         pil.setAttribute("role", "button");
         pil.setAttribute("tabindex", "0");
         const toon = () => {
-          const { regels, rest } = info();
+          const { regels, rest } = buffInfo(entry);
           dialog({
             title: `${def.icon} ${def.name}`,
-            body: `<p>${def.desc}</p>
+            body: `<p>${esc(def.desc)}</p>
               <div class="statlijst" style="margin-top:12px">
-                ${regels.map(([l, w]) => `<div><span>${l}</span><strong>${w}</strong></div>`).join("")}
+                ${regels.map(([l, w]) => `<div><span>${esc(l)}</span><strong>${w}</strong></div>`).join("")}
                 <div><span>Nog actief</span><strong>${rest.replace(/^Nog /, "")}</strong></div>
               </div>`,
             actions: [{ label: "Duidelijk", style: "ghost" }],
@@ -268,13 +295,6 @@ export function syncBuffs() {
   }
 }
 
-function incidentBuffDef(id) {
-  const inc = INCIDENTS.find((i) => `incident-${i.id}` === id);
-  return inc
-    ? { icon: "⚠️", name: "Storing", desc: inc.text }
-    : { icon: "❔", name: "Onbekend", desc: "" };
-}
-
 // ------------------------------------------------------- Logbalk en storing
 
 on("news", (text) => {
@@ -288,23 +308,15 @@ on("news", (text) => {
 const incidentText = el("incident-text");
 const incidentFix = el("incident-fix");
 const incidentIgnore = el("incident-ignore");
-let incidentDef = null;
 const incidentProgress = el("incident-progress");
+let getoondIncident = null;
 
-on("incident:start", ({ def }) => {
-  incidentDef = def;
-  incidentText.textContent = def.text;
-  incidentFix.textContent = `${def.fixLabel} (${fmt(G.incident.cost)})`;
-  incidentIgnore.textContent = def.ignoreLabel;
-  incidentEl.hidden = false;
-  blip(220, 0.2, 0.06);
-});
+on("incident:start", () => blip(220, 0.2, 0.06));
 
 on("incident:end", ({ how }) => {
-  incidentEl.hidden = true;
   if (how === "fixed") toast({ title: "Opgelost", text: "Het netwerk draait weer op volle kracht.", icon: "🔧", tone: "goed" });
-  else if (incidentDef) toast({ title: "Storing blijft", text: "Je productie ligt even lager.", icon: "⚠️", tone: "slecht" });
-  incidentDef = null;
+  else if (how === "auto") toast({ title: "Vanzelf opgelost", text: "Het netwerk herstelde zichzelf. Er ging niets verloren.", icon: "🩹", tone: "goed" });
+  else toast({ title: "Storing blijft", text: "Je productie ligt even lager.", icon: "⚠️", tone: "slecht" });
 });
 
 incidentFix.addEventListener("click", () => {
@@ -312,12 +324,25 @@ incidentFix.addEventListener("click", () => {
 });
 incidentIgnore.addEventListener("click", ignoreIncident);
 
+// De storing volgt G.incident, dus ook een storing die een herlaadbeurt
+// overleefde staat meteen weer in beeld.
 function syncIncident() {
-  if (!G.incident) return;
-  const totaal = G.incident.until - G.incident.startedAt;
-  const over = Math.max(0, G.incident.until - Date.now());
-  incidentProgress.style.transform = `scaleX(${over / totaal})`;
-  incidentFix.disabled = G.packets < G.incident.cost;
+  const inc = G.incident;
+  if (inc !== getoondIncident) {
+    getoondIncident = inc;
+    incidentEl.hidden = !inc;
+    if (inc) {
+      const def = INCIDENT_BY_ID[inc.id];
+      incidentText.textContent = def.text;
+      incidentFix.textContent = `${def.fixLabel} (${fmt(inc.cost)})`;
+      incidentIgnore.textContent = def.ignoreLabel;
+    }
+  }
+  if (!inc) return;
+  const totaal = inc.until - inc.startedAt;
+  const over = Math.max(0, inc.until - Date.now());
+  incidentProgress.style.transform = `scaleX(${totaal > 0 ? over / totaal : 0})`;
+  incidentFix.disabled = G.packets < inc.cost;
 }
 
 // ----------------------------------------------------------- Logboek
@@ -333,7 +358,7 @@ function logTijd() {
   return new Date().toLocaleTimeString("nl-BE", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
 
-export function logboek(tekst, toon = "") {
+function logboek(tekst, toon = "") {
   const leeg = loglijst.querySelector(".log-leeg");
   if (leeg) leeg.remove();
   const li = document.createElement("li");
@@ -356,6 +381,7 @@ on("bought", ({ id, amount }) => {
   );
 });
 on("upgrade", (u) => logboek(`Upgrade: ${u.name}`, "goed"));
+on("markt", ({ tekst, toon }) => logboek(tekst, toon));
 on("incident:start", ({ def }) => logboek(`Storing: ${def.text}`, "slecht"));
 on("graduated", () => logboek("Afgestudeerd. Je netwerk begint opnieuw.", "goud"));
 
@@ -472,7 +498,7 @@ export function syncRack() {
     const row = document.createElement("div");
     row.className = `rack-row vak-${b.vak}`;
     const units = Array.from({ length: zichtbaar }, () => `<i class="unit"></i>`).join("");
-    row.innerHTML = `<span>${b.icon}</span><span class="rack-units">${units}</span><span class="rack-aantal">${fmt(n)}</span>`;
+    row.innerHTML = `<span aria-hidden="true">${b.icon}</span><span class="rack-units">${units}</span><span class="rack-aantal">${fmt(n)}</span>`;
     row.title = `${n}x ${b.name}`;
     rackEl.append(row);
   }
@@ -489,8 +515,11 @@ export function syncRack() {
 }
 
 // ------------------------------------------------------- Gouden packets
+// Een schermlezer hoort dat er een packet verschijnt, en G pakt hem zonder
+// muis. Rode packets pak je met G alleen als je er iets aan hebt.
 
 let packetEl = null;
+let packetInfo = null;
 let packetTimer = null;
 
 on("golden:spawn", (info) => {
@@ -499,6 +528,7 @@ on("golden:spawn", (info) => {
   const marge = 24;
   const x = marge + Math.random() * (window.innerWidth - size - marge * 2);
   const y = marge + 70 + Math.random() * (window.innerHeight - size - marge * 2 - 70);
+  packetInfo = info;
   packetEl = document.createElement("button");
   packetEl.type = "button";
   packetEl.className = `packet${info.hazard ? " rood" : ""}`;
@@ -516,21 +546,45 @@ on("golden:spawn", (info) => {
     removePacket();
   });
   document.body.append(packetEl);
+  kondigAan(info.hazard
+    ? "Er is een rood packet verschenen. Laat het liever staan."
+    : "Er is een gouden packet verschenen. Druk op G om het te pakken.");
   packetTimer = setTimeout(() => {
     goldenExpired(info);
     removePacket();
   }, info.lifetimeMs);
 });
 
+function pakPacket() {
+  if (!packetEl || (packetInfo?.hazard && !D.ddosReward)) return;
+  packetEl.click();
+}
+
 function removePacket() {
   clearTimeout(packetTimer);
   packetEl?.remove();
   packetEl = null;
+  packetInfo = null;
 }
 
-on("buff:start", ({ def }) => {
-  logboek(`${def.name} actief`, def.effect?.ppsMult < 1 || def.effect?.clickMult < 1 ? "slecht" : "goud");
-  toast({ title: def.name, text: def.desc, icon: def.icon, tone: def.effect?.ppsMult < 1 || def.effect?.clickMult < 1 ? "slecht" : "goud" });
+// Wat de buff nu precies doet, in één zin, met de sterkte uit je upgrades.
+function buffUitleg(def, entry) {
+  const e = effectVan(entry, { kracht: D.goldenPower, weerstand: D.ddosResist }) || {};
+  if (e.randomBuildingMult && entry.building) {
+    const b = BUILDINGS.find((x) => x.id === entry.building);
+    return `${b.name} draait ${fmt(e.randomBuildingMult, { decimals: 1 })} keer zo hard.`;
+  }
+  if (entry.charges) return `${def.desc} Elke klik x${fmt(e.clickMult)}.`;
+  if (e.ppsMult) return `${def.desc} Productie x${fmt(e.ppsMult, { decimals: 1 })}.`;
+  if (e.clickMult) return `${def.desc} Kliks x${fmt(e.clickMult, { decimals: e.clickMult < 1 ? 2 : 0 })}.`;
+  return def.desc;
+}
+
+on("buff:start", ({ def, entry }) => {
+  const slecht = def.effect?.ppsMult < 1 || def.effect?.clickMult < 1;
+  const uitleg = buffUitleg(def, entry);
+  logboek(`${def.name}: ${uitleg}`, slecht ? "slecht" : "goud");
+  toast({ title: def.name, text: uitleg, icon: def.icon, tone: slecht ? "slecht" : "goud" });
 });
 
 on("buff:instant", ({ def, amount }) => {
@@ -591,19 +645,19 @@ on("meer:built", () => {
   motion.addEventListener("change", () => {
     G.options.motion = motion.checked;
     document.body.classList.toggle("rustig", !motion.checked);
+    applyUiterlijk();
     save();
   });
 
   const slot = el("opt-slot");
-  slot.value = currentSlot();
+  slot.value = actiefBestand();
   slot.addEventListener("change", () => {
-    save();
-    setSlot(slot.value);
+    wisselSlot(slot.value);
     location.reload();
   });
   const verversSloten = () => {
     for (const optie of slot.options) {
-      const info = optie.value === currentSlot() ? { packets: G.packets } : slotSummary(optie.value);
+      const info = optie.value === actiefBestand() ? { packets: G.packets } : slotSummary(optie.value);
       optie.textContent = info
         ? `Bestand ${optie.value} — ${fmt(info.packets)} packets`
         : `Bestand ${optie.value} — leeg`;
@@ -613,15 +667,17 @@ on("meer:built", () => {
   on("sheet:open", verversSloten);
 
   const melding = el("opslag-melding");
+  let meldingTimer = null;
   const zeg = (text, fout = false) => {
     melding.textContent = text;
     melding.classList.toggle("fout", fout);
-    setTimeout(() => (melding.textContent = ""), 3000);
+    clearTimeout(meldingTimer);
+    meldingTimer = setTimeout(() => (melding.textContent = ""), 4000);
   };
 
   el("btn-save").addEventListener("click", () => {
     const ok = save();
-    zeg(ok ? "Opgeslagen." : "Opslaan mislukt.", !ok);
+    zeg(ok ? "Opgeslagen." : "Opslaan lukt niet in deze browser.", !ok);
   });
   el("btn-export").addEventListener("click", async () => {
     const code = exportSave();
@@ -631,7 +687,7 @@ on("meer:built", () => {
     } catch {
       dialog({
         title: "Je code",
-        body: `<p>Kopieer deze tekst en bewaar hem.</p><textarea class="veld" readonly>${code}</textarea>`,
+        body: `<p>Kopieer deze tekst en bewaar hem.</p><textarea class="veld" readonly aria-label="Je code">${esc(code)}</textarea>`,
         actions: [{ label: "Klaar", style: "ghost" }],
       });
     }
@@ -639,7 +695,9 @@ on("meer:built", () => {
   el("btn-import").addEventListener("click", () => {
     dialog({
       title: "Code invoeren",
-      body: `<p>Plak hier de code van een ander toestel. Je huidige voortgang in dit bestand wordt overschreven.</p><textarea class="veld" id="import-veld" placeholder="SERGE1:..."></textarea>`,
+      body: `<p>Plak hier de code van een ander toestel. Je huidige voortgang in dit bestand wordt overschreven, maar je kunt de import daarna nog ongedaan maken.</p>
+        <textarea class="veld" id="import-veld" placeholder="SERGE1:..." aria-label="Code"></textarea>
+        <p class="melding fout" id="import-fout" role="alert"></p>`,
       actions: [
         { label: "Annuleren", style: "ghost" },
         {
@@ -647,15 +705,42 @@ on("meer:built", () => {
           onClick: (body) => {
             try {
               importSave(body.querySelector("#import-veld").value);
-              location.reload();
             } catch (err) {
-              zeg(err.message, true);
+              body.querySelector("#import-fout").textContent = err.message;
+              return false;
             }
+            location.reload();
           },
         },
       ],
     });
   });
+
+  const herstel = el("btn-herstel");
+  const syncHerstel = () => {
+    const info = backupInfo();
+    herstel.hidden = !info;
+    if (info) herstel.title = `Terug naar de stand van ${new Date(info.tijd).toLocaleString("nl-BE")}`;
+  };
+  syncHerstel();
+  on("sheet:open", syncHerstel);
+  herstel.addEventListener("click", () => {
+    dialog({
+      title: "Import ongedaan maken?",
+      body: "<p>Je gaat terug naar de stand van vlak voor je laatste import. Wat je sindsdien in dit bestand speelde, verdwijnt.</p>",
+      actions: [
+        { label: "Nee, laat staan", style: "ghost" },
+        {
+          label: "Terugzetten",
+          style: "gevaar",
+          onClick: () => {
+            if (herstelBackup()) location.reload();
+          },
+        },
+      ],
+    });
+  });
+
   el("btn-wipe").addEventListener("click", () => {
     dialog({
       title: "Alles wissen?",
@@ -678,6 +763,7 @@ on("meer:built", () => {
 });
 
 const netwerknaamEl = el("netwerknaam");
+const minderBeweging = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 export function applyUiterlijk() {
   const naam = (G.options.netwerknaam || "").trim();
@@ -685,17 +771,18 @@ export function applyUiterlijk() {
   netwerknaamEl.textContent = naam;
   const { portret, ring, achtergrond } = G.uiterlijk;
   document.body.dataset.achtergrond = achtergrond;
+  stelRegenIn({ aan: achtergrond === "matrix", beweging: G.options.motion && !minderBeweging.matches });
   sergeBtn.dataset.portret = portret;
   sergeBtn.dataset.ring = ring;
-  const bron = portret === "evolved" ? EVOLVED_SRC : STANDARD_SRC;
-  if (!sergeImg.src.endsWith(bron)) sergeImg.src = bron;
+  const bron = fotoVoor(portret);
+  if (sergeImg.getAttribute("src") !== bron) sergeImg.src = bron;
 }
 
 on("uiterlijk", applyUiterlijk);
+minderBeweging.addEventListener("change", applyUiterlijk);
 
 onSkin((skin) => {
   logboek(`Nieuw ${skin.soort}: ${skin.naam}`, "goud");
-  const waar = { portret: "portret", ring: "ring", achtergrond: "achtergrond" }[skin.soort] || "uiterlijk";
   if (skin.feest) {
     dialog({
       title: skin.feest.titel,
@@ -715,7 +802,7 @@ onSkin((skin) => {
     return;
   }
   toast({
-    title: `Nieuw ${waar}: ${skin.naam}`,
+    title: `Nieuw ${skin.soort}: ${skin.naam}`,
     text: "Te kiezen onder het tandwiel, bij Uiterlijk.",
     icon: "🎨",
     tone: "goud",
@@ -783,7 +870,8 @@ export function frameSync() {
   syncVerkeer();
   syncTabVisibility();
   syncShopbar();
-  if (!sheet.hidden) renderMeer();
+  if (sheet.open) renderMeer();
+  if (activeTab === "studie") syncStudie();
   syncHint();
   syncFast();
   if (rev() !== lastRev) {
@@ -796,6 +884,7 @@ export function initShell() {
   document.body.classList.toggle("rustig", !G.options.motion);
   setBuyAmount(G.options.buyAmount || 1);
   sellToggle.setAttribute("aria-pressed", String(!!G.options.sellMode));
+  sellToggle.textContent = G.options.sellMode ? "Verkopen aan" : "Verkopen";
   applyUiterlijk();
   plaatsLogboek();
   showTab("winkel");
@@ -805,30 +894,26 @@ export function initShell() {
 }
 
 // --------------------------------------------------- Statistiekenpaneel
+// Een echt <dialog>: showModal() houdt de focus erin, Esc sluit hem, en de
+// focus gaat daarna vanzelf terug naar het tandwiel.
 
 const sheet = el("sheet");
-let sheetTerug = null;
 
 export function openSheet() {
-  sheetTerug = document.activeElement;
   renderMeer();
-  sheet.hidden = false;
+  sheet.showModal();
   el("sheet-sluit").focus();
   emit("sheet:open");
 }
 
 export function sluitSheet() {
-  sheet.hidden = true;
-  sheetTerug?.focus?.();
+  if (sheet.open) sheet.close();
 }
 
 el("btn-meer").addEventListener("click", openSheet);
 el("sheet-sluit").addEventListener("click", sluitSheet);
 sheet.addEventListener("click", (e) => {
   if (e.target === sheet) sluitSheet();
-});
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !sheet.hidden) sluitSheet();
 });
 
 el("btn-help").addEventListener("click", () => {
@@ -837,7 +922,7 @@ el("btn-help").addEventListener("click", () => {
     body: `<p>Klik op Serge voor packets. Koop daarmee apparaten die vanzelf packets opleveren, en upgrades die alles versnellen.</p>
            <p>Gouden packets geven een tijdelijke bonus. Rode packets zijn dat niet: die laat je staan.</p>
            <p>Tabbladen met een 🔒 vertellen zelf wat je ervoor moet doen. Onder het tandwiel rechtsboven vind je je statistieken, instellingen en opslag.</p>
-           <p>Sneltoetsen: <strong>spatie</strong> klikt, <strong>1 / 2 / 3 / 4</strong> zetten het aantal per aankoop, <strong>Esc</strong> sluit een venster.</p>`,
+           <p>Sneltoetsen: <strong>spatie</strong> klikt, <strong>1 / 2 / 3 / 4</strong> zetten het aantal per aankoop, <strong>G</strong> pakt een gouden packet, <strong>Esc</strong> sluit een venster.</p>`,
     actions: [{ label: "Duidelijk", style: "ghost" }],
   });
 });
@@ -850,4 +935,3 @@ on("graduated", () => {
   applyUiterlijk();
   showTab("studie");
 });
-
