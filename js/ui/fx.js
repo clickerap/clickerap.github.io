@@ -328,6 +328,37 @@ Object.assign(KLIKEFFECTEN, {
   },
 });
 
+Object.assign(KLIKEFFECTEN, {
+  sneeuw: (x, y) => {
+    for (let i = 0; i < 9; i++) {
+      const hoek = willekeurig(0, Math.PI * 2);
+      const afstand = willekeurig(40, 90);
+      deeltje("fx-sneeuw", x, y, {
+        "--dx": `${Math.cos(hoek) * afstand}px`,
+        "--dy": `${Math.sin(hoek) * afstand * 0.6 + 40}px`,
+        "--draai": `${willekeurig(-180, 180)}deg`,
+        "font-size": `${willekeurig(12, 20)}px`,
+      }, 1300, "❄");
+    }
+  },
+  noten: (x, y) => {
+    for (let i = 0; i < 4; i++) {
+      deeltje("fx-noot", x + willekeurig(-20, 20), y, {
+        "--dx": `${willekeurig(-40, 40)}px`,
+        "--kleur": kies(["#f472b6", "#a78bfa", "#38bdf8", "#facc15", "#4ade80"]),
+        "animation-delay": `${i * 70}ms`,
+      }, 1400, kies(["♪", "♫", "♬", "♩"]));
+    }
+  },
+  portaal: (x, y) => {
+    deeltje("fx-portaal", x, y, {}, 950);
+    for (let i = 0; i < 6; i++) {
+      const hoek = (Math.PI * 2 * i) / 6;
+      deeltje("vonk", x, y, { "--dx": `${Math.cos(hoek) * 60}px`, "--dy": `${Math.sin(hoek) * 60}px`, background: kies(["#a3e635", "#4ade80", "#2dd4bf"]) }, 700);
+    }
+  },
+});
+
 export function klikEffect(soort, x, y) {
   if (!heeftDom || !G.options.motion) return;
   (KLIKEFFECTEN[soort] || KLIKEFFECTEN.vonken)(x, y);
@@ -480,6 +511,78 @@ Object.assign(KLIKGELUIDEN, {
       toon({ type: "sine", van: grond * factor, duur: 0.9, gain });
       toon({ type: "sine", van: grond * factor * 1.004, duur: 0.9, gain: gain * 0.7 });
     }
+  },
+});
+
+// Een stoot ruis door een filter, voor de beatbox en het zwaard. Een eigen,
+// vlakke ruis: die van het toetsenbord sterft al na een fractie uit.
+let vlakkeRuis = null;
+function ruisStoot({ freq, naar = freq, type = "highpass", duur, gain, q = 1 }) {
+  const ac = ctx();
+  if (!ac) return;
+  if (!vlakkeRuis) {
+    vlakkeRuis = ac.createBuffer(1, Math.floor(ac.sampleRate * 0.5), ac.sampleRate);
+    const data = vlakkeRuis.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+  }
+  const bron = ac.createBufferSource();
+  bron.buffer = vlakkeRuis;
+  bron.loop = true;
+  const filter = ac.createBiquadFilter();
+  filter.type = type;
+  filter.Q.value = q;
+  filter.frequency.setValueAtTime(freq, ac.currentTime);
+  if (naar !== freq) filter.frequency.exponentialRampToValueAtTime(naar, ac.currentTime + duur);
+  const vol = ac.createGain();
+  vol.gain.value = 0;
+  vol.gain.setValueAtTime(gain, ac.currentTime);
+  vol.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + duur);
+  bron.connect(filter).connect(vol).connect(ac.destination);
+  bron.start();
+  bron.stop(ac.currentTime + duur + 0.02);
+}
+
+const BEAT = ["boem", "tss", "boem", "boem", "tss", "ka"];
+let beatStap = 0;
+
+Object.assign(KLIKGELUIDEN, {
+  beatbox: () => {
+    const klank = BEAT[beatStap++ % BEAT.length];
+    if (klank === "boem") toon({ type: "sine", van: 150, naar: 48, duur: 0.18, gain: 0.16 });
+    if (klank === "tss") ruisStoot({ freq: 7000, duur: 0.07, gain: 0.07 });
+    if (klank === "ka") ruisStoot({ freq: 1800, type: "bandpass", duur: 0.09, gain: 0.12, q: 1.2 });
+  },
+  zwaard: () => {
+    // Een zoem van twee ontstemde tonen, en een zwiep die opengaat.
+    toon({ type: "sawtooth", van: 92, naar: 128, duur: 0.32, gain: 0.018 });
+    toon({ type: "sawtooth", van: 95, naar: 132, duur: 0.32, gain: 0.018 });
+    ruisStoot({ freq: 500, naar: 3200, type: "bandpass", duur: 0.22, gain: 0.08, q: 2 });
+  },
+  theremin: () => {
+    const ac = ctx();
+    if (!ac) return;
+    const nu = ac.currentTime;
+    const f = kies([392, 440, 523.25, 587.33, 659.25]);
+    const osc = ac.createOscillator();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(f, nu);
+    osc.frequency.exponentialRampToValueAtTime(f * 1.26, nu + 0.45);
+    // Het beven: een trage oscillator die de toonhoogte laat schommelen.
+    const lfo = ac.createOscillator();
+    lfo.frequency.value = 6;
+    const diepte = ac.createGain();
+    diepte.gain.value = 9;
+    lfo.connect(diepte).connect(osc.frequency);
+    const vol = ac.createGain();
+    vol.gain.value = 0;
+    vol.gain.setValueAtTime(0.0001, nu);
+    vol.gain.exponentialRampToValueAtTime(0.05, nu + 0.08);
+    vol.gain.exponentialRampToValueAtTime(0.0001, nu + 0.6);
+    osc.connect(vol).connect(ac.destination);
+    osc.start(nu);
+    lfo.start(nu);
+    osc.stop(nu + 0.62);
+    lfo.stop(nu + 0.62);
   },
 });
 

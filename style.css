@@ -593,7 +593,7 @@ body[data-paneel="glas"] :is(.stage, .status, .panel) {
 }
 
 /* De donkere thema's delen hoe goud, rood, groen en paars eruitzien. */
-:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"]) :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"], body[data-paneel="koffie"]) :is(.stage, .status, .panel, .sheet-card, .modal-card) {
   --goud: #fbbf24;
   --goud-vlak: rgba(251, 191, 36, 0.14);
   --goud-rand: rgba(251, 191, 36, 0.5);
@@ -613,10 +613,10 @@ body[data-paneel="glas"] :is(.stage, .status, .panel) {
   --koffie-tot: rgba(251, 191, 36, 0.18);
   --schaduw-s: 0 1px 2px rgba(0, 0, 0, 0.4), 0 3px 8px -3px rgba(0, 0, 0, 0.5);
 }
-:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"]) .vak-netwerken { --kleur: #38bdf8; --kleur-vlak: rgba(56, 189, 248, 0.16); --kleur-rand: rgba(56, 189, 248, 0.45); }
-:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"]) .vak-sddc { --kleur: #a78bfa; --kleur-vlak: rgba(167, 139, 250, 0.16); --kleur-rand: rgba(167, 139, 250, 0.45); }
-:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"]) .vak-cloud { --kleur: #2dd4bf; --kleur-vlak: rgba(45, 212, 191, 0.16); --kleur-rand: rgba(45, 212, 191, 0.45); }
-:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"]) .vak-security { --kleur: #fb923c; --kleur-vlak: rgba(251, 146, 60, 0.16); --kleur-rand: rgba(251, 146, 60, 0.45); }
+:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"], body[data-paneel="koffie"]) .vak-netwerken { --kleur: #38bdf8; --kleur-vlak: rgba(56, 189, 248, 0.16); --kleur-rand: rgba(56, 189, 248, 0.45); }
+:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"], body[data-paneel="koffie"]) .vak-sddc { --kleur: #a78bfa; --kleur-vlak: rgba(167, 139, 250, 0.16); --kleur-rand: rgba(167, 139, 250, 0.45); }
+:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"], body[data-paneel="koffie"]) .vak-cloud { --kleur: #2dd4bf; --kleur-vlak: rgba(45, 212, 191, 0.16); --kleur-rand: rgba(45, 212, 191, 0.45); }
+:is(body[data-paneel="nacht"], body[data-paneel="krijtbord"], body[data-paneel="blauwdruk"], body[data-paneel="neon"], body[data-paneel="goud"], body[data-paneel="crt"], body[data-paneel="magma"], body[data-paneel="aurora"], body[data-paneel="hologram"], body[data-paneel="sterren"], body[data-paneel="koffie"]) .vak-security { --kleur: #fb923c; --kleur-vlak: rgba(251, 146, 60, 0.16); --kleur-rand: rgba(251, 146, 60, 0.45); }
 
 /* Nachtdienst: donkerblauw. */
 body[data-paneel="nacht"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
@@ -1853,14 +1853,15 @@ body.rustig :is(.stage, .status, .panel)::before { animation: none; }
 }
 .doel strong { font-variant-numeric: tabular-nums; color: var(--blauw-700); }
 .doel-meter { height: 6px; background: var(--lijn); border-radius: 999px; overflow: hidden; }
+/* De balk wordt afgeknipt in plaats van geschaald, zodat een voortgangsstijl
+   met strepen of blokjes niet samengeperst wordt. --deel zet de schil. */
 .doel-meter span {
   display: block;
   height: 100%;
   width: 100%;
-  transform: scaleX(0);
-  transform-origin: left center;
+  clip-path: inset(0 calc((1 - var(--deel, 0)) * 100%) 0 0 round 999px);
   background: var(--blauw-500);
-  transition: transform var(--soepel);
+  transition: clip-path var(--soepel);
 }
 
 .verkeer { width: 100%; }
@@ -4644,7 +4645,7 @@ body.rustig .accessoire .ring i { transform: rotate(var(--a)) translateY(calc(va
 .accessoire[data-accessoire="vogeltje"] { --x: 52%; --y: 0%; --maat: 0.2; }
 /* Hoge hoeden krijgen wat extra ruimte boven de foto, zodat ze niet tegen
    het getal of de regel "per klik" aan komen. */
-.serge-plek:has(.accessoire:is([data-accessoire="heksenhoed"], [data-accessoire="kerstmuts"], [data-accessoire="feesthoed"], [data-accessoire="eenhoorn"], [data-accessoire="vlammen"], [data-accessoire="wifi"], [data-accessoire="ruimtehelm"], [data-accessoire="hogehoed"], [data-accessoire="regenwolk"], [data-accessoire="lampje"])) { margin-top: 18px; }
+.serge-plek:has(.accessoire:is([data-accessoire="heksenhoed"], [data-accessoire="kerstmuts"], [data-accessoire="feesthoed"], [data-accessoire="eenhoorn"], [data-accessoire="vlammen"], [data-accessoire="wifi"], [data-accessoire="ruimtehelm"], [data-accessoire="onweer"], [data-accessoire="routerhoed"], [data-accessoire="koffiemok"], [data-accessoire="hogehoed"], [data-accessoire="regenwolk"], [data-accessoire="lampje"])) { margin-top: 18px; }
 
 /* Kattenoren: af en toe trilt het rechteroor. */
 .acc-svg.kattenoren .oor { transform-box: fill-box; transform-origin: 50% 100%; }
@@ -4880,7 +4881,8 @@ body.rustig[data-accent="regenboog"] { animation: none; }
 .skin-preview.accent-voorbeeld { background: var(--vlak); display: grid; grid-template-rows: 1fr 1fr; gap: 4px; padding: 9px 7px; place-items: stretch; }
 .skin-preview.accent-voorbeeld i { display: block; border-radius: 5px; background: var(--a); }
 .skin-preview.accent-voorbeeld i:last-child { width: 62%; opacity: 0.55; }
-.skin-preview.accent-voorbeeld.regenboog i { background: linear-gradient(90deg, #dc2626, #d97706, #16a34a, #0891b2, #4f46e5, #c026d3); }
+.skin-preview.accent-voorbeeld.kleur-regenboog i { background: linear-gradient(90deg, #dc2626, #d97706, #16a34a, #0891b2, #4f46e5, #c026d3); }
+.skin-preview.accent-voorbeeld.kleur-aurora i { background: linear-gradient(90deg, #047857, #0e7490, #6d28d9); }
 
 /* ---------- Zweeftekst ---------- */
 
@@ -5747,3 +5749,1520 @@ body.rustig :is(
   .serge[data-houding], .houding-voorbeeld, .acc-svg, .acc-svg *, .accessoire .teken,
   .combo, .combo *, .combo::before, .toast[class*="stijl-"], .toast[class*="stijl-"]::before, .toast[class*="stijl-"]::after
 ) { animation: none !important; }
+
+/* =====================================================================
+   Uiterlijk, deel 4: omloop, decor, voortgang, grafiek, rack,
+   nieuwsbalk en looks.
+   ===================================================================== */
+
+/* Het decor ligt achter Serge, de omloop ervoor. De tekst
+   boven en onder hem ligt weer boven alles, zodat hij leesbaar blijft. */
+.serge { z-index: 1; }
+.counter, .clicker-hint, .doel, .buffbar { position: relative; z-index: 3; }
+
+/* ---------- Omloop ---------- */
+
+.omloop {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  --straal: 0.62;
+  --maat: calc(var(--foto) * 0.1);
+}
+.omloop-ring { position: absolute; left: 0; top: 0; animation: draaien var(--duur, 50s) linear infinite; }
+.omloop-ring i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--maat);
+  height: var(--maat);
+  margin: calc(var(--maat) / -2) 0 0 calc(var(--maat) / -2);
+  display: grid;
+  place-items: center;
+  font-style: normal;
+  line-height: 1;
+  font-size: calc(var(--maat) * 0.82);
+  transform: rotate(var(--a)) translateY(calc(var(--foto) * var(--straal) * -1));
+}
+.omloop-ring b { display: grid; place-items: center; width: 100%; height: 100%; font-weight: 800; filter: drop-shadow(0 1px 1.5px rgba(11, 37, 69, 0.45)); }
+/* De meeste dingen blijven rechtop: elk draait zijn eigen baan en draait
+   zichzelf even hard terug. */
+.omloop:is([data-omloop="packets"], [data-omloop="bits"], [data-omloop="hartjes"], [data-omloop="satellieten"], [data-omloop="koffie"], [data-omloop="munten"], [data-omloop="miniserge"], [data-omloop="noten"], [data-omloop="pinguins"]) .omloop-ring { animation: none; }
+.omloop:is([data-omloop="packets"], [data-omloop="bits"], [data-omloop="hartjes"], [data-omloop="satellieten"], [data-omloop="koffie"], [data-omloop="munten"], [data-omloop="miniserge"], [data-omloop="noten"], [data-omloop="pinguins"]) .omloop-ring i {
+  transform: rotate(var(--a)) translateY(calc(var(--foto) * var(--straal) * -1)) rotate(calc(-1 * var(--a)));
+  animation: rechtop var(--duur, 50s) linear infinite;
+}
+@keyframes rechtop {
+  from { transform: rotate(var(--a)) translateY(calc(var(--foto) * var(--straal) * -1)) rotate(calc(-1 * var(--a))); }
+  to { transform: rotate(calc(var(--a) + 360deg)) translateY(calc(var(--foto) * var(--straal) * -1)) rotate(calc(-1 * var(--a) - 360deg)); }
+}
+/* Muisjes: ze wijzen naar Serge en tikken om de beurt. */
+.omloop[data-omloop="muizen"] { --straal: 0.6; --maat: calc(var(--foto) * 0.09); --duur: 60s; }
+.omloop[data-omloop="muizen"] b { background: url("img/cursor/pijl.svg") center / contain no-repeat; rotate: 225deg; animation: tik 1.6s ease-in-out infinite; animation-delay: calc(var(--i) * -0.19s); }
+@keyframes tik {
+  0%, 70%, 100% { translate: 0 0; }
+  82% { translate: 0 5px; }
+}
+.omloop[data-omloop="packets"] b { animation: dobber 2.4s ease-in-out infinite; animation-delay: calc(var(--i) * -0.3s); }
+@keyframes dobber {
+  50% { translate: 0 -3px; }
+}
+.omloop[data-omloop="bits"] b {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  color: #16a34a;
+  text-shadow: 0 0 6px rgba(74, 222, 128, 0.8), 0 1px 0 #fff;
+  animation: bitKnipper 1.4s steps(1, end) infinite;
+  animation-delay: calc(var(--i) * -0.37s);
+}
+@keyframes bitKnipper {
+  50% { opacity: 0.35; }
+}
+.omloop[data-omloop="hartjes"] b { animation: klop 1.2s ease-in-out infinite; animation-delay: calc(var(--i) * -0.1s); }
+@keyframes klop {
+  0%, 60%, 100% { scale: 1; }
+  15% { scale: 1.25; }
+  30% { scale: 1; }
+  45% { scale: 1.15; }
+}
+.omloop[data-omloop="satellieten"] { --straal: 0.64; --duur: 80s; }
+.omloop[data-omloop="satellieten"] b { rotate: -25deg; }
+.omloop[data-omloop="koffie"] b { animation: wiebeltje 1.8s ease-in-out infinite alternate; animation-delay: calc(var(--i) * -0.4s); }
+@keyframes wiebeltje {
+  from { rotate: -10deg; }
+  to { rotate: 10deg; }
+}
+.omloop[data-omloop="munten"] b {
+  width: 82%;
+  height: 82%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff7cc, #fbbf24 45%, #b45309);
+  box-shadow: inset 0 0 0 2px #d97706;
+  color: #92400e;
+  font: 800 calc(var(--maat) * 0.5) / 1 Georgia, serif;
+  animation: muntDraai 1.6s linear infinite;
+  animation-delay: calc(var(--i) * -0.2s);
+}
+@keyframes muntDraai {
+  0%, 100% { scale: 1 1; }
+  50% { scale: 0.12 1; }
+}
+.omloop[data-omloop="miniserge"] { --maat: calc(var(--foto) * 0.13); --straal: 0.66; --duur: 70s; }
+.omloop[data-omloop="miniserge"] b { animation: zwaai 1.4s ease-in-out infinite alternate; animation-delay: calc(var(--i) * -0.23s); }
+.omloop[data-omloop="miniserge"] img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(11, 37, 69, 0.35); }
+@keyframes zwaai {
+  from { rotate: -12deg; }
+  to { rotate: 12deg; }
+}
+/* Kometen draaien de hele kring rond, met hun staart achter zich aan. */
+.omloop[data-omloop="kometen"] { --duur: 9s; --maat: 10px; }
+.omloop[data-omloop="kometen"] b { position: relative; width: 10px; height: 10px; border-radius: 50%; background: radial-gradient(circle, #fff 0 30%, #818cf8 70%); box-shadow: 0 0 8px 3px rgba(99, 102, 241, 0.7); }
+.omloop[data-omloop="kometen"] b::before {
+  content: "";
+  position: absolute;
+  right: 50%;
+  top: 50%;
+  width: calc(var(--foto) * 0.3);
+  height: 3px;
+  margin-top: -1.5px;
+  border-radius: 2px;
+  background: linear-gradient(to left, rgba(129, 140, 248, 0.95), rgba(192, 132, 252, 0.6) 40%, transparent);
+}
+/* Elektronen: drie platte banen door elkaar, zoals een atoom. */
+.omloop .baantje {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(var(--foto) * 1.36);
+  height: calc(var(--foto) * 1.36);
+  margin: calc(var(--foto) * -0.68) 0 0 calc(var(--foto) * -0.68);
+  transform: rotate(var(--r)) scaleY(0.34);
+}
+.omloop .baantje::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 3px solid rgba(56, 189, 248, 0.45); }
+.omloop .baantje b {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff, #38bdf8 60%);
+  box-shadow: 0 0 10px #38bdf8;
+  animation: elektron 2.4s linear infinite;
+  animation-delay: var(--d);
+}
+@keyframes elektron {
+  from { transform: rotate(0deg) translateY(calc(var(--foto) * -0.68)) rotate(0deg) scaleY(2.94); }
+  to { transform: rotate(360deg) translateY(calc(var(--foto) * -0.68)) rotate(-360deg) scaleY(2.94); }
+}
+/* Zonnestelsel: acht banen van bovenaf, Serge is de zon. */
+.omloop[data-omloop="zonnestelsel"]::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--foto) * -0.56);
+  top: calc(var(--foto) * -0.56);
+  width: calc(var(--foto) * 1.12);
+  height: calc(var(--foto) * 1.12);
+  border-radius: 50%;
+  box-shadow: 0 0 40px 14px rgba(251, 191, 36, 0.45);
+}
+.omloop .planeetbaan {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(var(--foto) * var(--straal) * 2);
+  height: calc(var(--foto) * var(--straal) * 2);
+  margin: calc(var(--foto) * var(--straal) * -1) 0 0 calc(var(--foto) * var(--straal) * -1);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 50%;
+  rotate: var(--a);
+  animation: draaien var(--tijd) linear infinite;
+}
+.omloop .planeetbaan b {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: var(--p);
+  height: var(--p);
+  margin: calc(var(--p) / -2) 0 0 calc(var(--p) / -2);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.7), var(--kleur) 55%);
+  box-shadow: 0 0 6px var(--kleur);
+}
+.omloop .planeetbaan.ring b::after { content: ""; position: absolute; inset: 35% -50%; border: 1.5px solid #fde68a; border-radius: 50%; rotate: -20deg; }
+
+/* ---------- Decor ---------- */
+
+.decor {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 0;
+  width: min(calc(var(--foto) * 1.5), 92vw);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.decor[data-decor="geen"] { display: none; }
+.decor[data-decor="spot"] { background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 34%, rgba(254, 240, 138, 0.55) 48%, transparent 70%); }
+.decor[data-decor="stralen"] {
+  background: repeating-conic-gradient(rgba(250, 204, 21, 0.45) 0 10deg, transparent 10deg 20deg);
+  -webkit-mask: radial-gradient(circle, #000 32%, transparent 70%);
+  mask: radial-gradient(circle, #000 32%, transparent 70%);
+  animation: draaien 30s linear infinite;
+}
+.decor[data-decor="sonar"] i { position: absolute; inset: 22%; border-radius: 50%; border: 4px solid #0ea5e9; box-shadow: 0 0 10px rgba(14, 165, 233, 0.6); animation: sonarRing 3s ease-out infinite; }
+.decor[data-decor="sonar"] i:nth-child(2) { animation-delay: 1s; }
+.decor[data-decor="sonar"] i:nth-child(3) { animation-delay: 2s; }
+@keyframes sonarRing {
+  from { scale: 1; opacity: 1; }
+  to { scale: 1.75; opacity: 0; }
+}
+.decor[data-decor="neonring"]::before,
+.decor[data-decor="neonring"]::after { content: ""; position: absolute; border-radius: 50%; animation: neonAdem 3s ease-in-out infinite; }
+.decor[data-decor="neonring"]::before { inset: 15%; border: 5px solid #f0abfc; box-shadow: 0 0 12px #e879f9, 0 0 30px #d946ef, inset 0 0 12px #e879f9; }
+.decor[data-decor="neonring"]::after { inset: 8%; border: 3px solid #67e8f9; box-shadow: 0 0 10px #22d3ee, inset 0 0 8px #22d3ee; animation-delay: -1.5s; }
+@keyframes neonAdem {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.decor[data-decor="disco"] {
+  background: conic-gradient(rgba(244, 114, 182, 0.6), rgba(250, 204, 21, 0.55), rgba(74, 222, 128, 0.55), rgba(56, 189, 248, 0.6), rgba(167, 139, 250, 0.6), rgba(244, 114, 182, 0.6));
+  -webkit-mask: radial-gradient(circle, #000 36%, transparent 70%);
+  mask: radial-gradient(circle, #000 36%, transparent 70%);
+  filter: blur(10px);
+  animation: draaien 6s linear infinite;
+}
+.decor[data-decor="disco"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 20% 30%, #fff 0 4px, transparent 5px),
+    radial-gradient(circle at 78% 22%, #fff 0 3px, transparent 4px),
+    radial-gradient(circle at 85% 70%, #fff 0 4px, transparent 5px),
+    radial-gradient(circle at 30% 82%, #fff 0 3px, transparent 4px),
+    radial-gradient(circle at 10% 60%, #fff 0 3px, transparent 4px);
+  animation: draaien 9s linear infinite reverse;
+}
+.decor[data-decor="vuur"] {
+  transform-origin: 50% 80%;
+  background: radial-gradient(ellipse 58% 70% at 50% 72%, rgba(250, 204, 21, 0.85), rgba(249, 115, 22, 0.65) 40%, rgba(220, 38, 38, 0.35) 62%, transparent 74%);
+  filter: blur(4px);
+  animation: vuurzee 1.1s ease-in-out infinite alternate;
+}
+.decor[data-decor="vuur"]::before {
+  content: "";
+  position: absolute;
+  inset: -4% 6% 30%;
+  background:
+    radial-gradient(ellipse 12% 40% at 18% 62%, rgba(251, 146, 60, 0.85), transparent),
+    radial-gradient(ellipse 10% 50% at 38% 50%, rgba(250, 204, 21, 0.85), transparent),
+    radial-gradient(ellipse 12% 46% at 62% 55%, rgba(249, 115, 22, 0.85), transparent),
+    radial-gradient(ellipse 9% 40% at 82% 62%, rgba(239, 68, 68, 0.75), transparent);
+  animation: tongen 0.7s ease-in-out infinite alternate;
+}
+@keyframes vuurzee {
+  from { scale: 1 1; }
+  to { scale: 1.04 1.1; }
+}
+@keyframes tongen {
+  from { translate: 0 0; opacity: 0.85; }
+  to { translate: 0 -6%; opacity: 1; }
+}
+.decor[data-decor="sterrenstelsel"] {
+  background:
+    conic-gradient(transparent, rgba(129, 140, 248, 0.85), transparent 30%, rgba(236, 72, 153, 0.75) 50%, transparent 65%, rgba(56, 189, 248, 0.8) 85%, transparent),
+    radial-gradient(circle, #1e1b4b 0 40%, #0f172a 55%, transparent 70%);
+  -webkit-mask: radial-gradient(circle, #000 40%, transparent 71%);
+  mask: radial-gradient(circle, #000 40%, transparent 71%);
+  animation: draaien 40s linear infinite;
+}
+.decor[data-decor="sterrenstelsel"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 15% 40%, #fff 0 1.5px, transparent 2px),
+    radial-gradient(circle at 70% 12%, #fff 0 1.5px, transparent 2px),
+    radial-gradient(circle at 88% 55%, #fde68a 0 2px, transparent 2.5px),
+    radial-gradient(circle at 40% 90%, #fff 0 1.5px, transparent 2px),
+    radial-gradient(circle at 25% 15%, #c4b5fd 0 2px, transparent 2.5px);
+}
+.decor[data-decor="zwartgat"]::before {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, transparent 50%, rgba(15, 23, 42, 0.9) 56%, rgba(15, 23, 42, 0.5) 64%, transparent 72%);
+}
+.decor[data-decor="zwartgat"] i {
+  position: absolute;
+  inset: 30% -2%;
+  border-radius: 50%;
+  rotate: -12deg;
+  background: radial-gradient(ellipse, transparent 40%, #f97316 45%, #fde047 49%, #f97316 55%, rgba(234, 88, 12, 0.45) 63%, transparent 70%);
+  filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.8));
+  animation: schijfGloed 2.2s ease-in-out infinite;
+}
+@keyframes schijfGloed {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.7)) brightness(1); }
+  50% { filter: drop-shadow(0 0 16px rgba(250, 204, 21, 0.9)) brightness(1.2); }
+}
+.decor[data-decor="portaal"] {
+  background: conic-gradient(#22c55e, #a3e635, #14b8a6, #16a34a, #84cc16, #22c55e);
+  -webkit-mask: radial-gradient(circle, transparent 30%, #000 34%, #000 60%, transparent 70%);
+  mask: radial-gradient(circle, transparent 30%, #000 34%, #000 60%, transparent 70%);
+  filter: blur(2px) drop-shadow(0 0 12px #4ade80);
+  animation: draaien 2.8s linear infinite;
+}
+.decor[data-decor="portaal"] i {
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(rgba(236, 252, 203, 0.7) 0 12deg, transparent 12deg 40deg);
+  animation: draaien 1.9s linear infinite reverse;
+}
+.decor[data-decor="stralenkrans"] {
+  background:
+    radial-gradient(circle, rgba(255, 251, 235, 0.95) 0 34%, rgba(253, 230, 138, 0.6) 46%, transparent 66%),
+    repeating-conic-gradient(rgba(251, 191, 36, 0.5) 0 6deg, transparent 6deg 18deg);
+  -webkit-mask: radial-gradient(circle, #000 40%, transparent 71%);
+  mask: radial-gradient(circle, #000 40%, transparent 71%);
+  animation: draaien 50s linear infinite;
+}
+.decor[data-decor="stralenkrans"] i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px;
+  background: #fffbeb;
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+  transform: rotate(calc(var(--i) * 51deg)) translateY(calc(var(--foto) * -0.64));
+  animation: glim 2.2s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -0.31s);
+}
+
+/* ---------- Voortgang ---------- */
+
+.doel[data-voortgang="streepjes"] .doel-meter { height: 12px; }
+.doel[data-voortgang="streepjes"] .doel-meter span {
+  background: repeating-linear-gradient(-45deg, var(--blauw-600) 0 8px, var(--blauw-400) 8px 16px);
+  background-size: 22.6px 22.6px;
+  animation: streepjes 0.8s linear infinite;
+}
+@keyframes streepjes {
+  to { background-position: 22.6px 0; }
+}
+.doel[data-voortgang="blokjes"] .doel-meter { height: 16px; padding: 2px; border-radius: 3px; background: #e2e8f0; box-shadow: inset 1px 1px 0 #94a3b8, inset -1px -1px 0 #fff; }
+.doel[data-voortgang="blokjes"] .doel-meter span { background: repeating-linear-gradient(90deg, #1d4ed8 0 10px, transparent 10px 13px); clip-path: inset(0 calc((1 - var(--deel, 0)) * 100%) 0 0); }
+.doel[data-voortgang="batterij"] .doel-meter { position: relative; overflow: visible; height: 18px; padding: 2px; margin-right: 6px; border: 2px solid var(--inkt-zacht); border-radius: 5px; background: var(--vlak); }
+.doel[data-voortgang="batterij"] .doel-meter::after { content: ""; position: absolute; right: -7px; top: 4px; width: 4px; height: 6px; border-radius: 0 2px 2px 0; background: var(--inkt-zacht); }
+.doel[data-voortgang="batterij"] .doel-meter span {
+  border-radius: 2px;
+  background: color-mix(in oklab, #ef4444, #22c55e calc(var(--deel, 0) * 100%));
+  clip-path: inset(0 calc((1 - var(--deel, 0)) * 100%) 0 0 round 2px);
+  animation: laden 1.6s ease-in-out infinite;
+}
+@keyframes laden {
+  50% { filter: brightness(1.25); }
+}
+.doel[data-voortgang="glasvezel"] .doel-meter { height: 8px; background: #0b2545; }
+.doel[data-voortgang="glasvezel"] .doel-meter span { position: relative; overflow: hidden; background: linear-gradient(90deg, #0ea5e9, #67e8f9); box-shadow: 0 0 8px #22d3ee; }
+.doel[data-voortgang="glasvezel"] .doel-meter span::after { content: ""; position: absolute; top: 0; bottom: 0; width: 30%; background: linear-gradient(90deg, transparent, #fff, transparent); animation: lichtpuls 1.4s linear infinite; }
+@keyframes lichtpuls {
+  from { left: -30%; }
+  to { left: 100%; }
+}
+.doel[data-voortgang="slang"] .doel-meter { position: relative; overflow: visible; height: 12px; background: repeating-linear-gradient(90deg, #dcfce7 0 14px, #bbf7d0 14px 28px); }
+.doel[data-voortgang="slang"] .doel-meter span { background: repeating-linear-gradient(90deg, #15803d 0 9px, #22c55e 9px 18px); }
+.doel[data-voortgang="slang"] .doel-meter::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: calc(var(--deel, 0) * 100%);
+  width: 20px;
+  height: 17px;
+  translate: -55% -50%;
+  border-radius: 40% 60% 60% 40% / 50%;
+  background:
+    radial-gradient(circle at 68% 28%, #fff 0 2.2px, #111 2.2px 3.4px, transparent 3.8px),
+    radial-gradient(circle at 68% 72%, #fff 0 2.2px, #111 2.2px 3.4px, transparent 3.8px),
+    #15803d;
+  transition: left var(--soepel);
+}
+.doel[data-voortgang="slang"] .doel-meter::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: calc(var(--deel, 0) * 100% + 8px);
+  width: 9px;
+  height: 4px;
+  translate: 0 -50%;
+  background: #ef4444;
+  clip-path: polygon(0 35%, 60% 35%, 100% 0, 75% 50%, 100% 100%, 60% 65%, 0 65%);
+  animation: tong 1.2s steps(1, end) infinite;
+  transition: left var(--soepel);
+}
+@keyframes tong {
+  0%, 60% { opacity: 0; }
+  61%, 80% { opacity: 1; }
+}
+@property --mond {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 32deg;
+}
+.doel[data-voortgang="happertje"] .doel-meter {
+  position: relative;
+  overflow: visible;
+  height: 14px;
+  background: #0b1020 radial-gradient(circle, #fde68a 0 2px, transparent 2.5px) 0 50% / 14px 14px repeat-x;
+}
+.doel[data-voortgang="happertje"] .doel-meter span { background: #0b1020; }
+.doel[data-voortgang="happertje"] .doel-meter::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: calc(var(--deel, 0) * 100%);
+  width: 20px;
+  height: 20px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: #facc15;
+  -webkit-mask: conic-gradient(from calc(90deg + var(--mond)), #000 0 calc(360deg - 2 * var(--mond)), transparent 0);
+  mask: conic-gradient(from calc(90deg + var(--mond)), #000 0 calc(360deg - 2 * var(--mond)), transparent 0);
+  animation: happen 0.35s ease-in-out infinite alternate;
+  transition: left var(--soepel);
+}
+@keyframes happen {
+  from { --mond: 2deg; }
+  to { --mond: 38deg; }
+}
+.doel[data-voortgang="regenboog"] .doel-meter { height: 10px; }
+.doel[data-voortgang="regenboog"] .doel-meter span { background: linear-gradient(90deg, #ef4444, #f97316, #facc15, #22c55e, #3b82f6, #a855f7, #ef4444); background-size: 200% 100%; animation: regenboogSchuif 2s linear infinite; }
+.doel[data-voortgang="lava"] .doel-meter { height: 12px; background: #292524; }
+.doel[data-voortgang="lava"] .doel-meter span {
+  background:
+    radial-gradient(circle at 30% 60%, #fef08a 0 2px, transparent 3px) 0 0 / 26px 12px,
+    linear-gradient(90deg, #b91c1c, #f97316, #facc15, #f97316, #b91c1c) 0 0 / 200% 100%;
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.7);
+  animation: lavaStroom 3s linear infinite;
+}
+@keyframes lavaStroom {
+  to { background-position: 26px -12px, 200% 0; }
+}
+.doel[data-voortgang="sterrenstof"] .doel-meter { height: 12px; background: #0f172a; }
+.doel[data-voortgang="sterrenstof"] .doel-meter span {
+  background:
+    radial-gradient(circle, #fff 0 1px, transparent 1.6px) 0 0 / 11px 12px,
+    radial-gradient(circle, #c4b5fd 0 1px, transparent 1.6px) 5px 6px / 13px 12px,
+    linear-gradient(90deg, #4338ca, #7c3aed, #db2777);
+  animation: fonkel 1.6s steps(4, end) infinite;
+}
+@keyframes fonkel {
+  to { background-position: 11px 0, -8px 6px, 0 0; }
+}
+.doel[data-voortgang="hemels"] .doel-meter { height: 10px; background: #fef3c7; }
+.doel[data-voortgang="hemels"] .doel-meter span { background: linear-gradient(90deg, #fde68a, #fffbeb, #fbbf24, #fffbeb, #fde68a); background-size: 200% 100%; box-shadow: 0 0 12px #fcd34d; animation: regenboogSchuif 3s linear infinite; }
+
+/* ---------- Grafiek ---------- */
+
+.grafiek-staaf { fill: var(--blauw-500); opacity: 0.85; }
+.grafiek-punt { fill: var(--blauw-600); }
+[data-grafiek="ruitjes"] .grafiek-vlak { background: #fffef8; border-color: #cbd5e1; }
+[data-grafiek="ruitjes"] .grafiek-rooster { stroke: #bae6fd; opacity: 1; stroke-dasharray: none; }
+[data-grafiek="ruitjes"] .grafiek-lijn { stroke: #475569; stroke-width: 1.7; }
+[data-grafiek="ruitjes"] .grafiek-vlakje { fill: #64748b; opacity: 0.1; }
+[data-grafiek="oscilloscoop"] .grafiek-vlak { background: #031a0b; border-color: #14532d; box-shadow: inset 0 0 18px rgba(34, 197, 94, 0.25); }
+[data-grafiek="oscilloscoop"] .grafiek-rooster { stroke: #16a34a; opacity: 0.35; stroke-dasharray: none; }
+[data-grafiek="oscilloscoop"] .grafiek-lijn { stroke: #4ade80; filter: drop-shadow(0 0 3px #22c55e); }
+[data-grafiek="oscilloscoop"] .grafiek-vlakje { fill: #22c55e; opacity: 0.08; }
+[data-grafiek="oscilloscoop"] .grafiek-punt { fill: #bbf7d0; }
+[data-grafiek="hartmonitor"] .grafiek-vlak { background: #020617; border-color: #1e293b; }
+[data-grafiek="hartmonitor"] .grafiek-rooster { stroke: #0f766e; opacity: 0.45; }
+[data-grafiek="hartmonitor"] .grafiek-lijn { stroke: #4ade80; filter: drop-shadow(0 0 2px #22c55e); }
+[data-grafiek="hartmonitor"] .grafiek-punt { fill: #bbf7d0; transform-box: fill-box; transform-origin: center; animation: piep 1s ease-in-out infinite; }
+@keyframes piep {
+  50% { opacity: 0.3; transform: scale(1.6); }
+}
+[data-grafiek="neon"] .grafiek-vlak { background: #1e0b36; border-color: #6b21a8; }
+[data-grafiek="neon"] .grafiek-rooster { stroke: #7e22ce; opacity: 0.6; }
+[data-grafiek="neon"] .grafiek-lijn { stroke: #f472b6; filter: drop-shadow(0 0 4px #ec4899); }
+[data-grafiek="neon"] .grafiek-vlakje { fill: #22d3ee; opacity: 0.18; }
+[data-grafiek="beurs"] .grafiek-vlak { background: #0f172a; border-color: #1e293b; }
+[data-grafiek="beurs"] .grafiek-rooster { stroke: #334155; opacity: 0.7; }
+[data-grafiek="beurs"] .grafiek-kaars.stijgt { fill: #22c55e; }
+[data-grafiek="beurs"] .grafiek-kaars.daalt { fill: #ef4444; }
+[data-grafiek="beurs"] .grafiek-lont { stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+[data-grafiek="beurs"] .grafiek-lont.stijgt { stroke: #4ade80; }
+[data-grafiek="beurs"] .grafiek-lont.daalt { stroke: #f87171; }
+[data-grafiek="regenboog"] .grafiek-lijn { stroke: url(#grafiekRegenboog); stroke-width: 3; }
+[data-grafiek="regenboog"] .grafiek-vlakje { fill: url(#grafiekRegenboog); opacity: 0.16; }
+[data-grafiek="vuur"] .grafiek-vlak { background: #1c0a05; border-color: #7c2d12; }
+[data-grafiek="vuur"] .grafiek-rooster { stroke: #7c2d12; }
+[data-grafiek="vuur"] .grafiek-lijn { stroke: #fde047; filter: drop-shadow(0 0 4px #f97316); }
+[data-grafiek="vuur"] .grafiek-vlakje { fill: url(#grafiekVuur); opacity: 0.9; animation: vuurFlakker 0.6s steps(2, end) infinite; }
+@keyframes vuurFlakker {
+  50% { opacity: 0.7; }
+}
+[data-grafiek="sterren"] .grafiek-vlak { background: radial-gradient(ellipse at 30% 20%, #1e1b4b, #020617); border-color: #312e81; }
+[data-grafiek="sterren"] .grafiek-hemel { fill: #fff; opacity: 0.55; }
+[data-grafiek="sterren"] .grafiek-lijn { stroke: rgba(191, 219, 254, 0.55); stroke-width: 1; }
+[data-grafiek="sterren"] .grafiek-ster { fill: #fff; filter: drop-shadow(0 0 3px #a5b4fc); }
+[data-grafiek="hemels"] .grafiek-vlak { background: radial-gradient(ellipse at 50% 0%, #fffbeb, #fef3c7); border-color: #fcd34d; }
+[data-grafiek="hemels"] .grafiek-rooster { stroke: #fcd34d; }
+[data-grafiek="hemels"] .grafiek-lijn { stroke: #d97706; filter: drop-shadow(0 0 3px #fbbf24); }
+[data-grafiek="hemels"] .grafiek-vlakje { fill: url(#grafiekGoud); opacity: 1; }
+
+/* ---------- Rack ---------- */
+
+@keyframes led {
+  0%, 70% { opacity: 1; }
+  71%, 100% { opacity: 0.3; }
+}
+
+.rack-body[data-rack="leds"] .unit { width: 9px; height: 9px; border-radius: 50%; box-shadow: 0 0 5px var(--kleur); animation: led 1.8s steps(1, end) infinite; }
+.rack-body[data-rack="leds"] .unit:nth-child(3n) { animation-delay: -0.6s; }
+.rack-body[data-rack="leds"] .unit:nth-child(3n + 1) { animation-delay: -1.1s; }
+.rack-body[data-rack="leds"] .unit:nth-child(4n) { animation-duration: 1.3s; }
+.rack-body[data-rack="leds"] .unit:nth-child(5n) { animation-duration: 2.3s; }
+.rack-body[data-rack="bouwstenen"] .rack-units { padding-top: 3px; gap: 4px 3px; }
+.rack-body[data-rack="bouwstenen"] .unit { position: relative; width: 12px; height: 9px; border-radius: 2px; box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.2); }
+.rack-body[data-rack="bouwstenen"] .unit::before { content: ""; position: absolute; top: -3px; left: 2px; width: 3px; height: 3px; border-radius: 1px 1px 0 0; background: var(--kleur); box-shadow: 5px 0 0 var(--kleur); filter: brightness(1.15); }
+.rack-body[data-rack="stekkers"] .unit { position: relative; width: 9px; height: 14px; border-radius: 2px 2px 1px 1px; background: linear-gradient(var(--kleur) 0 45%, #e0f2fe 45%); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18); }
+.rack-body[data-rack="stekkers"] .unit::after { content: ""; position: absolute; left: 2px; right: 2px; bottom: 2px; height: 2px; background: repeating-linear-gradient(90deg, #d4a017 0 1px, transparent 1px 2px); }
+.rack-body[data-rack="vu"] .rack-units { align-items: flex-end; height: 16px; gap: 2px; }
+.rack-body[data-rack="vu"] .unit { width: 5px; height: 100%; border-radius: 1px; transform-origin: 50% 100%; background: linear-gradient(to top, var(--kleur), color-mix(in oklab, var(--kleur), #fff 45%)); animation: vu 0.9s ease-in-out infinite alternate; }
+.rack-body[data-rack="vu"] .unit:nth-child(2n) { animation-duration: 0.7s; }
+.rack-body[data-rack="vu"] .unit:nth-child(3n) { animation-duration: 1.1s; animation-delay: -0.3s; }
+.rack-body[data-rack="vu"] .unit:nth-child(5n) { animation-duration: 0.6s; animation-delay: -0.5s; }
+@keyframes vu {
+  from { scale: 1 0.2; }
+  to { scale: 1 1; }
+}
+.rack-body[data-rack="pixels"] .unit { width: 9px; height: 9px; border-radius: 0; box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.35), inset 2px 2px 0 rgba(255, 255, 255, 0.35); }
+.rack-body[data-rack="diskettes"] .unit { position: relative; width: 11px; height: 11px; border-radius: 1px; }
+.rack-body[data-rack="diskettes"] .unit::before { content: ""; position: absolute; top: 0; left: 3px; width: 5px; height: 4px; background: #cbd5e1; }
+.rack-body[data-rack="diskettes"] .unit::after { content: ""; position: absolute; left: 2px; right: 2px; bottom: 1px; height: 3px; background: #f8fafc; }
+.rack-body[data-rack="neon"] { background: #0b0620; border-color: #3b0764; }
+.rack-body[data-rack="neon"] .unit { width: 4px; height: 13px; border-radius: 2px; background: #fff; box-shadow: 0 0 4px var(--kleur), 0 0 9px var(--kleur); }
+.rack-body[data-rack="neon"] .rack-aantal { color: #f5d0fe; text-shadow: 0 0 6px var(--kleur); }
+.rack-body[data-rack="neon"] :is(.rack-rest, .rack-empty) { color: #c4b5fd; }
+.rack-body[data-rack="kristallen"] .rack-units { gap: 5px; padding: 1px 2px; }
+.rack-body[data-rack="kristallen"] .unit { width: 8px; height: 8px; border-radius: 1px; rotate: 45deg; background: linear-gradient(135deg, #fff 0 15%, var(--kleur) 45%, color-mix(in oklab, var(--kleur), #000 30%)); box-shadow: 0 0 4px var(--kleur); }
+.rack-body[data-rack="lavalamp"] .unit { width: 9px; height: 13px; border-radius: 40% 60% 55% 45% / 55% 45% 60% 40%; animation: blob 3s ease-in-out infinite alternate; }
+.rack-body[data-rack="lavalamp"] .unit:nth-child(2n) { animation-delay: -1.2s; }
+.rack-body[data-rack="lavalamp"] .unit:nth-child(3n) { animation-delay: -2.1s; animation-duration: 2.4s; }
+@keyframes blob {
+  to { border-radius: 60% 40% 45% 55% / 40% 60% 45% 55%; translate: 0 -1px; }
+}
+.rack-body[data-rack="sterren"] .unit { width: 12px; height: 12px; border-radius: 0; box-shadow: none; clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); animation: rackTwinkel 1.6s ease-in-out infinite; }
+.rack-body[data-rack="sterren"] .unit:nth-child(2n) { animation-delay: -0.8s; }
+.rack-body[data-rack="sterren"] .unit:nth-child(3n) { animation-delay: -0.4s; }
+@keyframes rackTwinkel {
+  50% { opacity: 0.45; scale: 0.8; }
+}
+.rack-body[data-rack="goud"] .unit {
+  width: 13px;
+  height: 8px;
+  border-radius: 0;
+  box-shadow: none;
+  clip-path: polygon(15% 0, 85% 0, 100% 100%, 0 100%);
+  background: linear-gradient(90deg, #b45309, #fbbf24 30%, #fef3c7 45%, #fbbf24 60%, #b45309) 0 0 / 300% 100%;
+  animation: goudGlans 2.4s linear infinite;
+}
+@keyframes goudGlans {
+  to { background-position: 300% 0; }
+}
+
+/* ---------- Nieuwsbalk ---------- */
+/* Met een eigen stijl is de balk zelf onzichtbaar en krijgt de nieuwsregel
+   het uiterlijk. Een storing krijgt dan zijn eigen donkere kaart. */
+
+.logline[data-nieuws]:not([data-nieuws="standaard"]) { background: none; padding: 0; color: inherit; }
+.logline[data-nieuws]:not([data-nieuws="standaard"]) .incident { margin-top: 8px; padding: 13px 16px; border-top: 0; border-radius: var(--r-l); background: var(--blauw-900); color: #dbeafe; }
+.logline[data-nieuws="breaking"] .nieuws-tekst { display: flex; overflow: hidden; border-radius: 6px; background: #fff; color: #111827; font-weight: 700; box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.45); }
+.logline[data-nieuws="breaking"] .nieuws-tekst::before { content: "LAATSTE NIEUWS"; flex: none; display: flex; align-items: center; padding: 0 10px; background: #dc2626; color: #fff; font-size: 11.5px; font-weight: 900; letter-spacing: 0.06em; }
+.logline[data-nieuws="breaking"] .nieuws-tekst > span { padding: 10px 12px; }
+.logline[data-nieuws="ondertitels"] .nieuws-tekst {
+  padding: 6px 4px;
+  text-align: center;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  text-shadow: -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000, 0 2px 5px rgba(0, 0, 0, 0.6);
+}
+.logline[data-nieuws="terminal"] .nieuws-tekst { padding: 10px 14px; border: 1px solid #14532d; border-radius: 8px; background: #0a0f0a; color: #86efac; font: 500 13.5px/1.45 "IBM Plex Mono", ui-monospace, monospace; }
+.logline[data-nieuws="terminal"] .nieuws-tekst::before { content: "serge@netwerk:~$ tail -f nieuws.log"; display: block; margin-bottom: 4px; color: #4ade80; font-size: 12px; opacity: 0.75; }
+.logline[data-nieuws="terminal"] .nieuws-tekst > span::before { content: "> "; color: #4ade80; }
+.logline[data-nieuws="terminal"] .nieuws-tekst > span::after { content: "▋"; margin-left: 3px; color: #4ade80; animation: knipper 1s steps(1, end) infinite; }
+.logline[data-nieuws="lichtkrant"] .nieuws-tekst { overflow: hidden; padding: 9px 0; border-radius: 6px; background: #120904; box-shadow: inset 0 0 0 2px #2a1508; white-space: nowrap; }
+.logline[data-nieuws="lichtkrant"] .nieuws-tekst > span {
+  display: inline-block;
+  padding-left: 100%;
+  color: #ffb347;
+  font: 700 17px/1 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 6px #ff8c00;
+  -webkit-mask: radial-gradient(circle, #000 55%, transparent 62%) 0 0 / 3px 3px;
+  mask: radial-gradient(circle, #000 55%, transparent 62%) 0 0 / 3px 3px;
+  animation: lichtkrant 18s linear infinite;
+}
+@keyframes lichtkrant {
+  to { transform: translateX(-100%); }
+}
+.logline[data-nieuws="teletekst"] .nieuws-tekst { padding: 8px 10px; background: #000; color: #ffff00; font: 600 14px/1.35 "IBM Plex Mono", ui-monospace, monospace; }
+.logline[data-nieuws="teletekst"] .nieuws-tekst::before { content: "P101  SERGETEKST  " attr(data-tijd); display: block; margin: -8px -10px 6px; padding: 2px 10px; background: #0000cc; color: #00ffff; font-weight: 700; }
+.logline[data-nieuws="chat"] .nieuws-tekst { display: flex; align-items: flex-end; gap: 8px; }
+.logline[data-nieuws="chat"] .nieuws-tekst::before { content: ""; flex: none; width: 32px; height: 32px; border-radius: 50%; background: url("img/serge.jpg") center / cover; box-shadow: 0 0 0 2px #fff, 0 2px 6px rgba(11, 37, 69, 0.3); }
+.logline[data-nieuws="chat"] .nieuws-tekst > span { padding: 9px 13px; border-radius: 18px 18px 18px 4px; background: #e5e7eb; color: #111827; font-size: 14.5px; }
+.logline[data-nieuws="radio"] .nieuws-tekst { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; background: linear-gradient(#1f2937, #111827); color: #f9fafb; }
+.logline[data-nieuws="radio"] .nieuws-tekst::before { content: "SERGE FM 101.1"; flex: none; color: #f59e0b; font: 800 11px/1.2 "IBM Plex Mono", ui-monospace, monospace; }
+.logline[data-nieuws="radio"] .nieuws-tekst::after {
+  content: "";
+  flex: none;
+  order: 3;
+  width: 22px;
+  height: 16px;
+  margin-left: auto;
+  background:
+    linear-gradient(#4ade80, #4ade80) 0 100% / 3px 40% no-repeat,
+    linear-gradient(#4ade80, #4ade80) 5px 100% / 3px 80% no-repeat,
+    linear-gradient(#facc15, #facc15) 10px 100% / 3px 60% no-repeat,
+    linear-gradient(#4ade80, #4ade80) 15px 100% / 3px 90% no-repeat,
+    linear-gradient(#f87171, #f87171) 20px 100% / 2px 50% no-repeat;
+  animation: equalizer 0.8s steps(3, end) infinite;
+}
+@keyframes equalizer {
+  33% { background-size: 3px 90%, 3px 30%, 3px 100%, 3px 50%, 2px 80%; }
+  66% { background-size: 3px 60%, 3px 100%, 3px 40%, 3px 70%, 2px 30%; }
+}
+.logline[data-nieuws="krant"] .nieuws-tekst { padding: 8px 12px; border-top: 3px double #1c1917; border-bottom: 1px solid #1c1917; background: #f5f0e4; color: #1c1917; font-family: Georgia, "Times New Roman", serif; }
+.logline[data-nieuws="krant"] .nieuws-tekst::before { content: "DE SERGE · OCHTENDEDITIE"; display: block; margin-bottom: 4px; color: #b91c1c; font: 700 10px/1 "IBM Plex Sans", sans-serif; letter-spacing: 0.18em; }
+.logline[data-nieuws="krant"] .nieuws-tekst > span { font-size: 16px; font-weight: 800; line-height: 1.2; }
+.logline[data-nieuws="telex"] .nieuws-tekst {
+  padding: 13px 14px;
+  border-radius: 2px;
+  background:
+    radial-gradient(circle, #d6d3d1 0 2px, transparent 2.5px) 0 3px / 12px 12px repeat-x,
+    radial-gradient(circle, #d6d3d1 0 2px, transparent 2.5px) 0 calc(100% - 3px) / 12px 12px repeat-x,
+    #fefce8;
+  color: #292524;
+  font: 600 13.5px/1.4 "IBM Plex Mono", ui-monospace, monospace;
+  text-transform: uppercase;
+  box-shadow: 0 4px 10px -6px rgba(0, 0, 0, 0.4);
+}
+.logline[data-nieuws="telex"] .nieuws-tekst > span { display: inline-block; animation: telex 1.6s steps(32, end) both; }
+@keyframes telex {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+.logline[data-nieuws="hologram"] .nieuws-tekst {
+  position: relative;
+  overflow: hidden;
+  padding: 10px 14px;
+  border: 1px solid rgba(103, 232, 249, 0.75);
+  border-radius: 8px;
+  background: rgba(8, 47, 73, 0.6);
+  color: #a5f3fc;
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.9);
+  animation: holoFlikker 4s steps(1, end) infinite;
+}
+.logline[data-nieuws="hologram"] .nieuws-tekst::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, rgba(103, 232, 249, 0.12) 0 2px, transparent 2px 4px); animation: holoScan 2.5s linear infinite; }
+.logline[data-nieuws="openingstekst"] .nieuws-tekst {
+  position: relative;
+  display: block;
+  height: 104px;
+  overflow: hidden;
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 12% 30%, #fff 0 1px, transparent 1.5px),
+    radial-gradient(circle at 34% 72%, #fff 0 1px, transparent 1.5px),
+    radial-gradient(circle at 57% 18%, #fde68a 0 1.2px, transparent 1.7px),
+    radial-gradient(circle at 78% 55%, #fff 0 1px, transparent 1.5px),
+    radial-gradient(circle at 91% 24%, #fff 0 1px, transparent 1.5px),
+    radial-gradient(circle at 46% 44%, #c4b5fd 0 1px, transparent 1.5px),
+    #000;
+  perspective: 220px;
+  -webkit-mask: linear-gradient(transparent, #000 40%);
+  mask: linear-gradient(transparent, #000 40%);
+}
+.logline[data-nieuws="openingstekst"] .nieuws-tekst > span {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 0;
+  color: #facc15;
+  font: 800 17px/1.3 "IBM Plex Sans", sans-serif;
+  text-align: center;
+  transform-origin: 50% 100%;
+  animation: kruip 12s linear infinite;
+}
+@keyframes kruip {
+  from { transform: rotateX(34deg) translateY(10px); }
+  to { transform: rotateX(34deg) translateY(-210px); }
+}
+.logline[data-nieuws="hemels"] .nieuws-tekst {
+  position: relative;
+  overflow: hidden;
+  padding: 10px 16px;
+  border: 2px solid #fcd34d;
+  border-radius: 16px;
+  background: radial-gradient(ellipse at 50% 0%, #fffdf5, #fff7d6 70%, #fde68a);
+  color: #6b3f00;
+  text-align: center;
+  font-family: Georgia, "Iowan Old Style", serif;
+  font-weight: 700;
+  box-shadow: 0 0 18px rgba(253, 224, 71, 0.6);
+}
+.logline[data-nieuws="hemels"] .nieuws-tekst::before { content: ""; position: absolute; inset: -150%; background: repeating-conic-gradient(rgba(253, 224, 71, 0.28) 0 8deg, transparent 8deg 24deg); animation: draaien 16s linear infinite; }
+.logline[data-nieuws="hemels"] .nieuws-tekst > span { position: relative; }
+
+/* ---------- Voorbeeldjes in het menu ---------- */
+
+.skin-preview.omloop-voorbeeld { --foto: 26px; position: relative; overflow: visible; border: 0; box-shadow: none; background: none; }
+.omloop-voorbeeld > img { width: var(--foto); height: var(--foto); border-radius: 50%; box-shadow: 0 0 0 2px var(--lijn-sterk); }
+.omloop-voorbeeld .omloop { --maat: 9px; }
+.omloop-voorbeeld .omloop[data-omloop="miniserge"] { --maat: 10px; }
+.skin-preview.decor-voorbeeld { --foto: 22px; position: relative; background: var(--vlak-zacht); }
+.decor-voorbeeld .decor { width: 100%; }
+.decor-voorbeeld > img { position: relative; z-index: 1; width: var(--foto); height: var(--foto); border-radius: 50%; }
+.skin-preview:is(.nieuws-voorbeeld, .voortgang-voorbeeld, .grafiek-voorbeeld, .rack-voorbeeld) { width: 104px; border-radius: 12px; background: var(--vlak-zacht); }
+.nieuws-voorbeeld .logline { width: 196px; zoom: 0.5; font-size: 14.5px; line-height: 1.3; }
+.nieuws-voorbeeld .logline .nieuws-tekst { display: block; }
+.nieuws-voorbeeld .logline[data-nieuws="openingstekst"] .nieuws-tekst { height: 90px; }
+.voortgang-voorbeeld .doel { display: block; width: 80px; }
+.voortgang-voorbeeld .doel-meter,
+.voortgang-voorbeeld .doel-meter > span { display: block; }
+.grafiek-voorbeeld .grafiek-vlak { width: 92px; height: 44px; padding: 3px; border-radius: 8px; }
+.rack-voorbeeld .rack-body { width: 90px; max-height: none; overflow: hidden; padding: 5px; gap: 3px; border-radius: 8px; }
+.rack-voorbeeld .rack-units { gap: 2px; }
+
+/* ---------- Looks ---------- */
+
+.looks { margin: 4px 0 8px; }
+.look-plekken { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.look-plek { display: grid; align-content: start; gap: 3px; min-width: 0; padding: 10px; border: 2px solid var(--lijn); border-radius: var(--r-m); background: var(--vlak); }
+.look-plek.leeg { border-style: dashed; background: var(--vlak-zacht); }
+.look-plek strong { overflow: hidden; font-size: 14.5px; text-overflow: ellipsis; white-space: nowrap; }
+.look-plek small { font-size: 12px; color: var(--inkt-licht); }
+.look-knoppen { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+.look-knoppen .btn { flex: 1 1 auto; padding-left: 8px; padding-right: 8px; }
+.look-thema { display: flex; flex-wrap: wrap; gap: 6px; }
+.look-thema button {
+  padding: 6px 12px;
+  border: 2px solid var(--lijn);
+  border-radius: 999px;
+  background: var(--vlak);
+  color: var(--inkt);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color var(--sneller), background var(--sneller);
+}
+.look-thema button:hover { border-color: var(--lijn-sterk); }
+.look-thema button small { margin-left: 2px; font-weight: 600; color: var(--inkt-licht); }
+.look-thema button.compleet { border-color: var(--groen-rand); background: var(--groen-vlak); }
+.skin-groepen { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 520px) {
+  .look-plekken { grid-template-columns: 1fr; }
+  .look-plek { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+  .look-plek strong { grid-column: 1; grid-row: 1; }
+  .look-plek small { grid-column: 1; grid-row: 2; }
+  .look-plek .look-knoppen { grid-column: 2; grid-row: 1 / span 2; margin-top: 0; }
+  .skin-groepen button { padding: 7px 2px 6px; font-size: 12px; }
+  .skin-groepen button small { font-size: 10.5px; }
+}
+
+/* Met animaties uit staat alles uit deel 4 stil. */
+body.rustig :is(
+  .omloop-ring, .omloop-ring i, .omloop-ring b, .omloop-ring b::before, .omloop .baantje b, .omloop .planeetbaan,
+  .decor, .decor::before, .decor::after, .decor i, .doel-meter span, .doel-meter span::after, .doel-meter::before, .doel-meter::after,
+  .grafiek-vlak *, .rack-body .unit, .nieuws-tekst, .nieuws-tekst > span, .nieuws-tekst::before, .nieuws-tekst::after
+) { animation: none !important; }
+body.rustig .logline[data-nieuws="lichtkrant"] .nieuws-tekst { white-space: normal; }
+body.rustig .logline[data-nieuws="lichtkrant"] .nieuws-tekst > span { padding: 0 12px; }
+body.rustig .logline[data-nieuws="openingstekst"] .nieuws-tekst > span { transform: rotateX(34deg) translateY(-20px); }
+
+/* =====================================================================
+   Uiterlijk, deel 5: nieuwe dingen in elke soort.
+   ===================================================================== */
+
+/* ---------- Portret ---------- */
+
+[data-portret="duotoon"] img, img[data-portret="duotoon"] { filter: url(#duotoon); }
+[data-portret="infrarood"] img, img[data-portret="infrarood"] { filter: hue-rotate(-105deg) saturate(1.7) contrast(1.12) brightness(1.05); }
+[data-portret="oudetv"] img, img[data-portret="oudetv"] { filter: grayscale(1) contrast(1.35) brightness(1.08); }
+.serge[data-portret="oudetv"]::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  z-index: 2;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 0 2px, transparent 2px 4px),
+    linear-gradient(transparent 40%, rgba(255, 255, 255, 0.14) 46% 52%, transparent 58%) 0 0 / 100% 300%;
+  animation: tvRol 4s linear infinite;
+}
+@keyframes tvRol {
+  from { background-position: 0 0, 0 0%; }
+  to { background-position: 0 0, 0 150%; }
+}
+
+/* ---------- Accessoire ---------- */
+
+.accessoire[data-accessoire="koffiemok"] { --x: 46%; --y: 2%; --maat: 0.26; }
+.accessoire[data-accessoire="routerhoed"] { --x: 44%; --y: 3%; --breed: 0.44; }
+.accessoire[data-accessoire="onweer"] { --x: 50%; --y: -8%; --breed: 0.4; }
+.accessoire .stoom { position: absolute; left: 46%; top: -12%; width: calc(var(--foto) * 0.14); height: calc(var(--foto) * 0.14); translate: -50% 0; }
+.accessoire .stoom i {
+  position: absolute;
+  bottom: 0;
+  width: 5px;
+  height: 60%;
+  border-radius: 999px;
+  background: linear-gradient(transparent, rgba(255, 255, 255, 0.9));
+  filter: blur(1.5px) drop-shadow(0 0 2px rgba(11, 37, 69, 0.3));
+  animation: stoom 2.4s ease-in-out infinite;
+}
+.accessoire .stoom i:nth-child(1) { left: 15%; }
+.accessoire .stoom i:nth-child(2) { left: 45%; animation-delay: -0.8s; }
+.accessoire .stoom i:nth-child(3) { left: 75%; animation-delay: -1.6s; }
+@keyframes stoom {
+  0% { translate: 0 20%; opacity: 0; scale: 1 0.6; }
+  40% { opacity: 1; }
+  100% { translate: 4px -70%; opacity: 0; scale: 1.4 1.2; }
+}
+.acc-svg.routerhoed .lampjes circle { animation: led 1.4s steps(1, end) infinite; }
+.acc-svg.routerhoed .lampjes circle:nth-child(2) { animation-delay: -0.5s; animation-duration: 0.9s; }
+.acc-svg.routerhoed .lampjes circle:nth-child(3) { animation-delay: -0.9s; animation-duration: 2.1s; }
+.acc-svg.routerhoed .lampjes circle:nth-child(4) { animation-duration: 0.7s; }
+.acc-svg.onweer .flits { animation: flits 3.2s steps(1, end) infinite; }
+@keyframes flits {
+  0%, 62%, 70%, 74%, 100% { opacity: 0; }
+  64%, 72% { opacity: 1; }
+}
+.acc-svg.onweer .druppels { animation: druppels 0.6s linear infinite; }
+@keyframes druppels {
+  from { transform: translateY(-4px); opacity: 1; }
+  to { transform: translateY(8px); opacity: 0.2; }
+}
+
+/* ---------- Ring ---------- */
+
+[data-ring="morse"] { --ring: #f8fafc; }
+[data-ring="glitchring"] { --ring: #0b0b12; }
+[data-ring="klok"] { --ring: #1e293b; }
+.serge[data-ring="morse"]::before {
+  opacity: 1;
+  background: repeating-conic-gradient(#1e293b 0 3deg, transparent 3deg 8deg, #1e293b 8deg 18deg, transparent 18deg 23deg);
+  animation-duration: 14s;
+}
+.serge[data-ring="glitchring"]::before {
+  opacity: 1;
+  background: conic-gradient(#ff005a 0 25%, #00dcff 25% 50%, #ff005a 50% 75%, #00dcff 75%);
+  animation: draaien 5s linear infinite, glitchRing 2.6s steps(1, end) infinite;
+}
+@keyframes glitchRing {
+  0%, 86%, 100% { translate: 0 0; clip-path: none; }
+  88% { translate: 5px -2px; clip-path: inset(0 0 60% 0); }
+  91% { translate: -6px 3px; clip-path: inset(40% 0 0 0); }
+  94% { translate: 3px 0; clip-path: none; }
+}
+@property --wijzer {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+.serge[data-ring="klok"]::before {
+  opacity: 1;
+  background:
+    conic-gradient(from var(--wijzer), #dc2626 0 4deg, transparent 4deg),
+    repeating-conic-gradient(#1e293b 0 2deg, transparent 2deg 30deg),
+    #f8fafc;
+  animation: seconde 60s steps(60, end) infinite;
+}
+@keyframes seconde {
+  to { --wijzer: 360deg; }
+}
+.skin-preview:is([data-ring="morse"], [data-ring="glitchring"], [data-ring="klok"]) { box-shadow: none; border-color: transparent; }
+.skin-preview[data-ring="morse"] { background: repeating-conic-gradient(#1e293b 0 6deg, #f8fafc 6deg 14deg, #1e293b 14deg 32deg, #f8fafc 32deg 40deg); }
+.skin-preview[data-ring="glitchring"] { background: conic-gradient(#ff005a 0 25%, #00dcff 25% 50%, #ff005a 50% 75%, #00dcff 75%); }
+.skin-preview[data-ring="klok"] { background: conic-gradient(#dc2626 0 6deg, transparent 6deg), repeating-conic-gradient(#1e293b 0 3deg, #f8fafc 3deg 30deg); }
+.skin-preview:is([data-ring="morse"], [data-ring="glitchring"], [data-ring="klok"]) img { transform: scale(0.78); border-radius: 50%; }
+
+/* ---------- Houding ---------- */
+
+:is(.serge, .houding-voorbeeld)[data-houding="slaperig"] { transform-origin: 50% 100%; animation: hSlaperig 5s ease-in-out infinite; }
+@keyframes hSlaperig {
+  0%, 30%, 100% { rotate: 0deg; translate: 0 0; }
+  52%, 62% { rotate: 8deg; translate: 0 2%; }
+  66% { rotate: -2deg; translate: 0 -1%; }
+  72% { rotate: 0deg; }
+}
+:is(.serge, .houding-voorbeeld)[data-houding="headbangen"] { transform-origin: 50% 100%; animation: hBang 0.46s ease-in-out infinite; }
+@keyframes hBang {
+  0%, 100% { rotate: 0deg; translate: 0 0; }
+  35% { rotate: -5deg; translate: 0 3%; }
+  65% { rotate: 3deg; translate: 0 -1%; }
+}
+:is(.serge, .houding-voorbeeld)[data-houding="moonwalk"] { animation: hMoonwalk 3.2s ease-in-out infinite; }
+@keyframes hMoonwalk {
+  0%, 100% { translate: -6% 0; rotate: -4deg; }
+  25% { translate: 0 -1%; rotate: -4deg; }
+  50% { translate: 6% 0; rotate: -4deg; }
+  75% { translate: 0 -1%; rotate: -4deg; }
+}
+
+/* ---------- Omloop ---------- */
+
+.omloop[data-omloop="noten"] b { color: #7c3aed; font-size: calc(var(--maat) * 0.95); animation: dobber 1.8s ease-in-out infinite; animation-delay: calc(var(--i) * -0.25s); }
+.omloop[data-omloop="noten"] i:nth-child(3n) b { color: #db2777; }
+.omloop[data-omloop="noten"] i:nth-child(3n + 1) b { color: #0284c7; }
+.omloop[data-omloop="pinguins"] { --duur: 60s; }
+.omloop[data-omloop="pinguins"] b { animation: waggel 0.7s ease-in-out infinite alternate; animation-delay: calc(var(--i) * -0.2s); }
+@keyframes waggel {
+  from { rotate: -10deg; }
+  to { rotate: 10deg; }
+}
+.omloop[data-omloop="vuurvliegjes"] { --duur: 70s; --maat: 12px; }
+.omloop[data-omloop="vuurvliegjes"] b {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fde047;
+  box-shadow: 0 0 0 1.5px rgba(146, 64, 14, 0.55), 0 0 8px 4px rgba(250, 204, 21, 0.85);
+  filter: none;
+  animation: vliegLicht 2.2s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -0.41s);
+}
+@keyframes vliegLicht {
+  0%, 100% { opacity: 0.15; translate: 0 0; }
+  50% { opacity: 1; translate: 3px -4px; }
+}
+
+/* ---------- Decor ---------- */
+
+@property --fase {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+.decor[data-decor="regenboog"] {
+  background: radial-gradient(circle, transparent 38%, #ef4444 38.5% 43%, #f97316 43% 48%, #facc15 48% 53%, #22c55e 53% 58%, #3b82f6 58% 63%, #8b5cf6 63% 68%, transparent 68.5%);
+  opacity: 0.8;
+  filter: blur(0.5px);
+}
+.decor[data-decor="sterrenhemel"] {
+  background:
+    radial-gradient(circle at 18% 30%, #fff 0 1.5px, transparent 2px),
+    radial-gradient(circle at 80% 22%, #fde68a 0 2px, transparent 2.5px),
+    radial-gradient(circle at 72% 78%, #fff 0 1.5px, transparent 2px),
+    radial-gradient(circle at 26% 76%, #c7d2fe 0 1.5px, transparent 2px),
+    radial-gradient(circle at 50% 8%, #fff 0 1.2px, transparent 1.7px),
+    radial-gradient(circle at 92% 50%, #fff 0 1.2px, transparent 1.7px),
+    radial-gradient(circle at 8% 55%, #fff 0 1.5px, transparent 2px),
+    radial-gradient(circle, #1e1b4b 0 45%, #0f172a 58%, transparent 71%);
+}
+.decor[data-decor="sterrenhemel"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 15%, #fff 0 1.5px, transparent 2px),
+    radial-gradient(circle at 64% 90%, #fff 0 1.5px, transparent 2px),
+    radial-gradient(circle at 12% 40%, #fde68a 0 1.5px, transparent 2px),
+    radial-gradient(circle at 88% 64%, #fff 0 1.5px, transparent 2px);
+  animation: neonAdem 2.4s ease-in-out infinite;
+}
+.decor[data-decor="tunnel"] {
+  background: repeating-radial-gradient(circle, transparent 0 var(--fase), rgba(56, 189, 248, 0.75) var(--fase) calc(var(--fase) + 3px), transparent calc(var(--fase) + 3px) 22px);
+  -webkit-mask: radial-gradient(circle, transparent 30%, #000 45%, transparent 71%);
+  mask: radial-gradient(circle, transparent 30%, #000 45%, transparent 71%);
+  animation: tunnel 0.9s linear infinite;
+}
+@keyframes tunnel {
+  to { --fase: 22px; }
+}
+
+/* ---------- Achtergrond ---------- */
+
+[data-achtergrond="tropisch"] { --lucht: #fde047; --blauw: #fb7185; --indigo: #0d9488; }
+[data-achtergrond="circuit"] { --lucht: #166534; --blauw: #052e16; --indigo: #01140a; }
+[data-achtergrond="eclips"] { --lucht: #111827; --blauw: #070b16; --indigo: #000000; }
+body[data-achtergrond="circuit"]::after {
+  opacity: 1;
+  background:
+    radial-gradient(circle, #fde68a 0 3px, transparent 3.5px) 40px 40px / 160px 160px,
+    radial-gradient(circle, #86efac 0 3px, transparent 3.5px) 120px 80px / 160px 160px,
+    radial-gradient(circle, #86efac 0 2.5px, transparent 3px) 80px 120px / 160px 160px,
+    linear-gradient(90deg, transparent 38px, rgba(134, 239, 172, 0.32) 38px 42px, transparent 42px) 0 0 / 160px 160px,
+    linear-gradient(transparent 78px, rgba(134, 239, 172, 0.32) 78px 82px, transparent 82px) 40px 0 / 160px 160px,
+    linear-gradient(90deg, transparent 118px, rgba(134, 239, 172, 0.25) 118px 121px, transparent 121px) 0 80px / 160px 160px,
+    linear-gradient(transparent 118px, rgba(134, 239, 172, 0.25) 118px 121px, transparent 121px) 0 0 / 160px 160px;
+  animation: stroom 6s ease-in-out infinite;
+}
+@keyframes stroom {
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 1; }
+}
+body[data-achtergrond="eclips"]::after {
+  opacity: 1;
+  background:
+    radial-gradient(circle at 50% 46px, #000 0 34px, rgba(255, 251, 235, 0.98) 36px, rgba(253, 230, 138, 0.55) 46px, rgba(251, 146, 60, 0.22) 70px, transparent 110px),
+    radial-gradient(circle at 12% 30%, #fff 0 1px, transparent 1.5px),
+    radial-gradient(circle at 34% 12%, #fff 0 1px, transparent 1.5px),
+    radial-gradient(circle at 56% 60%, #fff 0 1px, transparent 1.5px),
+    radial-gradient(circle at 20% 80%, #fde68a 0 1.2px, transparent 1.7px),
+    radial-gradient(circle at 90% 70%, #fff 0 1px, transparent 1.5px),
+    radial-gradient(circle at 66% 38%, #fff 0 1px, transparent 1.5px);
+  animation: corona 5s ease-in-out infinite alternate;
+}
+@keyframes corona {
+  from { filter: brightness(0.95); }
+  to { filter: brightness(1.25); }
+}
+.skin-preview[data-achtergrond="circuit"] { background-image: linear-gradient(90deg, transparent 16px, rgba(134, 239, 172, 0.6) 16px 19px, transparent 19px), linear-gradient(transparent 28px, rgba(134, 239, 172, 0.6) 28px 31px, transparent 31px), radial-gradient(circle at 17px 29px, #fde68a 0 3px, transparent 3.5px), linear-gradient(#166534, #01140a); }
+.skin-preview[data-achtergrond="eclips"] { background-image: radial-gradient(circle, #000 0 26%, #fffbeb 29%, rgba(253, 230, 138, 0.6) 38%, transparent 56%), linear-gradient(#111827, #000); }
+
+/* ---------- Panelen ---------- */
+
+body[data-paneel="papier"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: #fbf8f1;
+  --vlak-zacht: #f3eee2;
+  --blauw-50: #f7f2e7;
+  --inkt: #2b2621;
+  --inkt-zacht: #5c5247;
+  --inkt-licht: #6f6356;
+  --lijn: #e6dccb;
+  --lijn-sterk: #d4c6ae;
+  --teller: #2b2621;
+}
+body[data-paneel="papier"] :is(.stage, .status, .panel) {
+  background-color: #fbf8f1;
+  background-image: repeating-linear-gradient(transparent 0 27px, rgba(59, 130, 246, 0.07) 27px 28px);
+  box-shadow: 0 1px 0 #e6dccb, 0 18px 40px -22px rgba(43, 38, 33, 0.45);
+}
+body[data-paneel="koffie"] :is(.stage, .status, .panel, .sheet-card, .modal-card) {
+  --vlak: #2b1d14;
+  --vlak-zacht: #231710;
+  --blauw-50: #33241a;
+  --inkt: #f5e6d3;
+  --inkt-zacht: #d9c3a8;
+  --inkt-licht: #b89f84;
+  --lijn: #45311f;
+  --lijn-sterk: #5c4330;
+  --blauw-100: #4a3322;
+  --blauw-300: #a47a52;
+  --blauw-400: #c49a6c;
+  --blauw-600: #8a5a2b;
+  --blauw-700: #f0c48f;
+  --blauw-900: #140c07;
+  --knop: #8a5a2b;
+  --knop-hover: #744a22;
+  --teller: #fff4e6;
+}
+body[data-paneel="koffie"] :is(.stage, .status, .panel) {
+  background-color: #2b1d14;
+  background-image: radial-gradient(ellipse at 20% 0%, rgba(214, 162, 107, 0.16), transparent 60%);
+}
+
+/* ---------- Accentkleur ---------- */
+
+body[data-accent="oceaan"] { --blauw-700: #075985; --blauw-600: #0369a1; --blauw-500: #0ea5e9; --blauw-400: #38bdf8; --blauw-300: #7dd3fc; --blauw-100: #e0f2fe; --blauw-50: #f0f9ff; --knop: #0369a1; --knop-hover: #075985; }
+body[data-accent="bordeaux"] { --blauw-700: #881337; --blauw-600: #9f1239; --blauw-500: #e11d48; --blauw-400: #fb7185; --blauw-300: #fda4af; --blauw-100: #ffe4e6; --blauw-50: #fff1f2; --knop: #9f1239; --knop-hover: #881337; }
+/* Aurora: dezelfde formules als de regenboog, maar de tint golft alleen
+   tussen groen en violet, heen en terug. */
+body[data-accent="aurora"] {
+  --tint: 160;
+  --blauw-700: oklch(0.43 0.15 var(--tint));
+  --blauw-600: oklch(0.5 0.16 var(--tint));
+  --blauw-500: oklch(0.62 0.16 var(--tint));
+  --blauw-400: oklch(0.72 0.13 var(--tint));
+  --blauw-300: oklch(0.82 0.09 var(--tint));
+  --blauw-100: oklch(0.94 0.04 var(--tint));
+  --blauw-50: oklch(0.975 0.015 var(--tint));
+  --knop: oklch(0.5 0.16 var(--tint));
+  --knop-hover: oklch(0.43 0.15 var(--tint));
+  animation: tintAurora 48s steps(24) infinite alternate;
+}
+@keyframes tintAurora {
+  from { --tint: 150; }
+  to { --tint: 305; }
+}
+body.rustig[data-accent="aurora"] { animation: none; }
+
+/* ---------- Filter ---------- */
+
+:is(body[data-filter="pastel"] .filterkleur, .filter-voorbeeld[data-filter="pastel"] .kleur) { background: #fbcfe8; mix-blend-mode: soft-light; opacity: 0.75; }
+:is(body[data-filter="pastel"] .filterlaag, .filter-voorbeeld[data-filter="pastel"] .laag) { background: rgba(255, 255, 255, 0.12); }
+:is(body[data-filter="cyberpunk"] .filterkleur, .filter-voorbeeld[data-filter="cyberpunk"] .kleur) {
+  background: linear-gradient(135deg, rgba(255, 0, 170, 0.85), rgba(0, 229, 255, 0.85));
+  mix-blend-mode: color;
+  opacity: 0.38;
+}
+:is(body[data-filter="cyberpunk"] .filterlaag, .filter-voorbeeld[data-filter="cyberpunk"] .laag) {
+  background:
+    repeating-linear-gradient(to bottom, rgba(255, 0, 170, 0.05) 0 1px, transparent 1px 4px),
+    radial-gradient(ellipse at center, transparent 55%, rgba(20, 0, 40, 0.45));
+}
+:is(body[data-filter="prisma"] .filterlaag, .filter-voorbeeld[data-filter="prisma"] .laag) {
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(255, 0, 0, 0.13) 68%, rgba(255, 200, 0, 0.13) 74%, rgba(0, 255, 90, 0.13) 80%, rgba(0, 200, 255, 0.13) 86%, rgba(90, 0, 255, 0.13) 92%, rgba(255, 0, 200, 0.15) 98%);
+  mix-blend-mode: screen;
+  animation: prisma 8s ease-in-out infinite alternate;
+}
+@keyframes prisma {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+/* ---------- Gouden packet ---------- */
+
+:is(.packet, .packet-voorbeeld).stijl-envelop { background: radial-gradient(circle at 35% 30%, #ffffff, #e2e8f0 62%, #94a3b8); }
+:is(.packet, .packet-voorbeeld).stijl-koekje { background: radial-gradient(circle at 35% 30%, #fde68a, #d97706 62%, #92400e); }
+:is(.packet, .packet-voorbeeld).stijl-ufo { background: radial-gradient(circle at 35% 30%, #a7f3d0, #10b981 62%, #065f46); }
+.packet.stijl-ufo { box-shadow: 0 0 26px 6px rgba(16, 185, 129, 0.55), 0 0 0 5px rgba(255, 255, 255, 0.6); }
+
+/* ---------- Opstartscherm ---------- */
+
+.opstart:is([data-opstart="dos"], [data-opstart="matrix"]) { background: #000; place-items: start; text-align: left; }
+.opstart[data-opstart="dos"] .op-console { color: #c0c0c0; }
+.opstart[data-opstart="matrix"] { place-items: center; text-align: left; }
+.opstart[data-opstart="matrix"] .op-console { color: #4ade80; font-size: clamp(16px, 2.6vw, 28px); text-shadow: 0 0 8px rgba(34, 197, 94, 0.8); }
+.op-cursor { animation: knipper 1s steps(1, end) infinite; }
+.opstart[data-opstart="console"] { background: radial-gradient(ellipse at 50% 55%, #2563eb, #0b1d4d 70%); color: #fff; }
+.op-console-logo {
+  position: relative;
+  overflow: hidden;
+  padding: 0 0.2em;
+  font: italic 900 clamp(56px, 13vw, 150px)/1 "IBM Plex Sans", sans-serif;
+  letter-spacing: 0.02em;
+  text-shadow: 0 6px 0 #1e3a8a;
+  animation: logoSchuif 0.8s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+.op-console-logo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.75) 50%, transparent 65%);
+  background-size: 250% 100%;
+  animation: logoGlans 1s 0.8s ease-in-out both;
+}
+@keyframes logoSchuif {
+  from { transform: translateX(60vw); }
+}
+@keyframes logoGlans {
+  from { background-position: 150% 0; }
+  to { background-position: -50% 0; }
+}
+.op-roep { margin: 12px 0 0; font: italic 800 clamp(18px, 3vw, 30px)/1 "IBM Plex Sans", sans-serif; letter-spacing: 0.1em; color: #bfdbfe; opacity: 0; animation: roep 0.5s 1.3s ease-out both; }
+@keyframes roep {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: none; }
+}
+.skin-preview.opstart-voorbeeld[data-opstart="dos"] { background: #000; }
+.skin-preview.opstart-voorbeeld[data-opstart="console"] { background: radial-gradient(circle, #2563eb, #0b1d4d); }
+.skin-preview.opstart-voorbeeld[data-opstart="matrix"] { background: radial-gradient(circle, #052e16, #000); }
+
+/* ---------- Teller ---------- */
+
+.counter[data-teller="krijt"] strong {
+  display: inline-block;
+  padding: 0.08em 0.35em 0.02em;
+  border: 6px solid #7a4a22;
+  border-radius: 10px;
+  background: #1f3b2c radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.07), transparent 60%);
+  color: #f8fafc;
+  font-family: "Chalkboard SE", "Bradley Hand", "Segoe Print", cursive;
+  letter-spacing: 0;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.55);
+}
+.counter[data-teller="flip"] strong {
+  display: inline-block;
+  padding: 0.04em 0 0.04em 0.12em;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.12em;
+  color: #fde68a;
+  background:
+    linear-gradient(transparent 48%, rgba(0, 0, 0, 0.7) 48% 52%, transparent 52%),
+    repeating-linear-gradient(90deg, #1f2937 0 1ch, transparent 1ch calc(1ch + 0.12em));
+  border-radius: 6px;
+}
+.counter[data-teller="chroom"] strong {
+  background: linear-gradient(180deg, #f8fafc 0%, #cbd5e1 38%, #334155 50%, #94a3b8 58%, #f1f5f9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 0 #475569) drop-shadow(0 0 1px #0f172a);
+}
+
+/* ---------- Voortgang ---------- */
+
+.doel[data-voortgang="kabel"] .doel-meter { position: relative; overflow: visible; height: 8px; background: #e2e8f0; }
+.doel[data-voortgang="kabel"] .doel-meter span { background: #3b82f6; box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.2); }
+.doel[data-voortgang="kabel"] .doel-meter::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: calc(var(--deel, 0) * 100%);
+  width: 16px;
+  height: 13px;
+  translate: -3px -50%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #1d4ed8 0 42%, #e0f2fe 42%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
+  transition: left var(--soepel);
+}
+.doel[data-voortgang="treintje"] .doel-meter { position: relative; overflow: visible; height: 16px; background: repeating-linear-gradient(90deg, #94a3b8 0 3px, transparent 3px 10px) 0 100% / 100% 3px no-repeat; border-radius: 0; }
+.doel[data-voortgang="treintje"] .doel-meter span {
+  height: 11px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(90deg, #dc2626 0 16px, transparent 16px 19px, #2563eb 19px 35px, transparent 35px 38px, #16a34a 38px 54px, transparent 54px 57px);
+  clip-path: inset(0 calc((1 - var(--deel, 0)) * 100%) 0 0);
+}
+.doel[data-voortgang="treintje"] .doel-meter::after {
+  content: "🚂";
+  position: absolute;
+  top: 50%;
+  left: calc(var(--deel, 0) * 100%);
+  font-size: 22px;
+  line-height: 1;
+  translate: -30% -62%;
+  scale: -1 1;
+  animation: tsjoek 0.5s ease-in-out infinite alternate;
+  transition: left var(--soepel);
+}
+@keyframes tsjoek {
+  to { translate: -30% -70%; }
+}
+.doel[data-voortgang="raket"] .doel-meter { position: relative; overflow: visible; height: 8px; background: #0f172a; }
+.doel[data-voortgang="raket"] .doel-meter span { background: linear-gradient(90deg, transparent, #fb923c 40%, #fde047 88%, #fff); animation: laden 0.3s ease-in-out infinite; }
+.doel[data-voortgang="raket"] .doel-meter::after {
+  content: "🚀";
+  position: absolute;
+  top: 50%;
+  left: calc(var(--deel, 0) * 100%);
+  font-size: 18px;
+  line-height: 1;
+  translate: -45% -55%;
+  rotate: 45deg;
+  animation: tril 0.12s steps(2) infinite;
+  transition: left var(--soepel);
+}
+@keyframes tril {
+  to { translate: -45% -50%; }
+}
+
+/* ---------- Grafiek ---------- */
+
+[data-grafiek="bergen"] .grafiek-vlak { background: linear-gradient(#e0f2fe, #f0f9ff); }
+[data-grafiek="bergen"] .grafiek-vlakje { fill: url(#grafiekBergen); opacity: 1; }
+[data-grafiek="bergen"] .grafiek-lijn { stroke: #ffffff; stroke-width: 2.5; filter: drop-shadow(0 1px 1px rgba(30, 41, 59, 0.6)); }
+[data-grafiek="aquarium"] .grafiek-vlak { position: relative; overflow: hidden; background: #e0f2fe; }
+[data-grafiek="aquarium"] .grafiek-vlakje { fill: url(#grafiekWater); opacity: 0.9; }
+[data-grafiek="aquarium"] .grafiek-lijn { stroke: #0284c7; }
+[data-grafiek="aquarium"] .grafiek-vlak::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.85) 0 2px, transparent 2.5px) 12% 0 / 26px 30px,
+    radial-gradient(circle, rgba(255, 255, 255, 0.7) 0 1.5px, transparent 2px) 60% 10px / 34px 38px;
+  animation: bubbelsOp 4s linear infinite;
+  pointer-events: none;
+}
+@keyframes bubbelsOp {
+  to { background-position: 12% -60px, 60% -66px; }
+}
+[data-grafiek="pixel"] .grafiek-vlak { background: #020617; border-color: #14532d; }
+[data-grafiek="pixel"] .grafiek-rooster { stroke: #14532d; opacity: 0.8; stroke-dasharray: none; }
+[data-grafiek="pixel"] .grafiek-lijn { stroke: #4ade80; stroke-width: 3; stroke-linejoin: miter; shape-rendering: crispEdges; }
+
+/* ---------- Rack ---------- */
+
+.rack-body[data-rack="boeken"] .rack-units { align-items: flex-end; gap: 1px; height: 17px; }
+.rack-body[data-rack="boeken"] .unit { width: 6px; height: 16px; border-radius: 1px; box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.35), inset 0 -3px 0 rgba(0, 0, 0, 0.25); }
+.rack-body[data-rack="boeken"] .unit:nth-child(3n) { height: 13px; }
+.rack-body[data-rack="boeken"] .unit:nth-child(4n) { width: 8px; height: 15px; }
+.rack-body[data-rack="boeken"] .unit:nth-child(7n) { rotate: 12deg; transform-origin: 0 100%; margin-right: 2px; }
+.rack-body[data-rack="snoep"] .rack-units { gap: 3px 8px; padding: 0 3px; }
+.rack-body[data-rack="snoep"] .unit { position: relative; width: 9px; height: 9px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.7), var(--kleur) 60%); box-shadow: none; }
+.rack-body[data-rack="snoep"] .unit::before,
+.rack-body[data-rack="snoep"] .unit::after { content: ""; position: absolute; top: 1px; width: 5px; height: 7px; background: var(--kleur); opacity: 0.75; }
+.rack-body[data-rack="snoep"] .unit::before { left: -4px; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.rack-body[data-rack="snoep"] .unit::after { right: -4px; clip-path: polygon(100% 0, 0 50%, 100% 100%); }
+.rack-body[data-rack="batterijen"] .unit {
+  position: relative;
+  width: 8px;
+  height: 14px;
+  margin-top: 2px;
+  border: 1.5px solid var(--kleur);
+  border-radius: 2px;
+  background: linear-gradient(var(--kleur), var(--kleur)) bottom / 100% 60% no-repeat;
+  box-shadow: none;
+  animation: batterijLaden 3s ease-in-out infinite alternate;
+}
+.rack-body[data-rack="batterijen"] .unit::before { content: ""; position: absolute; top: -4px; left: 1.5px; width: 2px; height: 2px; background: var(--kleur); }
+.rack-body[data-rack="batterijen"] .unit:nth-child(2n) { animation-delay: -1s; }
+.rack-body[data-rack="batterijen"] .unit:nth-child(3n) { animation-delay: -2.2s; }
+@keyframes batterijLaden {
+  from { background-size: 100% 15%; }
+  to { background-size: 100% 100%; }
+}
+
+/* ---------- Logo ---------- */
+
+.wordmark[data-logo="pixel"] { font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+.wordmark[data-logo="pixel"] .w1 { color: #fde047; text-shadow: 3px 0 0 #111, -3px 0 0 #111, 0 3px 0 #111, 0 -3px 0 #111, 6px 6px 0 #dc2626; }
+.wordmark[data-logo="pixel"] .w2 { color: #67e8f9; text-shadow: 3px 0 0 #111, -3px 0 0 #111, 0 3px 0 #111, 0 -3px 0 #111, 6px 6px 0 #7c3aed; }
+.wordmark[data-logo="morse"] { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: clamp(12px, 2.2vw, 26px); letter-spacing: 0.06em; white-space: normal; line-height: 1.25; }
+.wordmark[data-logo="morse"] .w1 { color: #f8fafc; }
+.wordmark[data-logo="morse"] .w2 { color: #fde68a; }
+.wordmark[data-logo="graffiti"] { font-family: "Marker Felt", "Permanent Marker", "Chalkboard SE", "Comic Sans MS", cursive; rotate: -3deg; letter-spacing: 0.01em; }
+.wordmark[data-logo="graffiti"] .w1 { color: #f472b6; -webkit-text-stroke: 1.5px #111; text-shadow: 3px 3px 0 #111, 0 9px 0 rgba(244, 114, 182, 0.35); }
+.wordmark[data-logo="graffiti"] .w2 { color: #facc15; -webkit-text-stroke: 1.5px #111; text-shadow: 3px 3px 0 #111, 0 9px 0 rgba(250, 204, 21, 0.35); }
+
+/* ---------- Zweeftekst ---------- */
+
+.zweef.zweef-stempel {
+  padding: 4px 12px;
+  border: 3px solid #dc2626;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #dc2626;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.06em;
+  box-shadow: none;
+  animation: zweefStempel 1.2s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+@keyframes zweefStempel {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(1.8) rotate(var(--draai)); }
+  12% { opacity: 1; transform: translate(-50%, 0) scale(1) rotate(var(--draai)); }
+  70% { opacity: 1; transform: translate(-50%, -10px) scale(1) rotate(var(--draai)); }
+  100% { opacity: 0; transform: translate(-50%, -40px) scale(1) rotate(var(--draai)); }
+}
+.zweef.zweef-handschrift {
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  color: #dc2626;
+  font: 700 26px/1 "Bradley Hand", "Segoe Print", "Chalkboard SE", cursive;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+  animation: zweefBoog 1.3s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+.zweef.zweef-handschrift::after { content: " ✓"; }
+.zweef.zweef-diamant {
+  padding: 0;
+  background: linear-gradient(135deg, #38bdf8, #a5f3fc 30%, #ffffff 45%, #a78bfa 62%, #0ea5e9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 25px;
+  font-weight: 900;
+  box-shadow: none;
+  -webkit-text-stroke: 1px #0c4a6e;
+  filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.9));
+}
+.zweef.zweef-diamant::after { content: "✦"; position: absolute; right: -14px; top: -8px; color: #fff; -webkit-text-fill-color: #fff; font-size: 14px; animation: glim 0.9s ease-in-out infinite; }
+.zweef-voorbeeld .zweef:is(.zweef-handschrift, .zweef-diamant) { font-size: 15px; padding: 0; }
+.zweef-voorbeeld .zweef.zweef-stempel { padding: 2px 5px; border-width: 2px; font-size: 11px; }
+.zweef-voorbeeld .zweef.zweef-diamant::after { content: none; }
+
+/* ---------- Meldingen ---------- */
+
+.toast.stijl-brief {
+  background: #fffdf5 repeating-linear-gradient(transparent 0 21px, #bfdbfe 21px 22px);
+  background-position: 0 6px;
+  color: #1c1917;
+  border: 1px solid #e7e5e4;
+  border-radius: 3px;
+  font-family: Georgia, "Times New Roman", serif;
+  box-shadow: 0 10px 22px -12px rgba(0, 0, 0, 0.45);
+  padding-right: 56px;
+}
+.toast.stijl-brief::after {
+  content: "📮";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  border: 2px dashed #ef4444;
+  background: #fef2f2;
+  rotate: 6deg;
+}
+.toast.stijl-brief p { color: #57534e; }
+.toast.stijl-arcade {
+  background: #000;
+  color: #fff;
+  border: 3px solid #fde047;
+  border-radius: 0;
+  box-shadow: 0 0 0 3px #000, 0 0 0 6px #f43f5e, 8px 8px 0 6px rgba(0, 0, 0, 0.35);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  text-transform: uppercase;
+}
+.toast.stijl-arcade h4 { color: #fde047; font-size: 14px; letter-spacing: 0.06em; }
+.toast.stijl-arcade h4::before { content: "1UP  "; color: #f43f5e; }
+.toast.stijl-arcade p { color: #a5f3fc; font-size: 12.5px; }
+.toast.stijl-glas {
+  background: rgba(255, 255, 255, 0.35);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
+  color: #0b2545;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 8px 32px rgba(11, 37, 69, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+.toast.stijl-glas p { color: #1e3a5f; }
+.melding-voorbeeld .toast.mini.stijl-brief { padding-right: 10px; }
+.melding-voorbeeld .toast.mini:is(.stijl-brief, .stijl-arcade)::after,
+.melding-voorbeeld .toast.mini.stijl-arcade h4::before { content: none; }
+
+/* ---------- Nieuwsbalk ---------- */
+
+.logline[data-nieuws="gsm"] .nieuws-tekst {
+  padding: 8px 12px 10px;
+  border: 7px solid #2b3a4a;
+  border-radius: 10px;
+  background: #b8d8a0;
+  color: #1e2b12;
+  font: 700 14px/1.35 "IBM Plex Mono", ui-monospace, monospace;
+  box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.18);
+}
+.logline[data-nieuws="gsm"] .nieuws-tekst::before { content: "▮▮▮▯  Serge-net        ▮▮▮"; display: block; margin-bottom: 4px; font-size: 11px; white-space: pre; }
+.logline[data-nieuws="strip"] .nieuws-tekst {
+  position: relative;
+  margin-bottom: 14px;
+  padding: 10px 16px;
+  border: 3px solid #111;
+  border-radius: 22px;
+  background: #fff;
+  color: #111;
+  font: 700 15px/1.3 "Comic Neue", "Comic Sans MS", "Chalkboard SE", sans-serif;
+  box-shadow: 4px 4px 0 #111;
+}
+.logline[data-nieuws="strip"] .nieuws-tekst::before,
+.logline[data-nieuws="strip"] .nieuws-tekst::after { content: ""; position: absolute; left: 30px; clip-path: polygon(0 0, 100% 0, 18% 100%); }
+.logline[data-nieuws="strip"] .nieuws-tekst::before { bottom: -19px; width: 24px; height: 19px; background: #111; }
+.logline[data-nieuws="strip"] .nieuws-tekst::after { bottom: -13px; left: 33px; width: 17px; height: 14px; background: #fff; }
+.logline[data-nieuws="graffiti"] .nieuws-tekst {
+  padding: 12px 14px;
+  border-radius: 4px;
+  background:
+    linear-gradient(90deg, transparent 0 58px, #5b1f0c 58px 61px, transparent 61px) 0 0 / 120px 22px,
+    linear-gradient(90deg, transparent 0 28px, #5b1f0c 28px 31px, transparent 31px 88px, #5b1f0c 88px 91px, transparent 91px) 0 11px / 120px 22px,
+    repeating-linear-gradient(#9a3412 0 9px, #5b1f0c 9px 11px);
+  color: #fde047;
+  font: 700 18px/1.25 "Marker Felt", "Permanent Marker", "Chalkboard SE", "Comic Sans MS", cursive;
+  text-shadow: 2px 2px 0 #000, 0 0 10px rgba(253, 224, 71, 0.5);
+}
+
+/* ---------- Klikeffect ---------- */
+
+.fx-sneeuw { position: absolute; color: #f0f9ff; text-shadow: 0 0 2px #0369a1, 0 0 2px #0369a1, 0 0 8px #38bdf8; line-height: 1; translate: -50% -50%; animation: fxSneeuw 1.3s ease-out forwards; }
+@keyframes fxSneeuw {
+  from { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  to { transform: translate(var(--dx), var(--dy)) rotate(var(--draai)); opacity: 0; }
+}
+.fx-noot { position: absolute; color: var(--kleur); font-size: 22px; font-weight: 800; line-height: 1; text-shadow: 0 1px 2px rgba(11, 37, 69, 0.5); translate: -50% -50%; animation: fxNoot 1.4s ease-out both; }
+@keyframes fxNoot {
+  0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+  15% { opacity: 1; transform: translate(0, -10px) scale(1); }
+  50% { transform: translate(calc(var(--dx) * 0.5), -50px) rotate(-10deg); }
+  100% { transform: translate(var(--dx), -110px) rotate(10deg); opacity: 0; }
+}
+.fx-portaal {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  margin: -45px 0 0 -45px;
+  border-radius: 50%;
+  background: conic-gradient(#22c55e, #a3e635, #14b8a6, #16a34a, #22c55e);
+  -webkit-mask: radial-gradient(circle, transparent 26%, #000 31%, #000 62%, transparent 70%);
+  mask: radial-gradient(circle, transparent 26%, #000 31%, #000 62%, transparent 70%);
+  filter: drop-shadow(0 0 10px #4ade80);
+  animation: fxPortaal 0.95s ease-in-out both;
+}
+@keyframes fxPortaal {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  30% { transform: scale(1) rotate(200deg); opacity: 1; }
+  70% { transform: scale(1) rotate(520deg); opacity: 1; }
+  100% { transform: scale(0) rotate(760deg); opacity: 0; }
+}
+
+/* ---------- Klikreeks ---------- */
+
+.combo[data-combo="emoji"] { rotate: 0deg; }
+.combo[data-combo="emoji"] b { font-size: 38px; filter: drop-shadow(0 3px 4px rgba(11, 37, 69, 0.4)); }
+.combo[data-combo="emoji"] small { color: #0b2545; font-size: 15px; font-weight: 900; text-shadow: 0 0 3px #fff, 0 0 6px #fff; }
+.combo[data-combo="dj"] { rotate: -6deg; }
+.combo[data-combo="dj"] b { padding: 4px 10px; border-radius: 8px; background: #111827; color: #f0abfc; font: 800 18px/1.1 "IBM Plex Mono", ui-monospace, monospace; box-shadow: 0 0 12px rgba(217, 70, 239, 0.7); }
+.combo[data-combo="dj"] small { padding: 3px 8px; border-radius: 6px; background: #d946ef; color: #fff; font-weight: 900; letter-spacing: 0.03em; }
+.combo[data-combo="spreuk"] { rotate: 0deg; }
+.combo[data-combo="spreuk"] b { color: #fde68a; font: 800 24px/1 Georgia, "Iowan Old Style", serif; -webkit-text-stroke: 1px #6b21a8; text-shadow: 0 0 10px #a855f7, 0 2px 0 #581c87; }
+.combo[data-combo="spreuk"] small { padding: 3px 9px; border-radius: 999px; background: linear-gradient(90deg, #6b21a8, #7c3aed); color: #fef3c7; font: italic 700 14px/1.2 Georgia, "Iowan Old Style", serif; box-shadow: 0 0 12px rgba(168, 85, 247, 0.8); }
+
+/* Met animaties uit staat alles uit deel 5 stil. */
+body.rustig :is(
+  .accessoire .stoom i, .acc-svg.routerhoed .lampjes circle, .acc-svg.onweer .flits, .acc-svg.onweer .druppels,
+  .omloop[data-omloop="vuurvliegjes"] b, .decor::after, .doel-meter::after, .counter strong
+) { animation: none !important; }
+body.rustig .serge[data-portret="oudetv"]::after { animation: none; }
+
+.maatje:is([data-maatje="muis"], [data-maatje="wolkje"]) { background: var(--blauw-300); }
+.maatje:is([data-maatje="muis"], [data-maatje="wolkje"]) span { filter: drop-shadow(0 1px 1px rgba(11, 37, 69, 0.7)); }

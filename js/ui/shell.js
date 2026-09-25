@@ -2,8 +2,8 @@
 
 import { G, D, BUILDINGS, VAKKEN, nextCost, availableUpgrades, onAchievement, onSkin, touch, rev } from "../state.js";
 import { buffUiterlijk, effectVan, INCIDENT_BY_ID } from "../data/buffs.js";
-import { fotoVoor, TITELS, MAATJES, RANGEN, ENKELVOUD, DE_WOORD, LETTERTYPES, PACKETS, CURSORS } from "../data/uiterlijk.js";
-import { logoHtml, accessoireHtml } from "./opmaak.js";
+import { fotoVoor, TITELS, MAATJES, RANGEN, ENKELVOUD, DE_WOORD, LETTERTYPES, PACKETS, CURSORS, EENHEDEN } from "../data/uiterlijk.js";
+import { logoHtml, accessoireHtml, omloopHtml, decorHtml } from "./opmaak.js";
 import { STUDIE_OPEN } from "../data/skilltree.js";
 import { fmt, fmtLong, fmtTime, setNotation } from "../format.js";
 import { click, goldenClicked, goldenExpired, fixIncident, ignoreIncident } from "../engine.js";
@@ -303,10 +303,17 @@ export function syncBuffs() {
 
 // ------------------------------------------------------- Logbalk en storing
 
+// De tekst staat in een span, zodat een lichtkrant of telex hem kan laten
+// schuiven zonder dat de balk zelf meebeweegt. Teletekst toont er de tijd bij.
+const loglineEl = newsEl.closest(".logline");
+const TELETEKST_TIJD = new Intl.DateTimeFormat("nl-BE", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 on("news", (text) => {
   newsEl.classList.add("fade");
   setTimeout(() => {
-    newsEl.textContent = text;
+    const regel = document.createElement("span");
+    regel.textContent = text;
+    newsEl.replaceChildren(regel);
+    newsEl.dataset.tijd = TELETEKST_TIJD.format(new Date());
     newsEl.classList.remove("fade");
   }, 260);
 });
@@ -396,7 +403,6 @@ on("graduated", () => logboek("Afgestudeerd. Je netwerk begint opnieuw.", "goud"
 const doelEl = el("doel");
 const doelTekst = el("doel-tekst");
 const doelPct = el("doel-pct");
-const doelBar = el("doel-bar");
 
 // Het eerstvolgende dat je nog niet hebt: een apparaat, anders een upgrade.
 function volgendDoel() {
@@ -418,7 +424,9 @@ function syncDoel() {
   if (doelTekst.textContent !== doel.tekst) doelTekst.textContent = doel.tekst;
   const pct = `${Math.floor(doel.deel * 100)}%`;
   if (doelPct.textContent !== pct) doelPct.textContent = pct;
-  doelBar.style.transform = `scaleX(${doel.deel})`;
+  // Als variabele, zodat een voortgangsstijl ook iets aan het eind van de
+  // balk kan tekenen, zoals de kop van de slang.
+  doelEl.style.setProperty("--deel", doel.deel.toFixed(4));
 }
 
 const verkeerEl = el("verkeer");
@@ -518,6 +526,24 @@ export function syncRack() {
   if (!eerst && G.options.motion) {
     rackEl.querySelector(".rack-row:last-of-type .unit:last-of-type")?.classList.add("nieuw");
   }
+  syncOmloop();
+}
+
+// -------------------------------------------------------------- Omloop
+// Vier tot vierentwintig dingen rond Serge, naargelang hoeveel apparaten je
+// hebt. Alleen opnieuw opbouwen als er iets verandert.
+
+const omloopEl = el("omloop");
+let omloopSleutel = "";
+function syncOmloop() {
+  const id = G.uiterlijk.omloop;
+  const n = Math.min(24, 4 + Math.floor(D.totalBuildings / 25));
+  const foto = fotoVoor(G.uiterlijk.portret);
+  const sleutel = `${id}:${n}:${foto}`;
+  if (sleutel === omloopSleutel) return;
+  omloopSleutel = sleutel;
+  omloopEl.dataset.omloop = id;
+  omloopEl.innerHTML = omloopHtml(id, n, foto);
 }
 
 // ------------------------------------------------------- Gouden packets
@@ -776,6 +802,9 @@ const netwerknaamEl = el("netwerknaam");
 const titelEl = el("titelbadge");
 const wordmarkEl = el("wordmark");
 const accessoireEl = el("accessoire");
+const decorEl = el("decor");
+const eenheidEl = el("eenheid");
+const doorvoerEl = document.querySelector(".doorvoer");
 const tellerEl = document.querySelector(".counter");
 const minderBeweging = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -791,7 +820,11 @@ const REEKS_TEKST = {
   vechtspel: ["GOED!", "GEWELDIG!", "ONSTUITBAAR!", "LEGENDARISCH!", "GODDELIJK!", "K.O.!", "PERFECT K.O.!"],
   sport: ["Mooie reeks!", "Hij blijft maar gaan!", "Wat. Een. Klikker.", "DIT IS HISTORISCH!", "Dames en heren, dit heb ik nog nooit gezien!", "Iemand moet die muis afpakken!", "DE MUIS IS GESMOLTEN!"],
   serge: ["Goed zo.", "Netjes.", "Dat komt op je rapport.", "Tien op tien.", "Ik ben trots op je.", "Dit is geen stage meer, dit is kunst.", "Ik heb je niets meer te leren."],
+  dj: ["Handen in de lucht!", "Scratch!", "Harder!", "De vloer kookt!", "Nog één keer!", "Serge in de mix!", "Legendarische set!"],
+  spreuk: ["Klikus!", "Packetum Maximus!", "Bandbreedtus Totalus!", "Expecto Uptime!", "Wingardium Datagrammum!", "Accio Singulariteit!", "Serge Omnipotentus!"],
 };
+// Van blij naar ontploft, naarmate je reeks langer wordt.
+const GEZICHTJES = [[250, "🤯"], [100, "😱"], [50, "🤩"], [25, "😄"], [10, "😃"], [0, "🙂"]];
 let reeks = 0;
 let laatsteKlik = 0;
 let vorigeTussentijd = 0;
@@ -865,6 +898,18 @@ export function toonReeks(stijl, n, afwijking = 0) {
     case "hemels":
       kop = `×${romeins(Math.min(n, 3999))}`;
       if (mijlpaal) klikGeluid("hemelkoor");
+      break;
+    case "emoji":
+      kop = GEZICHTJES.find(([vanaf]) => n >= vanaf)[1];
+      onder = `×${n}`;
+      break;
+    case "dj":
+      kop = `💿 ×${n}`;
+      onder = mijlpaalTekst(REEKS_TEKST.dj, n);
+      break;
+    case "spreuk":
+      kop = `🪄 ${n}`;
+      onder = mijlpaalTekst(REEKS_TEKST.spreuk, n);
       break;
     default:
       return;
@@ -985,6 +1030,20 @@ export function applyUiterlijk() {
   if (accessoireEl.dataset.accessoire !== G.uiterlijk.accessoire) {
     accessoireEl.dataset.accessoire = G.uiterlijk.accessoire;
     accessoireEl.innerHTML = accessoireHtml(G.uiterlijk.accessoire);
+  }
+  if (decorEl.dataset.decor !== G.uiterlijk.decor) {
+    decorEl.dataset.decor = G.uiterlijk.decor;
+    decorEl.innerHTML = decorHtml(G.uiterlijk.decor);
+  }
+  syncOmloop();
+  const eenheid = EENHEDEN.find((e) => e.id === G.uiterlijk.eenheid) || EENHEDEN[0];
+  if (eenheidEl.textContent !== eenheid.woord) eenheidEl.textContent = eenheid.woord;
+  loglineEl.dataset.nieuws = G.uiterlijk.nieuws;
+  doelEl.dataset.voortgang = G.uiterlijk.voortgang;
+  rackEl.dataset.rack = G.uiterlijk.rack;
+  if (doorvoerEl.dataset.grafiek !== G.uiterlijk.grafiek) {
+    doorvoerEl.dataset.grafiek = G.uiterlijk.grafiek;
+    tekenGrafiek(grafiekSvg, grafiekNu, grafiekPiek, grafiekGem);
   }
   const letter = LETTERTYPES.find((l) => l.id === G.uiterlijk.lettertype);
   document.body.style.fontFamily = letter && letter.id !== "plex" ? letter.familie : "";

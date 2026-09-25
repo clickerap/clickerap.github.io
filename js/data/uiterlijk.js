@@ -4,6 +4,8 @@
 //   accessoire   iets op zijn hoofd of om zijn nek, bij elk portret
 //   ring         de rand om de foto
 //   houding      hoe Serge beweegt als je niet klikt
+//   omloop       wat er rond Serge cirkelt
+//   decor        wat er achter Serge staat
 //   maatje       een figuurtje naast Serge dat af en toe iets zegt
 //   achtergrond  de kleuren van de pagina
 //   paneel       hoe de drie grote panelen eruitzien
@@ -15,9 +17,14 @@
 //   logo         hoe de naam van het spel bovenaan eruitziet
 //   titel        een titel onder de naam van het spel
 //   teller       hoe het grote getal met je packets eruitziet
+//   eenheid      het woord achter je productie: packets, frames, bits…
+//   voortgang    de balk naar je volgende aankoop
+//   grafiek      de doorvoergrafiek
+//   rack         hoe je apparaten in het rack staan
 //   lettertype   de letter van het hele spel
 //   zweeftekst   het getal dat opstijgt als je klikt
 //   melding      hoe de meldingen linksonder eruitzien
+//   nieuws       hoe de nieuwsbalk onder Serge eruitziet
 //   klik         wat er wegspat als je op Serge klikt
 //   combo        hoe een reeks snelle kliks in beeld komt
 //   cursor       de muisaanwijzer (alleen met een muis)
@@ -77,6 +84,9 @@ export const PORTRETTEN = [
   d("legendarisch", "radioactief", "Radioactief", "Hij heeft te lang naast de DWDM-laser gestaan. Hij gloeit.", "Koop een Quantum Link", (g) => (g.buildings.quantum || 0) >= 1),
   d("mythisch", "spook", "Spook in de machine", "Half doorzichtig, en af en toe even weg. Er zit iemand in de server.", "Speel in totaal vijftig uur", (g) => g.stats.playTime >= 50 * 3600),
   d("goddelijk", "kosmisch", "Kosmische Serge", "Serge is één met het universum. De sterren draaien om hem heen.", "Haal elke prestatie", (g) => g.stats.achievements >= g.totaalPrestaties),
+  d("ongewoon", "duotoon", "Duotoon", "Twee kleuren, indigo en koraal, zoals een affiche voor een concert.", "Koop 40 upgrades", (g) => g.stats.upgrades >= 40),
+  d("zeldzaam", "infrarood", "Infrarood", "Door een infraroodcamera. Zijn trui is ineens roze.", "Bezit 25 Security Operations Centers", (g) => (g.buildings.soc || 0) >= 25),
+  d("episch", "oudetv", "Oude tv", "Zwart-wit, met lijnen en een balk die door het beeld rolt.", "Speel in totaal veertig uur", (g) => g.stats.playTime >= 40 * 3600),
 ];
 
 // Iets op zijn hoofd of om zijn nek. Het ligt als een laag over de foto,
@@ -108,6 +118,9 @@ export const ACCESSOIRES = [
   d("mythisch", "vlammen", "Vlammenkroon", "Zijn hoofd staat in brand en hij heeft het niet eens door. Zo hard werkt hij.", "Bereik een biljard packets per seconde", heeft("pps-5"), { voorbeeld: "🔥" }),
   d("mythisch", "aureool", "Aureool", "Een gouden ring boven zijn hoofd. Serge is heilig verklaard.", "Koop elk knooppunt in de studieboom", heeft("prestige-boom"), { voorbeeld: "" }),
   d("goddelijk", "planeten", "Planetenbaan", "Drie planeten draaien rond zijn hoofd. Zo belangrijk is hij inmiddels.", "Haal elke prestatie", (g) => g.stats.achievements >= g.totaalPrestaties, { voorbeeld: "🪐" }),
+  d("ongewoon", "koffiemok", "Koffiemok", "Een dampende mok op zijn hoofd. Handig, dan hoeft hij niet op te staan.", "Speel in totaal vier uur", (g) => g.stats.playTime >= 4 * 3600, { voorbeeld: "☕" }),
+  d("zeldzaam", "routerhoed", "Routerhoed", "Een router met drie antennes en knipperende lampjes. Serge is een hotspot.", "Bezit 150 core routers", (g) => (g.buildings.router || 0) >= 150, { voorbeeld: "📡" }),
+  d("legendarisch", "onweer", "Onweerswolk", "Een donderwolk die af en toe een bliksem laat vallen. Het netwerk ligt eruit, maar hij niet.", "Zie 150 rode packets", (g) => g.stats.ddosSeen >= 150, { voorbeeld: "⛈️" }),
 ];
 
 export const RINGEN = [
@@ -136,6 +149,9 @@ export const RINGEN = [
   d("mythisch", "plasma", "Plasma", "Een gloeiende ring die nooit stilstaat.", "Verzamel 50 studiepunten", (g) => g.prestige >= 50),
   d("mythisch", "melkweg", "Melkweg", "Een draaiend sterrenstelsel, met Serge in het midden.", "Studeer 25 keer af", (g) => g.stats.prestiges >= 25),
   d("goddelijk", "zonnekroon", "Zonnekroon", "Stralen van licht die langzaam om hem heen draaien.", "Koop de hele studieboom en vind alles wat verborgen is", (g) => !!g.achievements["prestige-boom"] && !!g.achievements["egg-alles"]),
+  d("zeldzaam", "morse", "Morse", "Streepjes en puntjes die ronddraaien. Er staat SERGE, als je het kunt lezen.", "Rond vijftien opdrachten af in de terminal", (g) => g.opdrachten >= 15),
+  d("episch", "glitchring", "Glitchring", "Een ring die hapert en uit elkaar valt in rood en blauw.", "Voer rm -rf / uit in de terminal", heeft("egg-rm")),
+  d("legendarisch", "klok", "Klok", "Een wijzerplaat rond zijn hoofd, met een secondewijzer die nooit stopt.", "Speel in totaal zestig uur", (g) => g.stats.playTime >= 60 * 3600),
 ];
 
 export const ACHTERGRONDEN = [
@@ -165,6 +181,9 @@ export const ACHTERGRONDEN = [
   d("mythisch", "warp", "Warpsprong", "Sterren die langs je heen schieten. Volle kracht vooruit.", "Koop een Parallel VPN", (g) => (g.buildings.multiverse || 0) >= 1),
   d("mythisch", "vuurwerk", "Vuurwerk", "Pijlen die opstijgen en openbarsten in alle kleuren.", "Speel op oudejaarsavond of nieuwjaarsdag, of studeer vijftien keer af", (g) => (maand() === 12 && dag() === 31) || (maand() === 1 && dag() === 1) || g.stats.prestiges >= 15),
   d("goddelijk", "heelal", "Heelal", "Een spiraalstelsel dat langzaam om zijn kern draait.", "Bezit honderd singulariteiten tegelijk", (g) => (g.buildings.singularity || 0) >= 100),
+  d("ongewoon", "tropisch", "Tropisch", "Een gele zon die in een turquoise zee zakt. Vakantie, maar dan met packets.", "Bezit driehonderd apparaten tegelijk", (g) => g.totalBuildings >= 300),
+  d("zeldzaam", "circuit", "Printplaat", "Groene sporen en soldeerpunten, zoals de binnenkant van een switch.", "Lever tien werkorders luchtdicht op", (g) => g.luchtdicht >= 10),
+  d("mythisch", "eclips", "Zonsverduistering", "De maan schuift voor de zon, en een gloeiende krans licht op in een donkere hemel.", "Studeer 35 keer af", (g) => g.stats.prestiges >= 35),
 ];
 
 // De drie grote panelen. `kleuren` is alleen voor het voorbeeldje in het
@@ -188,6 +207,8 @@ export const PANELEN = [
   d("legendarisch", "hologram", "Hologram", "Doorschijnend cyaan, met scanlijnen en af en toe een hapering.", "Bereik een biljoen packets per seconde", (g) => g.pps >= 1e12, { kleuren: ["linear-gradient(135deg, rgba(8, 47, 73, 0.95), rgba(14, 116, 144, 0.9))", "#e0fbff", "#67e8f9"] }),
   d("mythisch", "sterren", "Sterrennacht", "Een diepblauwe hemel vol sterren die zachtjes twinkelen.", "Studeer twintig keer af", (g) => g.stats.prestiges >= 20, { kleuren: ["radial-gradient(circle at 70% 20%, #1e2a5e, #070a1f)", "#f1f5ff", "#c7d2fe"] }),
   d("goddelijk", "hemelpoort", "Hemelpoort", "Wit en goud, met licht dat er traag doorheen trekt.", "Speel in totaal 200 uur", (g) => g.stats.playTime >= 200 * 3600, { kleuren: ["radial-gradient(circle at 50% 0%, #fffbeb, #fde68a)", "#3b2600", "#d97706"] }),
+  d("ongewoon", "papier", "Papier", "Gebroken wit, zoals een cursus die net van de printer komt.", "Lees de hele cursus", heeft("cursus-alles"), { kleuren: ["#fbf8f1", "#2b2621", "#b45309"] }),
+  d("zeldzaam", "koffie", "Koffiebar", "Donkerbruin met romige letters. Het ruikt hier naar espresso.", "Speel in totaal tien uur", (g) => g.stats.playTime >= 10 * 3600, { kleuren: ["#2b1d14", "#f5e6d3", "#d6a26b"] }),
 ];
 
 // Een laag over het hele scherm, boven alles behalve de meldingen.
@@ -203,6 +224,9 @@ export const FILTERS = [
   d("legendarisch", "gameboy", "Zakcomputer", "Vier tinten groen en een raster van pixels, zoals een spelcomputer uit 1989.", "Vind twaalf verborgen dingen", (g) => g.stats.eggs >= 12, { voorbeeld: "🎮" }),
   d("mythisch", "onderwater", "Onderwater", "Lichtvlekken die over alles heen dansen, alsof het rack in zee ligt.", "Bezit 100 zeekabels tegelijk", (g) => (g.buildings.subsea || 0) >= 100, { voorbeeld: "🌊" }),
   d("goddelijk", "folie", "Hologramfolie", "Een glanzende folie over het hele scherm, zoals op een zeldzame ruilkaart.", "Studeer dertig keer af", (g) => g.stats.prestiges >= 30, { voorbeeld: "💿" }),
+  d("ongewoon", "pastel", "Pastel", "Alles zachter en een tikje roze, alsof het spel pas gewassen is.", "Koop vijftien upgrades", (g) => g.stats.upgrades >= 15, { voorbeeld: "🩷" }),
+  d("episch", "cyberpunk", "Cyberpunk", "Magenta en cyaan, zoals een stad die nooit slaapt.", "Bezit 25 AI NetOps", (g) => (g.buildings.neural || 0) >= 25, { voorbeeld: "🌃" }),
+  d("legendarisch", "prisma", "Prisma", "Het licht breekt aan de randen van het scherm in alle kleuren.", "Klik drieduizend gouden packets", (g) => g.stats.goldenClicks >= 3000, { voorbeeld: "🔺" }),
 ];
 
 // De naam van het spel bovenaan. Sommige logo's schrijven de naam anders;
@@ -226,6 +250,9 @@ export const LOGOS = [
   d("legendarisch", "goud", "Goud", "Verguld, met een glans die erover trekt.", "Klik duizend gouden packets", (g) => g.stats.goldenClicks >= 1000),
   d("mythisch", "kosmisch", "Kosmisch", "Geschreven in de sterren.", "Bezit vijftig singulariteiten", (g) => (g.buildings.singularity || 0) >= 50),
   d("goddelijk", "hemels", "Hemels", "Stralen van licht achter de naam. Je hoort bijna een koor.", "Verzamel 3.000 studiepunten", (g) => g.prestige >= 3000),
+  d("ongewoon", "pixel", "Pixelletters", "Blokkerige letters, zoals op de doos van een oud spel.", "Klik drieduizend keer", (g) => g.stats.clicks >= 3000),
+  d("zeldzaam", "morse", "Morse", "Zijn naam in streepjes en puntjes. Voor wie het kan lezen.", "Rond twintig opdrachten af in de terminal", (g) => g.opdrachten >= 20, { tekst: ["... . .-. --. .", "-.-. .-.. .. -.-. -.- . .-."] }),
+  d("episch", "graffiti", "Graffiti", "Gespoten op de muur achter de school. Er druipt nog verf van.", "Typ hackerman, gewoon op je toetsenbord", heeft("egg-kabel")),
 ];
 
 // Het grote getal met je packets.
@@ -242,6 +269,9 @@ export const TELLERS = [
   d("legendarisch", "hologram", "Hologram", "Doorschijnend, met scanlijnen door de cijfers.", "Bereik een miljard packets per seconde", (g) => g.pps >= 1e9, { voorbeeld: "123" }),
   d("mythisch", "kosmisch", "Kosmisch", "Cijfers vol sterrenstelsels.", "Speel in totaal honderd uur", (g) => g.stats.playTime >= 100 * 3600, { voorbeeld: "123" }),
   d("goddelijk", "hemels", "Hemels", "Wit goud met een gloed die ademt.", "Verzamel 3.000 studiepunten", (g) => g.prestige >= 3000, { voorbeeld: "123" }),
+  d("ongewoon", "krijt", "Krijtbord", "Witte krijtcijfers op een groen bord. Er is net nog iets uitgeveegd.", "Lees twee hoofdstukken van de cursus", (g) => g.hoofdstukken >= 2, { voorbeeld: "123" }),
+  d("episch", "flip", "Scorebord", "Klapcijfers zoals op een oud station. Elk cijfer in een eigen vakje.", "Verdien in totaal een biljard packets", heeft("totaal-4"), { voorbeeld: "123" }),
+  d("legendarisch", "chroom", "Chroom", "Glanzend metaal, zoals op een oude sportwagen.", "Bezit vierduizend apparaten tegelijk", (g) => g.totalBuildings >= 4000, { voorbeeld: "123" }),
 ];
 
 // De letter van het hele spel. Alleen letters die al op je toestel staan, dus
@@ -256,6 +286,10 @@ export const LETTERTYPES = [
   d("episch", "handschrift", "Handschrift", "Alsof Serge alles zelf heeft opgeschreven.", "Lees de hele cursus", heeft("cursus-alles"), { voorbeeld: "Aa", familie: '"Bradley Hand", "Segoe Print", "Chalkboard SE", "Comic Neue", cursive' }),
   d("episch", "meme", "Meme", "Bovenste tekst. Onderste tekst.", "Vind tien verborgen dingen", (g) => g.stats.eggs >= 10, { voorbeeld: "Aa", familie: 'Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif' }),
   d("legendarisch", "comic", "Comic Sans", "De letter waar elke ontwerper van huilt. Serge vindt hem prachtig.", "Speel op 1 april, of vind vijftien verborgen dingen", (g) => (maand() === 4 && dag() === 1) || g.stats.eggs >= 15, { voorbeeld: "Aa", familie: '"Comic Sans MS", "Comic Neue", "Chalkboard SE", cursive' }),
+  d("zeldzaam", "copperplate", "Visitekaartje", "Deftige kapitalen, zoals op het kaartje van een directeur.", "Haal 40 prestaties", (g) => g.stats.achievements >= 40, { voorbeeld: "Aa", familie: 'Copperplate, "Copperplate Gothic Light", "Perpetua Titling MT", "Trajan Pro", serif' }),
+  d("episch", "mode", "Mode", "Hoog contrast en dunne schreven, zoals op de cover van een modeblad.", "Speel 150 dingen vrij bij Uiterlijk", (g) => g.vrijgespeeld >= 150, { voorbeeld: "Aa", familie: 'Didot, "Bodoni 72", "Bodoni MT", "Playfair Display", Georgia, serif' }),
+  d("mythisch", "gotisch", "Middeleeuws", "Letters van een monnik met een ganzenveer. Het netwerk is een heilige kroniek.", "Koop vijftig knooppunten in de studieboom", (g) => g.knooppunten >= 50, { voorbeeld: "Aa", familie: 'Luminari, "Old English Text MT", "Blackadder ITC", fantasy' }),
+  d("goddelijk", "kalligrafie", "Kalligrafie", "Zwierige letters met krullen, geschreven op het diploma van een doctor.", "Behaal het doctoraat in de studieboom", (g) => !!g.nodes.dr, { voorbeeld: "Aa", familie: '"Apple Chancery", "Snell Roundhand", "Segoe Script", "URW Chancery L", cursive' }),
 ];
 
 // Hoe gouden packets eruitzien. Rode packets blijven altijd rood, zodat je
@@ -272,6 +306,9 @@ export const PACKETS = [
   d("legendarisch", "serge", "Mini-Serge", "Serge zelf, verguld. Klik hem voor hij wegloopt.", "Klik duizend gouden packets", (g) => g.stats.goldenClicks >= 1000, { voorbeeld: "🧔", inhoud: "" }),
   d("mythisch", "zon", "Zonnetje", "Een kleine zon met stralen die ronddraaien.", "Klik 2.500 gouden packets", (g) => g.stats.goldenClicks >= 2500, { voorbeeld: "☀️", inhoud: "" }),
   d("goddelijk", "regenboog", "Regenboogpacket", "Een packet in alle kleuren. Wat erin zit, weet niemand.", "Klik 5.000 gouden packets", (g) => g.stats.goldenClicks >= 5000, { voorbeeld: "✨" }),
+  d("ongewoon", "envelop", "Envelop", "Een brief met een lakzegel. Er staat je naam op.", "Klik 35 gouden packets", (g) => g.stats.goldenClicks >= 35, { voorbeeld: "✉️" }),
+  d("zeldzaam", "koekje", "Koekje", "Een knipoog naar een ander klikspel. Serge ontkent dat hij het kent.", "Klik dertigduizend keer", (g) => g.stats.clicks >= 30000, { voorbeeld: "🍪" }),
+  d("episch", "ufo", "Vliegende schotel", "Hij zweeft voorbij en neemt je packets mee. Of brengt hij ze?", "Bezit 75 satellietconstellaties", (g) => (g.buildings.satellite || 0) >= 75, { voorbeeld: "🛸" }),
 ];
 
 // Een maatje zit rechtsonder naast Serge. Klik erop, of klik vaak genoeg op
@@ -457,6 +494,36 @@ export const MAATJES = [
       "Ik knik. Dat is het hoogste compliment dat je krijgt.",
     ],
   }),
+  d("ongewoon", "muis", "Muis", "Zijn trouwste werktuig. Hij heeft er meer van gezien dan jij.", "Klik 2.500 keer", (g) => g.stats.clicks >= 2500, {
+    voorbeeld: "🖱️",
+    zegt: [
+      "Klik. Klik. Ik zeg niet dat je verslaafd bent, maar ik voel het.",
+      "Mijn rechterknop voelt zich genegeerd.",
+      "Vroeger had ik een balletje. Nu een laser. Dat noemen ze vooruitgang.",
+      "Dubbelklikken? In deze economie?",
+      "Iedereen denkt dat jij het werk doet. Ik doe het werk.",
+    ],
+  }),
+  d("zeldzaam", "diskette", "Diskette", "Een diskette van 1,44 MB die nog altijd denkt dat ze belangrijk is.", "Koop 75 upgrades", heeft("up-75"), {
+    voorbeeld: "💾",
+    zegt: [
+      "1,44 MB. Daar paste vroeger een heel besturingssysteem op.",
+      "Ik ben het icoon van opslaan. Niemand weet meer waarom.",
+      "Niet buigen en niet in de buurt van een magneet. Ik ben gevoelig.",
+      "Schrijfbeveiliging aan. Ik doe vandaag niets meer.",
+      "Ik ben niet oud. Ik ben een klassieker.",
+    ],
+  }),
+  d("episch", "wolkje", "Wolkje", "De cloud, in het klein. Ze zweeft naast Serge en weet alles van hem.", "Bezit 25 Hyperscaler-regio's", (g) => (g.buildings.hyperscaler || 0) >= 25, {
+    voorbeeld: "☁️",
+    zegt: [
+      "Ik ben de cloud. Eigenlijk gewoon de computer van iemand anders.",
+      "Alles staat bij mij. Ook dingen die je liever kwijt was.",
+      "Opslag is onbeperkt. De factuur ook.",
+      "Ik zweef, maar ik draai op een server in een kelder in Frankfurt.",
+      "Er is geen downtime. Alleen gepland onderhoud. Elke dag.",
+    ],
+  }),
 ];
 
 // Wat er over de achtergrond valt of zweeft, achter de kaarten.
@@ -473,6 +540,9 @@ export const WEER = [
   d("episch", "confetti", "Confetti", "Een feest dat nooit ophoudt.", "Studeer vijf keer af", (g) => g.stats.prestiges >= 5, { voorbeeld: "🎊" }),
   d("legendarisch", "sterrenregen", "Vallende sterren", "Sterren die in lange strepen door de lucht schieten. Doe een wens.", "Vind vijftien verborgen dingen", (g) => g.stats.eggs >= 15, { voorbeeld: "🌠" }),
   d("goddelijk", "goudregen", "Gouden regen", "Gouden glinsters die neerdalen en even oplichten.", "Klik 5.000 gouden packets", (g) => g.stats.goldenClicks >= 5000, { voorbeeld: "✨" }),
+  d("ongewoon", "mist", "Mist", "Zachte slierten die over het scherm drijven. Waar is dat serverlokaal ook alweer?", "Negeer vijf rode packets", (g) => g.stats.ddosIgnored >= 5, { voorbeeld: "🌫" }),
+  d("zeldzaam", "ballonnen", "Ballonnen", "Kleurige ballonnen die opstijgen. Er is altijd iets te vieren.", "Haal 65 prestaties", (g) => g.stats.achievements >= 65, { voorbeeld: "🎈" }),
+  d("mythisch", "onweer", "Onweer", "Harde regen, en af en toe licht het hele scherm op.", "Zie driehonderd rode packets", (g) => g.stats.ddosSeen >= 300, { voorbeeld: "⚡" }),
 ];
 
 // Wat er wegspat als je klikt. `voorbeeld` staat in het rondje in het menu.
@@ -494,6 +564,9 @@ export const KLIKEFFECTEN = [
   d("legendarisch", "zwartgat", "Zwart gat", "Alles wordt naar binnen gezogen.", "Bezit tien singulariteiten", (g) => (g.buildings.singularity || 0) >= 10, { voorbeeld: "●" }),
   d("mythisch", "supernova", "Supernova", "Een ster die ineenstort en openbarst in een schokgolf.", "Bezit vijftig singulariteiten", (g) => (g.buildings.singularity || 0) >= 50, { voorbeeld: "✹" }),
   d("goddelijk", "oerknal", "Oerknal", "Alles begint bij jouw klik: een lichtflits, een ring en sterren in alle kleuren.", "Haal elke prestatie", (g) => g.stats.achievements >= g.totaalPrestaties, { voorbeeld: "☄" }),
+  d("ongewoon", "sneeuw", "Sneeuwvlokjes", "Kleine vlokjes die van je klik weg dwarrelen.", "Klik 7.500 keer", (g) => g.stats.clicks >= 7500, { voorbeeld: "❄" }),
+  d("zeldzaam", "noten", "Muziek", "Noten die van je klik opstijgen, elke keer een andere.", "Klik veertigduizend keer", (g) => g.stats.clicks >= 40000, { voorbeeld: "♫" }),
+  d("legendarisch", "portaal", "Portaaltje", "Een klein kolkend portaal dat opengaat en weer dichtklapt.", "Bezit tien Parallel VPN's", (g) => (g.buildings.multiverse || 0) >= 10, { voorbeeld: "🌀" }),
 ];
 
 // Hoe een klik klinkt. Je hoort het alleen als Geluid aanstaat.
@@ -514,6 +587,9 @@ export const KLIKGELUIDEN = [
   d("episch", "miauw", "Miauw", "De serverkat is het eens met je klik.", "Heb precies 42 exemplaren van één apparaat", heeft("egg-42"), { voorbeeld: "🐱" }),
   d("episch", "subwoofer", "Subwoofer", "Een diepe dreun. Het rack trilt mee.", "Bezit 100 datacenters tegelijk", (g) => (g.buildings.datacenter || 0) >= 100, { voorbeeld: "🔊" }),
   d("goddelijk", "hemelkoor", "Hemelkoor", "Een zacht koor dat bij elke klik aanzwelt.", "Verzamel 2.000 studiepunten", (g) => g.prestige >= 2000, { voorbeeld: "🎶" }),
+  d("zeldzaam", "beatbox", "Beatbox", "Boem, tss, boem-boem, tss. Om de beurt.", "Klik een reeks van 75", (g) => g.stats.besteReeks >= 75, { voorbeeld: "🥁" }),
+  d("legendarisch", "zwaard", "Energiezwaard", "Een zoemend zwaard van licht dat door de lucht zwiept.", "Zie tweehonderd rode packets", (g) => g.stats.ddosSeen >= 200, { voorbeeld: "⚔️" }),
+  d("mythisch", "theremin", "Theremin", "Een zweverige toon uit een oude sciencefictionfilm.", "Bezit 150 Quantum Links", (g) => (g.buildings.quantum || 0) >= 150, { voorbeeld: "🛸" }),
 ];
 
 // Een spoor achter de muisaanwijzer. Op een telefoon is er geen muis, dus
@@ -529,6 +605,10 @@ export const SPOREN = [
   d("episch", "regenboog", "Regenboog", "Een lint in alle kleuren.", "Studeer één keer af", (g) => g.prestige >= 1, { voorbeeld: "🌈" }),
   d("episch", "vuur", "Vuurspoor", "Vlammetjes die opflakkeren en uitdoven.", "Speel in totaal 36 uur", (g) => g.stats.playTime >= 36 * 3600, { voorbeeld: "🔥" }),
   d("goddelijk", "komeet", "Komeet", "Een felle kern met een lange staart van sterren in alle kleuren.", "Speel in totaal 150 uur", (g) => g.stats.playTime >= 150 * 3600, { voorbeeld: "☄" }),
+  d("ongewoon", "pixels", "Pixels", "Blokjes in felle kleuren die achter je muis vallen.", "Typ de Konami-code", heeft("egg-konami"), { voorbeeld: "▦" }),
+  d("zeldzaam", "noten", "Muzieknoten", "Een melodie die achter je muis opstijgt.", "Klik een reeks van veertig", (g) => g.stats.besteReeks >= 40, { voorbeeld: "♪" }),
+  d("legendarisch", "bliksem", "Bliksemspoor", "Een zigzag van elektriciteit die achter je muis knettert.", "Bezit honderd next-gen firewalls", (g) => (g.buildings.firewall || 0) >= 100, { voorbeeld: "⚡" }),
+  d("mythisch", "spook", "Spookmuizen", "Doorschijnende muisaanwijzers die je muis blijven volgen, alsof er iemand meekijkt.", "Speel in totaal 175 uur", (g) => g.stats.playTime >= 175 * 3600, { voorbeeld: "👻" }),
 ];
 
 // Hoe Serge beweegt als je niet klikt. De hele knop beweegt, dus ring,
@@ -547,6 +627,9 @@ export const HOUDINGEN = [
   d("legendarisch", "disco", "Discokoorts", "Hij danst, en de kleuren dansen mee.", "Studeer tien keer af", (g) => g.stats.prestiges >= 10, { voorbeeld: "🪩" }),
   d("mythisch", "zen", "Zen", "Diep in, diep uit. Er straalt een zacht licht van hem af.", "Speel in totaal 72 uur", (g) => g.stats.playTime >= 72 * 3600, { voorbeeld: "🧘" }),
   d("goddelijk", "hypnose", "Hypnose", "Hij slingert als een zakhorloge. Je wordt heel slaperig. Je wilt alleen nog klikken.", "Speel 300 dingen vrij bij Uiterlijk", (g) => g.vrijgespeeld >= 300, { voorbeeld: "🌀" }),
+  d("ongewoon", "slaperig", "Slaperig", "Hij knikt af en toe weg. Het is ook al laat.", "Speel tussen drie en vier uur 's nachts", heeft("egg-nacht"), { voorbeeld: "😴" }),
+  d("zeldzaam", "headbangen", "Headbangen", "Knikken op een hard ritme. Het is metal, of een ventilator die vastloopt.", "Klik een reeks van honderd", (g) => g.stats.besteReeks >= 100, { voorbeeld: "🤘" }),
+  d("episch", "moonwalk", "Moonwalk", "Hij glijdt achteruit en weer terug, zonder zijn voeten te bewegen.", "Klik 250.000 keer", (g) => g.stats.clicks >= 250000, { voorbeeld: "🕺" }),
 ];
 
 // De accentkleur: knoppen, tabs, balken en het blauw in de tekst. Een paneel
@@ -564,6 +647,9 @@ export const ACCENTEN = [
   d("episch", "inkt", "Inkt", "Zwart op wit, zoals een oude laserprinter.", "Ontdek elk protocol in de patchkast", heeft("patch-alles"), { kleur: "#1f2937" }),
   d("legendarisch", "regenboog", "Regenboog", "De accentkleur schuift langzaam door de hele regenboog.", "Studeer twaalf keer af", (g) => g.stats.prestiges >= 12, { kleur: "conic" }),
   d("mythisch", "neon", "Neon", "Roze knoppen en cyaan balken. Het is altijd 1986.", "Bezit 100 AI NetOps", (g) => (g.buildings.neural || 0) >= 100, { kleur: "#c026d3" }),
+  d("ongewoon", "oceaan", "Oceaan", "Diep zeeblauw, zoals een zeekabel op de bodem.", "Bezit tien zeekabels", (g) => (g.buildings.subsea || 0) >= 10, { kleur: "#0369a1" }),
+  d("zeldzaam", "bordeaux", "Bordeaux", "Donkerrood, zoals een goede wijn op de opendeurdag.", "Studeer drie keer af", (g) => g.stats.prestiges >= 3, { kleur: "#9f1239" }),
+  d("goddelijk", "aurora", "Aurora", "De accentkleur golft traag tussen groen, turkoois en violet, zoals het noorderlicht.", "Speel in totaal 250 uur", (g) => g.stats.playTime >= 250 * 3600, { kleur: "aurora" }),
 ];
 
 // Wat je ziet als je het spel opent. Een klik of een toets slaat het over.
@@ -575,6 +661,9 @@ export const OPSTARTS = [
   d("episch", "retro", "Serge 95", "Wolkjes, een laadbalk en een geluid dat je niet vergeet.", "Rechtsklik tien keer op Serge", heeft("egg-rechts"), { voorbeeld: "🪟" }),
   d("legendarisch", "film", "Bioscoop", "Serge Studios presenteert. Een film over packets. In de hoofdrol: jij.", "Studeer twintig keer af", (g) => g.stats.prestiges >= 20, { voorbeeld: "🎬" }),
   d("goddelijk", "hemels", "Hemelpoort", "De wolken schuiven open, het licht valt naar binnen, en Serge ontwaakt.", "Behaal het doctoraat in de studieboom", (g) => !!g.nodes.dr, { voorbeeld: "☁️" }),
+  d("ongewoon", "dos", "DOS", "C:\\> met een knipperend streepje, en dan start SERGE.EXE.", "Rond vijf opdrachten af in de terminal", (g) => g.opdrachten >= 5, { voorbeeld: "💾" }),
+  d("zeldzaam", "console", "Spelconsole", "Een blauw logo dat opzij schuift, en iemand die heel luid de naam roept.", "Klik 75.000 keer", (g) => g.stats.clicks >= 75000, { voorbeeld: "🎮" }),
+  d("mythisch", "matrix", "Word wakker", "Word wakker, Serge. Het netwerk heeft je. Volg de witte muis.", "Vind zestien verborgen dingen", (g) => g.stats.eggs >= 16, { voorbeeld: "🐇" }),
 ];
 
 // Het getal dat opstijgt als je klikt.
@@ -592,6 +681,9 @@ export const ZWEEFTEKSTEN = [
   d("legendarisch", "regenboog", "Regenboog", "Alle kleuren, en het getal maakt een boogje opzij.", "Studeer zeven keer af", (g) => g.stats.prestiges >= 7, { voorbeeld: "+1" }),
   d("mythisch", "sterren", "Sterrenstof", "Een getal van sterren dat langzaam uit elkaar dwarrelt.", "Bezit 25 singulariteiten", (g) => (g.buildings.singularity || 0) >= 25, { voorbeeld: "+1" }),
   d("goddelijk", "hemels", "Hemels", "Een getal van licht, met een straal die naar boven wijst.", "Klik een miljoen keer", heeft("klik-1m"), { voorbeeld: "+1" }),
+  d("ongewoon", "stempel", "Stempel", "Een rode stempel, schuin op het papier. Goedgekeurd.", "Lever vijf werkorders op", (g) => g.werkorders >= 5, { voorbeeld: "+1" }),
+  d("zeldzaam", "handschrift", "Rode pen", "Met de rode pen van Serge, alsof hij je toets verbetert.", "Beantwoord dertig vragen goed bij de overhoring", (g) => g.quizGoed >= 30, { voorbeeld: "+1" }),
+  d("legendarisch", "diamant", "Diamant", "Geslepen cijfers die schitteren als ze opstijgen.", "Klik 1.200 gouden packets", (g) => g.stats.goldenClicks >= 1200, { voorbeeld: "+1" }),
 ];
 
 // Hoe de meldingen linksonder eruitzien.
@@ -608,6 +700,9 @@ export const MELDINGEN = [
   d("legendarisch", "perkament", "Perkament", "Een oorkonde met een lakzegel. Serge laat het voorlezen door een heraut.", "Studeer vijftien keer af", (g) => g.stats.prestiges >= 15, { voorbeeld: "📜" }),
   d("mythisch", "hologram", "Hologram", "Doorschijnend en blauw, en het hapert af en toe.", "Bezit 100 Quantum Links", (g) => (g.buildings.quantum || 0) >= 100, { voorbeeld: "🔷" }),
   d("goddelijk", "hemels", "Hemelse boodschap", "Elke melding daalt neer uit de hemel, met licht en al.", "Behaal het doctoraat in de studieboom", (g) => !!g.nodes.dr, { voorbeeld: "✨" }),
+  d("ongewoon", "brief", "Brief", "Een briefje op gelinieerd papier, met een postzegel in de hoek.", "Koop twintig upgrades", (g) => g.stats.upgrades >= 20, { voorbeeld: "✉️" }),
+  d("zeldzaam", "arcade", "Arcade", "Blokletters op zwart, met een rand van pixels. 1UP!", "Klik vijftig keer op het grote getal bovenaan", heeft("egg-score"), { voorbeeld: "👾" }),
+  d("episch", "glas", "Matglas", "Doorschijnend glas waar de pagina wazig doorheen schijnt.", "Bezit vijftig vSphere-clusters", (g) => (g.buildings.vsphere || 0) >= 50, { voorbeeld: "🪟" }),
 ];
 
 // Hoe een reeks snelle kliks in beeld komt. Een reeks loopt door zolang je
@@ -621,6 +716,9 @@ export const COMBOS = [
   d("episch", "serge", "Serge keurt", "Serge zegt wat hij ervan vindt. Streng, maar rechtvaardig.", "Beantwoord honderd vragen goed bij de overhoring", (g) => g.quizGoed >= 100, { voorbeeld: "📝" }),
   d("legendarisch", "kracht", "Krachtniveau", "Je krachtniveau stijgt met elke klik. Tot het meer dan negenduizend is.", "Klik een reeks van driehonderd", (g) => g.stats.besteReeks >= 300, { voorbeeld: "💥" }),
   d("goddelijk", "hemels", "Hemelse reeks", "Romeinse cijfers in goud, en bij elke mijlpaal zingt er een koor.", "Klik een miljoen keer", heeft("klik-1m"), { voorbeeld: "Ⅻ" }),
+  d("ongewoon", "emoji", "Gezichtjes", "Een gezichtje dat steeds enthousiaster wordt naarmate je reeks groeit.", "Klik een reeks van 25", (g) => g.stats.besteReeks >= 25, { voorbeeld: "🤩" }),
+  d("zeldzaam", "dj", "DJ Serge", "De dj roept je reeks om, met scratches erbij.", "Klik een reeks van 150", (g) => g.stats.besteReeks >= 150, { voorbeeld: "🎧" }),
+  d("mythisch", "spreuk", "Toverspreuken", "Elke mijlpaal een spreuk. Klikus Maximus!", "Klik een reeks van zeshonderd", (g) => g.stats.besteReeks >= 600, { voorbeeld: "🪄" }),
 ];
 
 // De muisaanwijzer. Elke aanwijzer is een klein SVG-bestand in img/cursor;
@@ -638,6 +736,9 @@ export const CURSORS = [
   d("legendarisch", "goud", "Gouden pijl", "Massief goud. Zwaar om mee te klikken, maar het staat je goed.", "Klik 1.500 gouden packets", (g) => g.stats.goldenClicks >= 1500, { punt: [3, 2] }),
   d("mythisch", "komeet", "Komeet", "Een ster met een staart van licht.", "Bezit 50 Dyson-datacenters", (g) => (g.buildings.dyson || 0) >= 50, { punt: [6, 6] }),
   d("goddelijk", "vinger", "Hemelse vinger", "De vinger uit het plafond van de Sixtijnse Kapel. Eén aanraking en er komt leven in het netwerk.", "Haal elke prestatie", (g) => g.stats.achievements >= g.totaalPrestaties, { punt: [9, 4] }),
+  d("gewoon", "potlood", "Potlood", "Een geel potlood met een gumpje. Klaar voor de overhoring.", "Beantwoord drie vragen goed bij de overhoring", (g) => g.quizGoed >= 3, { punt: [3, 29] }),
+  d("ongewoon", "pizza", "Pizzapunt", "Een punt pizza. Het puntje klikt.", "Speel in totaal vijf uur", (g) => g.stats.playTime >= 5 * 3600, { punt: [4, 4] }),
+  d("episch", "bliksem", "Bliksem", "Een bliksemschicht. Elke klik slaat in.", "Bezit vijftig SDN-controllers", (g) => (g.buildings.sdn || 0) >= 50, { punt: [10, 30] }),
 ];
 
 // Een muziekje op de achtergrond. Het wordt ter plekke gespeeld met Web Audio,
@@ -653,6 +754,236 @@ export const MUZIEK = [
   d("legendarisch", "eindbaas", "Eindbaas", "Het laatste level. Snel, donker en vol spanning.", "Lever een goot van 8 bij 8 luchtdicht op, zonder hulp", heeft("patch-meester"), { voorbeeld: "⚔️" }),
   d("mythisch", "ruimte", "Ruimtereis", "Trage klanken met een echo, ergens tussen twee sterren.", "Bezit 25 Parallel VPN's", (g) => (g.buildings.multiverse || 0) >= 25, { voorbeeld: "🌌" }),
   d("goddelijk", "hemels", "Hemelse harmonie", "Een koor en klokjes. Zo klinkt het als het netwerk af is.", "Verzamel 3.000 studiepunten", (g) => g.prestige >= 3000, { voorbeeld: "🎶" }),
+  d("zeldzaam", "jazz", "Jazzcafé", "Een wandelende bas, een zacht bekken en een piano die meedenkt.", "Speel in totaal negen uur", (g) => g.stats.playTime >= 9 * 3600, { voorbeeld: "🎷" }),
+  d("episch", "eurodance", "Eurodance", "Pianostoten en een bas die op de tweede tel springt. Het is 1995.", "Studeer negen keer af", (g) => g.stats.prestiges >= 9, { voorbeeld: "💃" }),
+];
+
+// Wat er rond Serge cirkelt, zoals de muisjes rond een koekje. Hoe meer
+// apparaten je hebt, hoe drukker het wordt: van vier tot vierentwintig.
+export const OMLOPEN = [
+  standaard("geen", "Niets", "Serge draait zijn eigen rondjes niet.", { voorbeeld: "○" }),
+  d("gewoon", "muizen", "Muisjes", "Muisaanwijzers die om de beurt op Serge tikken. Hij merkt het niet eens.", "Klik duizend keer", heeft("klik-1k"), { voorbeeld: "↖" }),
+  d("gewoon", "packets", "Packets", "Envelopjes die in een baan om Serge wachten op hun beurt.", "Bezit vijftig apparaten tegelijk", (g) => g.totalBuildings >= 50, { voorbeeld: "✉️" }),
+  d("ongewoon", "bits", "Bits", "Nullen en enen in een kring, alsof hij in een stroomkring staat.", "Verdien in totaal een miljard packets", heeft("totaal-2"), { voorbeeld: "01" }),
+  d("ongewoon", "hartjes", "Hartjes", "Iedereen houdt van Serge. Zelfs zijn baan.", "Klik tien keer precies op zijn neus", heeft("egg-neus"), { voorbeeld: "♥" }),
+  d("zeldzaam", "satellieten", "Satellieten", "Zijn eigen constellatie. Het bereik is uitstekend.", "Bezit tien satellietconstellaties", (g) => (g.buildings.satellite || 0) >= 10, { voorbeeld: "🛰️" }),
+  d("zeldzaam", "koffie", "Koffiekringetje", "De mokken draaien rondjes. Er is er altijd een binnen handbereik.", "Bereik het hoogste koffiepeil", heeft("koffie-vol"), { voorbeeld: "☕" }),
+  d("episch", "elektronen", "Elektronen", "Drie banen, zoals een atoom. Serge is de kern van de zaak.", "Bezit 25 Quantum Links", (g) => (g.buildings.quantum || 0) >= 25, { voorbeeld: "⚛️" }),
+  d("episch", "munten", "Goudstukken", "Draaiende munten. Ze glanzen elke keer als ze voorbij komen.", "Klik vierhonderd gouden packets", (g) => g.stats.goldenClicks >= 400, { voorbeeld: "🪙" }),
+  d("legendarisch", "miniserge", "Mini-Serges", "Een fanclub van kleine Serges die rond de grote draaien.", "Typ zijn naam, gewoon op je toetsenbord", heeft("egg-naam"), { voorbeeld: "🧔" }),
+  d("mythisch", "kometen", "Kometen", "Kometen met een lange staart, op hoge snelheid.", "Speel in totaal 120 uur", (g) => g.stats.playTime >= 120 * 3600, { voorbeeld: "☄️" }),
+  d("goddelijk", "zonnestelsel", "Zonnestelsel", "Serge is de zon. Acht planeten, elk op zijn eigen tempo. Het klopt nu eindelijk.", "Bezit honderd singulariteiten", (g) => (g.buildings.singularity || 0) >= 100, { voorbeeld: "🪐" }),
+  d("ongewoon", "noten", "Muzieknootjes", "Noten die rond hem zweven. Hij neuriet iets. Niemand herkent het.", "Klik vijftienduizend keer", (g) => g.stats.clicks >= 15000, { voorbeeld: "♪" }),
+  d("zeldzaam", "pinguins", "Linux-fans", "Pinguïns die rond hem waggelen. Ze willen dat hij overstapt.", "Bezit vijftig Proxmox-clusters", (g) => (g.buildings.proxmox || 0) >= 50, { voorbeeld: "🐧" }),
+  d("episch", "vuurvliegjes", "Vuurvliegjes", "Lichtjes die rond hem zweven en aan- en uitgaan.", "Wees om 13:37 in het spel", heeft("egg-1337u"), { voorbeeld: "✧" }),
+];
+
+// Wat er achter Serge staat, binnen het kader. Het licht bij elk paneel.
+export const DECORS = [
+  standaard("geen", "Niets", "Geen decor, alleen Serge.", { voorbeeld: "○" }),
+  d("gewoon", "spot", "Spot aan", "Een zachte spot van achteren. Hij staat in de schijnwerpers.", "Koop 25 upgrades", heeft("up-25"), { voorbeeld: "🔦" }),
+  d("ongewoon", "stralen", "Zonnestralen", "Stralen die langzaam ronddraaien, zoals bij een prijs in een spel.", "Studeer één keer af", heeft("prestige-1"), { voorbeeld: "☀️" }),
+  d("ongewoon", "sonar", "Sonar", "Ringen die van hem wegrollen. Ping. Ping. Ping.", "Typ ping in de terminal", heeft("egg-ping"), { voorbeeld: "◎" }),
+  d("zeldzaam", "neonring", "Neonring", "Een roze en blauwe neonbuis achter hem. Hij zoemt.", "Haal 55 prestaties", (g) => g.stats.achievements >= 55, { voorbeeld: "⭕" }),
+  d("zeldzaam", "disco", "Discolicht", "Gekleurde vlekken die over de muur draaien.", "Studeer twee keer af", (g) => g.stats.prestiges >= 2, { voorbeeld: "🪩" }),
+  d("episch", "vuur", "Vuurzee", "Hij staat voor een muur van vlammen en kijkt niet om.", "Bezit duizend apparaten tegelijk", (g) => g.totalBuildings >= 1000, { voorbeeld: "🔥" }),
+  d("legendarisch", "sterrenstelsel", "Sterrenstelsel", "Een draaiend sterrenstelsel, met Serge in het midden.", "Bezit honderd Hyperscaler-regio's", (g) => (g.buildings.hyperscaler || 0) >= 100, { voorbeeld: "🌌" }),
+  d("legendarisch", "zwartgat", "Zwart gat", "Een gloeiende schijf die rondraast. Alles valt naar hem toe.", "Bezit vijf singulariteiten", (g) => (g.buildings.singularity || 0) >= 5, { voorbeeld: "🕳️" }),
+  d("mythisch", "portaal", "Portaal", "Een kolkende poort naar een ander netwerk.", "Bezit vijftig Parallel VPN's", (g) => (g.buildings.multiverse || 0) >= 50, { voorbeeld: "🌀" }),
+  d("goddelijk", "stralenkrans", "Stralenkrans", "Gouden stralen, een zachte gloed en glinsters. Het is officieel.", "Verzamel 4.000 studiepunten", (g) => g.prestige >= 4000, { voorbeeld: "✨" }),
+  d("ongewoon", "regenboog", "Regenboog", "Een regenboog van achteren, als een stralenkrans in alle kleuren.", "Haal 35 prestaties", (g) => g.stats.achievements >= 35, { voorbeeld: "🌈" }),
+  d("zeldzaam", "sterrenhemel", "Sterrenhemel", "Een stukje nachthemel achter hem, met sterren die twinkelen.", "Bezit 25 satellietconstellaties", (g) => (g.buildings.satellite || 0) >= 25, { voorbeeld: "🌃" }),
+  d("episch", "tunnel", "Tunnel", "Ringen die naar je toe schieten, alsof je door een glasvezel reist.", "Bezit vijftig Dark Fiber Meshes", (g) => (g.buildings.darkfiber || 0) >= 50, { voorbeeld: "🌀" }),
+];
+
+// Hoe de nieuwsbalk onder Serge eruitziet.
+export const NIEUWSBALKEN = [
+  standaard("standaard", "Donkerblauw", "Het nieuws in een donkerblauwe balk.", { voorbeeld: "▬" }),
+  d("gewoon", "breaking", "Laatste nieuws", "Een rood label en een witte balk, zoals op tv.", "Verdien in totaal een miljoen packets", heeft("totaal-1"), { voorbeeld: "📺" }),
+  d("gewoon", "ondertitels", "Ondertitels", "Wit met een zwarte rand, zoals onder een film.", "Speel in totaal een halfuur", (g) => g.stats.playTime >= 1800, { voorbeeld: "💬" }),
+  d("ongewoon", "terminal", "Terminal", "Het nieuws als een logbestand dat je volgt met tail -f.", "Voer je eerste commando uit in de terminal", heeft("cli-1"), { voorbeeld: ">_" }),
+  d("ongewoon", "lichtkrant", "Lichtkrant", "Oranje ledjes, en de tekst schuift van rechts naar links.", "Klik 25 keer op de logbalk onder Serge", heeft("egg-ticker"), { voorbeeld: "🟧" }),
+  d("zeldzaam", "teletekst", "Teletekst", "Pagina 101. Blokletters in felle kleuren, zoals vroeger.", "Klik drie keer op het versienummer", heeft("egg-versie"), { voorbeeld: "📟" }),
+  d("zeldzaam", "chat", "Chat", "Serge stuurt je het nieuws zelf, in een berichtje.", "Kom terug na een uur weg te zijn geweest", heeft("offline"), { voorbeeld: "💭" }),
+  d("zeldzaam", "radio", "Radio", "Serge FM, met een equalizer die meedanst.", "Speel in totaal acht uur", (g) => g.stats.playTime >= 8 * 3600, { voorbeeld: "📻" }),
+  d("episch", "krant", "Ochtendkrant", "Elk bericht is de kop van de voorpagina.", "Haal negentig prestaties", (g) => g.stats.achievements >= 90, { voorbeeld: "📰" }),
+  d("episch", "telex", "Telex", "Een papieren strook waarop de letters een voor een verschijnen.", "Rond vijftig opdrachten af in de terminal", (g) => g.opdrachten >= 50, { voorbeeld: "🧾" }),
+  d("legendarisch", "hologram", "Hologram", "Doorschijnend blauw, en het hapert soms.", "Bezit vijftig AI NetOps", (g) => (g.buildings.neural || 0) >= 50, { voorbeeld: "🔷" }),
+  d("mythisch", "openingstekst", "Openingstekst", "Lang geleden, in een netwerk hier ver vandaan. Het nieuws kruipt schuin de ruimte in.", "Studeer 25 keer af", (g) => g.stats.prestiges >= 25, { voorbeeld: "⭐" }),
+  d("goddelijk", "hemels", "Hemels bericht", "Het nieuws in gouden letters, met licht van boven.", "Vind alles wat verborgen is", heeft("egg-alles"), { voorbeeld: "✨" }),
+  d("ongewoon", "gsm", "Oude gsm", "Donkere pixels op een groen schermpje. Onverwoestbaar.", "Klik 3.310 keer", (g) => g.stats.clicks >= 3310, { voorbeeld: "📱" }),
+  d("zeldzaam", "strip", "Stripballon", "Het nieuws als tekstballon uit een stripverhaal.", "Haal 45 prestaties", (g) => g.stats.achievements >= 45, { voorbeeld: "🗯️" }),
+  d("episch", "graffiti", "Graffitimuur", "Gespoten op een bakstenen muur, met verf die nog nat is.", "Typ hackerman, gewoon op je toetsenbord", heeft("egg-kabel"), { voorbeeld: "🧱" }),
+];
+
+// De balk die toont hoe ver je bent tot je volgende aankoop.
+export const VOORTGANGEN = [
+  standaard("standaard", "Blauwe balk", "Een dunne blauwe balk.", { voorbeeld: "▰" }),
+  d("gewoon", "streepjes", "Streepjes", "Schuine strepen die blijven lopen, zoals een echte laadbalk.", "Koop vijf upgrades", (g) => g.stats.upgrades >= 5, { voorbeeld: "▰" }),
+  d("ongewoon", "blokjes", "Laadblokjes", "Blokje per blokje, zoals een installatie uit 1995.", "Bezit 150 apparaten tegelijk", (g) => g.totalBuildings >= 150, { voorbeeld: "▰" }),
+  d("ongewoon", "batterij", "Batterij", "Van rood naar groen, en hij laadt op.", "Speel in totaal drie uur", (g) => g.stats.playTime >= 3 * 3600, { voorbeeld: "🔋" }),
+  d("zeldzaam", "glasvezel", "Glasvezel", "Een lichtpuls die door de balk schiet.", "Bezit honderd glasvezels", (g) => (g.buildings.fiber || 0) >= 100, { voorbeeld: "▰" }),
+  d("zeldzaam", "slang", "Slang", "Een slang die groeit tot aan je volgende aankoop.", "Typ hackerman, gewoon op je toetsenbord", heeft("egg-kabel"), { voorbeeld: "🐍" }),
+  d("episch", "happertje", "Happertje", "Een geel mannetje eet de stippen op weg naar je volgende aankoop.", "Klik 350 gouden packets", (g) => g.stats.goldenClicks >= 350, { voorbeeld: "●" }),
+  d("episch", "regenboog", "Regenboog", "Alle kleuren, en ze lopen door.", "Studeer zes keer af", (g) => g.stats.prestiges >= 6, { voorbeeld: "🌈" }),
+  d("legendarisch", "lava", "Lava", "Gloeiende lava met belletjes die opborrelen.", "Bezit drieduizend apparaten tegelijk", (g) => g.totalBuildings >= 3000, { voorbeeld: "🌋" }),
+  d("mythisch", "sterrenstof", "Sterrenstof", "Een balk vol sterren die flonkeren.", "Bezit honderd Dyson-datacenters", (g) => (g.buildings.dyson || 0) >= 100, { voorbeeld: "✨" }),
+  d("goddelijk", "hemels", "Hemelse balk", "Een straal van licht, met glinsters erin.", "Verzamel 5.000 studiepunten", (g) => g.prestige >= 5000, { voorbeeld: "☀️" }),
+  d("ongewoon", "kabel", "Patchkabel", "Een blauwe kabel met een stekker aan het eind, op weg naar de volgende poort.", "Lever je eerste werkorder op in de patchkast", heeft("patch-1"), { voorbeeld: "🔌" }),
+  d("zeldzaam", "treintje", "Treintje", "Een locomotief die wagonnetjes trekt naar je volgende aankoop. Tjoek tjoek.", "Lever vijftig werkorders op", (g) => g.werkorders >= 50, { voorbeeld: "🚂" }),
+  d("episch", "raket", "Raket", "Een raket met een vlammende staart. Volgende halte: de volgende aankoop.", "Koop een satellietconstellatie", (g) => (g.buildings.satellite || 0) >= 1, { voorbeeld: "🚀" }),
+];
+
+// De doorvoergrafiek naast Serge.
+export const GRAFIEKEN = [
+  standaard("standaard", "Blauwe lijn", "Een lijn met een vlak eronder, zoals elke monitoringpagina.", { voorbeeld: "📈" }),
+  d("gewoon", "staven", "Staafjes", "Elke paar seconden een staaf.", "Bereik duizend packets per seconde", heeft("pps-1"), { voorbeeld: "📊" }),
+  d("ongewoon", "ruitjes", "Schrift", "Met potlood op ruitjespapier, zoals in de les.", "Lees drie hoofdstukken van de cursus", (g) => g.hoofdstukken >= 3, { voorbeeld: "✏️" }),
+  d("ongewoon", "oscilloscoop", "Oscilloscoop", "Een groene lijn die gloeit op een zwart scherm.", "Bereik een miljoen packets per seconde", heeft("pps-2"), { voorbeeld: "〰" }),
+  d("zeldzaam", "hartmonitor", "Hartmonitor", "Piep. Piep. Serge leeft nog, en zijn netwerk ook.", "Los een incident op voor het uit de hand loopt", heeft("incident-fix"), { voorbeeld: "💓" }),
+  d("zeldzaam", "neon", "Neon", "Een roze lijn op een donkerpaars scherm.", "Wees om 13:37 in het spel", heeft("egg-1337u"), { voorbeeld: "💗" }),
+  d("episch", "beurs", "Beurskoers", "Kaarsjes, groen en rood, zoals op de markt.", "Verdien een fortuin op de markt in één sessie", heeft("beurs-fortuin"), { voorbeeld: "🕯️" }),
+  d("episch", "regenboog", "Regenboog", "Een lijn in alle kleuren.", "Studeer acht keer af", (g) => g.stats.prestiges >= 8, { voorbeeld: "🌈" }),
+  d("legendarisch", "vuur", "Vuurlijn", "De grafiek staat in brand van het verkeer.", "Bereik tien biljoen packets per seconde", (g) => g.stats.bestPps >= 1e13, { voorbeeld: "🔥" }),
+  d("mythisch", "sterren", "Sterrenbeeld", "Je productie als sterrenbeeld aan een nachtelijke hemel.", "Bezit tweehonderd satellietconstellaties", (g) => (g.buildings.satellite || 0) >= 200, { voorbeeld: "✨" }),
+  d("goddelijk", "hemels", "Gouden grafiek", "Een gouden vlak met licht erin.", "Koop elk knooppunt in de studieboom", heeft("prestige-boom"), { voorbeeld: "👑" }),
+  d("ongewoon", "bergen", "Bergketen", "Je productie als bergen, met sneeuw op de toppen.", "Bezit vijftig core routers", (g) => (g.buildings.router || 0) >= 50, { voorbeeld: "🏔️" }),
+  d("zeldzaam", "aquarium", "Aquarium", "Een bak water die volloopt met je productie, en belletjes die opstijgen.", "Bezit vijftig zeekabels", (g) => (g.buildings.subsea || 0) >= 50, { voorbeeld: "🐠" }),
+  d("episch", "pixel", "8-bit", "Een lijn in trapjes, groen op zwart, zoals een spel uit 1985.", "Vind zes verborgen dingen", (g) => g.stats.eggs >= 6, { voorbeeld: "👾" }),
+];
+
+// Hoe je apparaten in het rack staan.
+export const RACKS = [
+  standaard("standaard", "Blokjes", "Een blokje per apparaat, in de kleur van zijn vak.", { voorbeeld: "▮" }),
+  d("gewoon", "leds", "Ledjes", "Ronde lampjes die knipperen, elk op zijn eigen tempo.", "Bezit vijftig patchkabels", heeft("bouw-patchkabel-50"), { voorbeeld: "●" }),
+  d("ongewoon", "bouwstenen", "Bouwsteentjes", "Met noppen erop. Je kunt er een netwerk mee bouwen.", "Bezit honderd exemplaren van één apparaat", heeft("bouw-100"), { voorbeeld: "🧱" }),
+  d("ongewoon", "stekkers", "Stekkers", "Een rij netwerkstekkers, netjes naast elkaar.", "Lever een werkorder luchtdicht op", heeft("patch-luchtdicht"), { voorbeeld: "🔌" }),
+  d("zeldzaam", "vu", "Equalizer", "Staafjes die op en neer dansen, alsof je netwerk muziek maakt.", "Klik twintigduizend keer", (g) => g.stats.clicks >= 20000, { voorbeeld: "🎚️" }),
+  d("zeldzaam", "pixels", "Pixels", "Blokkerige pixels met een harde rand, zoals in 1985.", "Ontdek het Token Ring-protocol", heeft("egg-tokenring"), { voorbeeld: "▦" }),
+  d("zeldzaam", "diskettes", "Diskettes", "Elk apparaat staat op een eigen diskette.", "Koop negentig upgrades", (g) => g.stats.upgrades >= 90, { voorbeeld: "💾" }),
+  d("episch", "neon", "Neonbuisjes", "Gloeiende buisjes in de kleur van hun vak.", "Speel in totaal dertig uur", (g) => g.stats.playTime >= 30 * 3600, { voorbeeld: "💡" }),
+  d("episch", "kristallen", "Kristallen", "Geslepen stenen die schitteren.", "Bezit vijftig Quantum Links", (g) => (g.buildings.quantum || 0) >= 50, { voorbeeld: "💎" }),
+  d("legendarisch", "lavalamp", "Lavalampjes", "Blobjes die traag van vorm veranderen.", "Bezit vijfduizend apparaten tegelijk", (g) => g.totalBuildings >= 5000, { voorbeeld: "🫧" }),
+  d("mythisch", "sterren", "Sterretjes", "Elk apparaat een ster, en ze twinkelen.", "Bezit 75 singulariteiten", (g) => (g.buildings.singularity || 0) >= 75, { voorbeeld: "⭐" }),
+  d("goddelijk", "goud", "Goudstaafjes", "Massief goud, met een glans die erover trekt.", "Klik tienduizend gouden packets", (g) => g.stats.goldenClicks >= 10000, { voorbeeld: "🥇" }),
+  d("ongewoon", "boeken", "Boekenplank", "Elk apparaat een boek op de plank, in de kleur van zijn vak.", "Lees vier hoofdstukken van de cursus", (g) => g.hoofdstukken >= 4, { voorbeeld: "📚" }),
+  d("zeldzaam", "snoep", "Snoepjes", "Ingepakte snoepjes. Niet opeten, het zijn je servers.", "Klik 75 gouden packets", (g) => g.stats.goldenClicks >= 75, { voorbeeld: "🍬" }),
+  d("episch", "batterijen", "Batterijen", "Elk apparaat een batterij die langzaam oplaadt.", "Bezit tien Dyson-datacenters", (g) => (g.buildings.dyson || 0) >= 10, { voorbeeld: "🔋" }),
+];
+
+// Het woord achter je productie: "packets per seconde". De eerste vier zijn
+// de namen van de PDU's uit het OSI-model.
+export const EENHEDEN = [
+  standaard("packets", "Packets", "Pakketten op laag 3, zoals het hoort.", { woord: "packets", voorbeeld: "📦" }),
+  d("gewoon", "frames", "Frames", "Laag 2: wat een switch doorstuurt.", "Beantwoord vijf vragen goed bij de overhoring", (g) => g.quizGoed >= 5, { woord: "frames", voorbeeld: "🖼️" }),
+  d("gewoon", "bits", "Bits", "Laag 1: nullen en enen, meer is het niet.", "Beantwoord tien vragen goed bij de overhoring", (g) => g.quizGoed >= 10, { woord: "bits", voorbeeld: "01" }),
+  d("ongewoon", "segmenten", "Segmenten", "Laag 4: TCP knipt alles in stukjes.", "Beantwoord 25 vragen goed bij de overhoring", (g) => g.quizGoed >= 25, { woord: "segmenten", voorbeeld: "✂️" }),
+  d("ongewoon", "datagrammen", "Datagrammen", "UDP: versturen en hopen dat het aankomt.", "Rond tien opdrachten af in de terminal", heeft("cli-tien"), { woord: "datagrammen", voorbeeld: "📨" }),
+  d("ongewoon", "bytes", "Bytes", "Acht bits per stuk. Serge telt ze allemaal.", "Verdien in totaal een biljoen packets", heeft("totaal-3"), { woord: "bytes", voorbeeld: "💽" }),
+  d("zeldzaam", "pakketjes", "Pakketjes", "Met een strik. De koerier belt twee keer.", "Lever 25 werkorders op in de patchkast", (g) => g.werkorders >= 25, { woord: "pakketjes", voorbeeld: "🎁" }),
+  d("zeldzaam", "koffiebonen", "Koffiebonen", "De echte brandstof van elk netwerk.", "Bereik het hoogste koffiepeil", heeft("koffie-vol"), { woord: "koffiebonen", voorbeeld: "☕" }),
+  d("episch", "sergecoins", "Sergecoins", "Een munt die alleen maar stijgt. Beloofd.", "Koop op een gerucht dat uitkomt, en verkoop met winst", heeft("beurs-gerucht"), { woord: "Sergecoins", voorbeeld: "🪙" }),
+  d("episch", "pizzapunten", "Pizzapunten", "Voor elke pizza in de leraarskamer een punt.", "Speel in totaal twintig uur", (g) => g.stats.playTime >= 20 * 3600, { woord: "pizzapunten", voorbeeld: "🍕" }),
+  d("legendarisch", "memes", "Memes", "De leerlingen sturen ze door. Serge maakt ze.", "Vind achttien verborgen dingen", (g) => g.stats.eggs >= 18, { woord: "memes", voorbeeld: "😂" }),
+  d("mythisch", "fotonen", "Fotonen", "Licht, per seconde. Sneller wordt het niet.", "Verdien in totaal een quadriljard packets", heeft("totaal-8"), { woord: "fotonen", voorbeeld: "💡" }),
+  d("goddelijk", "wonderen", "Wonderen", "Serge verricht wonderen. Per seconde.", "Speel 400 dingen vrij bij Uiterlijk", (g) => g.vrijgespeeld >= 400, { woord: "wonderen", voorbeeld: "✨" }),
+  d("ongewoon", "likes", "Likes", "Serge gaat viraal. Per seconde.", "Haal 25 prestaties", (g) => g.stats.achievements >= 25, { woord: "likes", voorbeeld: "👍" }),
+  d("zeldzaam", "cookies", "Cookies", "Een knipoog naar een ander klikspel. Deze cookies accepteer je wel.", "Klik dertigduizend keer", (g) => g.stats.clicks >= 30000, { woord: "cookies", voorbeeld: "🍪" }),
+  d("episch", "dinos", "Dino's", "Zo lang speel je al. Je bent zelf een dino geworden.", "Speel in totaal vijftig uur", (g) => g.stats.playTime >= 50 * 3600, { woord: "dino's", voorbeeld: "🦖" }),
+];
+
+// Kant-en-klare looks. Elke look kiest voor álle soorten iets, zodat er
+// niets van je vorige look blijft hangen. Wat je nog niet hebt vrijgespeeld,
+// staat op standaard tot je het hebt. "Klassiek" zet alles terug.
+export const LOOKS = [
+  {
+    id: "hacker", naam: "Hacker", icoon: "🕶️",
+    uiterlijk: {
+      portret: "matrix", accessoire: "ninja", ring: "matrix", houding: "haperen", omloop: "bits", decor: "tunnel",
+      maatje: "python", achtergrond: "matrix", paneel: "crt", accent: "groen", weer: "bits", filter: "scanlijnen",
+      packet: "diskette", opstart: "matrix", teller: "matrix", eenheid: "bits", voortgang: "glasvezel", grafiek: "oscilloscoop",
+      rack: "leds", logo: "terminal", titel: "hackerman", lettertype: "terminal", zweeftekst: "terminal", melding: "syslog",
+      nieuws: "terminal", klik: "bits", combo: "arcade", cursor: "laser", spoor: "bits", geluid: "toetsenbord",
+      muziek: "techno",
+    },
+  },
+  {
+    id: "arcade", naam: "Arcade", icoon: "🕹️",
+    uiterlijk: {
+      portret: "pixel", accessoire: "koptelefoon", ring: "regenboog", houding: "stuiter", omloop: "munten", decor: "stralen",
+      maatje: "robot", achtergrond: "blokjes", paneel: "crt", accent: "neon", weer: "confetti", filter: "scanlijnen",
+      packet: "munt", opstart: "arcade", teller: "arcade", eenheid: "cookies", voortgang: "happertje", grafiek: "pixel",
+      rack: "pixels", logo: "pixel", titel: "klikmachine", lettertype: "terminal", zweeftekst: "pixel", melding: "arcade",
+      nieuws: "lichtkrant", klik: "pixels", combo: "arcade", cursor: "hand", spoor: "pixels", geluid: "chiptune",
+      muziek: "chiptune",
+    },
+  },
+  {
+    id: "retro", naam: "Retro 95", icoon: "💾",
+    uiterlijk: {
+      portret: "oudetv", accessoire: "pet", ring: "t568b", houding: "rustig", omloop: "packets", decor: "geen",
+      maatje: "paperclip", achtergrond: "mint", paneel: "retro", accent: "blauw", weer: "geen", filter: "vhs",
+      packet: "diskette", opstart: "retro", teller: "lcd", eenheid: "bytes", voortgang: "blokjes", grafiek: "staven",
+      rack: "diskettes", logo: "exe", titel: "helpdesk", lettertype: "plex", zweeftekst: "kaal", melding: "venster",
+      nieuws: "teletekst", klik: "vonken", combo: "geen", cursor: "hand", spoor: "geen", geluid: "modem",
+      muziek: "lift",
+    },
+  },
+  {
+    id: "neon", naam: "Neonnacht", icoon: "🌆",
+    uiterlijk: {
+      portret: "neon", accessoire: "koptelefoon", ring: "plasma", houding: "knikken", omloop: "vuurvliegjes", decor: "neonring",
+      maatje: "alien", achtergrond: "synthwave", paneel: "neon", accent: "neon", weer: "vuurvliegjes", filter: "cyberpunk",
+      packet: "diamant", opstart: "film", teller: "neon", eenheid: "likes", voortgang: "glasvezel", grafiek: "neon",
+      rack: "neon", logo: "neon", titel: "nachtuil", lettertype: "rond", zweeftekst: "neon", melding: "neon",
+      nieuws: "hologram", klik: "laser", combo: "ritme", cursor: "laser", spoor: "neon", geluid: "pew",
+      muziek: "synthwave",
+    },
+  },
+  {
+    id: "studie", naam: "Studeren", icoon: "📚",
+    uiterlijk: {
+      portret: "schets", accessoire: "lampje", ring: "wit", houding: "slaperig", omloop: "noten", decor: "spot",
+      maatje: "uil", achtergrond: "mint", paneel: "ruitjes", accent: "turkoois", weer: "regen", filter: "avond",
+      packet: "pizza", opstart: "geen", teller: "krijt", eenheid: "segmenten", voortgang: "streepjes", grafiek: "ruitjes",
+      rack: "boeken", logo: "handtekening", titel: "ccna", lettertype: "handschrift", zweeftekst: "handschrift", melding: "postit",
+      nieuws: "ondertitels", klik: "noten", combo: "serge", cursor: "potlood", spoor: "geen", geluid: "toetsenbord",
+      muziek: "lofi",
+    },
+  },
+  {
+    id: "feest", naam: "Feestje", icoon: "🎉",
+    uiterlijk: {
+      portret: "festival", accessoire: "feesthoed", ring: "regenboog", houding: "dansen", omloop: "hartjes", decor: "disco",
+      maatje: "eenhoorn", achtergrond: "vuurwerk", paneel: "regenboog", accent: "roze", weer: "confetti", filter: "pastel",
+      packet: "cadeau", opstart: "console", teller: "regenboog", eenheid: "pizzapunten", voortgang: "regenboog", grafiek: "regenboog",
+      rack: "snoep", logo: "regenboog", titel: "chaos", lettertype: "rond", zweeftekst: "regenboog", melding: "sms",
+      nieuws: "radio", klik: "confetti", combo: "dj", cursor: "toverstaf", spoor: "regenboog", geluid: "xylofoon",
+      muziek: "eurodance",
+    },
+  },
+  {
+    id: "ruimte", naam: "Ruimtevaart", icoon: "🚀",
+    uiterlijk: {
+      portret: "kosmisch", accessoire: "ruimtehelm", ring: "satelliet", houding: "zen", omloop: "satellieten", decor: "sterrenstelsel",
+      maatje: "alien", achtergrond: "heelal", paneel: "sterren", accent: "paars", weer: "sterrenregen", filter: "vignet",
+      packet: "ufo", opstart: "film", teller: "kosmisch", eenheid: "fotonen", voortgang: "raket", grafiek: "sterren",
+      rack: "sterren", logo: "kosmisch", titel: "kapitein", lettertype: "plex", zweeftekst: "sterren", melding: "hologram",
+      nieuws: "openingstekst", klik: "supernova", combo: "kracht", cursor: "komeet", spoor: "komeet", geluid: "theremin",
+      muziek: "ruimte",
+    },
+  },
+  {
+    id: "hemels", naam: "Hemels", icoon: "👼",
+    uiterlijk: {
+      portret: "goudbeeld", accessoire: "aureool", ring: "zonnekroon", houding: "zen", omloop: "vuurvliegjes", decor: "stralenkrans",
+      maatje: "miniserge", achtergrond: "zonsopgang", paneel: "hemelpoort", accent: "aurora", weer: "goudregen", filter: "geen",
+      packet: "zon", opstart: "hemels", teller: "hemels", eenheid: "wonderen", voortgang: "hemels", grafiek: "hemels",
+      rack: "goud", logo: "hemels", titel: "serge", lettertype: "kalligrafie", zweeftekst: "hemels", melding: "hemels",
+      nieuws: "hemels", klik: "oerknal", combo: "hemels", cursor: "vinger", spoor: "sterrenstof", geluid: "hemelkoor",
+      muziek: "hemels",
+    },
+  },
 ];
 
 // Een titel onder de naam van het spel, met een icoon. Hoe zeldzamer, hoe
@@ -690,6 +1021,7 @@ export const TITELS = [
   titel("zeldzaam", "oogappel", "🍎", "Serge's oogappel", "Heeft de hele cursus gelezen. Echt waar.", "Lees de hele cursus", heeft("cursus-alles")),
   titel("zeldzaam", "werkorders", "🧾", "Werkordermachine", "Nog één goot, en dan naar huis. Zegt hij al drie uur.", "Lever 25 werkorders op in de patchkast", (g) => g.werkorders >= 25),
   titel("zeldzaam", "firewall", "🧱", "Firewall-fluisteraar", "Praat zachtjes tegen poorten tot ze dichtgaan.", "Koop een Next-gen Firewall", (g) => (g.buildings.firewall || 0) >= 1),
+  titel("zeldzaam", "stylist", "👔", "Stylist", "Heeft een eigen look bewaard. Serge vraagt om advies.", "Bewaar een eigen look bij Uiterlijk", (g) => g.looks >= 1),
 
   // Episch: alleen voor wie echt doorzet.
   titel("episch", "subnetkoning", "👑", "Subnetkoning", "Rekent een /27 uit in zijn slaap. En praat erover.", "Vijfentwintig goede antwoorden op rij bij de overhoring", heeft("quiz-25")),
@@ -704,6 +1036,7 @@ export const TITELS = [
   titel("episch", "bgp", "🗺️", "BGP-baron", "Beslist welke kant het internet op gaat.", "Bezit 250 core routers tegelijk", (g) => (g.buildings.router || 0) >= 250),
   titel("episch", "uptime", "🧘", "Uptime-monnik", "Vierentwintig uur zonder herstart. Innerlijke rust.", "Speel in totaal 24 uur", (g) => g.stats.playTime >= 24 * 3600),
   titel("episch", "kapitein", "⚓", "Zeekabelkapitein", "Legt kabels over de bodem van de oceaan. Zeeziek wordt hij niet.", "Bezit 50 zeekabels tegelijk", (g) => (g.buildings.subsea || 0) >= 50),
+  titel("episch", "verzamelaar", "🧺", "Verzamelaar", "Tweehonderd dingen vrijgespeeld. De kast zit vol.", "Speel tweehonderd dingen vrij bij Uiterlijk", (g) => g.vrijgespeeld >= 200),
 
   // Legendarisch: het eind van het spel komt in zicht.
   titel("legendarisch", "singulariteit", "🌀", "Singulariteit", "Is het netwerk geworden.", "Koop een singulariteit", (g) => (g.buildings.singularity || 0) >= 1),
@@ -711,6 +1044,7 @@ export const TITELS = [
   titel("legendarisch", "dyson", "☀️", "Dysonbouwer", "Heeft een ster ingepakt om servers te koelen.", "Koop een Dyson-datacenter", (g) => (g.buildings.dyson || 0) >= 1),
   titel("legendarisch", "ccie", "🏅", "CCIE", "Het zwaarste certificaat dat er is. Acht uur labo.", "Verzamel honderd studiepunten", (g) => g.prestige >= 100),
   titel("legendarisch", "professor", "🧑‍🏫", "Professor", "Geeft zelf les. Serge komt kijken, en knikt.", "Studeer tien keer af", (g) => g.stats.prestiges >= 10),
+  titel("legendarisch", "reekskoning", "🔥", "Reekskoning", "Vijfhonderd kliks op rij, zonder te stoppen.", "Klik een reeks van vijfhonderd", (g) => g.stats.besteReeks >= 500),
 
   // Mythisch: bijna niemand haalt dit.
   titel("mythisch", "klikgod", "🚑", "De Klikgod", "Een miljoen kliks. Serge maakt zich zorgen.", "Klik een miljoen keer", heeft("klik-1m")),
@@ -733,22 +1067,25 @@ export const fotoVoor = (portret) => (portret === "evolved" ? FOTO.evolved : FOT
 // Het menu toont de soorten in vier groepen. De volgorde hier is ook de
 // volgorde van de tabs.
 export const GROEPEN = [
-  { id: "serge", naam: "Serge", icoon: "🧔", soorten: ["portret", "accessoire", "ring", "houding", "maatje"] },
+  { id: "serge", naam: "Serge", icoon: "🧔", soorten: ["portret", "accessoire", "ring", "houding", "omloop", "decor", "maatje"] },
   { id: "scherm", naam: "Scherm", icoon: "🖥️", soorten: ["achtergrond", "paneel", "accent", "weer", "filter", "packet", "opstart"] },
-  { id: "tekst", naam: "Tekst", icoon: "🔤", soorten: ["logo", "titel", "teller", "lettertype", "zweeftekst", "melding"] },
+  { id: "cijfers", naam: "Cijfers", icoon: "📊", soorten: ["teller", "eenheid", "voortgang", "grafiek", "rack"] },
+  { id: "tekst", naam: "Tekst", icoon: "🔤", soorten: ["logo", "titel", "lettertype", "zweeftekst", "melding", "nieuws"] },
   { id: "klikken", naam: "Klikken", icoon: "👆", soorten: ["klik", "combo", "cursor", "spoor", "geluid", "muziek"] },
 ];
 
 export const UITERLIJK = {
-  portret: PORTRETTEN, accessoire: ACCESSOIRES, ring: RINGEN, houding: HOUDINGEN, maatje: MAATJES,
+  portret: PORTRETTEN, accessoire: ACCESSOIRES, ring: RINGEN, houding: HOUDINGEN, omloop: OMLOPEN, decor: DECORS, maatje: MAATJES,
   achtergrond: ACHTERGRONDEN, paneel: PANELEN, accent: ACCENTEN, weer: WEER, filter: FILTERS, packet: PACKETS, opstart: OPSTARTS,
-  logo: LOGOS, titel: TITELS, teller: TELLERS, lettertype: LETTERTYPES, zweeftekst: ZWEEFTEKSTEN, melding: MELDINGEN,
+  teller: TELLERS, eenheid: EENHEDEN, voortgang: VOORTGANGEN, grafiek: GRAFIEKEN, rack: RACKS,
+  logo: LOGOS, titel: TITELS, lettertype: LETTERTYPES, zweeftekst: ZWEEFTEKSTEN, melding: MELDINGEN, nieuws: NIEUWSBALKEN,
   klik: KLIKEFFECTEN, combo: COMBOS, cursor: CURSORS, spoor: SPOREN, geluid: KLIKGELUIDEN, muziek: MUZIEK,
 };
 export const SOORTNAMEN = {
-  portret: "Portret", accessoire: "Accessoire", ring: "Ring", houding: "Houding", maatje: "Maatje",
+  portret: "Portret", accessoire: "Accessoire", ring: "Ring", houding: "Houding", omloop: "Omloop", decor: "Decor", maatje: "Maatje",
   achtergrond: "Achtergrond", paneel: "Panelen", accent: "Accentkleur", weer: "Weer", filter: "Filter", packet: "Packet", opstart: "Opstart",
-  logo: "Logo", titel: "Titel", teller: "Teller", lettertype: "Lettertype", zweeftekst: "Zweeftekst", melding: "Meldingen",
+  teller: "Teller", eenheid: "Eenheid", voortgang: "Voortgang", grafiek: "Grafiek", rack: "Rack",
+  logo: "Logo", titel: "Titel", lettertype: "Lettertype", zweeftekst: "Zweeftekst", melding: "Meldingen", nieuws: "Nieuwsbalk",
   klik: "Klikeffect", combo: "Klikreeks", cursor: "Cursor", spoor: "Muisspoor", geluid: "Klikgeluid", muziek: "Muziek",
 };
 // Eén zin per soort, onder de tabs in het menu.
@@ -777,6 +1114,13 @@ export const SOORTUITLEG = {
   combo: "Klik je snel na elkaar, dan bouw je een reeks op. Dit bepaalt hoe die in beeld komt.",
   cursor: "De muisaanwijzer in het hele spel. Op een telefoon zie je hem niet.",
   muziek: "Een muziekje dat blijft doorspelen, alleen als Geluid aanstaat. Het zwijgt als je naar een ander tabblad gaat.",
+  omloop: "Wat er rond Serge cirkelt. Hoe meer apparaten je hebt, hoe meer er rondgaan.",
+  decor: "Wat er achter Serge staat.",
+  eenheid: "Het woord achter je productie, bovenaan: packets per seconde, of iets anders.",
+  voortgang: "De balk onder Serge die toont hoe ver je bent tot je volgende aankoop.",
+  grafiek: "Hoe de doorvoergrafiek je productie tekent.",
+  rack: "Hoe je apparaten in het rack staan.",
+  nieuws: "Hoe de nieuwsbalk onder Serge eruitziet.",
 };
 export const STANDAARD = {
   portret: "serge", accessoire: "geen", ring: "blauw", maatje: "geen",
@@ -785,7 +1129,12 @@ export const STANDAARD = {
   klik: "vonken", geluid: "blip", spoor: "geen", packet: "standaard",
   houding: "rustig", accent: "blauw", opstart: "geen", zweeftekst: "standaard",
   melding: "standaard", combo: "geen", cursor: "standaard", muziek: "geen",
+  omloop: "geen", decor: "geen", eenheid: "packets",
+  voortgang: "standaard", grafiek: "standaard", rack: "standaard", nieuws: "standaard",
 };
+
+// De laatste kant-en-klare look zet alles terug zoals het begon.
+LOOKS.push({ id: "klassiek", naam: "Klassiek", icoon: "🧑‍🏫", uiterlijk: { ...STANDAARD } });
 
 // Voor meldingen: "nieuw portret" maar "nieuwe ring". Bij de de-woorden
 // krijgt het bijvoeglijk naamwoord een -e.
@@ -796,6 +1145,8 @@ export const ENKELVOUD = {
   klik: "klikeffect", geluid: "klikgeluid", spoor: "muisspoor", packet: "gouden packet",
   houding: "houding", accent: "accentkleur", opstart: "opstartscherm", zweeftekst: "zweeftekst",
   melding: "meldingstijl", combo: "klikreeks", cursor: "muisaanwijzer", muziek: "muziekje",
+  omloop: "omloop", decor: "decor", eenheid: "eenheid",
+  voortgang: "voortgangsbalk", grafiek: "grafiek", rack: "rack", nieuws: "nieuwsbalk",
 };
 export const DE_WOORD = {
   portret: false, accessoire: false, ring: true, maatje: false,
@@ -804,6 +1155,8 @@ export const DE_WOORD = {
   klik: false, geluid: false, spoor: false, packet: false,
   houding: true, accent: true, opstart: false, zweeftekst: true,
   melding: true, combo: true, cursor: true, muziek: false,
+  omloop: true, decor: false, eenheid: true,
+  voortgang: true, grafiek: true, rack: false, nieuws: true,
 };
 
 export const ALLE_SKINS = Object.entries(UITERLIJK).flatMap(([soort, lijst]) =>

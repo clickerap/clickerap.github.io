@@ -238,6 +238,98 @@ Object.assign(WEERSOORTEN, {
   },
 });
 
+Object.assign(WEERSOORTEN, {
+  // Grote zachte slierten die traag over het scherm drijven.
+  mist: {
+    dichtheid: 1 / 110000,
+    nieuw: (b, h, verspreid) => ({ x: verspreid ? willekeurig(0, b) : -340, y: willekeurig(0, h), r: willekeurig(160, 340), v: willekeurig(0.15, 0.45), a: willekeurig(0.06, 0.12) }),
+    stap: (d) => { d.x += d.v; },
+    teken: (ctx, d) => {
+      const g = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.r);
+      g.addColorStop(0, `rgba(241, 245, 249, ${d.a})`);
+      g.addColorStop(1, "rgba(241, 245, 249, 0)");
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.ellipse(d.x, d.y, d.r, d.r * 0.45, 0, 0, Math.PI * 2);
+      ctx.fill();
+    },
+    weg: (d, b) => d.x - d.r > b,
+  },
+  // Ballonnen die opstijgen, elk met een touwtje dat meewiegt.
+  ballonnen: {
+    dichtheid: 1 / 55000,
+    nieuw: (b, h, verspreid) => ({ x: willekeurig(0, b), y: verspreid ? willekeurig(0, h) : h + 50, r: willekeurig(11, 18), v: willekeurig(0.5, 1.1), fase: willekeurig(0, 6.3), kleur: kies(["#f472b6", "#facc15", "#4ade80", "#38bdf8", "#a78bfa", "#fb923c", "#f87171"]) }),
+    stap: (d) => { d.y -= d.v; d.fase += 0.025; d.x += Math.sin(d.fase) * 0.35; },
+    teken: (ctx, d) => {
+      const zwaai = Math.sin(d.fase) * 6;
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.55)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(d.x, d.y + d.r * 1.2);
+      ctx.quadraticCurveTo(d.x + zwaai, d.y + d.r * 2.2, d.x - zwaai * 0.5, d.y + d.r * 3.4);
+      ctx.stroke();
+      ctx.globalAlpha = 0.85;
+      ctx.fillStyle = d.kleur;
+      ctx.beginPath();
+      ctx.ellipse(d.x, d.y, d.r, d.r * 1.2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(d.x, d.y + d.r * 1.15);
+      ctx.lineTo(d.x - 3, d.y + d.r * 1.35);
+      ctx.lineTo(d.x + 3, d.y + d.r * 1.35);
+      ctx.fill();
+      ctx.globalAlpha = 0.55;
+      ctx.fillStyle = "#fff";
+      ctx.beginPath();
+      ctx.ellipse(d.x - d.r * 0.35, d.y - d.r * 0.45, d.r * 0.22, d.r * 0.32, -0.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    },
+    weg: (d) => d.y < -80,
+  },
+  // Harde, schuine regen. Af en toe licht het hele scherm op en schiet er
+  // een bliksem door de lucht.
+  onweer: {
+    dichtheid: 1 / 4200,
+    nieuw: (b, h, verspreid) => ({ x: willekeurig(0, b + 260), y: verspreid ? willekeurig(0, h) : willekeurig(-60, -10), v: willekeurig(13, 20), lengte: willekeurig(14, 26) }),
+    stap: (d) => { d.y += d.v; d.x -= d.v * 0.35; },
+    voor: (ctx, b, h) => {
+      const nu = performance.now();
+      const f = WEERSOORTEN.onweer;
+      if (!f.flits && Math.random() < 0.006) {
+        const x = willekeurig(b * 0.1, b * 0.9);
+        const punten = [[x, 0]];
+        while (punten.at(-1)[1] < h * 0.7) {
+          const [px, py] = punten.at(-1);
+          punten.push([px + willekeurig(-50, 50), py + willekeurig(30, 70)]);
+        }
+        f.flits = { tot: nu + 260, punten };
+      }
+      if (f.flits && nu > f.flits.tot) f.flits = null;
+      if (!f.flits) return;
+      const rest = (f.flits.tot - nu) / 260;
+      ctx.fillStyle = `rgba(226, 232, 240, ${0.35 * rest})`;
+      ctx.fillRect(0, 0, b, h);
+      ctx.strokeStyle = `rgba(255, 255, 255, ${rest})`;
+      ctx.shadowColor = "#bfdbfe";
+      ctx.shadowBlur = 16;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      f.flits.punten.forEach(([px, py], i) => (i ? ctx.lineTo(px, py) : ctx.moveTo(px, py)));
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    },
+    teken: (ctx, d) => {
+      ctx.strokeStyle = "rgba(203, 213, 225, 0.45)";
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(d.x, d.y);
+      ctx.lineTo(d.x + d.lengte * 0.35, d.y - d.lengte);
+      ctx.stroke();
+    },
+  },
+});
+
 const weer = { laag: null, soort: null, deeltjes: [], raf: 0, vorige: 0 };
 
 function vulWeer() {
@@ -252,6 +344,7 @@ function tekenWeer() {
   ctx.clearRect(0, 0, b, h);
   ctx.font = '600 14px "IBM Plex Mono", ui-monospace, monospace';
   const def = WEERSOORTEN[weer.soort];
+  def.voor?.(ctx, b, h);
   for (const d of weer.deeltjes) def.teken(ctx, d);
 }
 
@@ -319,7 +412,7 @@ function spoorBeweging(e) {
   const punt = { x: e.clientX, y: e.clientY, t: nu };
   const vorige = spoor.laatste;
   spoor.laatste = punt;
-  if (spoor.soort === "kabel" || spoor.soort === "regenboog" || spoor.soort === "neon" || spoor.soort === "komeet") {
+  if (["kabel", "regenboog", "neon", "komeet", "bliksem", "spook"].includes(spoor.soort)) {
     spoor.punten.push(punt);
     if (spoor.punten.length > 40) spoor.punten.shift();
     if (spoor.soort === "komeet") {
@@ -337,6 +430,24 @@ function spoorBeweging(e) {
         leven: vuur ? willekeurig(350, 600) : willekeurig(700, 1100),
         r: willekeurig(3, 7),
         kleur: vuur ? kies(["#fde047", "#fb923c", "#f97316", "#ef4444"]) : kies(["#f472b6", "#fb7185", "#f9a8d4", "#ef4444"]),
+      });
+    } else {
+      spoor.laatste = vorige;
+    }
+  } else if (spoor.soort === "noten" || spoor.soort === "pixels") {
+    if (!vorige || Math.hypot(punt.x - vorige.x, punt.y - vorige.y) > 14 || !spoor.stukjes.length) {
+      const noot = spoor.soort === "noten";
+      spoor.stukjes.push({
+        x: punt.x + willekeurig(-5, 5),
+        y: punt.y,
+        vx: willekeurig(-0.3, 0.3),
+        vy: noot ? willekeurig(-1.2, -0.6) : willekeurig(0.4, 1.1),
+        t: nu,
+        leven: noot ? willekeurig(800, 1200) : willekeurig(500, 800),
+        r: noot ? willekeurig(13, 19) : kies([4, 5, 6]),
+        kleur: kies(noot ? ["#f472b6", "#a78bfa", "#38bdf8", "#facc15", "#4ade80"] : ["#f43f5e", "#facc15", "#22d3ee", "#a3e635", "#c084fc"]),
+        tekst: kies(["♪", "♫", "♬", "♩"]),
+        fase: willekeurig(0, 6.3),
       });
     } else {
       spoor.laatste = vorige;
@@ -460,6 +571,77 @@ function spoorLus() {
         ctx.arc(st.x, st.y, st.r * rest, 0, Math.PI * 2);
         ctx.fill();
       }
+    }
+    ctx.globalAlpha = 1;
+  } else if (spoor.soort === "noten" || spoor.soort === "pixels") {
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    for (const st of spoor.stukjes) {
+      const rest = 1 - (nu - st.t) / st.leven;
+      st.fase += 0.12;
+      st.x += st.vx + (spoor.soort === "noten" ? Math.sin(st.fase) * 0.5 : 0);
+      st.y += st.vy;
+      ctx.globalAlpha = rest;
+      ctx.fillStyle = st.kleur;
+      if (spoor.soort === "noten") {
+        ctx.font = `700 ${Math.round(st.r)}px system-ui, sans-serif`;
+        ctx.fillText(st.tekst, st.x, st.y);
+      } else {
+        const r = Math.round(st.r);
+        ctx.fillRect(Math.round(st.x / 3) * 3, Math.round(st.y / 3) * 3, r, r);
+      }
+    }
+    ctx.globalAlpha = 1;
+  } else if (spoor.soort === "bliksem") {
+    // Een zigzag die elke tekening anders knettert, met een blauwe gloed.
+    const punten = spoor.punten;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    for (const [breedte, kleur] of [[9, "rgba(96, 165, 250, 0.25)"], [2.4, "#eff6ff"]]) {
+      ctx.strokeStyle = kleur;
+      ctx.lineWidth = breedte;
+      ctx.beginPath();
+      let begonnen = false;
+      for (let i = 0; i < punten.length; i++) {
+        const p = punten[i];
+        const rest = 1 - (nu - p.t) / LEVEN;
+        if (rest <= 0) continue;
+        const x = p.x + willekeurig(-6, 6) * rest;
+        const y = p.y + willekeurig(-6, 6) * rest;
+        if (!begonnen) {
+          ctx.moveTo(x, y);
+          begonnen = true;
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+      ctx.stroke();
+    }
+  } else if (spoor.soort === "spook") {
+    // Doorschijnende muisaanwijzers op de plekken waar je muis net was.
+    const punten = spoor.punten;
+    for (let i = 0; i < punten.length; i += 4) {
+      const p = punten[i];
+      const rest = 1 - (nu - p.t) / LEVEN;
+      if (rest <= 0) continue;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.globalAlpha = rest * 0.8;
+      ctx.fillStyle = "#e0e7ff";
+      ctx.strokeStyle = "#4338ca";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, 16);
+      ctx.lineTo(4.5, 12.5);
+      ctx.lineTo(7.5, 19);
+      ctx.lineTo(10, 18);
+      ctx.lineTo(7, 11.5);
+      ctx.lineTo(12, 11.5);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
     }
     ctx.globalAlpha = 1;
   } else if (spoor.soort === "bits") {

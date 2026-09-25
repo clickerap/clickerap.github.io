@@ -32,6 +32,8 @@ export function freshState() {
     eggs: {},
     skins: Object.fromEntries(Object.entries(STANDAARD).map(([soort, id]) => [`${soort}:${id}`, true])),
     uiterlijk: { ...STANDAARD },
+    // Drie bewaarde looks: een naam en een keuze per soort.
+    looks: [null, null, null],
     prestige: 0,
     ects: 0,
     buffs: [],
@@ -145,6 +147,9 @@ function reqView() {
     werkorders: G.minigames?.patch?.gedaan || 0,
     luchtdicht: G.minigames?.patch?.luchtdicht || 0,
     opdrachten: G.minigames?.cli?.gedaan || 0,
+    hoofdstukken: Object.keys(G.minigames?.cursus?.gelezen || {}).length,
+    knooppunten: Object.keys(G.nodes || {}).length,
+    looks: (G.looks || []).filter(Boolean).length,
     quizGoed: G.minigames?.quiz?.correct || 0,
     vrijgespeeld: Object.keys(G.skins).length,
   };
@@ -495,6 +500,7 @@ export function graduate() {
   const keep = {
     skins: G.skins,
     uiterlijk: G.uiterlijk,
+    looks: G.looks,
     achievements: G.achievements,
     nodes: G.nodes,
     eggs: G.eggs,
@@ -511,6 +517,7 @@ export function graduate() {
   Object.assign(G, fresh, {
     skins: keep.skins,
     uiterlijk: keep.uiterlijk,
+    looks: keep.looks,
     achievements: keep.achievements,
     nodes: keep.nodes,
     eggs: keep.eggs,
@@ -533,6 +540,7 @@ export function graduate() {
     prestiges: keep.stats.prestiges + 1,
     playTime: keep.stats.playTime,
     bestPps: keep.stats.bestPps,
+    besteReeks: keep.stats.besteReeks,
     runPlayTime: 0,
     runStarted: Date.now(),
   };
@@ -620,6 +628,31 @@ export function kiesSkin(soort, id) {
   G.uiterlijk[soort] = id;
   touch();
   return true;
+}
+
+// Een look dragen zet elke soort: wat in de look staat en je al hebt, anders
+// de standaard. Zo blijft er nooit iets van je vorige look hangen. Geeft terug
+// hoeveel er gelukt is, zodat het spel kan zeggen wat nog ontbreekt.
+export function draagLook(keuze) {
+  let toegepast = 0;
+  let totaal = 0;
+  for (const soort of Object.keys(UITERLIJK)) {
+    const id = keuze[soort] ?? STANDAARD[soort];
+    totaal++;
+    if (UITERLIJK[soort].some((s) => s.id === id) && skinUnlocked(soort, id)) {
+      G.uiterlijk[soort] = id;
+      toegepast++;
+    } else {
+      G.uiterlijk[soort] = STANDAARD[soort];
+    }
+  }
+  touch();
+  return { toegepast, totaal };
+}
+
+export function bewaarLook(plek, naam) {
+  G.looks[plek] = { naam: String(naam || "").trim().slice(0, 24) || `Look ${plek + 1}`, uiterlijk: { ...G.uiterlijk } };
+  touch();
 }
 
 export function findEgg(id) {

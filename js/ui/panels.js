@@ -5,11 +5,12 @@
 import {
   G, D, BUILDINGS, BUILDING_BY_ID, VAKKEN, ACHIEVEMENTS, NODES,
   buyBuilding, sellBuilding, priceOf, availableUpgrades, buyUpgrade,
-  buyNode, graduate, ectsOnGraduate, koffieRank, skinUnlocked, kiesSkin,
+  buyNode, graduate, ectsOnGraduate, koffieRank, skinUnlocked, kiesSkin, draagLook, bewaarLook,
 } from "../state.js";
 import { UPGRADE_BY_ID } from "../data/upgrades.js";
-import { UITERLIJK, SOORTNAMEN, SOORTUITLEG, RANGEN, RANG_VOLGORDE, FOTO, fotoVoor, GROEPEN } from "../data/uiterlijk.js";
-import { logoHtml, accessoireHtml } from "./opmaak.js";
+import { UITERLIJK, SOORTNAMEN, SOORTUITLEG, RANGEN, RANG_VOLGORDE, FOTO, fotoVoor, GROEPEN, LOOKS } from "../data/uiterlijk.js";
+import { logoHtml, accessoireHtml, omloopHtml, decorHtml } from "./opmaak.js";
+import { grafiekVoorbeeld } from "./grafiek.js";
 import { CATEGORIEEN } from "../data/achievements.js";
 import { BRANCHES, NODE_BY_ID, lifetimeForEcts, BONUS_PER_PUNT } from "../data/skilltree.js";
 import { fmt, fmtLong, fmtPct, fmtTime, fmtEta } from "../format.js";
@@ -639,7 +640,7 @@ function voorbeeld(soort, skin, open) {
     case "houding":
       return `<span class="skin-preview houding-voorbeeld" data-houding="${esc(skin.id)}" aria-hidden="true">${foto(G.uiterlijk.portret)}</span>`;
     case "accent":
-      return `<span class="skin-preview accent-voorbeeld${skin.kleur.startsWith("#") ? "" : " regenboog"}" style="--a: ${esc(skin.kleur)}" aria-hidden="true"><i></i><i></i></span>`;
+      return `<span class="skin-preview accent-voorbeeld${skin.kleur.startsWith("#") ? "" : ` kleur-${esc(skin.id)}`}" style="--a: ${esc(skin.kleur)}" aria-hidden="true"><i></i><i></i></span>`;
     case "zweeftekst":
       return `<span class="skin-preview zweef-voorbeeld" aria-hidden="true"><span class="zweef${skin.id === "standaard" ? "" : ` zweef-${esc(skin.id)}`}" data-tekst="+42">+42</span></span>`;
     case "melding":
@@ -654,6 +655,20 @@ function voorbeeld(soort, skin, open) {
         : `<span class="skin-preview teken" aria-hidden="true">${esc(skin.voorbeeld)}</span>`;
     case "opstart":
       return `<span class="skin-preview opstart-voorbeeld" data-opstart="${esc(skin.id)}" aria-hidden="true">${esc(skin.voorbeeld)}</span>`;
+    case "omloop":
+      return `<span class="skin-preview omloop-voorbeeld" aria-hidden="true">${foto(G.uiterlijk.portret)}<span class="omloop" data-omloop="${esc(skin.id)}">${omloopHtml(skin.id, 6, fotoVoor(G.uiterlijk.portret))}</span></span>`;
+    case "decor":
+      return `<span class="skin-preview decor-voorbeeld" aria-hidden="true"><span class="decor" data-decor="${esc(skin.id)}">${decorHtml(skin.id)}</span>${foto(G.uiterlijk.portret)}</span>`;
+    case "nieuws":
+      return `<span class="skin-preview nieuws-voorbeeld" aria-hidden="true"><span class="logline mini" data-nieuws="${esc(skin.id)}"><span class="nieuws-tekst" data-tijd="do 24 sep"><span>Serge klikt door</span></span></span></span>`;
+    case "voortgang":
+      return `<span class="skin-preview voortgang-voorbeeld" aria-hidden="true"><span class="doel" data-voortgang="${esc(skin.id)}" style="--deel: 0.62"><span class="doel-meter"><span></span></span></span></span>`;
+    case "grafiek":
+      return `<span class="skin-preview grafiek-voorbeeld" data-grafiek="${esc(skin.id)}" aria-hidden="true"><span class="grafiek-vlak">${grafiekVoorbeeld(skin.id)}</span></span>`;
+    case "rack": {
+      const rij = (vak, n) => `<span class="rack-row vak-${vak}"><span class="rack-units">${'<i class="unit"></i>'.repeat(n)}</span></span>`;
+      return `<span class="skin-preview rack-voorbeeld" aria-hidden="true"><span class="rack-body" data-rack="${esc(skin.id)}">${rij("netwerken", 6)}${rij("sddc", 4)}${rij("security", 5)}</span></span>`;
+    }
     default:
       return `<span class="skin-preview teken" aria-hidden="true">${esc(skin.voorbeeld || "")}</span>`;
   }
@@ -703,6 +718,7 @@ function renderUiterlijk() {
   const totaal = Object.values(UITERLIJK).reduce((som, lijst) => som + lijst.length, 0);
   kaartEl.querySelector("#uiterlijk-telling").textContent =
     `${Object.keys(G.skins).length} van de ${totaal} vrijgespeeld`;
+  renderLooks();
 }
 
 // Laat meteen zien of horen wat je net koos.
@@ -721,6 +737,58 @@ function probeer(soort, id, knop) {
   }
 }
 
+// ---------------------------------------------------------------- Looks
+// Drie plekken voor je eigen combinaties, en kant-en-klare thema's. Een look
+// zet alles op wat je al hebt; wat ontbreekt, blijft zoals het was.
+
+function renderLooks() {
+  const plekken = meerEl.querySelector("#look-plekken");
+  if (!plekken) return;
+  plekken.innerHTML = G.looks
+    .map((look, i) => `
+      <div class="look-plek${look ? "" : " leeg"}">
+        <strong>${look ? esc(look.naam) : `Plek ${i + 1}`}</strong>
+        <small>${look ? `${Object.keys(look.uiterlijk).length} onderdelen` : "Nog leeg"}</small>
+        <span class="look-knoppen">
+          ${look ? `<button type="button" class="btn small" data-draag="${i}">Draag</button>` : ""}
+          <button type="button" class="btn ghost small" data-bewaar="${i}">${look ? "Vervang" : "Bewaar hier"}</button>
+        </span>
+      </div>`)
+    .join("");
+  meerEl.querySelector("#look-thema").innerHTML = LOOKS.map((look) => {
+    const delen = Object.entries(look.uiterlijk);
+    const heb = delen.filter(([soort, id]) => skinUnlocked(soort, id)).length;
+    return `<button type="button" data-look="${look.id}" class="${heb === delen.length ? "compleet" : ""}" title="${heb} van de ${delen.length} onderdelen vrijgespeeld"><span aria-hidden="true">${look.icoon}</span> ${esc(look.naam)} <small>${heb}/${delen.length}</small></button>`;
+  }).join("");
+}
+
+function meldLook(naam, { toegepast, totaal }) {
+  toast({
+    title: `Look: ${naam}`,
+    text: toegepast === totaal ? "Alles zit erop." : `${toegepast} van de ${totaal} onderdelen zitten erop. De rest staat op standaard tot je ze vrijspeelt.`,
+    icon: "👔",
+    tone: toegepast === totaal ? "goed" : "",
+  });
+}
+
+function bewaarVenster(plek) {
+  const huidig = G.looks[plek]?.naam || `Look ${plek + 1}`;
+  dialog({
+    title: "Look bewaren",
+    body: `<p>Alles wat je nu draagt, komt op plek ${plek + 1}.</p><label class="skin-kop" for="look-naam">Naam</label><input class="veld" id="look-naam" maxlength="24" autocomplete="off" value="${esc(huidig)}" />`,
+    actions: [
+      { label: "Annuleren", style: "ghost" },
+      {
+        label: "Bewaren",
+        onClick: (lichaam) => {
+          bewaarLook(plek, lichaam.querySelector("#look-naam").value);
+          renderLooks();
+        },
+      },
+    ],
+  });
+}
+
 // Verras me: van elke soort een willekeurig vrijgespeeld ding.
 function verras() {
   for (const soort of Object.keys(UITERLIJK)) {
@@ -735,6 +803,12 @@ function buildMeer() {
     <div class="kaart" id="uiterlijk-kaart">
       <h3>Uiterlijk <span id="uiterlijk-telling" style="float:right;text-transform:none;letter-spacing:0;font-weight:600"></span></h3>
       <p class="panel-intro">Geef je spel een eigen gezicht. Je speelt ze vrij door te spelen; wat je eenmaal hebt, houd je ook na het afstuderen.</p>
+      <div class="looks">
+        <h4 class="skin-kop">Mijn looks</h4>
+        <div class="look-plekken" id="look-plekken"></div>
+        <h4 class="skin-kop">Kant-en-klare looks</h4>
+        <div class="look-thema" id="look-thema" role="group" aria-label="Kant-en-klare looks"></div>
+      </div>
       <div class="skin-bediening">
         <div class="skin-groepen" id="skin-groepen" role="group" aria-label="Welk deel van het spel?"></div>
         <div class="segmented skin-tabs" id="skin-tabs" role="group" aria-label="Wat wil je aanpassen?"></div>
@@ -817,6 +891,31 @@ function buildMeer() {
       laatsteSoort[groepVan(toonSoort).id] = toonSoort;
       renderUiterlijk();
       meerEl.querySelector(`[data-toon="${toonSoort}"]`)?.focus();
+      return;
+    }
+    const draag = e.target.closest("[data-draag]");
+    if (draag) {
+      const look = G.looks[Number(draag.dataset.draag)];
+      if (look) {
+        meldLook(look.naam, draagLook(look.uiterlijk));
+        blip(660, 0.07);
+        emit("uiterlijk");
+        renderUiterlijk();
+      }
+      return;
+    }
+    const bewaar = e.target.closest("[data-bewaar]");
+    if (bewaar) {
+      bewaarVenster(Number(bewaar.dataset.bewaar));
+      return;
+    }
+    const thema = e.target.closest("[data-look]");
+    if (thema) {
+      const look = LOOKS.find((l) => l.id === thema.dataset.look);
+      meldLook(look.naam, draagLook(look.uiterlijk));
+      blip(660, 0.07);
+      emit("uiterlijk");
+      renderUiterlijk();
       return;
     }
     if (e.target.closest("#skin-verras")) {

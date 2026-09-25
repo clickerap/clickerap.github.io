@@ -43,8 +43,35 @@ const BIOS = [
   "Druk op DEL voor SETUP. Of klik, dat mag ook.",
 ];
 
+// Een balk van blokjes (█) die vol loopt, zoals een programma dat laadt.
+const DOS = [
+  "Starting SERGE-DOS...",
+  "",
+  "HIMEM is testing extended memory...done.",
+  "",
+  "C:\\>CD \\SPELLEN",
+  "C:\\SPELLEN>SERGE.EXE",
+  "",
+  "Serge Clicker 3.1 voor SERGE-DOS",
+  "640K geheugen. Dat is genoeg voor iedereen.",
+  "█",
+  "",
+  "Druk op een toets om te beginnen.",
+];
+
+// Letter voor letter, op een zwart scherm.
+const WAKKER = ["Word wakker, Serge…", "Het netwerk heeft je.", "Volg de witte muis.", "", "Klop, klop, Serge."];
+
 const SCHERMEN = {
   ios: { duur: 3400, regels: IOS },
+  dos: { duur: 3600, regels: DOS },
+  matrix: { duur: 5200, regels: WAKKER, letters: true },
+  console: {
+    duur: 3000,
+    html: () => `
+      <div class="op-console-logo"><span>SERGE</span></div>
+      <p class="op-roep">SERGEEE!</p>`,
+  },
   bios: { duur: 3600, regels: BIOS },
   arcade: {
     duur: 3200,
@@ -100,7 +127,8 @@ export function toonOpstart(soort) {
   const timers = [];
   if (scherm.regels) {
     el.innerHTML = `<pre class="op-console" aria-hidden="true"></pre>`;
-    typ(el.firstElementChild, scherm.regels, stil, timers);
+    if (scherm.letters) typLetters(el.firstElementChild, scherm.regels, stil, timers);
+    else typ(el.firstElementChild, scherm.regels, stil, timers);
   } else {
     el.innerHTML = scherm.html();
     for (const kind of el.children) kind.setAttribute("aria-hidden", "true");
@@ -138,7 +166,7 @@ export function toonOpstart(soort) {
 // zijn geheugen op.
 function typ(pre, regels, stil, timers) {
   if (stil) {
-    pre.textContent = regels.map((r) => (r === "@" ? "@".repeat(48) : r === "#" ? "Memory Test :  65536K OK" : r)).join("\n");
+    pre.textContent = regels.map((r) => (r === "@" ? "@".repeat(48) : r === "█" ? "█".repeat(32) : r === "#" ? "Memory Test :  65536K OK" : r)).join("\n");
     return;
   }
   let tijd = 120;
@@ -150,6 +178,13 @@ function typ(pre, regels, stil, timers) {
       tijd += 48 * 18 + 80;
       continue;
     }
+    if (regel === "█") {
+      const lijn = document.createElement("span");
+      timers.push(setTimeout(() => pre.append(lijn, "\n"), tijd));
+      for (let i = 1; i <= 32; i++) timers.push(setTimeout(() => (lijn.textContent = `${"█".repeat(i)}${"░".repeat(32 - i)} ${Math.round((i / 32) * 100)}%`), tijd + i * 34));
+      tijd += 32 * 34 + 100;
+      continue;
+    }
     if (regel === "#") {
       const lijn = document.createElement("span");
       timers.push(setTimeout(() => pre.append(lijn, "\n"), tijd));
@@ -159,5 +194,25 @@ function typ(pre, regels, stil, timers) {
     }
     timers.push(setTimeout(() => pre.insertAdjacentHTML("beforeend", `${esc(regel)}\n`), tijd));
     tijd += regel ? 90 : 40;
+  }
+}
+
+// Letter voor letter, met een knipperend blokje erachter.
+function typLetters(pre, regels, stil, timers) {
+  const tekst = regels.join("\n");
+  if (stil) {
+    pre.textContent = tekst;
+    return;
+  }
+  const cursor = document.createElement("span");
+  cursor.className = "op-cursor";
+  cursor.textContent = "█";
+  const uit = document.createTextNode("");
+  pre.append(uit, cursor);
+  let tijd = 300;
+  for (let i = 1; i <= tekst.length; i++) {
+    const teken = tekst[i - 1];
+    tijd += teken === "\n" ? 520 : teken === "…" || teken === "." ? 260 : 55;
+    timers.push(setTimeout(() => (uit.data = tekst.slice(0, i)), tijd));
   }
 }

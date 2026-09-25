@@ -13,7 +13,7 @@ import { NODES, BRANCHES, ECTS_BASIS, STUDIE_OPEN, BONUS_PER_PUNT } from "../js/
 import { BUFFS, HAZARDS, INCIDENTS } from "../js/data/buffs.js";
 import { VERBINDINGEN, MATEN, WERK, DREMPELS, PROTOCOLLEN } from "../js/data/patch.js";
 import { GOEDEREN, GOED_BY_ID, KOPPEN, MARKT } from "../js/data/market.js";
-import { UITERLIJK, SOORTNAMEN, ALLE_SKINS, RANGEN } from "../js/data/uiterlijk.js";
+import { UITERLIJK, SOORTNAMEN, ALLE_SKINS, RANGEN, GROEPEN, LOOKS } from "../js/data/uiterlijk.js";
 import { HOOFDSTUKKEN } from "../js/data/cursus.js";
 import { TAKEN } from "../js/data/terminal.js";
 import { ONDERWERPEN, FEITEN } from "../js/data/vragen.js";
@@ -310,7 +310,16 @@ tabel(
 // ----------------------------------------------------------- Uiterlijk
 
 kop(2, "Uiterlijk");
-p(`Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. ${Object.keys(UITERLIJK).length} losse keuzes die je vrij combineert: ${Object.values(SOORTNAMEN).map((n) => n.toLowerCase()).join(", ").replace(/, (?=[^,]*$)/, " en ")}. Samen ${ALLE_SKINS.length} dingen om vrij te spelen, elk met een zeldzaamheid: gewoon, ongewoon, zeldzaam, episch, legendarisch, mythisch of goddelijk. Wat je eenmaal hebt, houd je ook na het afstuderen. Met **Verras me** kies je van elke soort iets willekeurigs uit wat je al hebt. Sneeuw, bloesem, vlinders en herfstbladeren speel je vrij in hun seizoen, het avondlicht door 's avonds te spelen.`);
+p(`Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. ${Object.keys(UITERLIJK).length} losse keuzes die je vrij combineert: ${Object.values(SOORTNAMEN).map((n) => n.toLowerCase()).join(", ").replace(/, (?=[^,]*$)/, " en ")}. Samen ${ALLE_SKINS.length} dingen om vrij te spelen, elk met een zeldzaamheid: gewoon, ongewoon, zeldzaam, episch, legendarisch, mythisch of goddelijk. Wat je eenmaal hebt, houd je ook na het afstuderen. Met **Verras me** kies je van elke soort iets willekeurigs uit wat je al hebt. Sneeuw, bloesem, vlinders en herfstbladeren speel je vrij in hun seizoen, het avondlicht door 's avonds te spelen, de kerstmuts in december en de heksenhoed in oktober.`);
+p("");
+p(`Het menu staat in ${GROEPEN.length} groepen: ${GROEPEN.map((g) => `**${g.naam}** (${g.soorten.map((soort) => SOORTNAMEN[soort].toLowerCase()).join(", ")})`).join(", ").replace(/, (?=\*\*[^*]+\*\* \([^)]*\)$)/, " en ")}.`);
+p("");
+p("**Looks.** Bovenaan het menu staan drie plekken voor je eigen combinaties: **Bewaar hier** onthoudt alles wat je nu draagt, met een naam, en **Draag** zet het later in één klik terug. Daaronder staan kant-en-klare looks. Die zetten alles op wat je van dat thema al hebt; wat nog ontbreekt, blijft zoals het was.");
+p("");
+tabel(
+  ["Kant-en-klare look", "Onderdelen"],
+  LOOKS.map((l) => [`${l.icoon} **${l.naam}**`, Object.entries(l.uiterlijk).map(([soort, id]) => `${SOORTNAMEN[soort].toLowerCase()}: ${UITERLIJK[soort].find((x) => x.id === id).naam}`).join(", ")])
+);
 p("");
 for (const soort of Object.keys(UITERLIJK)) {
   kop(3, SOORTNAMEN[soort]);
@@ -381,7 +390,7 @@ tabel(
     ["`gebouw switch 100`", "Zet het aantal van één apparaat. De id's staan hieronder."],
     ["`upgrades`", "Geeft alle upgrades vrij"],
     ["`prestaties`", "Geeft alle prestaties vrij"],
-    ["`skins`", "Geeft alles van Uiterlijk vrij: portretten, ringen, achtergronden, klikeffecten, klikgeluiden en titels"],
+    ["`skins`", "Geeft alles van Uiterlijk vrij, van portretten en ringen tot muziek, opstartschermen en looks"],
     ["`punten 50`", "Voegt studiepunten toe"],
     ["`goud`", "Laat meteen een gouden packet verschijnen"],
     ["`reset`", "Wist alle actieve buffs en straffen"],

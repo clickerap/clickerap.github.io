@@ -229,3 +229,50 @@ test("elk muziekje speelt zonder fouten, en zachter dan een klik", async () => {
   assert.deepEqual(fouten, []);
   await context.close();
 });
+
+test("een look bewaar je met een naam en trek je later weer aan", async () => {
+  const { page, context, fouten } = await openSpel();
+  await page.evaluate(async () => {
+    const { G } = await import("/js/state.js");
+    const { emit } = await import("/js/bus.js");
+    for (const k of ["achtergrond:matrix", "accent:paars", "omloop:muizen", "grafiek:staven", "nieuws:terminal", "rack:leds", "voortgang:slang", "eenheid:frames", "decor:stralen"]) G.skins[k] = true;
+    Object.assign(G.uiterlijk, { achtergrond: "matrix", accent: "paars", omloop: "muizen", grafiek: "staven", nieuws: "terminal", rack: "leds", voortgang: "slang", eenheid: "frames", decor: "stralen" });
+    emit("uiterlijk");
+  });
+  // Alles staat ook echt op de pagina.
+  assert.equal(await page.textContent("#eenheid"), "frames");
+  assert.equal(await page.locator("#omloop i").count() >= 4, true);
+  assert.equal(await page.getAttribute(".logline", "data-nieuws"), "terminal");
+  assert.equal(await page.locator("#grafiek .grafiek-staaf").count() > 0 || (await page.locator("#grafiek").innerHTML()).length > 0, true);
+
+  await page.click("#btn-meer");
+  await page.click('[data-bewaar="0"]');
+  await page.fill("#look-naam", "Nerd");
+  await page.click("#modal-actions button:last-child");
+  await page.waitForSelector(".look-plek:first-child >> text=Nerd");
+
+  // Iets anders aan, en dan de look terug.
+  await page.evaluate(async () => {
+    const { G } = await import("/js/state.js");
+    const { emit } = await import("/js/bus.js");
+    Object.assign(G.uiterlijk, { achtergrond: "klas", accent: "blauw", omloop: "geen", eenheid: "packets" });
+    emit("uiterlijk");
+  });
+  assert.equal(await page.textContent("#eenheid"), "packets");
+  await page.click('[data-draag="0"]');
+  assert.equal(await page.textContent("#eenheid"), "frames");
+  assert.equal(await page.getAttribute("body", "data-accent"), "paars");
+  assert.equal(await page.getAttribute("#omloop", "data-omloop"), "muizen");
+
+  // Een kant-en-klare look zegt hoeveel er al op kon.
+  await page.click('[data-look="hacker"]');
+  assert.match(await page.textContent("#toaster"), /Look: Hacker/);
+  const opgeslagen = await page.evaluate(async () => {
+    const { save } = await import("/js/save.js");
+    save();
+    return JSON.parse(localStorage.getItem("sergeClicker")).looks[0].naam;
+  });
+  assert.equal(opgeslagen, "Nerd");
+  assert.deepEqual(fouten, []);
+  await context.close();
+});

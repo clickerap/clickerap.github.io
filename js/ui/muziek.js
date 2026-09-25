@@ -386,6 +386,70 @@ const NUMMERS = {
     },
   },
 
+  // Een jazzcafé: een wandelende bas, een swingend bekken en een piano die
+  // tussendoor een akkoord laat vallen. Twee-vijf-een, en terug.
+  jazz: {
+    bpm: 132,
+    volume: 1.6,
+    maat(m, t, i, tel) {
+      const BAS = [[38, 41, 45, 44], [43, 47, 50, 49], [48, 52, 55, 46], [45, 49, 52, 39]];
+      const AKKOORDEN = [[53, 57, 60, 64], [53, 59, 62, 64], [52, 55, 59, 62], [55, 61, 64, 69]];
+      const swing = tel * 0.66;
+      BAS[i % 4].forEach((n, k) => noot(m, { t: t + tel * k, f: hz(n), duur: tel * 0.9, type: "triangle", vol: 0.1, aan: 0.01, tokkel: true }));
+      // Het ridebekken: ding, ding-da, ding, ding-da.
+      for (const b of [0, 1, 1 + swing / tel, 2, 3, 3 + swing / tel]) stoot(m, { t: t + tel * b, duur: 0.22, vol: b % 1 ? 0.012 : 0.018, freq: 8500 });
+      for (const b of [1, 3]) stoot(m, { t: t + tel * b, duur: 0.03, vol: 0.02, freq: 6000 });
+      const stoten = i % 2 ? [swing / tel, 2 + swing / tel] : [0, 1 + swing / tel];
+      for (const b of stoten) {
+        for (const n of AKKOORDEN[i % 4]) {
+          noot(m, { t: t + tel * b, f: hz(n), duur: tel * 0.7, vol: 0.02, aan: 0.006, tokkel: true });
+          noot(m, { t: t + tel * b, f: hz(n) * 2, duur: tel * 0.25, type: "triangle", vol: 0.004, aan: 0.004, tokkel: true });
+        }
+      }
+      // Af en toe een vibrafoon die een paar noten uit het akkoord speelt.
+      if (Math.floor(i / 4) % 2 === 1) {
+        for (let k = 0; k < 4; k++) {
+          if (!kans(0.6)) continue;
+          const n = kies(AKKOORDEN[i % 4]) + 12;
+          noot(m, { t: t + tel * k + (k % 2 ? swing - tel * 0.5 : 0), f: hz(n), duur: tel * 0.8, vol: 0.022, aan: 0.004, tokkel: true });
+        }
+      }
+    },
+  },
+
+  // Eurodance: vier op de vloer, een bas op de tweede helft van elke tel en
+  // pianostoten zoals in 1995.
+  eurodance: {
+    bpm: 138,
+    volume: 0.4,
+    maat(m, t, i, tel) {
+      const AKKOORDEN = [[57, 60, 64], [57, 60, 65], [55, 60, 64], [55, 59, 62]];
+      const WORTELS = [33, 29, 36, 31];
+      for (let b = 0; b < 4; b++) kick(m, t + tel * b, 0.5);
+      for (let b = 0; b < 4; b++) {
+        const w = WORTELS[i % 4] + (b % 2 ? 12 : 0);
+        noot(m, { t: t + tel * (b + 0.5), f: hz(w + 12), duur: tel * 0.42, type: "sawtooth", vol: 0.05, filter: 900, tokkel: true });
+        hihat(m, t + tel * (b + 0.5), 0.025, true);
+      }
+      for (let k = 0; k < 16; k++) if (k % 2) hihat(m, t + tel * (k / 4), 0.006);
+      for (const b of [1, 3]) for (const d of [0, 0.011]) stoot(m, { t: t + tel * b + d, duur: 0.08, vol: 0.05, type: "bandpass", freq: 1300, q: 0.9 });
+      for (const b of [0, 0.75, 1.5, 2.5, 3.25]) {
+        for (const n of AKKOORDEN[i % 4]) {
+          noot(m, { t: t + tel * b, f: hz(n + 12), duur: tel * 0.45, type: "triangle", vol: 0.018, aan: 0.004, tokkel: true });
+          noot(m, { t: t + tel * b, f: hz(n + 24), duur: tel * 0.2, vol: 0.006, aan: 0.003, tokkel: true });
+        }
+      }
+      // De tweede keer doet er een synthlijn mee.
+      if (Math.floor(i / 4) % 2 === 1) {
+        const LIJN = [[81, 0, 79, 76, 0, 76, 79, 81], [77, 0, 76, 72, 0, 72, 74, 76], [79, 0, 76, 72, 0, 72, 76, 79], [79, 81, 79, 74, 0, 74, 71, 74]];
+        LIJN[i % 4].forEach((n, k) => {
+          if (!n) return;
+          for (const d of [-8, 8]) noot(m, { t: t + tel * (k / 2), f: hz(n), duur: tel * 0.4, type: "square", vol: 0.006, detune: d, filter: 3000, tokkel: true });
+        });
+      }
+    },
+  },
+
   // Een koor en klokjes.
   hemels: {
     bpm: 56,

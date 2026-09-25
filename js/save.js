@@ -147,6 +147,7 @@ function serialize() {
     eggs: ids(G.eggs),
     skins: ids(G.skins),
     uiterlijk: G.uiterlijk,
+    looks: G.looks,
     seen: ids(G.seen),
     prestige: G.prestige,
     ects: G.ects,
@@ -232,6 +233,20 @@ export function schoon(data) {
       uiterlijk.portret = fresh.uiterlijk.portret;
     }
   }
+  // Bewaarde looks: hooguit drie, met een korte naam en alleen keuzes die
+  // bestaan. Of ze vrijgespeeld zijn, kijkt het spel pas bij het dragen.
+  const looks = [0, 1, 2].map((i) => {
+    const l = Array.isArray(d.looks) ? d.looks[i] : null;
+    if (!isObject(l) || !isObject(l.uiterlijk)) return null;
+    const keuze = {};
+    for (const [soort, lijst] of Object.entries(UITERLIJK)) {
+      const id = l.uiterlijk[soort];
+      if (typeof id === "string" && lijst.some((s) => s.id === id)) keuze[soort] = id;
+    }
+    const naam = typeof l.naam === "string" && l.naam.trim() ? l.naam.trim().slice(0, 24) : `Look ${i + 1}`;
+    return Object.keys(keuze).length ? { naam, uiterlijk: keuze } : null;
+  });
+
   const skinLijst = (Array.isArray(d.skins) ? d.skins : isObject(d.skins) ? Object.keys(d.skins).filter((k) => d.skins[k]) : [])
     .map((k) => VERHUISD[k] || k);
 
@@ -268,6 +283,7 @@ export function schoon(data) {
     eggs: idMap(d.eggs, (id) => Object.hasOwn(ACHIEVEMENT_BY_ID, id) && ACHIEVEMENT_BY_ID[id].egg === true),
     skins: { ...fresh.skins, ...idMap(skinLijst, (k) => SKIN_KEYS.has(k)) },
     uiterlijk,
+    looks,
     seen: idMap(d.seen, kent(BUILDING_BY_ID)),
     prestige: getal(d.prestige),
     ects: getal(d.ects),

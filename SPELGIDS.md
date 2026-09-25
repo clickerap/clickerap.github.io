@@ -750,7 +750,23 @@ Na genoeg opgeleverde werkorders komt het volgende protocol vrij. Elk protocol g
 
 ## Uiterlijk
 
-Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes die je vrij combineert: portret, accessoire, ring, houding, maatje, achtergrond, panelen, accentkleur, weer, filter, packet, opstart, logo, titel, teller, lettertype, zweeftekst, meldingen, klikeffect, klikreeks, cursor, muisspoor, klikgeluid en muziek. Samen 384 dingen om vrij te spelen, elk met een zeldzaamheid: gewoon, ongewoon, zeldzaam, episch, legendarisch, mythisch of goddelijk. Wat je eenmaal hebt, houd je ook na het afstuderen. Met **Verras me** kies je van elke soort iets willekeurigs uit wat je al hebt. Sneeuw, bloesem, vlinders en herfstbladeren speel je vrij in hun seizoen, het avondlicht door 's avonds te spelen.
+Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 31 losse keuzes die je vrij combineert: portret, accessoire, ring, houding, omloop, decor, maatje, achtergrond, panelen, accentkleur, weer, filter, packet, opstart, teller, eenheid, voortgang, grafiek, rack, logo, titel, lettertype, zweeftekst, meldingen, nieuwsbalk, klikeffect, klikreeks, cursor, muisspoor, klikgeluid en muziek. Samen 560 dingen om vrij te spelen, elk met een zeldzaamheid: gewoon, ongewoon, zeldzaam, episch, legendarisch, mythisch of goddelijk. Wat je eenmaal hebt, houd je ook na het afstuderen. Met **Verras me** kies je van elke soort iets willekeurigs uit wat je al hebt. Sneeuw, bloesem, vlinders en herfstbladeren speel je vrij in hun seizoen, het avondlicht door 's avonds te spelen, de kerstmuts in december en de heksenhoed in oktober.
+
+Het menu staat in 5 groepen: **Serge** (portret, accessoire, ring, houding, omloop, decor, maatje), **Scherm** (achtergrond, panelen, accentkleur, weer, filter, packet, opstart), **Cijfers** (teller, eenheid, voortgang, grafiek, rack), **Tekst** (logo, titel, lettertype, zweeftekst, meldingen, nieuwsbalk) en **Klikken** (klikeffect, klikreeks, cursor, muisspoor, klikgeluid, muziek).
+
+**Looks.** Bovenaan het menu staan drie plekken voor je eigen combinaties: **Bewaar hier** onthoudt alles wat je nu draagt, met een naam, en **Draag** zet het later in één klik terug. Daaronder staan kant-en-klare looks. Die zetten alles op wat je van dat thema al hebt; wat nog ontbreekt, blijft zoals het was.
+
+| Kant-en-klare look | Onderdelen |
+|---|---|
+| 🕶️ **Hacker** | portret: Matrix, accessoire: Ninjaband, ring: Terminalgroen, houding: Haperen, omloop: Bits, decor: Tunnel, maatje: Python, achtergrond: Matrix, panelen: Beeldbuis, accentkleur: Groen, weer: Binaire sneeuw, filter: Beeldbuis, packet: Diskette, opstart: Word wakker, teller: Matrix, eenheid: Bits, voortgang: Glasvezel, grafiek: Oscilloscoop, rack: Ledjes, logo: Prompt, titel: Hackerman, lettertype: Terminal, zweeftekst: Terminal, meldingen: Syslog, nieuwsbalk: Terminal, klikeffect: Bits, klikreeks: Arcade, cursor: Laserpointer, muisspoor: Bits, klikgeluid: Mechanisch, muziek: Rave in het datacenter |
+| 🕹️ **Arcade** | portret: 8-bit, accessoire: Koptelefoon, ring: Regenboog, houding: Stuiterbal, omloop: Goudstukken, decor: Zonnestralen, maatje: Botje, achtergrond: Blokjes, panelen: Beeldbuis, accentkleur: Neon, weer: Confetti, filter: Beeldbuis, packet: Munt, opstart: Munt erin, teller: Arcade, eenheid: Cookies, voortgang: Happertje, grafiek: 8-bit, rack: Pixels, logo: Pixelletters, titel: Klikmachine, lettertype: Terminal, zweeftekst: 8-bit, meldingen: Arcade, nieuwsbalk: Lichtkrant, klikeffect: Pixels, klikreeks: Arcade, cursor: Pixelhand, muisspoor: Pixels, klikgeluid: 8-bit, muziek: 8-bit |
+| 💾 **Retro 95** | portret: Oude tv, accessoire: Pet, ring: T568B, houding: Rustig, omloop: Packets, decor: Niets, maatje: Paperclip, achtergrond: Mint, panelen: Windows 95, accentkleur: Blauw, weer: Helder, filter: Videoband, packet: Diskette, opstart: Serge 95, teller: Rekenmachine, eenheid: Bytes, voortgang: Laadblokjes, grafiek: Staafjes, rack: Diskettes, logo: Serge.exe, titel: Helpdesk, lettertype: IBM Plex, zweeftekst: Kaal getal, meldingen: Dialoogvenster, nieuwsbalk: Teletekst, klikeffect: Vonken, klikreeks: Geen reeks, cursor: Pixelhand, muisspoor: Geen spoor, klikgeluid: Inbelmodem, muziek: Liftmuziek |
+| 🌆 **Neonnacht** | portret: Neon, accessoire: Koptelefoon, ring: Plasma, houding: Meeknikken, omloop: Vuurvliegjes, decor: Neonring, maatje: Invader, achtergrond: Synthwave, panelen: Neon, accentkleur: Neon, weer: Vuurvliegjes, filter: Cyberpunk, packet: Diamant, opstart: Bioscoop, teller: Neon, eenheid: Likes, voortgang: Glasvezel, grafiek: Neon, rack: Neonbuisjes, logo: Neonreclame, titel: Nachtuil, lettertype: Rond, zweeftekst: Neon, meldingen: Neonbord, nieuwsbalk: Hologram, klikeffect: Laser, klikreeks: Ritmespel, cursor: Laserpointer, muisspoor: Neonbuis, klikgeluid: Pew, muziek: Synthwave |
+| 📚 **Studeren** | portret: Schets, accessoire: Lampje, ring: Wit, houding: Slaperig, omloop: Muzieknootjes, decor: Spot aan, maatje: Nachtuil, achtergrond: Mint, panelen: Ruitjespapier, accentkleur: Turkoois, weer: Regen, filter: Avondlicht, packet: Pizza, opstart: Meteen spelen, teller: Krijtbord, eenheid: Segmenten, voortgang: Streepjes, grafiek: Schrift, rack: Boekenplank, logo: Handtekening, titel: CCNA, lettertype: Handschrift, zweeftekst: Rode pen, meldingen: Post-it, nieuwsbalk: Ondertitels, klikeffect: Muziek, klikreeks: Serge keurt, cursor: Potlood, muisspoor: Geen spoor, klikgeluid: Mechanisch, muziek: Lo-fi om te studeren |
+| 🎉 **Feestje** | portret: Festival, accessoire: Feesthoedje, ring: Regenboog, houding: Dansen, omloop: Hartjes, decor: Discolicht, maatje: Startup-eenhoorn, achtergrond: Vuurwerk, panelen: Regenboogrand, accentkleur: Roze, weer: Confetti, filter: Pastel, packet: Cadeautje, opstart: Spelconsole, teller: Regenboog, eenheid: Pizzapunten, voortgang: Regenboog, grafiek: Regenboog, rack: Snoepjes, logo: Regenboog, titel: Chaos-agent, lettertype: Rond, zweeftekst: Regenboog, meldingen: Sms'je, nieuwsbalk: Radio, klikeffect: Confetti, klikreeks: DJ Serge, cursor: Toverstaf, muisspoor: Regenboog, klikgeluid: Xylofoon, muziek: Eurodance |
+| 🚀 **Ruimtevaart** | portret: Kosmische Serge, accessoire: Ruimtehelm, ring: Satelliet, houding: Zen, omloop: Satellieten, decor: Sterrenstelsel, maatje: Invader, achtergrond: Heelal, panelen: Sterrennacht, accentkleur: Paars, weer: Vallende sterren, filter: Vignet, packet: Vliegende schotel, opstart: Bioscoop, teller: Kosmisch, eenheid: Fotonen, voortgang: Raket, grafiek: Sterrenbeeld, rack: Sterretjes, logo: Kosmisch, titel: Zeekabelkapitein, lettertype: IBM Plex, zweeftekst: Sterrenstof, meldingen: Hologram, nieuwsbalk: Openingstekst, klikeffect: Supernova, klikreeks: Krachtniveau, cursor: Komeet, muisspoor: Komeet, klikgeluid: Theremin, muziek: Ruimtereis |
+| 👼 **Hemels** | portret: Gouden beeld, accessoire: Aureool, ring: Zonnekroon, houding: Zen, omloop: Vuurvliegjes, decor: Stralenkrans, maatje: Mini-Serge, achtergrond: Vroege dienst, panelen: Hemelpoort, accentkleur: Aurora, weer: Gouden regen, filter: Geen filter, packet: Zonnetje, opstart: Hemelpoort, teller: Hemels, eenheid: Wonderen, voortgang: Hemelse balk, grafiek: Gouden grafiek, rack: Goudstaafjes, logo: Hemels, titel: Serge, lettertype: Kalligrafie, zweeftekst: Hemels, meldingen: Hemelse boodschap, nieuwsbalk: Hemels bericht, klikeffect: Oerknal, klikreeks: Hemelse reeks, cursor: Hemelse vinger, muisspoor: Sterrenstof, klikgeluid: Hemelkoor, muziek: Hemelse harmonie |
+| 🧑‍🏫 **Klassiek** | portret: Serge, accessoire: Niets, ring: Blauw, maatje: Geen maatje, achtergrond: Klaslokaal, panelen: Wit, weer: Helder, filter: Geen filter, logo: Serge Clicker, titel: Geen titel, teller: Donkerblauw, lettertype: IBM Plex, klikeffect: Vonken, klikgeluid: Blip, muisspoor: Geen spoor, packet: Gouden schijf, houding: Rustig, accentkleur: Blauw, opstart: Meteen spelen, zweeftekst: Blauw pilletje, meldingen: Kaartje, klikreeks: Geen reeks, cursor: Systeem, muziek: Stilte, omloop: Niets, decor: Niets, eenheid: Packets, voortgang: Blauwe balk, grafiek: Blauwe lijn, rack: Blokjes, nieuwsbalk: Donkerblauw |
 
 ### Portret
 
@@ -777,6 +793,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Radioactief** *(legendarisch)* — Hij heeft te lang naast de DWDM-laser gestaan. Hij gloeit. | Koop een Quantum Link |
 | **Spook in de machine** *(mythisch)* — Half doorzichtig, en af en toe even weg. Er zit iemand in de server. | Speel in totaal vijftig uur |
 | **Kosmische Serge** *(goddelijk)* — Serge is één met het universum. De sterren draaien om hem heen. | Haal elke prestatie |
+| **Duotoon** *(ongewoon)* — Twee kleuren, indigo en koraal, zoals een affiche voor een concert. | Koop 40 upgrades |
+| **Infrarood** *(zeldzaam)* — Door een infraroodcamera. Zijn trui is ineens roze. | Bezit 25 Security Operations Centers |
+| **Oude tv** *(episch)* — Zwart-wit, met lijnen en een balk die door het beeld rolt. | Speel in totaal veertig uur |
 
 ### Accessoire
 
@@ -808,6 +827,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Vlammenkroon** *(mythisch)* — Zijn hoofd staat in brand en hij heeft het niet eens door. Zo hard werkt hij. | Bereik een biljard packets per seconde |
 | **Aureool** *(mythisch)* — Een gouden ring boven zijn hoofd. Serge is heilig verklaard. | Koop elk knooppunt in de studieboom |
 | **Planetenbaan** *(goddelijk)* — Drie planeten draaien rond zijn hoofd. Zo belangrijk is hij inmiddels. | Haal elke prestatie |
+| **Koffiemok** *(ongewoon)* — Een dampende mok op zijn hoofd. Handig, dan hoeft hij niet op te staan. | Speel in totaal vier uur |
+| **Routerhoed** *(zeldzaam)* — Een router met drie antennes en knipperende lampjes. Serge is een hotspot. | Bezit 150 core routers |
+| **Onweerswolk** *(legendarisch)* — Een donderwolk die af en toe een bliksem laat vallen. Het netwerk ligt eruit, maar hij niet. | Zie 150 rode packets |
 
 ### Ring
 
@@ -838,6 +860,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Plasma** *(mythisch)* — Een gloeiende ring die nooit stilstaat. | Verzamel 50 studiepunten |
 | **Melkweg** *(mythisch)* — Een draaiend sterrenstelsel, met Serge in het midden. | Studeer 25 keer af |
 | **Zonnekroon** *(goddelijk)* — Stralen van licht die langzaam om hem heen draaien. | Koop de hele studieboom en vind alles wat verborgen is |
+| **Morse** *(zeldzaam)* — Streepjes en puntjes die ronddraaien. Er staat SERGE, als je het kunt lezen. | Rond vijftien opdrachten af in de terminal |
+| **Glitchring** *(episch)* — Een ring die hapert en uit elkaar valt in rood en blauw. | Voer rm -rf / uit in de terminal |
+| **Klok** *(legendarisch)* — Een wijzerplaat rond zijn hoofd, met een secondewijzer die nooit stopt. | Speel in totaal zestig uur |
 
 ### Houding
 
@@ -855,6 +880,48 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Discokoorts** *(legendarisch)* — Hij danst, en de kleuren dansen mee. | Studeer tien keer af |
 | **Zen** *(mythisch)* — Diep in, diep uit. Er straalt een zacht licht van hem af. | Speel in totaal 72 uur |
 | **Hypnose** *(goddelijk)* — Hij slingert als een zakhorloge. Je wordt heel slaperig. Je wilt alleen nog klikken. | Speel 300 dingen vrij bij Uiterlijk |
+| **Slaperig** *(ongewoon)* — Hij knikt af en toe weg. Het is ook al laat. | Speel tussen drie en vier uur 's nachts |
+| **Headbangen** *(zeldzaam)* — Knikken op een hard ritme. Het is metal, of een ventilator die vastloopt. | Klik een reeks van honderd |
+| **Moonwalk** *(episch)* — Hij glijdt achteruit en weer terug, zonder zijn voeten te bewegen. | Klik 250.000 keer |
+
+### Omloop
+
+| Omloop | Hoe je hem vrijspeelt |
+|---|---|
+| **Niets** *(gewoon)* — Serge draait zijn eigen rondjes niet. | Heb je vanaf het begin |
+| **Muisjes** *(gewoon)* — Muisaanwijzers die om de beurt op Serge tikken. Hij merkt het niet eens. | Klik duizend keer |
+| **Packets** *(gewoon)* — Envelopjes die in een baan om Serge wachten op hun beurt. | Bezit vijftig apparaten tegelijk |
+| **Bits** *(ongewoon)* — Nullen en enen in een kring, alsof hij in een stroomkring staat. | Verdien in totaal een miljard packets |
+| **Hartjes** *(ongewoon)* — Iedereen houdt van Serge. Zelfs zijn baan. | Klik tien keer precies op zijn neus |
+| **Satellieten** *(zeldzaam)* — Zijn eigen constellatie. Het bereik is uitstekend. | Bezit tien satellietconstellaties |
+| **Koffiekringetje** *(zeldzaam)* — De mokken draaien rondjes. Er is er altijd een binnen handbereik. | Bereik het hoogste koffiepeil |
+| **Elektronen** *(episch)* — Drie banen, zoals een atoom. Serge is de kern van de zaak. | Bezit 25 Quantum Links |
+| **Goudstukken** *(episch)* — Draaiende munten. Ze glanzen elke keer als ze voorbij komen. | Klik vierhonderd gouden packets |
+| **Mini-Serges** *(legendarisch)* — Een fanclub van kleine Serges die rond de grote draaien. | Typ zijn naam, gewoon op je toetsenbord |
+| **Kometen** *(mythisch)* — Kometen met een lange staart, op hoge snelheid. | Speel in totaal 120 uur |
+| **Zonnestelsel** *(goddelijk)* — Serge is de zon. Acht planeten, elk op zijn eigen tempo. Het klopt nu eindelijk. | Bezit honderd singulariteiten |
+| **Muzieknootjes** *(ongewoon)* — Noten die rond hem zweven. Hij neuriet iets. Niemand herkent het. | Klik vijftienduizend keer |
+| **Linux-fans** *(zeldzaam)* — Pinguïns die rond hem waggelen. Ze willen dat hij overstapt. | Bezit vijftig Proxmox-clusters |
+| **Vuurvliegjes** *(episch)* — Lichtjes die rond hem zweven en aan- en uitgaan. | Wees om 13:37 in het spel |
+
+### Decor
+
+| Decor | Hoe je hem vrijspeelt |
+|---|---|
+| **Niets** *(gewoon)* — Geen decor, alleen Serge. | Heb je vanaf het begin |
+| **Spot aan** *(gewoon)* — Een zachte spot van achteren. Hij staat in de schijnwerpers. | Koop 25 upgrades |
+| **Zonnestralen** *(ongewoon)* — Stralen die langzaam ronddraaien, zoals bij een prijs in een spel. | Studeer één keer af |
+| **Sonar** *(ongewoon)* — Ringen die van hem wegrollen. Ping. Ping. Ping. | Typ ping in de terminal |
+| **Neonring** *(zeldzaam)* — Een roze en blauwe neonbuis achter hem. Hij zoemt. | Haal 55 prestaties |
+| **Discolicht** *(zeldzaam)* — Gekleurde vlekken die over de muur draaien. | Studeer twee keer af |
+| **Vuurzee** *(episch)* — Hij staat voor een muur van vlammen en kijkt niet om. | Bezit duizend apparaten tegelijk |
+| **Sterrenstelsel** *(legendarisch)* — Een draaiend sterrenstelsel, met Serge in het midden. | Bezit honderd Hyperscaler-regio's |
+| **Zwart gat** *(legendarisch)* — Een gloeiende schijf die rondraast. Alles valt naar hem toe. | Bezit vijf singulariteiten |
+| **Portaal** *(mythisch)* — Een kolkende poort naar een ander netwerk. | Bezit vijftig Parallel VPN's |
+| **Stralenkrans** *(goddelijk)* — Gouden stralen, een zachte gloed en glinsters. Het is officieel. | Verzamel 4.000 studiepunten |
+| **Regenboog** *(ongewoon)* — Een regenboog van achteren, als een stralenkrans in alle kleuren. | Haal 35 prestaties |
+| **Sterrenhemel** *(zeldzaam)* — Een stukje nachthemel achter hem, met sterren die twinkelen. | Bezit 25 satellietconstellaties |
+| **Tunnel** *(episch)* — Ringen die naar je toe schieten, alsof je door een glasvezel reist. | Bezit vijftig Dark Fiber Meshes |
 
 ### Maatje
 
@@ -878,6 +945,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Startup-eenhoorn** *(legendarisch)* — Een miljard waard, op papier. Vooral op papier. | Verdien een fortuin op de markt in één sessie |
 | **Legacy-draak** *(mythisch)* — Bewaakt een server uit 1998 waar niemand meer aan durft te komen. | Verzamel 250 studiepunten |
 | **Mini-Serge** *(goddelijk)* — Een kleine Serge die alles ziet. Echt alles. | Verzamel 1.000 studiepunten |
+| **Muis** *(ongewoon)* — Zijn trouwste werktuig. Hij heeft er meer van gezien dan jij. | Klik 2.500 keer |
+| **Diskette** *(zeldzaam)* — Een diskette van 1,44 MB die nog altijd denkt dat ze belangrijk is. | Koop 75 upgrades |
+| **Wolkje** *(episch)* — De cloud, in het klein. Ze zweeft naast Serge en weet alles van hem. | Bezit 25 Hyperscaler-regio's |
 
 ### Achtergrond
 
@@ -909,6 +979,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Warpsprong** *(mythisch)* — Sterren die langs je heen schieten. Volle kracht vooruit. | Koop een Parallel VPN |
 | **Vuurwerk** *(mythisch)* — Pijlen die opstijgen en openbarsten in alle kleuren. | Speel op oudejaarsavond of nieuwjaarsdag, of studeer vijftien keer af |
 | **Heelal** *(goddelijk)* — Een spiraalstelsel dat langzaam om zijn kern draait. | Bezit honderd singulariteiten tegelijk |
+| **Tropisch** *(ongewoon)* — Een gele zon die in een turquoise zee zakt. Vakantie, maar dan met packets. | Bezit driehonderd apparaten tegelijk |
+| **Printplaat** *(zeldzaam)* — Groene sporen en soldeerpunten, zoals de binnenkant van een switch. | Lever tien werkorders luchtdicht op |
+| **Zonsverduistering** *(mythisch)* — De maan schuift voor de zon, en een gloeiende krans licht op in een donkere hemel. | Studeer 35 keer af |
 
 ### Panelen
 
@@ -932,6 +1005,8 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Hologram** *(legendarisch)* — Doorschijnend cyaan, met scanlijnen en af en toe een hapering. | Bereik een biljoen packets per seconde |
 | **Sterrennacht** *(mythisch)* — Een diepblauwe hemel vol sterren die zachtjes twinkelen. | Studeer twintig keer af |
 | **Hemelpoort** *(goddelijk)* — Wit en goud, met licht dat er traag doorheen trekt. | Speel in totaal 200 uur |
+| **Papier** *(ongewoon)* — Gebroken wit, zoals een cursus die net van de printer komt. | Lees de hele cursus |
+| **Koffiebar** *(zeldzaam)* — Donkerbruin met romige letters. Het ruikt hier naar espresso. | Speel in totaal tien uur |
 
 ### Accentkleur
 
@@ -948,6 +1023,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Inkt** *(episch)* — Zwart op wit, zoals een oude laserprinter. | Ontdek elk protocol in de patchkast |
 | **Regenboog** *(legendarisch)* — De accentkleur schuift langzaam door de hele regenboog. | Studeer twaalf keer af |
 | **Neon** *(mythisch)* — Roze knoppen en cyaan balken. Het is altijd 1986. | Bezit 100 AI NetOps |
+| **Oceaan** *(ongewoon)* — Diep zeeblauw, zoals een zeekabel op de bodem. | Bezit tien zeekabels |
+| **Bordeaux** *(zeldzaam)* — Donkerrood, zoals een goede wijn op de opendeurdag. | Studeer drie keer af |
+| **Aurora** *(goddelijk)* — De accentkleur golft traag tussen groen, turkoois en violet, zoals het noorderlicht. | Speel in totaal 250 uur |
 
 ### Weer
 
@@ -965,6 +1043,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Confetti** *(episch)* — Een feest dat nooit ophoudt. | Studeer vijf keer af |
 | **Vallende sterren** *(legendarisch)* — Sterren die in lange strepen door de lucht schieten. Doe een wens. | Vind vijftien verborgen dingen |
 | **Gouden regen** *(goddelijk)* — Gouden glinsters die neerdalen en even oplichten. | Klik 5.000 gouden packets |
+| **Mist** *(ongewoon)* — Zachte slierten die over het scherm drijven. Waar is dat serverlokaal ook alweer? | Negeer vijf rode packets |
+| **Ballonnen** *(zeldzaam)* — Kleurige ballonnen die opstijgen. Er is altijd iets te vieren. | Haal 65 prestaties |
+| **Onweer** *(mythisch)* — Harde regen, en af en toe licht het hele scherm op. | Zie driehonderd rode packets |
 
 ### Filter
 
@@ -981,6 +1062,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Zakcomputer** *(legendarisch)* — Vier tinten groen en een raster van pixels, zoals een spelcomputer uit 1989. | Vind twaalf verborgen dingen |
 | **Onderwater** *(mythisch)* — Lichtvlekken die over alles heen dansen, alsof het rack in zee ligt. | Bezit 100 zeekabels tegelijk |
 | **Hologramfolie** *(goddelijk)* — Een glanzende folie over het hele scherm, zoals op een zeldzame ruilkaart. | Studeer dertig keer af |
+| **Pastel** *(ongewoon)* — Alles zachter en een tikje roze, alsof het spel pas gewassen is. | Koop vijftien upgrades |
+| **Cyberpunk** *(episch)* — Magenta en cyaan, zoals een stad die nooit slaapt. | Bezit 25 AI NetOps |
+| **Prisma** *(legendarisch)* — Het licht breekt aan de randen van het scherm in alle kleuren. | Klik drieduizend gouden packets |
 
 ### Packet
 
@@ -997,6 +1081,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Mini-Serge** *(legendarisch)* — Serge zelf, verguld. Klik hem voor hij wegloopt. | Klik duizend gouden packets |
 | **Zonnetje** *(mythisch)* — Een kleine zon met stralen die ronddraaien. | Klik 2.500 gouden packets |
 | **Regenboogpacket** *(goddelijk)* — Een packet in alle kleuren. Wat erin zit, weet niemand. | Klik 5.000 gouden packets |
+| **Envelop** *(ongewoon)* — Een brief met een lakzegel. Er staat je naam op. | Klik 35 gouden packets |
+| **Koekje** *(zeldzaam)* — Een knipoog naar een ander klikspel. Serge ontkent dat hij het kent. | Klik dertigduizend keer |
+| **Vliegende schotel** *(episch)* — Hij zweeft voorbij en neemt je packets mee. Of brengt hij ze? | Bezit 75 satellietconstellaties |
 
 ### Opstart
 
@@ -1009,6 +1096,108 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Serge 95** *(episch)* — Wolkjes, een laadbalk en een geluid dat je niet vergeet. | Rechtsklik tien keer op Serge |
 | **Bioscoop** *(legendarisch)* — Serge Studios presenteert. Een film over packets. In de hoofdrol: jij. | Studeer twintig keer af |
 | **Hemelpoort** *(goddelijk)* — De wolken schuiven open, het licht valt naar binnen, en Serge ontwaakt. | Behaal het doctoraat in de studieboom |
+| **DOS** *(ongewoon)* — C:\> met een knipperend streepje, en dan start SERGE.EXE. | Rond vijf opdrachten af in de terminal |
+| **Spelconsole** *(zeldzaam)* — Een blauw logo dat opzij schuift, en iemand die heel luid de naam roept. | Klik 75.000 keer |
+| **Word wakker** *(mythisch)* — Word wakker, Serge. Het netwerk heeft je. Volg de witte muis. | Vind zestien verborgen dingen |
+
+### Teller
+
+| Teller | Hoe je hem vrijspeelt |
+|---|---|
+| **Donkerblauw** *(gewoon)* — Rustig en goed leesbaar. | Heb je vanaf het begin |
+| **Rekenmachine** *(ongewoon)* — Groene cijfers op een zwart schermpje. | Verdien in totaal honderd miljoen packets |
+| **Goud** *(zeldzaam)* — Elk getal is een trofee. | Klik honderd gouden packets |
+| **Neon** *(zeldzaam)* — Roze neonbuizen, en ze zoemen zachtjes. | Haal 60 prestaties |
+| **Arcade** *(zeldzaam)* — Zoals de highscore in een speelhal. | Typ de Konami-code |
+| **Matrix** *(episch)* — Groene cijfers die zachtjes gloeien. | Voer rm -rf / uit in de terminal |
+| **Regenboog** *(episch)* — Elk cijfer in een andere kleur, en ze schuiven door. | Studeer vijf keer af |
+| **IJs** *(episch)* — Bevroren cijfers met een koude gloed. | Speel in totaal 48 uur |
+| **Vuur** *(legendarisch)* — Het getal is zo hoog dat het brandt. | Bereik een biljoen packets per seconde |
+| **Hologram** *(legendarisch)* — Doorschijnend, met scanlijnen door de cijfers. | Bereik een miljard packets per seconde |
+| **Kosmisch** *(mythisch)* — Cijfers vol sterrenstelsels. | Speel in totaal honderd uur |
+| **Hemels** *(goddelijk)* — Wit goud met een gloed die ademt. | Verzamel 3.000 studiepunten |
+| **Krijtbord** *(ongewoon)* — Witte krijtcijfers op een groen bord. Er is net nog iets uitgeveegd. | Lees twee hoofdstukken van de cursus |
+| **Scorebord** *(episch)* — Klapcijfers zoals op een oud station. Elk cijfer in een eigen vakje. | Verdien in totaal een biljard packets |
+| **Chroom** *(legendarisch)* — Glanzend metaal, zoals op een oude sportwagen. | Bezit vierduizend apparaten tegelijk |
+
+### Eenheid
+
+| Eenheid | Hoe je hem vrijspeelt |
+|---|---|
+| **Packets** *(gewoon)* — Pakketten op laag 3, zoals het hoort. | Heb je vanaf het begin |
+| **Frames** *(gewoon)* — Laag 2: wat een switch doorstuurt. | Beantwoord vijf vragen goed bij de overhoring |
+| **Bits** *(gewoon)* — Laag 1: nullen en enen, meer is het niet. | Beantwoord tien vragen goed bij de overhoring |
+| **Segmenten** *(ongewoon)* — Laag 4: TCP knipt alles in stukjes. | Beantwoord 25 vragen goed bij de overhoring |
+| **Datagrammen** *(ongewoon)* — UDP: versturen en hopen dat het aankomt. | Rond tien opdrachten af in de terminal |
+| **Bytes** *(ongewoon)* — Acht bits per stuk. Serge telt ze allemaal. | Verdien in totaal een biljoen packets |
+| **Pakketjes** *(zeldzaam)* — Met een strik. De koerier belt twee keer. | Lever 25 werkorders op in de patchkast |
+| **Koffiebonen** *(zeldzaam)* — De echte brandstof van elk netwerk. | Bereik het hoogste koffiepeil |
+| **Sergecoins** *(episch)* — Een munt die alleen maar stijgt. Beloofd. | Koop op een gerucht dat uitkomt, en verkoop met winst |
+| **Pizzapunten** *(episch)* — Voor elke pizza in de leraarskamer een punt. | Speel in totaal twintig uur |
+| **Memes** *(legendarisch)* — De leerlingen sturen ze door. Serge maakt ze. | Vind achttien verborgen dingen |
+| **Fotonen** *(mythisch)* — Licht, per seconde. Sneller wordt het niet. | Verdien in totaal een quadriljard packets |
+| **Wonderen** *(goddelijk)* — Serge verricht wonderen. Per seconde. | Speel 400 dingen vrij bij Uiterlijk |
+| **Likes** *(ongewoon)* — Serge gaat viraal. Per seconde. | Haal 25 prestaties |
+| **Cookies** *(zeldzaam)* — Een knipoog naar een ander klikspel. Deze cookies accepteer je wel. | Klik dertigduizend keer |
+| **Dino's** *(episch)* — Zo lang speel je al. Je bent zelf een dino geworden. | Speel in totaal vijftig uur |
+
+### Voortgang
+
+| Voortgang | Hoe je hem vrijspeelt |
+|---|---|
+| **Blauwe balk** *(gewoon)* — Een dunne blauwe balk. | Heb je vanaf het begin |
+| **Streepjes** *(gewoon)* — Schuine strepen die blijven lopen, zoals een echte laadbalk. | Koop vijf upgrades |
+| **Laadblokjes** *(ongewoon)* — Blokje per blokje, zoals een installatie uit 1995. | Bezit 150 apparaten tegelijk |
+| **Batterij** *(ongewoon)* — Van rood naar groen, en hij laadt op. | Speel in totaal drie uur |
+| **Glasvezel** *(zeldzaam)* — Een lichtpuls die door de balk schiet. | Bezit honderd glasvezels |
+| **Slang** *(zeldzaam)* — Een slang die groeit tot aan je volgende aankoop. | Typ hackerman, gewoon op je toetsenbord |
+| **Happertje** *(episch)* — Een geel mannetje eet de stippen op weg naar je volgende aankoop. | Klik 350 gouden packets |
+| **Regenboog** *(episch)* — Alle kleuren, en ze lopen door. | Studeer zes keer af |
+| **Lava** *(legendarisch)* — Gloeiende lava met belletjes die opborrelen. | Bezit drieduizend apparaten tegelijk |
+| **Sterrenstof** *(mythisch)* — Een balk vol sterren die flonkeren. | Bezit honderd Dyson-datacenters |
+| **Hemelse balk** *(goddelijk)* — Een straal van licht, met glinsters erin. | Verzamel 5.000 studiepunten |
+| **Patchkabel** *(ongewoon)* — Een blauwe kabel met een stekker aan het eind, op weg naar de volgende poort. | Lever je eerste werkorder op in de patchkast |
+| **Treintje** *(zeldzaam)* — Een locomotief die wagonnetjes trekt naar je volgende aankoop. Tjoek tjoek. | Lever vijftig werkorders op |
+| **Raket** *(episch)* — Een raket met een vlammende staart. Volgende halte: de volgende aankoop. | Koop een satellietconstellatie |
+
+### Grafiek
+
+| Grafiek | Hoe je hem vrijspeelt |
+|---|---|
+| **Blauwe lijn** *(gewoon)* — Een lijn met een vlak eronder, zoals elke monitoringpagina. | Heb je vanaf het begin |
+| **Staafjes** *(gewoon)* — Elke paar seconden een staaf. | Bereik duizend packets per seconde |
+| **Schrift** *(ongewoon)* — Met potlood op ruitjespapier, zoals in de les. | Lees drie hoofdstukken van de cursus |
+| **Oscilloscoop** *(ongewoon)* — Een groene lijn die gloeit op een zwart scherm. | Bereik een miljoen packets per seconde |
+| **Hartmonitor** *(zeldzaam)* — Piep. Piep. Serge leeft nog, en zijn netwerk ook. | Los een incident op voor het uit de hand loopt |
+| **Neon** *(zeldzaam)* — Een roze lijn op een donkerpaars scherm. | Wees om 13:37 in het spel |
+| **Beurskoers** *(episch)* — Kaarsjes, groen en rood, zoals op de markt. | Verdien een fortuin op de markt in één sessie |
+| **Regenboog** *(episch)* — Een lijn in alle kleuren. | Studeer acht keer af |
+| **Vuurlijn** *(legendarisch)* — De grafiek staat in brand van het verkeer. | Bereik tien biljoen packets per seconde |
+| **Sterrenbeeld** *(mythisch)* — Je productie als sterrenbeeld aan een nachtelijke hemel. | Bezit tweehonderd satellietconstellaties |
+| **Gouden grafiek** *(goddelijk)* — Een gouden vlak met licht erin. | Koop elk knooppunt in de studieboom |
+| **Bergketen** *(ongewoon)* — Je productie als bergen, met sneeuw op de toppen. | Bezit vijftig core routers |
+| **Aquarium** *(zeldzaam)* — Een bak water die volloopt met je productie, en belletjes die opstijgen. | Bezit vijftig zeekabels |
+| **8-bit** *(episch)* — Een lijn in trapjes, groen op zwart, zoals een spel uit 1985. | Vind zes verborgen dingen |
+
+### Rack
+
+| Rack | Hoe je hem vrijspeelt |
+|---|---|
+| **Blokjes** *(gewoon)* — Een blokje per apparaat, in de kleur van zijn vak. | Heb je vanaf het begin |
+| **Ledjes** *(gewoon)* — Ronde lampjes die knipperen, elk op zijn eigen tempo. | Bezit vijftig patchkabels |
+| **Bouwsteentjes** *(ongewoon)* — Met noppen erop. Je kunt er een netwerk mee bouwen. | Bezit honderd exemplaren van één apparaat |
+| **Stekkers** *(ongewoon)* — Een rij netwerkstekkers, netjes naast elkaar. | Lever een werkorder luchtdicht op |
+| **Equalizer** *(zeldzaam)* — Staafjes die op en neer dansen, alsof je netwerk muziek maakt. | Klik twintigduizend keer |
+| **Pixels** *(zeldzaam)* — Blokkerige pixels met een harde rand, zoals in 1985. | Ontdek het Token Ring-protocol |
+| **Diskettes** *(zeldzaam)* — Elk apparaat staat op een eigen diskette. | Koop negentig upgrades |
+| **Neonbuisjes** *(episch)* — Gloeiende buisjes in de kleur van hun vak. | Speel in totaal dertig uur |
+| **Kristallen** *(episch)* — Geslepen stenen die schitteren. | Bezit vijftig Quantum Links |
+| **Lavalampjes** *(legendarisch)* — Blobjes die traag van vorm veranderen. | Bezit vijfduizend apparaten tegelijk |
+| **Sterretjes** *(mythisch)* — Elk apparaat een ster, en ze twinkelen. | Bezit 75 singulariteiten |
+| **Goudstaafjes** *(goddelijk)* — Massief goud, met een glans die erover trekt. | Klik tienduizend gouden packets |
+| **Boekenplank** *(ongewoon)* — Elk apparaat een boek op de plank, in de kleur van zijn vak. | Lees vier hoofdstukken van de cursus |
+| **Snoepjes** *(zeldzaam)* — Ingepakte snoepjes. Niet opeten, het zijn je servers. | Klik 75 gouden packets |
+| **Batterijen** *(episch)* — Elk apparaat een batterij die langzaam oplaadt. | Bezit tien Dyson-datacenters |
 
 ### Logo
 
@@ -1032,6 +1221,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Goud** *(legendarisch)* — Verguld, met een glans die erover trekt. | Klik duizend gouden packets |
 | **Kosmisch** *(mythisch)* — Geschreven in de sterren. | Bezit vijftig singulariteiten |
 | **Hemels** *(goddelijk)* — Stralen van licht achter de naam. Je hoort bijna een koor. | Verzamel 3.000 studiepunten |
+| **Pixelletters** *(ongewoon)* — Blokkerige letters, zoals op de doos van een oud spel. | Klik drieduizend keer |
+| **Morse** *(zeldzaam)* — Zijn naam in streepjes en puntjes. Voor wie het kan lezen. | Rond twintig opdrachten af in de terminal |
+| **Graffiti** *(episch)* — Gespoten op de muur achter de school. Er druipt nog verf van. | Typ hackerman, gewoon op je toetsenbord |
 
 ### Titel
 
@@ -1061,6 +1253,7 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | 🍎 **Serge's oogappel** *(zeldzaam)* — Heeft de hele cursus gelezen. Echt waar. | Lees de hele cursus |
 | 🧾 **Werkordermachine** *(zeldzaam)* — Nog één goot, en dan naar huis. Zegt hij al drie uur. | Lever 25 werkorders op in de patchkast |
 | 🧱 **Firewall-fluisteraar** *(zeldzaam)* — Praat zachtjes tegen poorten tot ze dichtgaan. | Koop een Next-gen Firewall |
+| 👔 **Stylist** *(zeldzaam)* — Heeft een eigen look bewaard. Serge vraagt om advies. | Bewaar een eigen look bij Uiterlijk |
 | 👑 **Subnetkoning** *(episch)* — Rekent een /27 uit in zijn slaap. En praat erover. | Vijfentwintig goede antwoorden op rij bij de overhoring |
 | 🧲 **DDoS-magneet** *(episch)* — Rode packets vinden jou. Jij vindt ze nooit. | Negeer vijftig rode packets |
 | 🎖️ **Kabelmeester** *(episch)* — Geen kabelsalade. Nooit. Nergens. | Lever een goot van 8 bij 8 luchtdicht op, zonder hulp |
@@ -1073,11 +1266,13 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | 🗺️ **BGP-baron** *(episch)* — Beslist welke kant het internet op gaat. | Bezit 250 core routers tegelijk |
 | 🧘 **Uptime-monnik** *(episch)* — Vierentwintig uur zonder herstart. Innerlijke rust. | Speel in totaal 24 uur |
 | ⚓ **Zeekabelkapitein** *(episch)* — Legt kabels over de bodem van de oceaan. Zeeziek wordt hij niet. | Bezit 50 zeekabels tegelijk |
+| 🧺 **Verzamelaar** *(episch)* — Tweehonderd dingen vrijgespeeld. De kast zit vol. | Speel tweehonderd dingen vrij bij Uiterlijk |
 | 🌀 **Singulariteit** *(legendarisch)* — Is het netwerk geworden. | Koop een singulariteit |
 | 🌌 **Parallelle Serge** *(legendarisch)* — Bestaat in meerdere universums tegelijk. Alle versies klikken. | Koop een Parallel VPN |
 | ☀️ **Dysonbouwer** *(legendarisch)* — Heeft een ster ingepakt om servers te koelen. | Koop een Dyson-datacenter |
 | 🏅 **CCIE** *(legendarisch)* — Het zwaarste certificaat dat er is. Acht uur labo. | Verzamel honderd studiepunten |
 | 🧑‍🏫 **Professor** *(legendarisch)* — Geeft zelf les. Serge komt kijken, en knikt. | Studeer tien keer af |
+| 🔥 **Reekskoning** *(legendarisch)* — Vijfhonderd kliks op rij, zonder te stoppen. | Klik een reeks van vijfhonderd |
 | 🚑 **De Klikgod** *(mythisch)* — Een miljoen kliks. Serge maakt zich zorgen. | Klik een miljoen keer |
 | 🎓 **Eredoctor** *(mythisch)* — Zo vaak afgestudeerd dat de universiteit hem een gebouw gaf. | Studeer 25 keer af |
 | 🐲 **Eindbaas** *(mythisch)* — Heeft de hele studieboom uitgespeeld. | Koop elk knooppunt in de studieboom |
@@ -1087,23 +1282,6 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | 💥 **De Oerknal** *(goddelijk)* — Honderd singulariteiten. Er ontstaat een nieuw universum. | Bezit honderd singulariteiten tegelijk |
 | 🏛️ **De Architect** *(goddelijk)* — Heeft de hele studieboom gekocht en alles gevonden. Het netwerk is af. | Koop de hele studieboom en vind alles wat verborgen is |
 | 🧔 **Serge** *(goddelijk)* — Je bent Serge geworden. Hij weet nog niet of hij dat fijn vindt. | Haal elke prestatie |
-
-### Teller
-
-| Teller | Hoe je hem vrijspeelt |
-|---|---|
-| **Donkerblauw** *(gewoon)* — Rustig en goed leesbaar. | Heb je vanaf het begin |
-| **Rekenmachine** *(ongewoon)* — Groene cijfers op een zwart schermpje. | Verdien in totaal honderd miljoen packets |
-| **Goud** *(zeldzaam)* — Elk getal is een trofee. | Klik honderd gouden packets |
-| **Neon** *(zeldzaam)* — Roze neonbuizen, en ze zoemen zachtjes. | Haal 60 prestaties |
-| **Arcade** *(zeldzaam)* — Zoals de highscore in een speelhal. | Typ de Konami-code |
-| **Matrix** *(episch)* — Groene cijfers die zachtjes gloeien. | Voer rm -rf / uit in de terminal |
-| **Regenboog** *(episch)* — Elk cijfer in een andere kleur, en ze schuiven door. | Studeer vijf keer af |
-| **IJs** *(episch)* — Bevroren cijfers met een koude gloed. | Speel in totaal 48 uur |
-| **Vuur** *(legendarisch)* — Het getal is zo hoog dat het brandt. | Bereik een biljoen packets per seconde |
-| **Hologram** *(legendarisch)* — Doorschijnend, met scanlijnen door de cijfers. | Bereik een miljard packets per seconde |
-| **Kosmisch** *(mythisch)* — Cijfers vol sterrenstelsels. | Speel in totaal honderd uur |
-| **Hemels** *(goddelijk)* — Wit goud met een gloed die ademt. | Verzamel 3.000 studiepunten |
 
 ### Lettertype
 
@@ -1117,6 +1295,10 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Handschrift** *(episch)* — Alsof Serge alles zelf heeft opgeschreven. | Lees de hele cursus |
 | **Meme** *(episch)* — Bovenste tekst. Onderste tekst. | Vind tien verborgen dingen |
 | **Comic Sans** *(legendarisch)* — De letter waar elke ontwerper van huilt. Serge vindt hem prachtig. | Speel op 1 april, of vind vijftien verborgen dingen |
+| **Visitekaartje** *(zeldzaam)* — Deftige kapitalen, zoals op het kaartje van een directeur. | Haal 40 prestaties |
+| **Mode** *(episch)* — Hoog contrast en dunne schreven, zoals op de cover van een modeblad. | Speel 150 dingen vrij bij Uiterlijk |
+| **Middeleeuws** *(mythisch)* — Letters van een monnik met een ganzenveer. Het netwerk is een heilige kroniek. | Koop vijftig knooppunten in de studieboom |
+| **Kalligrafie** *(goddelijk)* — Zwierige letters met krullen, geschreven op het diploma van een doctor. | Behaal het doctoraat in de studieboom |
 
 ### Zweeftekst
 
@@ -1135,6 +1317,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Regenboog** *(legendarisch)* — Alle kleuren, en het getal maakt een boogje opzij. | Studeer zeven keer af |
 | **Sterrenstof** *(mythisch)* — Een getal van sterren dat langzaam uit elkaar dwarrelt. | Bezit 25 singulariteiten |
 | **Hemels** *(goddelijk)* — Een getal van licht, met een straal die naar boven wijst. | Klik een miljoen keer |
+| **Stempel** *(ongewoon)* — Een rode stempel, schuin op het papier. Goedgekeurd. | Lever vijf werkorders op |
+| **Rode pen** *(zeldzaam)* — Met de rode pen van Serge, alsof hij je toets verbetert. | Beantwoord dertig vragen goed bij de overhoring |
+| **Diamant** *(legendarisch)* — Geslepen cijfers die schitteren als ze opstijgen. | Klik 1.200 gouden packets |
 
 ### Meldingen
 
@@ -1152,6 +1337,30 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Perkament** *(legendarisch)* — Een oorkonde met een lakzegel. Serge laat het voorlezen door een heraut. | Studeer vijftien keer af |
 | **Hologram** *(mythisch)* — Doorschijnend en blauw, en het hapert af en toe. | Bezit 100 Quantum Links |
 | **Hemelse boodschap** *(goddelijk)* — Elke melding daalt neer uit de hemel, met licht en al. | Behaal het doctoraat in de studieboom |
+| **Brief** *(ongewoon)* — Een briefje op gelinieerd papier, met een postzegel in de hoek. | Koop twintig upgrades |
+| **Arcade** *(zeldzaam)* — Blokletters op zwart, met een rand van pixels. 1UP! | Klik vijftig keer op het grote getal bovenaan |
+| **Matglas** *(episch)* — Doorschijnend glas waar de pagina wazig doorheen schijnt. | Bezit vijftig vSphere-clusters |
+
+### Nieuwsbalk
+
+| Nieuwsbalk | Hoe je hem vrijspeelt |
+|---|---|
+| **Donkerblauw** *(gewoon)* — Het nieuws in een donkerblauwe balk. | Heb je vanaf het begin |
+| **Laatste nieuws** *(gewoon)* — Een rood label en een witte balk, zoals op tv. | Verdien in totaal een miljoen packets |
+| **Ondertitels** *(gewoon)* — Wit met een zwarte rand, zoals onder een film. | Speel in totaal een halfuur |
+| **Terminal** *(ongewoon)* — Het nieuws als een logbestand dat je volgt met tail -f. | Voer je eerste commando uit in de terminal |
+| **Lichtkrant** *(ongewoon)* — Oranje ledjes, en de tekst schuift van rechts naar links. | Klik 25 keer op de logbalk onder Serge |
+| **Teletekst** *(zeldzaam)* — Pagina 101. Blokletters in felle kleuren, zoals vroeger. | Klik drie keer op het versienummer |
+| **Chat** *(zeldzaam)* — Serge stuurt je het nieuws zelf, in een berichtje. | Kom terug na een uur weg te zijn geweest |
+| **Radio** *(zeldzaam)* — Serge FM, met een equalizer die meedanst. | Speel in totaal acht uur |
+| **Ochtendkrant** *(episch)* — Elk bericht is de kop van de voorpagina. | Haal negentig prestaties |
+| **Telex** *(episch)* — Een papieren strook waarop de letters een voor een verschijnen. | Rond vijftig opdrachten af in de terminal |
+| **Hologram** *(legendarisch)* — Doorschijnend blauw, en het hapert soms. | Bezit vijftig AI NetOps |
+| **Openingstekst** *(mythisch)* — Lang geleden, in een netwerk hier ver vandaan. Het nieuws kruipt schuin de ruimte in. | Studeer 25 keer af |
+| **Hemels bericht** *(goddelijk)* — Het nieuws in gouden letters, met licht van boven. | Vind alles wat verborgen is |
+| **Oude gsm** *(ongewoon)* — Donkere pixels op een groen schermpje. Onverwoestbaar. | Klik 3.310 keer |
+| **Stripballon** *(zeldzaam)* — Het nieuws als tekstballon uit een stripverhaal. | Haal 45 prestaties |
+| **Graffitimuur** *(episch)* — Gespoten op een bakstenen muur, met verf die nog nat is. | Typ hackerman, gewoon op je toetsenbord |
 
 ### Klikeffect
 
@@ -1174,6 +1383,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Zwart gat** *(legendarisch)* — Alles wordt naar binnen gezogen. | Bezit tien singulariteiten |
 | **Supernova** *(mythisch)* — Een ster die ineenstort en openbarst in een schokgolf. | Bezit vijftig singulariteiten |
 | **Oerknal** *(goddelijk)* — Alles begint bij jouw klik: een lichtflits, een ring en sterren in alle kleuren. | Haal elke prestatie |
+| **Sneeuwvlokjes** *(ongewoon)* — Kleine vlokjes die van je klik weg dwarrelen. | Klik 7.500 keer |
+| **Muziek** *(zeldzaam)* — Noten die van je klik opstijgen, elke keer een andere. | Klik veertigduizend keer |
+| **Portaaltje** *(legendarisch)* — Een klein kolkend portaal dat opengaat en weer dichtklapt. | Bezit tien Parallel VPN's |
 
 ### Klikreeks
 
@@ -1187,6 +1399,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Serge keurt** *(episch)* — Serge zegt wat hij ervan vindt. Streng, maar rechtvaardig. | Beantwoord honderd vragen goed bij de overhoring |
 | **Krachtniveau** *(legendarisch)* — Je krachtniveau stijgt met elke klik. Tot het meer dan negenduizend is. | Klik een reeks van driehonderd |
 | **Hemelse reeks** *(goddelijk)* — Romeinse cijfers in goud, en bij elke mijlpaal zingt er een koor. | Klik een miljoen keer |
+| **Gezichtjes** *(ongewoon)* — Een gezichtje dat steeds enthousiaster wordt naarmate je reeks groeit. | Klik een reeks van 25 |
+| **DJ Serge** *(zeldzaam)* — De dj roept je reeks om, met scratches erbij. | Klik een reeks van 150 |
+| **Toverspreuken** *(mythisch)* — Elke mijlpaal een spreuk. Klikus Maximus! | Klik een reeks van zeshonderd |
 
 ### Cursor
 
@@ -1204,6 +1419,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Gouden pijl** *(legendarisch)* — Massief goud. Zwaar om mee te klikken, maar het staat je goed. | Klik 1.500 gouden packets |
 | **Komeet** *(mythisch)* — Een ster met een staart van licht. | Bezit 50 Dyson-datacenters |
 | **Hemelse vinger** *(goddelijk)* — De vinger uit het plafond van de Sixtijnse Kapel. Eén aanraking en er komt leven in het netwerk. | Haal elke prestatie |
+| **Potlood** *(gewoon)* — Een geel potlood met een gumpje. Klaar voor de overhoring. | Beantwoord drie vragen goed bij de overhoring |
+| **Pizzapunt** *(ongewoon)* — Een punt pizza. Het puntje klikt. | Speel in totaal vijf uur |
+| **Bliksem** *(episch)* — Een bliksemschicht. Elke klik slaat in. | Bezit vijftig SDN-controllers |
 
 ### Muisspoor
 
@@ -1219,6 +1437,10 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Regenboog** *(episch)* — Een lint in alle kleuren. | Studeer één keer af |
 | **Vuurspoor** *(episch)* — Vlammetjes die opflakkeren en uitdoven. | Speel in totaal 36 uur |
 | **Komeet** *(goddelijk)* — Een felle kern met een lange staart van sterren in alle kleuren. | Speel in totaal 150 uur |
+| **Pixels** *(ongewoon)* — Blokjes in felle kleuren die achter je muis vallen. | Typ de Konami-code |
+| **Muzieknoten** *(zeldzaam)* — Een melodie die achter je muis opstijgt. | Klik een reeks van veertig |
+| **Bliksemspoor** *(legendarisch)* — Een zigzag van elektriciteit die achter je muis knettert. | Bezit honderd next-gen firewalls |
+| **Spookmuizen** *(mythisch)* — Doorschijnende muisaanwijzers die je muis blijven volgen, alsof er iemand meekijkt. | Speel in totaal 175 uur |
 
 ### Klikgeluid
 
@@ -1240,6 +1462,9 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Miauw** *(episch)* — De serverkat is het eens met je klik. | Heb precies 42 exemplaren van één apparaat |
 | **Subwoofer** *(episch)* — Een diepe dreun. Het rack trilt mee. | Bezit 100 datacenters tegelijk |
 | **Hemelkoor** *(goddelijk)* — Een zacht koor dat bij elke klik aanzwelt. | Verzamel 2.000 studiepunten |
+| **Beatbox** *(zeldzaam)* — Boem, tss, boem-boem, tss. Om de beurt. | Klik een reeks van 75 |
+| **Energiezwaard** *(legendarisch)* — Een zoemend zwaard van licht dat door de lucht zwiept. | Zie tweehonderd rode packets |
+| **Theremin** *(mythisch)* — Een zweverige toon uit een oude sciencefictionfilm. | Bezit 150 Quantum Links |
 
 ### Muziek
 
@@ -1255,6 +1480,8 @@ Onder het tandwiel rechtsboven kies je hoe je spel eruitziet. 24 losse keuzes di
 | **Eindbaas** *(legendarisch)* — Het laatste level. Snel, donker en vol spanning. | Lever een goot van 8 bij 8 luchtdicht op, zonder hulp |
 | **Ruimtereis** *(mythisch)* — Trage klanken met een echo, ergens tussen twee sterren. | Bezit 25 Parallel VPN's |
 | **Hemelse harmonie** *(goddelijk)* — Een koor en klokjes. Zo klinkt het als het netwerk af is. | Verzamel 3.000 studiepunten |
+| **Jazzcafé** *(zeldzaam)* — Een wandelende bas, een zacht bekken en een piano die meedenkt. | Speel in totaal negen uur |
+| **Eurodance** *(episch)* — Pianostoten en een bas die op de tweede tel springt. Het is 1995. | Studeer negen keer af |
 
 De geëvolueerde Serge is de opvolger van de oude Evolve-knop: bij een miljard packets verdiend krijg je een melding en kun je hem omzetten.
 
@@ -1454,7 +1681,7 @@ Klik in het tandwiel-paneel rechtsboven zeven keer op het versienummer onder **O
 | `gebouw switch 100` | Zet het aantal van één apparaat. De id's staan hieronder. |
 | `upgrades` | Geeft alle upgrades vrij |
 | `prestaties` | Geeft alle prestaties vrij |
-| `skins` | Geeft alles van Uiterlijk vrij: portretten, ringen, achtergronden, klikeffecten, klikgeluiden en titels |
+| `skins` | Geeft alles van Uiterlijk vrij, van portretten en ringen tot muziek, opstartschermen en looks |
 | `punten 50` | Voegt studiepunten toe |
 | `goud` | Laat meteen een gouden packet verschijnen |
 | `reset` | Wist alle actieve buffs en straffen |

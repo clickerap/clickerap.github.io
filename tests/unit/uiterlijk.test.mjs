@@ -1,6 +1,6 @@
 import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
-import { G, freshState, recompute, checkSkins, skinUnlocked, kiesSkin } from "../../js/state.js";
+import { G, freshState, recompute, checkSkins, skinUnlocked, kiesSkin, draagLook, bewaarLook, graduate } from "../../js/state.js";
 import { schoon } from "../../js/save.js";
 import { UITERLIJK, STANDAARD, SOORTNAMEN, ALLE_SKINS, WEER, MAATJES, FILTERS } from "../../js/data/uiterlijk.js";
 import { ACHIEVEMENT_BY_ID } from "../../js/data/achievements.js";
@@ -36,20 +36,22 @@ test("een nieuwe speler heeft alleen de standaarden, en het weer van dit seizoen
   }
 });
 
-test("wie alles heeft, speelt alles vrij", () => {
+test("wie alles heeft, speelt alles vrij", async () => {
   for (const id of Object.keys(ACHIEVEMENT_BY_ID)) G.achievements[id] = true;
-  Object.assign(G.stats, { clicks: 1e6, goldenClicks: 1e4, ddosIgnored: 100, playTime: 1e6, prestiges: 30, lifetime: 1e12 });
-  G.prestige = 3100;
+  Object.assign(G.stats, { clicks: 1e6, goldenClicks: 1e4, ddosIgnored: 100, ddosSeen: 400, playTime: 1e6, prestiges: 40, lifetime: 1e12, bestPps: 1e13 });
+  G.prestige = 5000;
   G.buildings.fiber = 250;
   G.buildings.singularity = 100;
-  G.buildings.satellite = 100;
-  G.buildings.datacenter = 100;
+  G.buildings.satellite = 200;
+  G.buildings.datacenter = 200;
+  G.buildings.hyperscaler = 100;
+  Object.assign(G.buildings, { soc: 25, proxmox: 50, darkfiber: 50, vsphere: 50, sdn: 50, firewall: 100 });
   G.buildings.k8s = 50;
-  G.buildings.firewall = 1;
+  G.buildings.firewall = 100;
   G.buildings.subsea = 100;
   G.buildings.rack = 100;
-  G.buildings.multiverse = 25;
-  G.buildings.dyson = 50;
+  G.buildings.multiverse = 50;
+  G.buildings.dyson = 100;
   G.buildings.neural = 100;
   G.buildings.patchkabel = 25;
   G.buildings.router = 250;
@@ -59,9 +61,14 @@ test("wie alles heeft, speelt alles vrij", () => {
   G.minigames.patch.luchtdicht = 25;
   G.minigames.patch.discovered = { tokenring: true, ethernet: true, poe: true, docsis: true };
   G.minigames.quiz.correct = 200;
+  for (const id of ["netwerk", "osi", "ip", "subnet", "switch"]) G.minigames.cursus.gelezen[id] = true;
   G.minigames.cli.gedaan = 50;
   G.stats.besteReeks = 1000;
   G.nodes.dr = true;
+  // Vijftig knooppunten in de studieboom, en een bewaarde look.
+  const { NODES } = await import("../../js/data/skilltree.js");
+  for (const node of NODES.slice(0, 50)) G.nodes[node.id] = true;
+  G.looks[0] = { naam: "Test", uiterlijk: { ...G.uiterlijk } };
   // Upgrades en eggs worden geteld uit hun lijsten.
   for (const u of UPGRADES.slice(0, 120)) G.upgrades[u.id] = true;
   for (const id of Object.keys(ACHIEVEMENT_BY_ID)) if (ACHIEVEMENT_BY_ID[id].egg) G.eggs[id] = true;
@@ -206,4 +213,67 @@ test("avondlicht vanaf negen uur 's avonds", () => {
   } finally {
     globalThis.Date = echt;
   }
+});
+
+test("een look zet alleen op wat je al hebt, en blijft bewaard", async () => {
+  const { LOOKS } = await import("../../js/data/uiterlijk.js");
+  checkSkins();
+  // Een nieuwe speler heeft van een kant-en-klare look nog niets.
+  const hacker = LOOKS.find((l) => l.id === "hacker");
+  const leeg = draagLook(hacker.uiterlijk);
+  assert.equal(leeg.toegepast, 0);
+  assert.equal(leeg.totaal, Object.keys(hacker.uiterlijk).length);
+  assert.equal(G.uiterlijk.achtergrond, "klas");
+  // Met twee onderdelen vrij, gaan er twee op.
+  G.skins["achtergrond:matrix"] = true;
+  G.skins["accent:groen"] = true;
+  assert.equal(draagLook(hacker.uiterlijk).toegepast, 2);
+  assert.equal(G.uiterlijk.achtergrond, "matrix");
+  assert.equal(G.uiterlijk.accent, "groen");
+
+  bewaarLook(1, "  Mijn groene look, met een veel te lange naam  ");
+  assert.equal(G.looks[1].naam, "Mijn groene look, met ee");
+  assert.equal(G.looks[1].uiterlijk.accent, "groen");
+  bewaarLook(2, "   ");
+  assert.equal(G.looks[2].naam, "Look 3");
+
+  // Na laden: onbekende soorten en id's verdwijnen, en er zijn er nooit meer dan drie.
+  const data = JSON.parse(JSON.stringify({ ...G, skins: Object.keys(G.skins) }));
+  data.looks[0] = { naam: "Rommel", uiterlijk: { achtergrond: "bestaatniet", vliegtuig: "boeing", teller: "lcd" } };
+  data.looks.push({ naam: "Vier", uiterlijk: { teller: "lcd" } });
+  const terug = schoon(data);
+  assert.equal(terug.looks.length, 3);
+  assert.deepEqual(terug.looks[0], { naam: "Rommel", uiterlijk: { teller: "lcd" } });
+  assert.equal(terug.looks[1].uiterlijk.achtergrond, "matrix");
+  assert.equal(schoon({ looks: "kapot" }).looks.every((l) => l === null), true);
+
+  // Afstuderen laat je looks en je beste klikreeks staan.
+  G.stats.besteReeks = 88;
+  G.stats.lifetime = 1e15;
+  recompute();
+  assert.ok(graduate() > 0);
+  assert.equal(G.looks[1].naam, "Mijn groene look, met ee");
+  assert.equal(G.stats.besteReeks, 88);
+});
+
+test("elke soort heeft iets goddelijks, en elke kant-en-klare look is volledig", async () => {
+  const { LOOKS } = await import("../../js/data/uiterlijk.js");
+  for (const [soort, lijst] of Object.entries(UITERLIJK)) {
+    assert.ok(lijst.some((s) => s.rang === "goddelijk"), `${soort} heeft niets goddelijks`);
+  }
+  for (const look of LOOKS) {
+    assert.deepEqual(Object.keys(look.uiterlijk).sort(), Object.keys(UITERLIJK).sort(), `${look.id} kiest niet voor elke soort`);
+    for (const [soort, id] of Object.entries(look.uiterlijk)) {
+      assert.ok(UITERLIJK[soort].some((s) => s.id === id), `${look.id}: ${soort}:${id} bestaat niet`);
+    }
+  }
+  // Een look neemt niets over van wat je droeg: wat je niet hebt, wordt standaard.
+  G.skins["accent:paars"] = true;
+  G.uiterlijk.accent = "paars";
+  const klassiek = LOOKS.find((l) => l.id === "klassiek");
+  const { toegepast, totaal } = draagLook(LOOKS.find((l) => l.id === "hemels").uiterlijk);
+  assert.equal(G.uiterlijk.accent, STANDAARD.accent);
+  assert.ok(toegepast < totaal);
+  assert.deepEqual(draagLook(klassiek.uiterlijk), { toegepast: totaal, totaal });
+  assert.deepEqual(G.uiterlijk, { ...STANDAARD });
 });
