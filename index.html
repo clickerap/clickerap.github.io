@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- Alleen scripts, stijlen, beelden en lettertypes van deze site zelf.
+       Een ingespoten onerror- of script-tag doet zo niets. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Pingo Clicker</title>
+  <meta name="description" content="Bouw het netwerk van Pingo uit, van patchkabel tot singulariteit." />
+  <meta name="theme-color" content="#0d2b4d" />
+  <!-- Nieuwe bestandsnamen: een browser die het oude pictogram onthield, haalt dit opnieuw op. -->
+  <link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+  <link rel="preload" href="fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <a class="skip" href="#winkel-tab">Naar de winkel</a>
+
+  <header class="topbar">
+    <div class="titel">
+      <!-- De naam blijft voor schermlezers altijd "Pingo Clicker", ook als een
+           logo hem anders schrijft. -->
+      <h1 class="wordmark" id="wordmark" aria-label="Pingo Clicker"><span class="w1">Pingo</span> <span class="w2">Clicker</span></h1>
+      <p class="netwerknaam" id="netwerknaam" hidden></p>
+      <p class="titelbadge" id="titelbadge" hidden></p>
+    </div>
+    <div class="kop-knoppen">
+      <button type="button" class="ghost-btn" id="btn-help" aria-label="Uitleg en sneltoetsen" title="Uitleg">?</button>
+      <button type="button" class="ghost-btn" id="btn-meer" aria-label="Statistieken en instellingen" title="Statistieken en instellingen">⚙</button>
+    </div>
+  </header>
+
+  <main class="board">
+    <section class="stage" aria-label="Pingo">
+      <div class="counter">
+        <strong id="score" aria-live="off">0</strong>
+        <p class="counter-sub"><span id="pps">0</span> <span id="eenheid">packets</span> per seconde</p>
+        <p class="counter-note" id="counter-note"></p>
+      </div>
+
+      <div class="clicker">
+        <div class="pingo-plek">
+          <!-- Het decor ligt achter Pingo, de omloop ervoor. -->
+          <span class="decor" id="decor" aria-hidden="true"></span>
+          <button type="button" id="pingo" class="pingo" aria-label="Klik op Pingo om packets te versturen">
+            <img src="img/pingo.png" alt="" id="pingo-img" width="320" height="320" draggable="false" />
+            <!-- Binnen de knop, zodat het accessoire meeveert als je klikt. -->
+            <span class="accessoire" id="accessoire" aria-hidden="true"></span>
+          </button>
+          <span class="omloop" id="omloop" aria-hidden="true"></span>
+          <p class="combo" id="combo" aria-hidden="true" hidden></p>
+          <button type="button" class="maatje" id="maatje" hidden><span aria-hidden="true"></span></button>
+          <p class="maatje-ballon" id="maatje-ballon" hidden></p>
+        </div>
+        <p class="clicker-hint" id="clicker-hint">Klik om te beginnen</p>
+      </div>
+
+      <div class="buffbar" id="buffbar" aria-live="polite"></div>
+
+      <div class="doel" id="doel" hidden>
+        <p><span id="doel-tekst"></span><strong id="doel-pct"></strong></p>
+        <div class="doel-meter"><span id="doel-bar"></span></div>
+      </div>
+
+      <div class="logline">
+        <p id="news" class="nieuws-tekst"><span>Netwerk wordt geïnitialiseerd…</span></p>
+        <div class="incident" id="incident" hidden>
+          <p id="incident-text"></p>
+          <div class="incident-actions">
+            <button type="button" class="btn small" id="incident-fix"></button>
+            <button type="button" class="btn small ghost" id="incident-ignore"></button>
+          </div>
+          <div class="incident-bar"><span id="incident-progress"></span></div>
+        </div>
+      </div>
+
+      <div class="logboek">
+        <h2 class="mini-kop">Logboek <span id="logboek-aantal"></span></h2>
+        <ul class="loglijst" id="loglijst">
+          <li class="log-leeg">Nog niets gebeurd.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="status" aria-label="Stand van zaken">
+      <div class="verkeer" id="verkeer" hidden>
+        <h2 class="mini-kop">Verdeling <span id="verkeer-totaal"></span></h2>
+        <div class="verkeerbalk" id="verkeerbalk"></div>
+        <ul class="verkeer-legenda" id="verkeer-legenda"></ul>
+      </div>
+
+      <div class="doorvoer">
+        <h2 class="mini-kop">Doorvoer <span id="grafiek-nu">0 p/s</span></h2>
+        <div class="grafiek-vlak">
+          <svg id="grafiek" viewBox="0 0 300 100" preserveAspectRatio="none" role="img"
+               aria-label="Je productie van de afgelopen twee minuten"></svg>
+        </div>
+        <p class="grafiek-voet"><span id="grafiek-piek"></span><span id="grafiek-gem"></span></p>
+      </div>
+
+      <div class="rack">
+        <h2 class="mini-kop">Infrastructuur <span id="rack-count">0 apparaten</span></h2>
+        <div class="rack-body" id="rack">
+          <p class="rack-empty">Nog niets in het rack. Koop je eerste patchkabel.</p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel" aria-label="Beheer">
+      <nav class="tabs" role="tablist" id="tabs" aria-label="Onderdelen">
+        <button type="button" role="tab" id="winkel-tab" data-tab="winkel" aria-selected="true" aria-controls="winkel" tabindex="0">Winkel</button>
+        <button type="button" role="tab" id="upgrades-tab" data-tab="upgrades" aria-selected="false" aria-controls="upgrades" tabindex="-1">
+          Upgrades <span class="pip" id="pip-upgrades" hidden>0</span>
+        </button>
+        <button type="button" role="tab" id="prestaties-tab" data-tab="prestaties" aria-selected="false" aria-controls="prestaties" tabindex="-1">Prestaties</button>
+        <button type="button" role="tab" id="labo-tab" data-tab="labo" aria-selected="false" aria-controls="labo" tabindex="-1">Labo</button>
+        <button type="button" role="tab" id="studie-tab" data-tab="studie" aria-selected="false" aria-controls="studie" tabindex="-1">Studie</button>
+      </nav>
+
+      <div class="tabpanels" id="tabpanels">
+        <section role="tabpanel" id="winkel" aria-labelledby="winkel-tab">
+          <div class="shopbar">
+            <div class="segmented" role="group" aria-label="Aantal per aankoop">
+              <button type="button" data-amount="1" class="on" aria-pressed="true">1</button>
+              <button type="button" data-amount="10" aria-pressed="false">10</button>
+              <button type="button" data-amount="100" aria-pressed="false">100</button>
+              <button type="button" data-amount="max" aria-pressed="false">max</button>
+            </div>
+            <button type="button" class="toggle" id="sell-toggle" aria-pressed="false">Verkopen</button>
+          </div>
+          <ul class="shoplist" id="shop"></ul>
+          <div class="starter" id="starter">
+            <h3>Zo werkt het</h3>
+            <ol>
+              <li><strong>Klik op Pingo.</strong> Elke klik levert packets op.</li>
+              <li><strong>Koop apparaten.</strong> Die leveren vanzelf packets, ook als je niets doet.</li>
+              <li><strong>Koop upgrades.</strong> Ze verdubbelen wat je al hebt. Kijk in het tweede tabblad.</li>
+              <li><strong>Let op gouden packets.</strong> Die verschijnen af en toe ergens op je scherm.</li>
+            </ol>
+            <p>Hoe verder je komt, hoe meer er opengaat: een labo met opdrachten, een studieboom, en een kast vol dingen om je spel mee op te tuigen.</p>
+          </div>
+        </section>
+
+        <section role="tabpanel" id="upgrades" aria-labelledby="upgrades-tab" hidden>
+          <p class="panel-intro" id="upgrade-intro">Upgrades verschijnen zodra je er een verdient.</p>
+          <div class="uptegels" id="upgrade-tegels"></div>
+          <details class="owned">
+            <summary>Al gekocht: <span id="owned-count">0</span></summary>
+            <div class="gekocht-grid" id="upgrade-owned"></div>
+          </details>
+          <div class="upinfo" id="upgrade-info"></div>
+        </section>
+
+        <section role="tabpanel" id="prestaties" aria-labelledby="prestaties-tab" hidden>
+          <div class="koffie">
+            <div class="koffie-head">
+              <span id="koffie-rank">Geen koffie</span>
+              <span id="koffie-count">0 / 0</span>
+            </div>
+            <div class="meter"><span id="koffie-bar"></span></div>
+            <p class="panel-intro" id="koffie-note">Elke prestatie zet je koffiepeil hoger.</p>
+          </div>
+          <div class="segmented klein" role="group" aria-label="Welke prestaties tonen" id="ach-filter">
+            <button type="button" data-filter="alles" class="on" aria-pressed="true">Alles</button>
+            <button type="button" data-filter="open" aria-pressed="false">Nog te doen</button>
+            <button type="button" data-filter="klaar" aria-pressed="false">Behaald</button>
+          </div>
+          <div class="achlijst" id="ach-lijst"></div>
+        </section>
+
+        <section role="tabpanel" id="labo" aria-labelledby="labo-tab" hidden>
+          <div class="labo-picker" id="labo-picker"></div>
+          <div class="labo-stage" id="labo-stage"></div>
+        </section>
+
+        <section role="tabpanel" id="studie" aria-labelledby="studie-tab" hidden>
+          <div class="graduate" id="graduate-card"></div>
+          <div class="tree" id="tree"></div>
+        </section>
+
+      </div>
+    </aside>
+  </main>
+
+  <dialog class="sheet" id="sheet" aria-labelledby="sheet-title">
+    <div class="sheet-card">
+      <div class="sheet-kop">
+        <h2 id="sheet-title">Statistieken en instellingen</h2>
+        <button type="button" class="sheet-sluit" id="sheet-sluit" aria-label="Sluiten">&times;</button>
+      </div>
+      <div class="stack sheet-body" id="meer-body"></div>
+    </div>
+  </dialog>
+
+  <!-- Het schermfilter uit Uiterlijk: een laag die van kleur verandert en een
+       laag met lijnen, randen of korrel. -->
+  <div class="filterkleur" aria-hidden="true"></div>
+  <div class="filterlaag" aria-hidden="true"></div>
+
+  <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+  <div class="toaster" id="toaster" aria-live="polite"></div>
+  <div class="fx" id="fx" aria-hidden="true"></div>
+  <p class="voor-schermlezers" id="aankondiging" aria-live="assertive"></p>
+
+  <dialog class="modal" id="modal" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <h2 id="modal-title"></h2>
+      <div id="modal-body"></div>
+      <div class="modal-actions" id="modal-actions"></div>
+    </div>
+  </dialog>
+
+  <script type="module" src="js/main.js"></script>
+  <noscript>
+    <p style="padding:2rem;text-align:center">Pingo Clicker heeft JavaScript nodig.</p>
+  </noscript>
+  <!-- Filters voor portretten die CSS alleen niet kan maken. -->
+  <svg class="filters" width="0" height="0" aria-hidden="true" focusable="false">
+    <!-- 8-bit: alleen elk negende pixel blijft over, en groeit dan tot een blok. -->
+    <filter id="pixel" x="0" y="0" width="1" height="1">
+      <feFlood x="4" y="4" width="1" height="1" />
+      <feComposite width="9" height="9" />
+      <feTile result="raster" />
+      <feComposite in="SourceGraphic" in2="raster" operator="in" />
+      <feMorphology operator="dilate" radius="4" />
+    </filter>
+    <!-- Duotoon: het beeld in twee kleuren, van indigo in de schaduw naar koraal in het licht. -->
+    <filter id="duotoon" color-interpolation-filters="sRGB">
+      <feColorMatrix type="saturate" values="0" />
+      <feComponentTransfer>
+        <feFuncR type="table" tableValues="0.15 0.98" />
+        <feFuncG type="table" tableValues="0.1 0.47" />
+        <feFuncB type="table" tableValues="0.45 0.42" />
+      </feComponentTransfer>
+    </filter>
+    <!-- Pop-art: felle kleuren, teruggebracht tot een paar vlakken. -->
+    <filter id="popart" color-interpolation-filters="sRGB">
+      <feColorMatrix type="saturate" values="2.4" />
+      <feComponentTransfer>
+        <feFuncR type="discrete" tableValues="0.1 0.6 0.98 1" />
+        <feFuncG type="discrete" tableValues="0.05 0.35 0.85 1" />
+        <feFuncB type="discrete" tableValues="0.35 0.65 0.95" />
+      </feComponentTransfer>
+    </filter>
+    <!-- Festival: drie kleuren, van diep indigo via magenta naar geel. -->
+    <filter id="festival" color-interpolation-filters="sRGB">
+      <feColorMatrix type="saturate" values="0" />
+      <feComponentTransfer>
+        <feFuncR type="table" tableValues="0.12 0.93 1" />
+        <feFuncG type="table" tableValues="0.07 0.28 0.9" />
+        <feFuncB type="table" tableValues="0.36 0.6 0.45" />
+      </feComponentTransfer>
+    </filter>
+    <!-- Schets: de randen van het beeld als potloodlijnen op licht papier. -->
+    <filter id="schets" color-interpolation-filters="sRGB">
+      <feColorMatrix type="saturate" values="0" result="grijs" />
+      <feConvolveMatrix in="grijs" order="3" kernelMatrix="-1 -1 -1 -1 8 -1 -1 -1 -1" preserveAlpha="true" result="randen" />
+      <feComponentTransfer in="randen" result="lijnen">
+        <feFuncR type="linear" slope="-4" intercept="1" />
+        <feFuncG type="linear" slope="-4" intercept="1" />
+        <feFuncB type="linear" slope="-4" intercept="1" />
+      </feComponentTransfer>
+      <feComponentTransfer in="grijs" result="papier">
+        <feFuncR type="linear" slope="0.35" intercept="0.68" />
+        <feFuncG type="linear" slope="0.35" intercept="0.68" />
+        <feFuncB type="linear" slope="0.35" intercept="0.66" />
+      </feComponentTransfer>
+      <feBlend in="lijnen" in2="papier" mode="multiply" />
+    </filter>
+    <!-- Warmtebeeld: grijswaarden, dan een kleurschaal van koud blauw via rood
+         en oranje naar wit. -->
+    <filter id="warmtebeeld" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="0.3 0.59 0.11 0 0  0.3 0.59 0.11 0 0  0.3 0.59 0.11 0 0  0 0 0 1 0" />
+      <feComponentTransfer>
+        <feFuncR type="table" tableValues="0.04 0.3 0.8 1 1 1" />
+        <feFuncG type="table" tableValues="0 0 0.08 0.42 0.82 1" />
+        <feFuncB type="table" tableValues="0.3 0.62 0.42 0.05 0.12 0.9" />
+      </feComponentTransfer>
+    </filter>
+  </svg>
+</body>
+
+</html>
