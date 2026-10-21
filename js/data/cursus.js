@@ -5,7 +5,7 @@
 //   lijst  opsomming
 //   tabel  kop + rijen
 //   code   voorbeeld in vaste breedte
-//   pingo  een opmerking van Pingo zelf
+//   egres  een opmerking van Egres zelf
 
 export const HOOFDSTUKKEN = [
   {
@@ -22,7 +22,7 @@ export const HOOFDSTUKKEN = [
         "Stukjes kunnen verschillende routes nemen en toch samen aankomen.",
       ] },
       { t: "p", tekst: "Op de kabel zelf heet zo'n stukje een frame. In dat frame zit het packet, en in dat packet zit je data. Elke laag doet er zijn eigen etiket omheen — dat heet inkapseling." },
-      { t: "pingo", tekst: "Als je snapt dat alles in stukjes gaat, snap je waarom een netwerk kan vertragen zonder stuk te zijn." },
+      { t: "egres", tekst: "Als je snapt dat alles in stukjes gaat, snap je waarom een netwerk kan vertragen zonder stuk te zijn." },
     ],
   },
   {
@@ -42,7 +42,7 @@ export const HOOFDSTUKKEN = [
         ["1", "Fysiek", "Signalen op de draad", "Koper, glas, wifi"],
       ] },
       { t: "p", tekst: "Het nut zit in het zoeken naar fouten: je begint onderaan en werkt omhoog. Kabel los is laag 1. Verkeerd VLAN is laag 2. Verkeerde gateway is laag 3. Poort dicht in de firewall is laag 4. Verlopen certificaat is laag 6." },
-      { t: "pingo", tekst: "Ezelsbruggetje van onder naar boven: Please Do Not Throw Sausage Pizza Away." },
+      { t: "egres", tekst: "Ezelsbruggetje van onder naar boven: Please Do Not Throw Sausage Pizza Away." },
     ],
   },
   {
@@ -90,7 +90,7 @@ export const HOOFDSTUKKEN = [
         ["/29", "255.255.255.248", "8", "6"],
         ["/30", "255.255.255.252", "4", "2"],
       ] },
-      { t: "pingo", tekst: "Leer de blokgroottes uit je hoofd. Met 256 min het laatste octet van het masker heb je hem zo terug." },
+      { t: "egres", tekst: "Leer de blokgroottes uit je hoofd. Met 256 min het laatste octet van het masker heb je hem zo terug." },
     ],
   },
   {
@@ -114,7 +114,7 @@ export const HOOFDSTUKKEN = [
         ["4", ".192/26", ".193 – .254", ".255"],
       ] },
       { t: "p", tekst: "Omgekeerd werkt het net zo. In welk subnet ligt 192.168.20.140/26? Blokgrootte 64, dus de grenzen liggen op 0, 64, 128 en 192. Honderdveertig zit tussen 128 en 191, dus het netwerk is 192.168.20.128 en de broadcast is 192.168.20.191." },
-      { t: "pingo", tekst: "In de overhoring hiernaast krijg je precies dit soort vragen. Reken ze op papier na, niet met een rekenmachine." },
+      { t: "egres", tekst: "In de overhoring hiernaast krijg je precies dit soort vragen. Reken ze op papier na, niet met een rekenmachine." },
     ],
   },
   {
@@ -151,7 +151,7 @@ export const HOOFDSTUKKEN = [
       ] },
       { t: "p", tekst: "Een switch leert vanzelf. Komt er een frame binnen op poort 5, dan onthoudt hij: dat MAC-adres hangt aan poort 5. Weet hij het adres nog niet, dan stuurt hij het frame even naar alle poorten en kijkt wie antwoordt." },
       { t: "p", tekst: "Een router kijkt niet naar MAC-adressen maar naar IP, en heeft een routeringstabel: voor elk netwerk staat erin via welke poort het te bereiken is. Weet hij het niet, dan gaat het naar de default gateway." },
-      { t: "pingo", tekst: "Jouw standaard gateway is het adres van je router. Alles wat niet in je eigen subnet zit, gaat daarheen. Daarom werkt niets meer als die verkeerd staat." },
+      { t: "egres", tekst: "Jouw standaard gateway is het adres van je router. Alles wat niet in je eigen subnet zit, gaat daarheen. Daarom werkt niets meer als die verkeerd staat." },
     ],
   },
   {
@@ -169,7 +169,7 @@ export const HOOFDSTUKKEN = [
       ] },
       { t: "p", tekst: "Je krijgt niet alleen een adres, maar ook het masker, de gateway en de DNS-servers. En een lease: een houdbaarheidsdatum, waarna je het adres opnieuw moet aanvragen." },
       { t: "p", tekst: "DNS doet iets anders: het vertaalt namen naar adressen. Jij typt een naam, je toestel vraagt het aan een resolver, die vraagt door tot bij de server die het echt weet, en het antwoord wordt een tijdje bewaard. Die bewaartijd heet de TTL." },
-      { t: "pingo", tekst: "Als iets het niet doet en de kabel zit erin: het is DNS. Het is bijna altijd DNS." },
+      { t: "egres", tekst: "Als iets het niet doet en de kabel zit erin: het is DNS. Het is bijna altijd DNS." },
     ],
   },
   {
@@ -191,7 +191,7 @@ export const HOOFDSTUKKEN = [
         ["22", "SSH"], ["25", "SMTP"], ["53", "DNS"], ["80", "HTTP"],
         ["443", "HTTPS"], ["3389", "Extern bureaublad"],
       ] },
-      { t: "pingo", tekst: "Een adres brengt je naar het gebouw. Een poortnummer zegt bij welke deur je moet aanbellen." },
+      { t: "egres", tekst: "Een adres brengt je naar het gebouw. Een poortnummer zegt bij welke deur je moet aanbellen." },
     ],
   },
 ];

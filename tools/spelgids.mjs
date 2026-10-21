@@ -46,7 +46,7 @@ const tabel = (kolommen, rijen) => {
 
 // ------------------------------------------------------------------ Kop
 
-p("# Pingo Clicker — volledige spelgids");
+p("# Egres Clicker — volledige spelgids");
 p("");
 p("> **Let op: hier staat alles in, ook alle verborgen dingen.** Wil je zelf zoeken, lees dan niet verder dan het hoofdstuk over de studieboom.");
 p("");
@@ -55,7 +55,7 @@ p(`Dit bestand is gemaakt met \`node tools/spelgids.mjs\` en volgt de spelbestan
 // -------------------------------------------------------------- Basis
 
 kop(2, "Hoe het spel werkt");
-p("Je klikt op Pingo en verdient packets. Met packets koop je apparaten die vanzelf packets opleveren, en upgrades die alles versnellen. Hoe verder je komt, hoe meer het spel zichzelf speelt — en hoe meer er opengaat.");
+p("Je klikt op Egres en verdient packets. Met packets koop je apparaten die vanzelf packets opleveren, en upgrades die alles versnellen. Hoe verder je komt, hoe meer het spel zichzelf speelt — en hoe meer er opengaat.");
 p("");
 p("De volgorde waarin dingen vrijkomen:");
 p("");
@@ -156,7 +156,7 @@ tabel(
 p("Laat je er een vanzelf verdwijnen, dan gebeurt er niets — en de eerste keer dat je dat doet levert het een prestatie op. Twee upgrades maken rode packets minder erg, en één maakt ze zelfs nuttig. Een straf blijft staan als je de pagina herlaadt.");
 
 kop(3, "Storingen");
-p("Af en toe gaat er iets stuk in je netwerk. Je krijgt dan onder Pingo twee knoppen: betalen voor noodherstel, of het laten lopen en 60 tot 100 seconden minder produceren. Reageer je niet binnen 45 seconden, dan geldt het als negeren.");
+p("Af en toe gaat er iets stuk in je netwerk. Je krijgt dan onder Egres twee knoppen: betalen voor noodherstel, of het laten lopen en 60 tot 100 seconden minder produceren. Reageer je niet binnen 45 seconden, dan geldt het als negeren.");
 p("");
 tabel(
   ["Storing", "Kosten van herstel", "Straf bij negeren"],
@@ -215,8 +215,8 @@ tabel(
   HOOFDSTUKKEN.map((h, i) => [`${i + 1}. ${h.icoon} **${h.titel}**`, h.korte])
 );
 
-kop(3, "📝 Pingo's overhoring");
-p("Vraagt 5.000 packets totaal. Je krijgt een vraag met vier antwoorden. Goed antwoord levert packets op — minstens 500, of 90 seconden van je productie, wat het meest is — plus 10% extra per goed antwoord op rij, tot twee keer zoveel. Na een goed antwoord duurt het 2,5 minuut voor de volgende vraag; na een fout antwoord de helft, en je reeks begint opnieuw. Na elk antwoord legt Pingo kort uit waarom het goede antwoord klopt.");
+kop(3, "📝 Egres' overhoring");
+p("Vraagt 5.000 packets totaal. Je krijgt een vraag met vier antwoorden. Goed antwoord levert packets op — minstens 500, of 90 seconden van je productie, wat het meest is — plus 10% extra per goed antwoord op rij, tot twee keer zoveel. Na een goed antwoord duurt het 2,5 minuut voor de volgende vraag; na een fout antwoord de helft, en je reeks begint opnieuw. Na elk antwoord legt Egres kort uit waarom het goede antwoord klopt.");
 p("");
 p(`Bovenaan kies je een onderwerp, of je laat alles door elkaar komen. Er zijn ${ONDERWERPEN.length} onderwerpen. Rekenvragen — subnetten, binair en hex, poortnummers, OSI-lagen en IPv6 afkorten — worden ter plekke opgesteld en nagerekend, dus die zijn eindeloos. Daarnaast zijn er ${FEITEN.length} vaste vragen over protocollen, IOS, switching, kabels, wifi en beveiliging. Een vaste vraag komt niet terug zolang er in dat onderwerp nog andere klaarliggen.`);
 p("");
@@ -238,7 +238,7 @@ p("**Afkortingen werken.** Elk woord mag je inkorten tot het nog eenduidig is, p
 p("");
 p("**Tab vult aan.** Eén woord dat past wordt afgemaakt; passen er meerdere, dan vult hij aan tot waar ze gelijk zijn en toont hij de mogelijkheden. **?** laat zien wat er op deze plek mag staan, met uitleg erbij — ook midden in een commando.");
 p("");
-p("**Pingo schrijft opdrachten uit.** Rond je er een af met `write memory`, dan krijg je packets: minstens 2.500, of anderhalve tot drieënhalve minuut van je productie, naargelang hoe moeilijk de opdracht is. Anderhalve minuut later ligt de volgende klaar. Nooit twee keer na elkaar dezelfde soort, en hoe meer opdrachten je afwerkt, hoe meer soorten er kunnen komen.");
+p("**Egres schrijft opdrachten uit.** Rond je er een af met `write memory`, dan krijg je packets: minstens 2.500, of anderhalve tot drieënhalve minuut van je productie, naargelang hoe moeilijk de opdracht is. Anderhalve minuut later ligt de volgende klaar. Nooit twee keer na elkaar dezelfde soort, en hoe meer opdrachten je afwerkt, hoe meer soorten er kunnen komen.");
 p("");
 const NA = ["meteen", "na 1 opdracht", "na 3 opdrachten", "na 6 opdrachten"];
 const vanaf = (niveau) => NA[niveau] || NA[NA.length - 1];
@@ -249,7 +249,7 @@ let zaad = 7;
 Math.random = () => ((zaad = (zaad * 16807) % 2147483647) - 1) / 2147483646;
 tabel(
   ["Opdracht", "Komt", "Levert", "Bijvoorbeeld"],
-  Object.values(TAKEN).map((t) => [`**${t.naam}**`, vanaf(t.niveau), `${nl.format(t.seconden / 60)} min productie`, t.tekst(t.maak({ hostname: "PINGO" }))])
+  Object.values(TAKEN).map((t) => [`**${t.naam}**`, vanaf(t.niveau), `${nl.format(t.seconden / 60)} min productie`, t.tekst(t.maak({ hostname: "EGRES" }))])
 );
 Math.random = willekeurig;
 p("");
@@ -257,7 +257,7 @@ p("De volledige reeks voor de eerste opdracht ziet er zo uit:");
 p("");
 p(["```", "en", "conf t", "int gi0/3", "ip add 10.42.7.1 255.255.255.0", "no shut", "end", "wr", "```"].join("\n"));
 p("");
-p("Voor de andere opdrachten kent de switch ook `hostname`, `description`, `shutdown`, `vlan` met `name`, `switchport mode access` en `switchport access vlan`, `ip default-gateway`, `banner motd #tekst#` en `enable secret`. Met `show running-config`, `show ip interface brief` en `show vlan brief` zie je wat er al staat — handig bij foutzoeken, waar Pingo niet zegt wat er mis is.");
+p("Voor de andere opdrachten kent de switch ook `hostname`, `description`, `shutdown`, `vlan` met `name`, `switchport mode access` en `switchport access vlan`, `ip default-gateway`, `banner motd #tekst#` en `enable secret`. Met `show running-config`, `show ip interface brief` en `show vlan brief` zie je wat er al staat — handig bij foutzoeken, waar Egres niet zegt wat er mis is.");
 p("");
 p("Ook de andere gewoontes van een echt apparaat werken: `copy run start` in plaats van `wr`, `do` voor commando's uit de bevoorrechte modus terwijl je aan het configureren bent (`do show ip int br`, `do wr`), `interface GigabitEthernet 0/1` met een spatie, en rechtstreeks van de ene interface naar de andere springen. Op een telefoon staan er knoppen voor Tab en ? onder de invoer.");
 
@@ -282,9 +282,9 @@ tabel(
 );
 
 kop(3, "🗄️ Patchkast");
-p(`Vraagt één glasvezel. Pingo legt werkorders uit de school in de bak: elke ${WERK.interval} seconden één, tot er ${WERK.wachtrij} klaarliggen. Dat loopt ook door als het spel dicht is. Een werkorder is een kabelgoot met aansluitingen die per twee hetzelfde label en dezelfde kleur hebben. Je trekt een kabel van de ene aansluiting naar de andere, vak voor vak, zonder over een andere kabel of aansluiting te gaan. Sleep je over een andere kabel, dan wordt die afgeknipt.`);
+p(`Vraagt één glasvezel. Egres legt werkorders uit de school in de bak: elke ${WERK.interval} seconden één, tot er ${WERK.wachtrij} klaarliggen. Dat loopt ook door als het spel dicht is. Een werkorder is een kabelgoot met aansluitingen die per twee hetzelfde label en dezelfde kleur hebben. Je trekt een kabel van de ene aansluiting naar de andere, vak voor vak, zonder over een andere kabel of aansluiting te gaan. Sleep je over een andere kabel, dan wordt die afgeknipt.`);
 p("");
-p(`Liggen alle kabels, dan kun je opleveren. Ligt bovendien elk vak van de goot vol, dan is de goot **luchtdicht** en levert de order ${Math.round((WERK.luchtdicht - 1) * 100)}% meer op. Elke goot kan luchtdicht. Kom je er niet uit, dan legt **Vraag Pingo** één kabel zoals in zijn oplossing; dat kost telkens ${Math.round(WERK.hulpKost * 100)}% van het loon, tot je nog ${Math.round(WERK.hulpMinimum * 100)}% overhoudt.`);
+p(`Liggen alle kabels, dan kun je opleveren. Ligt bovendien elk vak van de goot vol, dan is de goot **luchtdicht** en levert de order ${Math.round((WERK.luchtdicht - 1) * 100)}% meer op. Elke goot kan luchtdicht. Kom je er niet uit, dan legt **Vraag Egres** één kabel zoals in zijn oplossing; dat kost telkens ${Math.round(WERK.hulpKost * 100)}% van het loon, tot je nog ${Math.round(WERK.hulpMinimum * 100)}% overhoudt.`);
 p("");
 p("Een order betaalt een vast aantal seconden van je productie, zonder tijdelijke buffs. Grotere goten gaan open naarmate je meer protocollen hebt:");
 p("");
@@ -331,7 +331,7 @@ for (const soort of Object.keys(UITERLIJK)) {
     ])
   );
 }
-p("De geëvolueerde Pingo is de opvolger van de oude Evolve-knop: bij een miljard packets verdiend krijg je een melding en kun je hem omzetten.");
+p("De geëvolueerde Egres is de opvolger van de oude Evolve-knop: bij een miljard packets verdiend krijg je een melding en kun je hem omzetten.");
 
 // --------------------------------------------------------- Prestaties
 
@@ -355,14 +355,14 @@ tabel(
   ["Prestatie", "Hoe je hem vindt"],
   [
     ["🕹️ Up, up, down, down", "Typ de Konami-code: ↑ ↑ ↓ ↓ ← → ← → b a"],
-    ["🧔 Naamsvermelding", "Typ ergens in het spel het woord `pingo`"],
+    ["🧔 Naamsvermelding", "Typ ergens in het spel het woord `egres`"],
     ["👃 Op de neus", "Klik tien keer precies in het midden van de foto"],
-    ["📰 Persmuskiet", "Klik vijfentwintig keer op de zwarte logbalk onder Pingo"],
+    ["📰 Persmuskiet", "Klik vijfentwintig keer op de zwarte logbalk onder Egres"],
     ["🔢 Telfout", "Klik vijftig keer op het grote getal bovenaan"],
     ["😎 Elite", "Zorg dat je precies 1337 packets in bezit hebt (wordt elke 20 seconden nagekeken, dus makkelijkst aan het begin)"],
     ["🐋 Het antwoord", "Bezit precies 42 exemplaren van één apparaat"],
     ["🧘 Geduld", "Laat het spel tien minuten openstaan zonder te klikken of te typen"],
-    ["🖲️ Contextmenu", "Rechtsklik tien keer op Pingo"],
+    ["🖲️ Contextmenu", "Rechtsklik tien keer op Egres"],
     ["📶 Reply from 8.8.8.8", "Typ `ping` in de terminal"],
     ["🔓 sudo", "Typ een commando dat begint met `sudo` in de terminal"],
     ["🏷️ Vendor lock-in", "Typ `cisco` in de terminal"],
@@ -398,7 +398,7 @@ tabel(
 );
 p("De id's voor `gebouw`: " + BUILDINGS.map((b) => `\`${b.id}\``).join(", ") + ".");
 p("");
-p("Onzichtbaar maar aanwezig: in de browserconsole bestaat `pingo.pps`, `pingo.packets` en `pingo.hint`.");
+p("Onzichtbaar maar aanwezig: in de browserconsole bestaat `egres.pps`, `egres.packets` en `egres.hint`.");
 
 kop(2, "Technisch");
 p("- Je voortgang staat in localStorage van je eigen browser en wordt elke twintig seconden bewaard, plus bij het sluiten van het tabblad.");

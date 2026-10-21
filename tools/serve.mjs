@@ -50,5 +50,5 @@ export function startServer({ port = 0, root = ROOT } = {}) {
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const { url } = await startServer({ port: Number(process.argv[2]) || 8000 });
-  console.log(`Pingo Clicker draait op ${url}`);
+  console.log(`Egres Clicker draait op ${url}`);
 }

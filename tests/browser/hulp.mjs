@@ -42,8 +42,8 @@ export async function openSpel({ saves = {}, viewport = { width: 1400, height: 9
     if (r.status() >= 400) fouten.push(`${r.status()}: ${r.url()}`);
   });
   await page.goto(omgeving.url);
-  // Niet op window.pingo alleen wachten: dat is ook de knop met id="pingo".
-  await page.waitForFunction(() => typeof window.pingo?.pps === "number");
+  // Niet op window.egres alleen wachten: dat is ook de knop met id="egres".
+  await page.waitForFunction(() => typeof window.egres?.pps === "number");
   return { page, context, fouten };
 }
 

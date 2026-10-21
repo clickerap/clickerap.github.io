@@ -83,7 +83,7 @@ const CLICK_UPGRADES = [
     id: "klik-dpi",
     name: "8000 dpi",
     icon: "🎯",
-    desc: "Je raakt Pingo nu ook als je niet kijkt.",
+    desc: "Je raakt Egres nu ook als je niet kijkt.",
     note: "Klikkracht x2.",
     cost: 2e9,
     effect: { clickMult: 2 },
@@ -100,8 +100,8 @@ const CLICK_UPGRADES = [
     req: (g) => g.stats.clicks >= 12000,
   },
   {
-    id: "klik-pingo",
-    name: "Pingo's eigen muis",
+    id: "klik-egres",
+    name: "Egres' eigen muis",
     icon: "🐭",
     desc: "Uit het lokaal geleend. Hij weet het. Het is goed.",
     note: "Klikkracht x3.",
@@ -239,7 +239,7 @@ const KOFFIE_UPGRADES = [
   ["koffie-stagiair", "Stagiair", "🧑‍🎓", "Mag kabels aangeven en koffie halen.", 9e6, 0.1],
   ["koffie-assistent", "Student-assistent", "🧑‍🏫", "Weet meer dan hij denkt, minder dan hij zegt.", 9e9, 0.125],
   ["koffie-beheerder", "Systeembeheerder", "🧑‍💻", "Heeft overal een script voor.", 9e12, 0.15],
-  ["koffie-pingo", "Pingo zelf", "🧔", "Loopt langs, wijst één ding aan, alles werkt.", 9e15, 0.175],
+  ["koffie-egres", "Egres zelf", "🧔", "Loopt langs, wijst één ding aan, alles werkt.", 9e15, 0.175],
   ["koffie-team", "Het docententeam", "👥", "Vier vakken, één koffiezetapparaat.", 9e18, 0.2],
   ["koffie-alumni", "De alumni", "🎓", "Ze komen terug. Ze komen altijd terug.", 9e21, 0.225],
 ].map(([id, name, icon, desc, cost, power], i) => ({
@@ -326,7 +326,7 @@ const STUDIE_UPGRADES = [
   },
   {
     id: "st-thesis",
-    name: "Eindwerk over Pingo",
+    name: "Eindwerk over Egres",
     icon: "🏆",
     desc: "Onderscheiding. De jury had vragen, jij had antwoorden.",
     note: "Alles produceert 25% meer.",

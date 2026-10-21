@@ -6,7 +6,7 @@ test("op een telefoon heeft de terminal knoppen voor Tab en ?", async () => {
   const { page, context, fouten } = await openSpel({
     mobiel: true,
     viewport: { width: 390, height: 844 },
-    saves: { pingoClicker: `{ version: 3, packets: 1e6, buildings: { switch: 1 }, stats: { lifetime: 1e6 }, minigames: { laatste: "cli" }, lastSeen: nu }` },
+    saves: { egresClicker: `{ version: 3, packets: 1e6, buildings: { switch: 1 }, stats: { lifetime: 1e6 }, minigames: { laatste: "cli" }, lastSeen: nu }` },
   });
   await page.tap('button[data-tab="labo"]');
   await page.fill("#term-in", "en");

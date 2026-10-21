@@ -66,7 +66,7 @@ export function freshState() {
     },
     minigames: {
       quiz: { streak: 0, best: 0, correct: 0, wrong: 0, nextAt: 0, onderwerp: "alles" },
-      cli: { hostname: "PINGO", mode: "user", iface: null, vlanId: null, interfaces: {}, vlans: {}, banner: null, secret: false, gateway: null, vorige: null, opdracht: null, nextAt: 0, gedaan: 0 },
+      cli: { hostname: "EGRES", mode: "user", iface: null, vlanId: null, interfaces: {}, vlans: {}, banner: null, secret: false, gateway: null, vorige: null, opdracht: null, nextAt: 0, gedaan: 0 },
       market: { holdings: {}, prices: null, historie: null, trend: {}, nieuws: [], geruchten: [], stats: { verkopen: 0, gewonnen: 0, besteWinst: 0 }, profit: 0, tick: 0 },
       patch: { discovered: {}, gedaan: 0, luchtdicht: 0, nummer: 0, wachtrij: [], volgendeAt: 0, huidig: null },
       cursus: { gelezen: {}, open: null },

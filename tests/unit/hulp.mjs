@@ -28,5 +28,5 @@ export function geblokkeerdeOpslag() {
 }
 
 export function code(data) {
-  return "PINGO1:" + Buffer.from(JSON.stringify(data)).toString("base64");
+  return "EGRES1:" + Buffer.from(JSON.stringify(data)).toString("base64");
 }

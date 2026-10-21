@@ -30,8 +30,8 @@ function blokHtml(blok) {
       return `<ul class="cursus-lijst">${blok.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`;
     case "code":
       return `<pre class="cursus-code">${blok.regels.map(esc).join("\n")}</pre>`;
-    case "pingo":
-      return `<p class="cursus-pingo"><strong>Pingo zegt:</strong> ${esc(blok.tekst)}</p>`;
+    case "egres":
+      return `<p class="cursus-egres"><strong>Egres zegt:</strong> ${esc(blok.tekst)}</p>`;
     case "tabel":
       return `<div class="cursus-tabelvak"><table class="cursus-tabel">
         <thead><tr>${blok.kop.map((k) => `<th>${esc(k)}</th>`).join("")}</tr></thead>
@@ -65,7 +65,7 @@ function markeerGelezen(c, id) {
   chord([560, 740]);
   toast({
     title: "Hoofdstuk gelezen",
-    text: `${fmt(winst)} packets. Pingo vindt lezen ook werk.`,
+    text: `${fmt(winst)} packets. Egres vindt lezen ook werk.`,
     icon: "📚",
     tone: "goed",
   });

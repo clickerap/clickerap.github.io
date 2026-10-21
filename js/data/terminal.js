@@ -31,7 +31,7 @@ export const geldigeTekst = (t) => typeof t === "string" && t.length > 0 && t.le
 //   velden      wat er in de opdracht staat, voor het nakijken van een save
 //   maak        de details, willekeurig
 //   voorbereid  optioneel: zet de switch klaar, bijvoorbeeld met een fout
-//   tekst       de opdracht zoals Pingo hem uitschrijft
+//   tekst       de opdracht zoals Egres hem uitschrijft
 //   klaar       of de switch nu doet wat gevraagd is
 //   oplossing   een reeks commando's die de opdracht oplost, voor de tests
 
@@ -42,8 +42,8 @@ const zelfde = (a, b) => String(a || "").trim().toLowerCase() === String(b || ""
 const MASKERS = ["255.255.255.0", "255.255.255.128", "255.255.255.192", "255.255.255.224", "255.255.255.240"];
 const HOSTNAMEN = ["SW-B204", "SW-AULA", "CORE-01", "SW-LABO", "SW-REFTER", "SW-BIB", "EDGE-02", "SW-SPORTHAL", "SW-DIRECTIE"];
 const VLANNAMEN = ["LEERLINGEN", "PERSONEEL", "PRINTERS", "CAMERAS", "GASTEN", "BEHEER", "VOIP", "LABO", "DIRECTIE", "WIFI"];
-const OMSCHRIJVINGEN = ["Printer B.204", "Access point aula", "Uplink naar core", "Beamer lokaal A.012", "Camera ingang", "Pc van Pingo", "Digibord B.215", "Telefoon secretariaat", "Server labo"];
-const BANNERS = ["Alleen voor bevoegden", "Eigendom van Pingo", "Niet aankomen", "Welkom in het labo", "Geen toegang zonder toestemming"];
+const OMSCHRIJVINGEN = ["Printer B.204", "Access point aula", "Uplink naar core", "Beamer lokaal A.012", "Camera ingang", "Pc van Egres", "Digibord B.215", "Telefoon secretariaat", "Server labo"];
+const BANNERS = ["Alleen voor bevoegden", "Eigendom van Egres", "Niet aankomen", "Welkom in het labo", "Geen toegang zonder toestemming"];
 
 const adres = () => `10.${getal(1, 250)}.${getal(1, 250)}.1`;
 const poortVoor = (o) => [`interface ${o.poort}`];
@@ -144,7 +144,7 @@ export const TAKEN = {
     maak: () => ({}),
     tekst: () => "Iedereen kan hier zomaar enable typen. Beveilig de bevoorrechte modus met enable secret en bewaar.",
     klaar: (cli) => cli.secret === true,
-    oplossing: () => ["enable", "conf t", "enable secret Pingo2026", "end", "write memory"],
+    oplossing: () => ["enable", "conf t", "enable secret Egres2026", "end", "write memory"],
   },
   herstel: {
     naam: "Foutzoeken",

@@ -1,4 +1,4 @@
-// Pingo's overhoring: tien onderwerpen, van subnetten tot beveiliging.
+// Egres' overhoring: tien onderwerpen, van subnetten tot beveiliging.
 //
 // Rekenvragen stelt dit bestand zelf op en rekent ze zelf na; de vaste vragen
 // staan in data/vragen.js. Goed antwoord levert packets op, en een reeks
@@ -461,7 +461,7 @@ export const quiz = {
   eis: "Vraagt 5.000 packets",
   unlocked: () => G.stats.lifetime >= 5e3,
   info: [
-    { kop: "Wat is het", tekst: "Pingo stelt één vraag tegelijk, met een paar antwoorden om uit te kiezen. Tien onderwerpen: subnetten, binair en hex, het OSI-model, poorten, protocollen, Cisco IOS, switching, IPv6, kabels en wifi, en beveiliging. De cursus helpt." },
+    { kop: "Wat is het", tekst: "Egres stelt één vraag tegelijk, met een paar antwoorden om uit te kiezen. Tien onderwerpen: subnetten, binair en hex, het OSI-model, poorten, protocollen, Cisco IOS, switching, IPv6, kabels en wifi, en beveiliging. De cursus helpt." },
     {
       kop: "Zo werkt het",
       punten: [
@@ -484,7 +484,7 @@ export const quiz = {
     const q = G.minigames.quiz;
     root.innerHTML = `
       <div class="labo-kop">
-        <h3>Pingo's overhoring</h3>
+        <h3>Egres' overhoring</h3>
         ${INFO_KNOP}
         <span id="quiz-reeks"></span>
       </div>
@@ -548,7 +548,7 @@ export const quiz = {
 
     const over = ((q.nextAt || 0) - Date.now()) / 1000;
     if (over > 0 && !oefenen) {
-      vraagEl.textContent = "Pingo zoekt een nieuwe vraag.";
+      vraagEl.textContent = "Egres zoekt een nieuwe vraag.";
       melding.classList.remove("fout");
       melding.textContent = `Volgende vraag over ${fmtTime(over)}.`;
       oefenEl.innerHTML = `<button type="button" class="btn ghost small" data-oefen>Oefenvraag tussendoor</button>`;
@@ -603,7 +603,7 @@ export const quiz = {
       q.nextAt = Date.now() + (wachttijd() / 2) * 1000;
       tekst = `Fout. ${vraag.uitleg}`;
       blip(200, 0.16, 0.05);
-      toast({ title: "Pingo zucht", text: "Nog eens rustig nakijken.", icon: "📐" });
+      toast({ title: "Egres zucht", text: "Nog eens rustig nakijken.", icon: "📐" });
     }
     uitslag = { vraag, gekozen: optie, goed, tekst, oefen: oefenen, tot: Date.now() + UITLEG_MS };
     this.vul(root);

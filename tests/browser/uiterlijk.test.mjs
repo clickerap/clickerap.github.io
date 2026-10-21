@@ -39,7 +39,7 @@ test("met de console speel je alles van Uiterlijk vrij, en alles is te kiezen", 
   assert.equal(await page.getAttribute("body", "data-accent"), UITERLIJK.accent.at(-1).id);
   assert.equal(await page.getAttribute("body", "data-melding"), UITERLIJK.melding.at(-1).id);
   assert.equal(await page.getAttribute("body", "data-cursor"), UITERLIJK.cursor.at(-1).id);
-  assert.equal(await page.getAttribute("#pingo", "data-houding"), UITERLIJK.houding.at(-1).id);
+  assert.equal(await page.getAttribute("#egres", "data-houding"), UITERLIJK.houding.at(-1).id);
   // Elke aanwijzer is een plaatje dat echt laadt.
   const kapot = await page.evaluate(async (ids) => {
     const uit = [];
@@ -60,7 +60,7 @@ test("met de console speel je alles van Uiterlijk vrij, en alles is te kiezen", 
   await context.close();
 });
 
-test("het maatje praat, en door zijn ballon heen klik je gewoon op Pingo", async () => {
+test("het maatje praat, en door zijn ballon heen klik je gewoon op Egres", async () => {
   const { page, context, fouten } = await openSpel();
   await page.evaluate(async () => {
     const { G } = await import("/js/state.js");
@@ -77,7 +77,7 @@ test("het maatje praat, en door zijn ballon heen klik je gewoon op Pingo", async
   const ballon = await page.locator("#maatje-ballon").boundingBox();
   await page.mouse.click(ballon.x + 20, ballon.y + ballon.height / 2);
   const na = await page.evaluate(async () => (await import("/js/state.js")).G.stats.clicks);
-  assert.equal(na, voor + 1, "de klik ging naar Pingo");
+  assert.equal(na, voor + 1, "de klik ging naar Egres");
   assert.deepEqual(fouten, []);
   await context.close();
 });
@@ -98,11 +98,11 @@ test("elk paneelthema houdt de panelen op één lijn, en de ballon van het maatj
         const r = document.querySelector(sel).getBoundingClientRect();
         return [sel, { boven: Math.round(r.top), onder: Math.round(r.bottom) }];
       })));
-      // Drie kolommen: alle drie gelijk. Twee kolommen: Pingo en het paneel
+      // Drie kolommen: alle drie gelijk. Twee kolommen: Egres en het paneel
       // beginnen gelijk, de cijfers en het paneel eindigen gelijk.
       if (viewport.width >= 1220) {
-        assert.ok(Math.abs(maat[".panel"].boven - maat[".stage"].boven) <= 1, `${paneel.id}: paneel begint op ${maat[".panel"].boven}, Pingo op ${maat[".stage"].boven}`);
-        assert.ok(Math.abs(maat[".panel"].onder - maat[".stage"].onder) <= 1, `${paneel.id}: paneel eindigt op ${maat[".panel"].onder}, Pingo op ${maat[".stage"].onder}`);
+        assert.ok(Math.abs(maat[".panel"].boven - maat[".stage"].boven) <= 1, `${paneel.id}: paneel begint op ${maat[".panel"].boven}, Egres op ${maat[".stage"].boven}`);
+        assert.ok(Math.abs(maat[".panel"].onder - maat[".stage"].onder) <= 1, `${paneel.id}: paneel eindigt op ${maat[".panel"].onder}, Egres op ${maat[".stage"].onder}`);
         assert.ok(Math.abs(maat[".status"].boven - maat[".stage"].boven) <= 1, `${paneel.id}: de cijfers beginnen lager`);
       } else {
         assert.ok(Math.abs(maat[".panel"].boven - maat[".stage"].boven) <= 1, `${paneel.id} (smal): paneel begint op ${maat[".panel"].boven}`);
@@ -117,7 +117,7 @@ test("elk paneelthema houdt de panelen op één lijn, en de ballon van het maatj
   }
 });
 
-test("het logo schrijft de naam anders, maar heet voor een schermlezer nog altijd Pingo Clicker", async () => {
+test("het logo schrijft de naam anders, maar heet voor een schermlezer nog altijd Egres Clicker", async () => {
   const { page, context, fouten } = await openSpel();
   const zet = (u) => page.evaluate(async (u) => {
     const { G } = await import("/js/state.js");
@@ -128,12 +128,12 @@ test("het logo schrijft de naam anders, maar heet voor een schermlezer nog altij
   }, u);
   await zet({ logo: "leet" });
   assert.equal((await page.textContent("#wordmark")).trim(), "S3RG3 CL1CK3R");
-  assert.equal(await page.getAttribute("#wordmark", "aria-label"), "Pingo Clicker");
+  assert.equal(await page.getAttribute("#wordmark", "aria-label"), "Egres Clicker");
   await zet({ logo: "golf" });
-  assert.equal(await page.locator("#wordmark i").count(), "PingoClicker".length, "elke letter apart");
+  assert.equal(await page.locator("#wordmark i").count(), "EgresClicker".length, "elke letter apart");
 
   // Een gouden packet volgt Uiterlijk, een rood packet blijft rood.
-  await zet({ packet: "pingo" });
+  await zet({ packet: "egres" });
   const verschijn = (hazard) => page.evaluate(async (hazard) => {
     const { emit } = await import("/js/bus.js");
     document.querySelector(".packet")?.remove();
@@ -142,8 +142,8 @@ test("het logo schrijft de naam anders, maar heet voor een schermlezer nog altij
     return { klasse: el.className, tekst: el.textContent, beeld: el.style.backgroundImage };
   }, hazard);
   const goud = await verschijn(false);
-  assert.match(goud.klasse, /stijl-pingo/);
-  assert.match(goud.beeld, /pingo/);
+  assert.match(goud.klasse, /stijl-egres/);
+  assert.match(goud.beeld, /egres/);
   await page.evaluate(() => document.querySelector(".packet")?.click());
   const rood = await verschijn(true);
   assert.equal(rood.klasse, "packet rood");
@@ -162,9 +162,9 @@ test("een reeks snelle kliks komt in beeld en telt als beste reeks", async () =>
     G.uiterlijk.combo = "sport";
     emit("uiterlijk");
   });
-  const pingo = await page.locator("#pingo").boundingBox();
+  const egres = await page.locator("#egres").boundingBox();
   for (let i = 0; i < 12; i++) {
-    await page.mouse.click(pingo.x + pingo.width / 2, pingo.y + pingo.height / 2);
+    await page.mouse.click(egres.x + egres.width / 2, egres.y + egres.height / 2);
     await page.waitForTimeout(60);
   }
   assert.equal(await page.isVisible("#combo"), true);
@@ -181,7 +181,7 @@ test("een reeks snelle kliks komt in beeld en telt als beste reeks", async () =>
 test("het opstartscherm ligt over het spel, en vensters wachten tot het weg is", async () => {
   const { page, context, fouten } = await openSpel({
     saves: {
-      pingoClicker: `({ version: 5, packets: 5000, buildings: { patchkabel: 10 }, stats: { lifetime: 1e6 },
+      egresClicker: `({ version: 5, packets: 5000, buildings: { patchkabel: 10 }, stats: { lifetime: 1e6 },
         skins: ["opstart:ios"], uiterlijk: { opstart: "ios" }, lastSeen: nu - 3 * 3600 * 1000 })`,
     },
   });
@@ -270,7 +270,7 @@ test("een look bewaar je met een naam en trek je later weer aan", async () => {
   const opgeslagen = await page.evaluate(async () => {
     const { save } = await import("/js/save.js");
     save();
-    return JSON.parse(localStorage.getItem("pingoClicker")).looks[0].naam;
+    return JSON.parse(localStorage.getItem("egresClicker")).looks[0].naam;
   });
   assert.equal(opgeslagen, "Nerd");
   assert.deepEqual(fouten, []);
@@ -282,7 +282,7 @@ test("met minder beweging zie je het getal bij een klik toch", async () => {
     const context = await omgeving.browser.newContext({ viewport: { width: 1400, height: 900 }, reducedMotion: opties.reducedMotion || "no-preference" });
     const page = await context.newPage();
     await page.goto(omgeving.url);
-    await page.waitForFunction(() => typeof window.pingo?.pps === "number");
+    await page.waitForFunction(() => typeof window.egres?.pps === "number");
     if (opties.animatiesUit) {
       await page.evaluate(() => {
         document.body.classList.add("rustig");
@@ -296,7 +296,7 @@ test("met minder beweging zie je het getal bij een klik toch", async () => {
         G.uiterlijk.zweeftekst = id;
         document.querySelectorAll(".zweef").forEach((z) => z.remove());
       }, stijl.id);
-      await page.click("#pingo");
+      await page.click("#egres");
       await page.waitForTimeout(250);
       const zicht = await page.evaluate(() => Number(getComputedStyle(document.querySelector(".zweef")).opacity));
       assert.ok(zicht > 0.8, `${JSON.stringify(opties)} ${stijl.id}: het getal is onzichtbaar (${zicht})`);

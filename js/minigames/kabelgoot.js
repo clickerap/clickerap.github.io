@@ -297,7 +297,7 @@ export class Legger {
     this.kabels = this.kabels.map(() => []);
   }
 
-  // Pingo legt één kabel zoals in zijn oplossing. Eerst een paar dat nog niet
+  // Egres legt één kabel zoals in zijn oplossing. Eerst een paar dat nog niet
   // verbonden is; liggen ze allemaal, dan een kabel die anders loopt dan bij
   // hem. Geeft het nummer van het paar, of -1 als er niets te verbeteren valt.
   hulp() {

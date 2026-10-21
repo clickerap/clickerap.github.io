@@ -53,7 +53,7 @@ export function uitvoerRegels() {
 
 function staat(cli = G.minigames.cli) {
   if (!cli.interfaces) cli.interfaces = {};
-  if (!cli.hostname) cli.hostname = "PINGO";
+  if (!cli.hostname) cli.hostname = "EGRES";
   if (!cli.mode) cli.mode = "user";
   cli.vlans ||= {};
   // Een opdracht zonder soort komt uit een oudere versie: een adres.
@@ -102,7 +102,7 @@ function beloonOpdracht(cli) {
   chord([620, 820, 1040]);
   unlock("cli-config");
   if (cli.gedaan >= 10) unlock("cli-tien");
-  toast({ title: "Opdracht afgerond", text: `${fmt(winst)} packets. Pingo kijkt het na en knikt.`, icon: "⌨️", tone: "goed" });
+  toast({ title: "Opdracht afgerond", text: `${fmt(winst)} packets. Egres kijkt het na en knikt.`, icon: "⌨️", tone: "goed" });
 }
 
 // -------------------------------------------------------------- Grammatica
@@ -233,7 +233,7 @@ function grammatica(cli) {
         access: { hulp: "Het VLAN van een accesspoort", kinderen: { vlan: { hulp: "Het VLAN-nummer", arg: "nummer", doe: (a) => zetToegang(cli, a[0]) } } },
       },
     },
-    description: { hulp: "Omschrijving instellen", arg: "tekst", doe: (a) => { poort(cli, cli.iface).omschrijving = a.join(" ").slice(0, 80); schrijf("% Omschrijving ingesteld. Pingo waardeert dit meer dan je denkt.", "ok"); } },
+    description: { hulp: "Omschrijving instellen", arg: "tekst", doe: (a) => { poort(cli, cli.iface).omschrijving = a.join(" ").slice(0, 80); schrijf("% Omschrijving ingesteld. Egres waardeert dit meer dan je denkt.", "ok"); } },
     vlan: { hulp: "Een VLAN maken of aanpassen", arg: "nummer", doe: (a) => kiesVlan(cli, a[0]) },
     exit: { hulp: "Een niveau terug", doe: () => { cli.mode = "config"; cli.iface = null; } },
     end: { hulp: "Terug naar bevoorrechte modus", doe: () => { cli.mode = "enable"; cli.iface = null; } },
@@ -286,7 +286,7 @@ function toonVlans(cli) {
 
 function toonVersie() {
   schrijf(
-    `Pingo Clicker CLI, versie ${VERSIE}\nUptime: ${Math.floor(G.stats.playTime / 60)} minuten\nProductie: ${fmt(D.pps)} packets/seconde\nApparaten: ${fmt(D.totalBuildings)}`
+    `Egres Clicker CLI, versie ${VERSIE}\nUptime: ${Math.floor(G.stats.playTime / 60)} minuten\nProductie: ${fmt(D.pps)} packets/seconde\nApparaten: ${fmt(D.totalBuildings)}`
   );
 }
 
@@ -385,7 +385,7 @@ function zetBanner(cli, rest) {
 function zetSecret(cli, wachtwoord) {
   if (!wachtwoord) return schrijf("% enable secret <wachtwoord>", "err");
   if (wachtwoord.toLowerCase() === "cisco") {
-    schrijf("% 'cisco' als wachtwoord? Pingo fronst, maar zet het toch.", "err");
+    schrijf("% 'cisco' als wachtwoord? Egres fronst, maar zet het toch.", "err");
     egg("egg-cisco", "Vendor lock-in", "Standaardwachtwoorden zijn geen wachtwoorden.", D.pps * 45);
   }
   // Het wachtwoord zelf bewaren we niet; alleen dat er een is.
@@ -509,11 +509,11 @@ export function verwerk(regel, cli) {
 
   // Dingen die niet in de handleiding staan.
   if (laag.startsWith("sudo")) {
-    schrijf("% Dit is geen Linux. Pingo kijkt op van zijn scherm.", "err");
+    schrijf("% Dit is geen Linux. Egres kijkt op van zijn scherm.", "err");
     return egg("egg-sudo", "sudo", "Verkeerd besturingssysteem, juiste instelling.", D.pps * 60);
   }
   if (laag === "cisco" || laag === "cisco cisco") {
-    schrijf("% Wachtwoord 'cisco' op een productieapparaat. Pingo kijkt teleurgesteld.", "err");
+    schrijf("% Wachtwoord 'cisco' op een productieapparaat. Egres kijkt teleurgesteld.", "err");
     return egg("egg-cisco", "Vendor lock-in", "Standaardwachtwoorden zijn geen wachtwoorden.", D.pps * 45);
   }
   if (laag.startsWith("rm -rf")) {
@@ -596,7 +596,7 @@ export const terminal = {
         "`enable` (kort: `en`) brengt je naar de bevoorrechte modus.",
         "`configure terminal` (`conf t`) opent de configuratiemodus.",
         "`interface gi0/3` (`int gi0/3`) kiest een poort.",
-        "`end`, en dan `write memory` (`wr`), bewaart de configuratie. Pas dan kijkt Pingo de opdracht na.",
+        "`end`, en dan `write memory` (`wr`), bewaart de configuratie. Pas dan kijkt Egres de opdracht na.",
       ],
     },
     {
@@ -626,7 +626,7 @@ export const terminal = {
     if (!cli.opdracht && Date.now() >= (cli.nextAt || 0)) nieuweOpdracht(cli);
 
     if (!uitvoer.length) {
-      schrijf("Pingo Clicker CLI — afkortingen werken, Tab vult aan, ? toont de mogelijkheden.");
+      schrijf("Egres Clicker CLI — afkortingen werken, Tab vult aan, ? toont de mogelijkheden.");
       schrijf("Begin met 'en', dan 'conf t'.");
     }
 
@@ -719,7 +719,7 @@ export const terminal = {
     const cli = staat();
     if (!cli.opdracht && Date.now() >= (cli.nextAt || 0)) {
       nieuweOpdracht(cli);
-      schrijf("% Pingo heeft een nieuwe opdracht uitgeschreven.", "ok");
+      schrijf("% Egres heeft een nieuwe opdracht uitgeschreven.", "ok");
     }
     tekenUitvoer(root);
     const prompt = root.querySelector("#prompt");
@@ -743,8 +743,8 @@ export const terminal = {
       const over = ((cli.nextAt || 0) - Date.now()) / 1000;
       opdrachtEl.dataset.tekst = "";
       opdrachtEl.textContent = over > 0
-        ? `Pingo schrijft een nieuwe opdracht uit. Nog ${fmtTime(over)}.`
-        : "Pingo denkt na over je volgende opdracht.";
+        ? `Egres schrijft een nieuwe opdracht uit. Nog ${fmtTime(over)}.`
+        : "Egres denkt na over je volgende opdracht.";
     }
   },
 };

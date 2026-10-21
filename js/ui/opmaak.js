@@ -15,7 +15,7 @@ function letters(tekst, begin) {
 // De binnenkant van het logo: twee delen, de naam en "Clicker".
 export function logoHtml(id) {
   const def = LOGO_BY_ID[id] || LOGO_BY_ID.standaard;
-  const [een, twee] = def.tekst || ["Pingo", "Clicker"];
+  const [een, twee] = def.tekst || ["Egres", "Clicker"];
   switch (def.id) {
     case "golf":
       return `<span class="w1">${letters(een, 0)}</span> <span class="w2">${letters(twee, een.length + 1)}</span>`;
@@ -34,7 +34,7 @@ export function logoHtml(id) {
 
 // Hoeden en oren die als emoji niet mooi genoeg zijn, tekenen we zelf, als
 // SVG in de pagina. Zonder id's, want elk accessoire staat twee keer op de
-// pagina: op Pingo en in het menu.
+// pagina: op Egres en in het menu.
 const svg = (klasse, viewBox, inhoud) => `<svg class="acc-svg ${klasse}" viewBox="${viewBox}" aria-hidden="true" focusable="false">${inhoud}</svg>`;
 const VLAM = '<path d="M15 60C5 60 1 51 3 43C6 32 13 26 15 4C18 22 27 31 28 43C29 52 24 60 15 60Z" fill="#ef4444"/><path transform="translate(3.75 15) scale(.75)" d="M15 60C5 60 1 51 3 43C6 32 13 26 15 4C18 22 27 31 28 43C29 52 24 60 15 60Z" fill="#f97316"/><path d="M15 58C9 58 7 52 8 47C10 40 14 36 15 24C17 35 22 41 22 47C23 53 20 58 15 58Z" fill="#fde047"/>';
 const SVGS = {
@@ -68,7 +68,7 @@ export function accessoireHtml(id) {
 
 // ------------------------------------------------------------- Omloop
 // `n` is hoeveel er rondgaan; dat groeit met je apparaten. De meeste dingen
-// blijven rechtop terwijl ze draaien; de muisjes wijzen altijd naar Pingo.
+// blijven rechtop terwijl ze draaien; de muisjes wijzen altijd naar Egres.
 
 const OMLOOP_TEKEN = { packets: "✉️", hartjes: "❤️", satellieten: "🛰️", koffie: "☕", munten: "S", kometen: "", pinguins: "🐧", vuurvliegjes: "" };
 // De planeten, van binnen naar buiten: kleur, grootte in pixels en omlooptijd.
@@ -95,7 +95,7 @@ export function omloopHtml(id, n, foto) {
     let inhoud = OMLOOP_TEKEN[id] ?? "";
     if (id === "bits") inhoud = i % 2 ? "1" : "0";
     if (id === "noten") inhoud = ["♪", "♫", "♬", "♩"][i % 4];
-    if (id === "minipingo") inhoud = `<img src="${esc(foto)}" alt="" draggable="false" />`;
+    if (id === "miniegres") inhoud = `<img src="${esc(foto)}" alt="" draggable="false" />`;
     return `<i style="--a: ${((360 / aantal) * i).toFixed(1)}deg; --i: ${i}"><b>${inhoud}</b></i>`;
   });
   return `<span class="omloop-ring">${items.join("")}</span>`;

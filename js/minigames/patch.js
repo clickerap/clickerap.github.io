@@ -1,11 +1,11 @@
-// De patchkast: werkorders uit de school. Pingo legt ze in de bak, jij trekt
+// De patchkast: werkorders uit de school. Egres legt ze in de bak, jij trekt
 // de kabels. Elke order is een kabelgoot met aansluitingen die per twee bij
 // elkaar horen; de regels staan in kabelgoot.js. Opgeleverde orders tellen op
 // naar protocollen, en elk protocol geeft blijvend 2% extra productie.
 //
 // Een order betaalt een vast aantal seconden productie, afhankelijk van de
 // maat van de goot. Een luchtdichte goot levert de helft meer op; elke kabel
-// die Pingo voor je legt, kost een vijfde.
+// die Egres voor je legt, kost een vijfde.
 
 import { G, D, earn, unlock, recompute } from "../state.js";
 import { fmt, fmtTime } from "../format.js";
@@ -421,7 +421,7 @@ function tekenOrder(root) {
     bord.removeAttribute("role");
     bord.removeAttribute("tabindex");
     bord.removeAttribute("aria-label");
-    bord.innerHTML = `<p class="kast-leeg">De bak is leeg. Pingo brengt zo een nieuwe werkorder.</p>`;
+    bord.innerHTML = `<p class="kast-leeg">De bak is leeg. Egres brengt zo een nieuwe werkorder.</p>`;
     return;
   }
   const puzzel = puzzelVan(h);
@@ -496,7 +496,7 @@ function tekenStaat(root) {
   if (klaar) {
     const regels = [`<strong>Opgeleverd: +${fmt(h.winst)} packets</strong>`];
     if (h.dicht) regels.push(`<span class="kast-dicht">Luchtdicht, de helft meer</span>`);
-    if (h.hulp) regels.push(`<span>Pingo legde ${h.hulp === 1 ? "één kabel" : `${h.hulp} kabels`}: ${Math.round(hulpFactor(h.hulp) * 100)}% van het loon</span>`);
+    if (h.hulp) regels.push(`<span>Egres legde ${h.hulp === 1 ? "één kabel" : `${h.hulp} kabels`}: ${Math.round(hulpFactor(h.hulp) * 100)}% van het loon</span>`);
     if (h.protocol && PROTOCOLLEN[h.protocol]) {
       const proto = PROTOCOLLEN[h.protocol];
       regels.push(`<span class="kast-nieuw"><span aria-hidden="true">${proto.icon}</span> Nieuw protocol: ${esc(proto.naam)}. Alles produceert 2% meer.</span>`);
@@ -589,7 +589,7 @@ function vraagHulp(root) {
   if (i === -1) return;
   kast().huidig.hulp += 1;
   const soort = SOORT[legger.puzzel.paren[i].soort];
-  kondigAan(`Pingo legt de kabel ${soort.label}.`);
+  kondigAan(`Egres legt de kabel ${soort.label}.`);
   naVerandering(root, voor);
 }
 
@@ -616,7 +616,7 @@ export const patch = {
       punten: [
         `Liggen alle kabels, dan druk je op Opleveren. Een order levert ${Math.min(...Object.values(MATEN).map((m) => m.seconden))} tot ${Math.max(...Object.values(MATEN).map((m) => m.seconden))} seconden van je productie op, naargelang de maat van de goot.`,
         `Ligt elk vak van de goot vol, dan is hij luchtdicht en krijg je ${Math.round((WERK.luchtdicht - 1) * 100)}% meer. Elke goot kan luchtdicht.`,
-        `Vraag Pingo legt één kabel voor je, maar kost telkens ${Math.round(WERK.hulpKost * 100)}% van het loon. Je houdt altijd minstens ${Math.round(WERK.hulpMinimum * 100)}%.`,
+        `Vraag Egres legt één kabel voor je, maar kost telkens ${Math.round(WERK.hulpKost * 100)}% van het loon. Je houdt altijd minstens ${Math.round(WERK.hulpMinimum * 100)}%.`,
       ],
     },
     { kop: "De bak", tekst: `Elke ${WERK.interval} seconden komt er een werkorder bij, tot er ${WERK.wachtrij} klaarliggen, ook als het spel dicht is. Na het opleveren kies je zelf welke je als volgende doet.` },
@@ -647,7 +647,7 @@ export const patch = {
         <p class="kast-status" id="kast-status"></p>
         <div class="kast-knoppen" id="kast-knoppen">
           <button type="button" class="kast-knop hoofd" id="kast-oplever"><span>Opleveren</span><small></small></button>
-          <button type="button" class="kast-knop" id="kast-hulp"><span>Vraag Pingo</span><small></small></button>
+          <button type="button" class="kast-knop" id="kast-hulp"><span>Vraag Egres</span><small></small></button>
           <button type="button" class="kast-knop stil" id="kast-wis">Alles loshalen</button>
         </div>
         <div class="kast-resultaat" id="kast-resultaat" tabindex="-1" hidden></div>

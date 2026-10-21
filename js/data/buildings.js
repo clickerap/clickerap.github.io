@@ -32,7 +32,7 @@ export const BUILDINGS = [
     blurb: "Twee apparaten, één kabel. Zo begint elk netwerk.",
     tiers: [
       ["Ontklitte kabelbak", "Iemand heeft de bak eindelijk uitgezocht."],
-      ["Kleurcodering", "T568B. Niet T568A. Pingo kijkt mee."],
+      ["Kleurcodering", "T568B. Niet T568A. Egres kijkt mee."],
       ["Kabelgoot", "Alles weggewerkt, niets hangt meer los."],
       ["Cat6a", "Meer koper, minder crosstalk, zwaardere rol."],
       ["Gecertificeerde krimptang", "Elke stekker zit in één keer goed."],
@@ -65,7 +65,7 @@ export const BUILDINGS = [
     tiers: [
       ["Statische routes", "Werkt prima tot er iets verandert."],
       ["OSPF", "Area 0 en verder alles netjes eronder."],
-      ["BGP-sessie", "Je eigen AS-nummer. Pingo is trots."],
+      ["BGP-sessie", "Je eigen AS-nummer. Egres is trots."],
       ["Hardware forwarding", "Routeren gebeurt nu in silicium, niet in software."],
       ["Redundante supervisors", "De ene faalt, de andere merkt het amper."],
     ],
@@ -109,7 +109,7 @@ export const BUILDINGS = [
     vak: "sddc",
     baseCost: 1.4e6,
     basePps: 1400,
-    blurb: "Koud, luid en peperduur. Pingo voelt zich er thuis.",
+    blurb: "Koud, luid en peperduur. Egres voelt zich er thuis.",
     tiers: [
       ["N+1 UPS", "De stroom hapert, de servers merken het niet."],
       ["Dieselgenerator", "Getest op de eerste maandag van de maand."],
@@ -365,13 +365,13 @@ export const BUILDINGS = [
     vak: "cloud",
     baseCost: 4.8e22,
     basePps: 3.5e16,
-    blurb: "Pingo en het netwerk zijn niet langer te onderscheiden.",
+    blurb: "Egres en het netwerk zijn niet langer te onderscheiden.",
     tiers: [
       ["Zelfherschrijvende kernel", "De code van vanmorgen herkent hij niet meer."],
       ["Bewustzijn als dienst", "Per seconde afgerekend."],
       ["Tijd als transportprotocol", "Aankomst voor vertrek, binnen de spec."],
       ["Alles is één packet", "Het universum past in één frame. Jumbo, uiteraard."],
-      ["Pingo is het netwerk", "Er valt niets meer uit te leggen. Alleen te zijn."],
+      ["Egres is het netwerk", "Er valt niets meer uit te leggen. Alleen te zijn."],
     ],
   },
 ];

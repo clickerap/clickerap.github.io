@@ -1,4 +1,4 @@
-// De schil: teller, Pingo, buffs, logbalk, rack, tabbladen en gouden packets.
+// De schil: teller, Egres, buffs, logbalk, rack, tabbladen en gouden packets.
 
 import { G, D, BUILDINGS, VAKKEN, nextCost, availableUpgrades, onAchievement, onSkin, touch, rev } from "../state.js";
 import { buffUiterlijk, effectVan, INCIDENT_BY_ID } from "../data/buffs.js";
@@ -22,8 +22,8 @@ const el = (id) => document.getElementById(id);
 const scoreEl = el("score");
 const ppsEl = el("pps");
 const noteEl = el("counter-note");
-const pingoBtn = el("pingo");
-const pingoImg = el("pingo-img");
+const egresBtn = el("egres");
+const egresImg = el("egres-img");
 const hintEl = el("clicker-hint");
 const buffbar = el("buffbar");
 const newsEl = el("news");
@@ -87,7 +87,7 @@ const SLOTEN = {
     open: () => G.stats.lifetime >= 5e3 || G.stats.prestiges > 0,
     naam: "Het labo",
     eis: "Verdien in totaal 5.000 packets.",
-    tekst: "Vijf onderdelen: de cursus, een overhoring van Pingo, een terminal, de bandbreedtemarkt en een patchkast.",
+    tekst: "Vijf onderdelen: de cursus, een overhoring van Egres, een terminal, de bandbreedtemarkt en een patchkast.",
     icoon: "🧪",
   },
   studie: {
@@ -123,18 +123,18 @@ function toonSlot(naam) {
 
 // ------------------------------------------------------------ Klikken
 
-function clickPingo(event) {
+function clickEgres(event) {
   const value = click();
   if (!value) return;
-  const rect = pingoBtn.getBoundingClientRect();
+  const rect = egresBtn.getBoundingClientRect();
   const x = event?.clientX || rect.left + rect.width / 2;
   const y = event?.clientY || rect.top + rect.height / 2;
   floatText(x, y - 10, `+${fmt(value)}`);
   klikEffect(G.uiterlijk.klik, x, y);
   if (G.options.motion) {
-    pingoBtn.classList.remove("hit");
-    void pingoBtn.offsetWidth;
-    pingoBtn.classList.add("hit");
+    egresBtn.classList.remove("hit");
+    void egresBtn.offsetWidth;
+    egresBtn.classList.add("hit");
   }
   klikGeluid(G.uiterlijk.geluid);
   klikReeks();
@@ -146,17 +146,17 @@ function clickPingo(event) {
   }
 }
 
-pingoBtn.addEventListener("click", clickPingo);
-pingoBtn.addEventListener("contextmenu", (e) => {
+egresBtn.addEventListener("click", clickEgres);
+egresBtn.addEventListener("contextmenu", (e) => {
   e.preventDefault();
   emit("egg:rechtsklik");
 });
 // Een ingedrukte Enter of spatie herhaalt zichzelf; dat is geen klikken.
-pingoBtn.addEventListener("keydown", (e) => {
+egresBtn.addEventListener("keydown", (e) => {
   if (e.repeat && (e.key === "Enter" || e.key === " ")) e.preventDefault();
 });
 
-// Spatie klikt Pingo, tenzij de focus op iets staat dat zelf op spatie
+// Spatie klikt Egres, tenzij de focus op iets staat dat zelf op spatie
 // reageert. 1 tot 4 zetten het aantal per aankoop, G pakt een gouden packet.
 const REAGEERT_OP_SPATIE = "button, a[href], summary, [role=button], [role=tab], [role=switch]";
 
@@ -167,7 +167,7 @@ document.addEventListener("keydown", (e) => {
   if (e.code === "Space") {
     if (doel?.closest(REAGEERT_OP_SPATIE)) return;
     e.preventDefault();
-    if (!e.repeat) clickPingo();
+    if (!e.repeat) clickEgres();
     return;
   }
   if (e.repeat) return;
@@ -216,7 +216,7 @@ export function syncCounter() {
   if (text !== lastScoreText) {
     lastScoreText = text;
     scoreEl.textContent = text;
-    document.title = `${text} packets — Pingo Clicker`;
+    document.title = `${text} packets — Egres Clicker`;
   }
   ppsEl.textContent = fmt(D.pps);
   const perClick = D.clickValue;
@@ -531,7 +531,7 @@ export function syncRack() {
 }
 
 // -------------------------------------------------------------- Omloop
-// Vier tot vierentwintig dingen rond Pingo, naargelang hoeveel apparaten je
+// Vier tot vierentwintig dingen rond Egres, naargelang hoeveel apparaten je
 // hebt. Alleen opnieuw opbouwen als er iets verandert.
 
 const omloopEl = el("omloop");
@@ -570,7 +570,7 @@ on("golden:spawn", (info) => {
   packetEl.style.left = `${x}px`;
   packetEl.style.top = `${y}px`;
   packetEl.textContent = info.hazard ? "🚨" : (stijl.inhoud ?? stijl.voorbeeld);
-  if (!info.hazard && stijl.id === "pingo") packetEl.style.backgroundImage = `url("${fotoVoor(G.uiterlijk.portret)}")`;
+  if (!info.hazard && stijl.id === "egres") packetEl.style.backgroundImage = `url("${fotoVoor(G.uiterlijk.portret)}")`;
   packetEl.setAttribute("aria-label", info.hazard ? "Verdacht packet, niet aanklikken" : "Gouden packet");
   packetEl.addEventListener("click", () => {
     goldenClicked(info);
@@ -733,7 +733,7 @@ on("meer:built", () => {
     dialog({
       title: "Code invoeren",
       body: `<p>Plak hier de code van een ander toestel. Je huidige voortgang in dit bestand wordt overschreven, maar je kunt de import daarna nog ongedaan maken.</p>
-        <textarea class="veld" id="import-veld" placeholder="PINGO1:..." aria-label="Code"></textarea>
+        <textarea class="veld" id="import-veld" placeholder="EGRES1:..." aria-label="Code"></textarea>
         <p class="melding fout" id="import-fout" role="alert"></p>`,
       actions: [
         { label: "Annuleren", style: "ghost" },
@@ -820,9 +820,9 @@ const MIJLPALEN = [10, 25, 50, 100, 250, 500, 1000];
 const REEKS_TEKST = {
   vechtspel: ["GOED!", "GEWELDIG!", "ONSTUITBAAR!", "LEGENDARISCH!", "GODDELIJK!", "K.O.!", "PERFECT K.O.!"],
   sport: ["Mooie reeks!", "Hij blijft maar gaan!", "Wat. Een. Klikker.", "DIT IS HISTORISCH!", "Dames en heren, dit heb ik nog nooit gezien!", "Iemand moet die muis afpakken!", "DE MUIS IS GESMOLTEN!"],
-  pingo: ["Goed zo.", "Netjes.", "Dat komt op je rapport.", "Tien op tien.", "Ik ben trots op je.", "Dit is geen stage meer, dit is kunst.", "Ik heb je niets meer te leren."],
-  dj: ["Handen in de lucht!", "Scratch!", "Harder!", "De vloer kookt!", "Nog één keer!", "Pingo in de mix!", "Legendarische set!"],
-  spreuk: ["Klikus!", "Packetum Maximus!", "Bandbreedtus Totalus!", "Expecto Uptime!", "Wingardium Datagrammum!", "Accio Singulariteit!", "Pingo Omnipotentus!"],
+  egres: ["Goed zo.", "Netjes.", "Dat komt op je rapport.", "Tien op tien.", "Ik ben trots op je.", "Dit is geen stage meer, dit is kunst.", "Ik heb je niets meer te leren."],
+  dj: ["Handen in de lucht!", "Scratch!", "Harder!", "De vloer kookt!", "Nog één keer!", "Egres in de mix!", "Legendarische set!"],
+  spreuk: ["Klikus!", "Packetum Maximus!", "Bandbreedtus Totalus!", "Expecto Uptime!", "Wingardium Datagrammum!", "Accio Singulariteit!", "Egres Omnipotentus!"],
 };
 // Van blij naar ontploft, naarmate je reeks langer wordt.
 const GEZICHTJES = [[250, "🤯"], [100, "😱"], [50, "🤩"], [25, "😄"], [10, "😃"], [0, "🙂"]];
@@ -888,9 +888,9 @@ export function toonReeks(stijl, n, afwijking = 0) {
       kop = `${n} op rij`;
       onder = mijlpaalTekst(REEKS_TEKST.sport, n);
       break;
-    case "pingo":
+    case "egres":
       kop = `${n}`;
-      onder = mijlpaalTekst(REEKS_TEKST.pingo, n) || "Hm.";
+      onder = mijlpaalTekst(REEKS_TEKST.egres, n) || "Hm.";
       break;
     case "kracht":
       kop = `KRACHT ${(n * 1000).toLocaleString("nl-NL")}`;
@@ -935,8 +935,8 @@ function eindeReeks() {
   reeksTimer = setTimeout(() => (comboEl.hidden = true), 320);
 }
 
-// Het maatje zit rechtsonder naast Pingo. Het zegt iets als je erop klikt,
-// na elke veertig kliks op Pingo, en af en toe uit zichzelf.
+// Het maatje zit rechtsonder naast Egres. Het zegt iets als je erop klikt,
+// na elke veertig kliks op Egres, en af en toe uit zichzelf.
 
 const maatjeEl = el("maatje");
 const ballonEl = el("maatje-ballon");
@@ -1055,11 +1055,11 @@ export function applyUiterlijk() {
   stelSpoorIn({ soort: G.uiterlijk.spoor, beweging });
   zetMaatje(G.uiterlijk.maatje);
   stelMuziekIn({ soort: G.uiterlijk.muziek, aan: G.options.sound });
-  pingoBtn.dataset.portret = portret;
-  pingoBtn.dataset.ring = ring;
-  pingoBtn.dataset.houding = G.uiterlijk.houding;
+  egresBtn.dataset.portret = portret;
+  egresBtn.dataset.ring = ring;
+  egresBtn.dataset.houding = G.uiterlijk.houding;
   const bron = fotoVoor(portret);
-  if (pingoImg.getAttribute("src") !== bron) pingoImg.src = bron;
+  if (egresImg.getAttribute("src") !== bron) egresImg.src = bron;
 }
 
 on("uiterlijk", applyUiterlijk);
@@ -1213,7 +1213,7 @@ sheet.addEventListener("click", (e) => {
 el("btn-help").addEventListener("click", () => {
   dialog({
     title: "Hoe het werkt",
-    body: `<p>Klik op Pingo voor packets. Koop daarmee apparaten die vanzelf packets opleveren, en upgrades die alles versnellen.</p>
+    body: `<p>Klik op Egres voor packets. Koop daarmee apparaten die vanzelf packets opleveren, en upgrades die alles versnellen.</p>
            <p>Gouden packets geven een tijdelijke bonus. Rode packets zijn dat niet: die laat je staan.</p>
            <p>Tabbladen met een 🔒 vertellen zelf wat je ervoor moet doen. Onder het tandwiel rechtsboven vind je je statistieken, instellingen en opslag.</p>
            <p>Sneltoetsen: <strong>spatie</strong> klikt, <strong>1 / 2 / 3 / 4</strong> zetten het aantal per aankoop, <strong>G</strong> pakt een gouden packet, <strong>Esc</strong> sluit een venster.</p>`,

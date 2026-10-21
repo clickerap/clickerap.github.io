@@ -8,8 +8,8 @@
   <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Pingo Clicker</title>
-  <meta name="description" content="Bouw het netwerk van Pingo uit, van patchkabel tot singulariteit." />
+  <title>Egres Clicker</title>
+  <meta name="description" content="Bouw het netwerk van Egres uit, van patchkabel tot singulariteit." />
   <meta name="theme-color" content="#0d2b4d" />
   <!-- Nieuwe bestandsnamen: een browser die het oude pictogram onthield, haalt dit opnieuw op. -->
   <link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png" />
@@ -24,9 +24,9 @@
 
   <header class="topbar">
     <div class="titel">
-      <!-- De naam blijft voor schermlezers altijd "Pingo Clicker", ook als een
+      <!-- De naam blijft voor schermlezers altijd "Egres Clicker", ook als een
            logo hem anders schrijft. -->
-      <h1 class="wordmark" id="wordmark" aria-label="Pingo Clicker"><span class="w1">Pingo</span> <span class="w2">Clicker</span></h1>
+      <h1 class="wordmark" id="wordmark" aria-label="Egres Clicker"><span class="w1">Egres</span> <span class="w2">Clicker</span></h1>
       <p class="netwerknaam" id="netwerknaam" hidden></p>
       <p class="titelbadge" id="titelbadge" hidden></p>
     </div>
@@ -37,7 +37,7 @@
   </header>
 
   <main class="board">
-    <section class="stage" aria-label="Pingo">
+    <section class="stage" aria-label="Egres">
       <div class="counter">
         <strong id="score" aria-live="off">0</strong>
         <p class="counter-sub"><span id="pps">0</span> <span id="eenheid">packets</span> per seconde</p>
@@ -45,11 +45,11 @@
       </div>
 
       <div class="clicker">
-        <div class="pingo-plek">
-          <!-- Het decor ligt achter Pingo, de omloop ervoor. -->
+        <div class="egres-plek">
+          <!-- Het decor ligt achter Egres, de omloop ervoor. -->
           <span class="decor" id="decor" aria-hidden="true"></span>
-          <button type="button" id="pingo" class="pingo" aria-label="Klik op Pingo om packets te versturen">
-            <img src="img/pingo.png" alt="" id="pingo-img" width="320" height="320" draggable="false" />
+          <button type="button" id="egres" class="egres" aria-label="Klik op Egres om packets te versturen">
+            <img src="img/egres.png" alt="" id="egres-img" width="320" height="320" draggable="false" />
             <!-- Binnen de knop, zodat het accessoire meeveert als je klikt. -->
             <span class="accessoire" id="accessoire" aria-hidden="true"></span>
           </button>
@@ -138,7 +138,7 @@
           <div class="starter" id="starter">
             <h3>Zo werkt het</h3>
             <ol>
-              <li><strong>Klik op Pingo.</strong> Elke klik levert packets op.</li>
+              <li><strong>Klik op Egres.</strong> Elke klik levert packets op.</li>
               <li><strong>Koop apparaten.</strong> Die leveren vanzelf packets, ook als je niets doet.</li>
               <li><strong>Koop upgrades.</strong> Ze verdubbelen wat je al hebt. Kijk in het tweede tabblad.</li>
               <li><strong>Let op gouden packets.</strong> Die verschijnen af en toe ergens op je scherm.</li>
@@ -218,7 +218,7 @@
 
   <script type="module" src="js/main.js"></script>
   <noscript>
-    <p style="padding:2rem;text-align:center">Pingo Clicker heeft JavaScript nodig.</p>
+    <p style="padding:2rem;text-align:center">Egres Clicker heeft JavaScript nodig.</p>
   </noscript>
   <!-- Filters voor portretten die CSS alleen niet kan maken. -->
   <svg class="filters" width="0" height="0" aria-hidden="true" focusable="false">

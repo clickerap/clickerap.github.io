@@ -25,7 +25,7 @@ ach("klik-100", "Packet pusher", "💨", "Klik honderd keer.", (g) => g.stats.cl
 ach("klik-1k", "Klikspecialist", "💥", "Klik duizend keer.", (g) => g.stats.clicks >= 1000);
 ach("klik-10k", "Peesontsteking", "🦾", "Klik tienduizend keer.", (g) => g.stats.clicks >= 10000);
 ach("klik-100k", "Muis versleten", "🪦", "Klik honderdduizend keer.", (g) => g.stats.clicks >= 1e5);
-ach("klik-1m", "Pingo maakt zich zorgen", "🚑", "Klik een miljoen keer.", (g) => g.stats.clicks >= 1e6);
+ach("klik-1m", "Egres maakt zich zorgen", "🚑", "Klik een miljoen keer.", (g) => g.stats.clicks >= 1e6);
 
 // --- Totaal verdiend ---
 groep("Verdiend");
@@ -119,7 +119,7 @@ groep("Labo");
 ach("cursus-1", "Eerste hoofdstuk", "📖", "Lees een hoofdstuk van de cursus.", null, { manual: true });
 ach("cursus-alles", "Cursus uit", "🎒", "Lees alle hoofdstukken van de cursus.", null, { manual: true });
 ach("quiz-1", "Eerste overhoring", "📝", "Beantwoord een vraag van de overhoring goed.", null, { manual: true });
-ach("quiz-10", "Pingo knikt", "✅", "Tien goede antwoorden op rij.", null, { manual: true });
+ach("quiz-10", "Egres knikt", "✅", "Tien goede antwoorden op rij.", null, { manual: true });
 ach("quiz-25", "Subnetten in je hoofd", "🧮", "Vijfentwintig goede antwoorden op rij.", null, { manual: true });
 ach("cli-1", "enable", "⌨️", "Voer je eerste commando uit in de terminal.", null, { manual: true });
 ach("cli-config", "Running config", "💾", "Rond je eerste opdracht in de terminal af.", null, { manual: true });
@@ -131,7 +131,7 @@ ach("beurs-automaat", "Automatische piloot", "🤖", "Laat een winstorder of ver
 ach("beurs-gerucht", "Voorkennis", "🗞️", "Koop op een gerucht dat uitkomt, en verkoop met winst.", null, { manual: true });
 ach("patch-1", "Eerste werkorder", "🗒️", "Lever je eerste werkorder in de patchkast op.", null, { manual: true });
 ach("patch-luchtdicht", "Luchtdicht", "🌬️", "Lever een werkorder op waarbij de hele kabelgoot vol ligt.", null, { manual: true });
-ach("patch-meester", "Kabelmeester", "🎖️", "Lever een goot van 8 bij 8 luchtdicht op, zonder hulp van Pingo.", null, { manual: true });
+ach("patch-meester", "Kabelmeester", "🎖️", "Lever een goot van 8 bij 8 luchtdicht op, zonder hulp van Egres.", null, { manual: true });
 ach("patch-protocol", "Nieuw protocol", "🧬", "Ontdek een protocol in de patchkast.", null, { manual: true });
 ach("patch-alles", "Volledige patchkast", "🗃️", "Ontdek elk protocol.", null, { manual: true });
 
@@ -156,13 +156,13 @@ const EGG_ACHIEVEMENTS = [
   ["egg-rechts", "Contextmenu", "🖲️", "Je bleef rechtsklikken."],
   ["egg-ping", "Reply from 8.8.8.8", "📶", "Je hebt gepingd."],
   ["egg-sudo", "sudo", "🔓", "Je hebt om rechten gevraagd."],
-  ["egg-cisco", "Vendor lock-in", "🏷️", "Pingo kijkt teleurgesteld."],
+  ["egg-cisco", "Vendor lock-in", "🏷️", "Egres kijkt teleurgesteld."],
   ["egg-noshut", "no shutdown", "🔌", "Een interface die al aanstond."],
   ["egg-rm", "rm -rf /", "💀", "Je hebt het echt gedaan."],
   ["egg-1337u", "13:37", "🕐", "Op precies het juiste moment langsgekomen."],
   ["egg-nacht", "Nachtdienst", "🌃", "Tussen drie en vier 's nachts gespeeld."],
   ["egg-tokenring", "Token Ring", "💍", "Een protocol dat dood had moeten blijven."],
-  ["egg-kabel", "Kabelsalade", "🍝", "Iets waar Pingo nachtmerries van krijgt."],
+  ["egg-kabel", "Kabelsalade", "🍝", "Iets waar Egres nachtmerries van krijgt."],
   ["egg-console", "Achterdeur", "🚪", "Je hebt de verborgen console gevonden."],
   ["egg-versie", "Kleine lettertjes", "🔎", "Je leest zelfs de versienummers."],
 ];
@@ -185,6 +185,6 @@ export const KOFFIE_RANKS = [
   [0.45, "Espresso"],
   [0.6, "Dubbele espresso"],
   [0.75, "Ristretto"],
-  [0.9, "Koffie uit Pingo's eigen thermos"],
+  [0.9, "Koffie uit Egres' eigen thermos"],
   [1, "Puur cafeïne"],
 ];

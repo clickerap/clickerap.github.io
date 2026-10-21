@@ -49,7 +49,7 @@ test("playtest: van de eerste klik tot afstuderen en de studieboom", async () =>
   // 1. Klikken levert packets op, in een tempo dat een mens haalt (sneller
   // telt bewust niet mee, tegen autoclickers).
   for (let i = 0; i < 25; i++) {
-    await klik(page, "#pingo");
+    await klik(page, "#egres");
     await page.waitForTimeout(70);
   }
   let s = await staat(page);
@@ -118,7 +118,7 @@ test("playtest: van de eerste klik tot afstuderen en de studieboom", async () =>
   // 7. Alles blijft na herladen.
   await spel(page, async () => (await import("/js/save.js")).save());
   await page.reload();
-  await page.waitForFunction(() => typeof window.pingo?.pps === "number");
+  await page.waitForFunction(() => typeof window.egres?.pps === "number");
   const naHerladen = await spel(page, async () => {
     const { G } = await import("/js/state.js");
     return { prestige: G.prestige, p1: !!G.nodes.p1, s1: !!G.nodes.s1, clicks: G.stats.clicks };
@@ -177,13 +177,18 @@ test("playtest: de terminal en de overhoring via de echte invoer", async () => {
     await spel(page, async () => {
       (await import("/js/state.js")).G.minigames.quiz.nextAt = 0;
     });
-    await page.waitForSelector(".quiz-optie", { timeout: 4000 });
+    // Na een antwoord blijft de uitleg even staan, met de knoppen van die
+    // vraag uitgeschakeld. Pas een knop die je kunt aanklikken hoort bij de
+    // nieuwe vraag.
+    await page.waitForSelector(".quiz-optie:not([disabled])", { timeout: 8000 });
     const voor = await spel(page, async () => {
       const { G } = await import("/js/state.js");
       return { packets: G.packets, reeks: G.minigames.quiz.streak, goed: G.minigames.quiz.correct, fout: G.minigames.quiz.wrong };
     });
     await sluitVensters(page);
-    await page.locator(".quiz-optie").nth(ronde % 4).click();
+    // Niet elke vraag heeft vier antwoorden (juist of fout heeft er twee).
+    const opties = page.locator(".quiz-optie:not([disabled])");
+    await opties.nth(ronde % (await opties.count())).click();
     const na = await spel(page, async () => {
       const { G } = await import("/js/state.js");
       return { packets: G.packets, reeks: G.minigames.quiz.streak, goed: G.minigames.quiz.correct, fout: G.minigames.quiz.wrong };

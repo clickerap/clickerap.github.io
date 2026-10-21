@@ -1,6 +1,6 @@
-# Pingo Clicker
+# Egres Clicker
 
-Een klikspel over het netwerk van Pingo: van patchkabel tot singulariteit. Gemaakt voor de klas, met een labo vol netwerkoefeningen (subnetten, een IOS-terminal, een cursus) tussen het klikken door.
+Een klikspel over het netwerk van Egres: van patchkabel tot singulariteit. Gemaakt voor de klas, met een labo vol netwerkoefeningen (subnetten, een IOS-terminal, een cursus) tussen het klikken door.
 
 Spelen: <https://clickerap.github.io/>
 
@@ -27,7 +27,7 @@ python3 -m http.server
 | `js/minigames/` | Het labo. Elke opdracht heeft `render(root)`, optioneel `update(root)` en `stop()`; alleen `index.js` start timers. |
 | `tools/` | Hulpscripts: een lokale server, de spelgids en de balanssimulatie. |
 | `tests/` | Unit-tests (`tests/unit`) en browsertests (`tests/browser`). |
-| `fonts/`, `img/` | IBM Plex (zelf gehost) en de foto's van Pingo. |
+| `fonts/`, `img/` | IBM Plex (zelf gehost) en de foto's van Egres. |
 
 ## Testen
 

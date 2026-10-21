@@ -55,7 +55,7 @@ test("bug 3: een kwaadaardige save wordt veld voor veld opgeschoond", () => {
   assert.equal(schoonGemaakt.stats.clicks, 0);
   assert.equal(schoonGemaakt.stats.lifetime, 0);
   assert.equal(schoonGemaakt.minigames.cli.opdracht, null);
-  assert.equal(schoonGemaakt.minigames.cli.hostname, "PINGO");
+  assert.equal(schoonGemaakt.minigames.cli.hostname, "EGRES");
   assert.equal(schoonGemaakt.minigames.cli.mode, "config");
   assert.deepEqual(schoonGemaakt.minigames.cli.interfaces["gi0/1"], { ip: null, mask: null, up: false, omschrijving: null });
   assert.equal(schoonGemaakt.minigames.patch.grid, undefined);
@@ -96,7 +96,7 @@ test("een save uit de allereerste versie wordt omgezet", () => {
 test("versie 2 naar 3 neemt oude namen van het uiterlijk mee", () => {
   const data = migreer({ version: 2, skins: ["portret:standaard", "portret:goud"], options: { portret: "evolved" } });
   assert.ok(data.version >= 3);
-  assert.ok(data.skins.includes("portret:pingo"));
+  assert.ok(data.skins.includes("portret:egres"));
   assert.ok(data.skins.includes("ring:goud"));
   assert.equal(data.uiterlijk.portret, "evolved");
 });
@@ -132,10 +132,10 @@ test("een save onder een vorige naam verhuist, met de id's erin", () => {
   const uitkomst = load();
   assert.equal(uitkomst.loaded, true);
   assert.equal(G.packets, 4242);
-  assert.ok(G.upgrades["klik-pingo"], "de upgrade heet nu naar Pingo");
-  assert.ok(G.skins["packet:pingo"] && G.skins["maatje:minipingo"], "de skins ook");
-  assert.equal(G.uiterlijk.packet, "pingo");
-  assert.equal(G.options.netwerknaam, "Pingo-net");
+  assert.ok(G.upgrades["klik-egres"], "de upgrade heet nu naar Egres");
+  assert.ok(G.skins["packet:egres"] && G.skins["maatje:miniegres"], "de skins ook");
+  assert.equal(G.uiterlijk.packet, "egres");
+  assert.equal(G.options.netwerknaam, "Egres-net");
   assert.equal(lees(`${SAVE_KEY}:2`).packets, 2, "het tweede bestand verhuist mee");
   assert.equal(opslag.get(`${SAVE_KEY}:slot`), "1");
   assert.deepEqual([...opslag.keys()].filter((k) => k.startsWith("kareltje")), [], "de oude sleutels zijn weg");
@@ -162,15 +162,15 @@ test("een code van onder een vorige naam is nog te importeren", () => {
   load("1");
   importSave(oud);
   assert.equal(G.packets, 4242);
-  assert.ok(G.upgrades["klik-pingo"] && G.skins["packet:pingo"]);
+  assert.ok(G.upgrades["klik-egres"] && G.skins["packet:egres"]);
 });
 
 test("een code die niet klopt geeft een Nederlandse foutmelding", () => {
-  assert.throws(() => leesCode("hallo"), /geen Pingo Clicker-code/);
-  assert.throws(() => leesCode("PINGO1:%%%"), /beschadigd of onvolledig/);
-  assert.throws(() => leesCode("PINGO1:" + Buffer.from("42").toString("base64")), /beschadigd of onvolledig/);
+  assert.throws(() => leesCode("hallo"), /geen Egres Clicker-code/);
+  assert.throws(() => leesCode("EGRES1:%%%"), /beschadigd of onvolledig/);
+  assert.throws(() => leesCode("EGRES1:" + Buffer.from("42").toString("base64")), /beschadigd of onvolledig/);
   const heen = exportSave();
-  assert.ok(heen.startsWith("PINGO1:"));
+  assert.ok(heen.startsWith("EGRES1:"));
   assert.equal(typeof leesCode(heen), "object");
 });
 

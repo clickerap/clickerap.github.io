@@ -26,9 +26,9 @@ let getypt = "";
 
 function letterEggs(key) {
   getypt = (getypt + key.toLowerCase()).slice(-16);
-  if (getypt.endsWith("pingo")) {
-    beloon("egg-naam", "Hij hoort je", "Pingo kijkt even op van zijn scherm.", D.clickValue * 100);
-    const img = document.getElementById("pingo");
+  if (getypt.endsWith("egres")) {
+    beloon("egg-naam", "Hij hoort je", "Egres kijkt even op van zijn scherm.", D.clickValue * 100);
+    const img = document.getElementById("egres");
     img.animate(
       [{ transform: "rotate(0)" }, { transform: "rotate(-8deg) scale(1.05)" }, { transform: "rotate(0)" }],
       { duration: 700, easing: "cubic-bezier(.2,.8,.3,1)" }
@@ -59,7 +59,7 @@ export function initEggs() {
 
   // Op de neus: precies in het midden van de foto, tien keer.
   let neus = 0;
-  document.getElementById("pingo").addEventListener("click", (e) => {
+  document.getElementById("egres").addEventListener("click", (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const dx = (e.clientX - (rect.left + rect.width / 2)) / rect.width;
     const dy = (e.clientY - (rect.top + rect.height / 2)) / rect.height;
@@ -138,7 +138,7 @@ export function initConsole() {
 
 function openConsole(anchor) {
   if (document.getElementById("cheat-kaart")) return;
-  egg("egg-console", "Achterdeur", "Je hebt de console gevonden. Pingo weet van niets.", 0);
+  egg("egg-console", "Achterdeur", "Je hebt de console gevonden. Egres weet van niets.", 0);
   const kaart = document.createElement("div");
   kaart.className = "kaart";
   kaart.id = "cheat-kaart";

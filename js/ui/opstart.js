@@ -11,12 +11,12 @@ const heeftDom = typeof document !== "undefined";
 // regel met `@` wordt een laadbalk die zich vult.
 const IOS = [
   "System Bootstrap, Version 15.2(4r)E5, RELEASE SOFTWARE (fc4)",
-  "Copyright (c) 1994-2026 by Pingo Systems, Inc.",
+  "Copyright (c) 1994-2026 by Egres Systems, Inc.",
   "",
-  'Loading "flash:pingo-universalk9-mz.152-7.E4.bin"...',
+  'Loading "flash:egres-universalk9-mz.152-7.E4.bin"...',
   "@",
   "",
-  "Pingo Clicker IOS Software, Version 16.9.4, RELEASE SOFTWARE",
+  "Egres Clicker IOS Software, Version 16.9.4, RELEASE SOFTWARE",
   "Switch Ports Model              SW Version",
   "------ ----- -----              ----------",
   "*    1 52    SC-3850-48P-E      16.9.4",
@@ -28,14 +28,14 @@ const IOS = [
 ];
 
 const BIOS = [
-  "PingoBIOS v4.51PG, een energiezuinige Pingo",
-  "Copyright (C) 1984-2026, Pingo Software, Inc.",
+  "EgresBIOS v4.51PG, een energiezuinige Egres",
+  "Copyright (C) 1984-2026, Egres Software, Inc.",
   "",
-  "PINGO-486 CPU at 133MHz",
+  "EGRES-486 CPU at 133MHz",
   "#",
   "",
-  "Pingo Plug and Play-uitbreiding v1.0A",
-  "Detecting IDE Primary Master   ... PINGO-HDD 2.1GB",
+  "Egres Plug and Play-uitbreiding v1.0A",
+  "Detecting IDE Primary Master   ... EGRES-HDD 2.1GB",
   "Detecting IDE Primary Slave    ... Geen",
   "Detecting IDE Secondary Master ... CD-ROM 52X",
   "Detecting IDE Secondary Slave  ... Diskette met huiswerk",
@@ -45,14 +45,14 @@ const BIOS = [
 
 // Een balk van blokjes (█) die vol loopt, zoals een programma dat laadt.
 const DOS = [
-  "Starting PINGO-DOS...",
+  "Starting EGRES-DOS...",
   "",
   "HIMEM is testing extended memory...done.",
   "",
   "C:\\>CD \\SPELLEN",
-  "C:\\SPELLEN>PINGO.EXE",
+  "C:\\SPELLEN>EGRES.EXE",
   "",
-  "Pingo Clicker 3.1 voor PINGO-DOS",
+  "Egres Clicker 3.1 voor EGRES-DOS",
   "640K geheugen. Dat is genoeg voor iedereen.",
   "█",
   "",
@@ -60,7 +60,7 @@ const DOS = [
 ];
 
 // Letter voor letter, op een zwart scherm.
-const WAKKER = ["Word wakker, Pingo…", "Het netwerk heeft je.", "Volg de witte muis.", "", "Klop, klop, Pingo."];
+const WAKKER = ["Word wakker, Egres…", "Het netwerk heeft je.", "Volg de witte muis.", "", "Klop, klop, Egres."];
 
 const SCHERMEN = {
   ios: { duur: 3400, regels: IOS },
@@ -69,34 +69,34 @@ const SCHERMEN = {
   console: {
     duur: 3000,
     html: () => `
-      <div class="op-console-logo"><span>PINGO</span></div>
-      <p class="op-roep">PINGOOO!</p>`,
+      <div class="op-console-logo"><span>EGRES</span></div>
+      <p class="op-roep">EGREEES!</p>`,
   },
   bios: { duur: 3600, regels: BIOS },
   arcade: {
     duur: 3200,
     html: () => `
       <div class="op-score"><span>1UP 00000</span><span>HI 99999</span></div>
-      <div class="op-titel"><span>PINGO</span><span>CLICKER</span></div>
+      <div class="op-titel"><span>EGRES</span><span>CLICKER</span></div>
       <p class="op-munt">MUNT ERIN</p>
       <p class="op-start">DRUK OP START</p>
-      <div class="op-voet"><span>© 1987 PINGO</span><span class="op-credit">CREDIT 0</span></div>`,
+      <div class="op-voet"><span>© 1987 EGRES</span><span class="op-credit">CREDIT 0</span></div>`,
   },
   retro: {
     duur: 3400,
     html: () => `
       <div class="op-wolken"></div>
-      <div class="op-logo"><span class="op-embleem">🧔</span><span><b>Pingo</b><sup>95</sup></span></div>
+      <div class="op-logo"><span class="op-embleem">🧔</span><span><b>Egres</b><sup>95</sup></span></div>
       <div class="op-laad"><i></i></div>
-      <p class="op-klein">© Pingo Corporation. Alle packets voorbehouden.</p>`,
+      <p class="op-klein">© Egres Corporation. Alle packets voorbehouden.</p>`,
   },
   film: {
     duur: 4600,
     html: () => `
-      <p class="op-regel een">PINGO STUDIOS PRESENTEERT</p>
+      <p class="op-regel een">EGRES STUDIOS PRESENTEERT</p>
       <p class="op-regel twee">IN EEN WERELD WAAR ALLES DRAAIT OM PACKETS…</p>
       <p class="op-regel drie">…IS ER ÉÉN MAN DIE KLIKT</p>
-      <div class="op-film"><span>PINGO</span><span>CLICKER</span></div>`,
+      <div class="op-film"><span>EGRES</span><span>CLICKER</span></div>`,
   },
   hemels: {
     duur: 3800,
@@ -104,7 +104,7 @@ const SCHERMEN = {
       <div class="op-stralen"></div>
       <div class="op-wolk links"></div>
       <div class="op-wolk rechts"></div>
-      <p class="op-ontwaakt">Pingo ontwaakt</p>`,
+      <p class="op-ontwaakt">Egres ontwaakt</p>`,
   },
 };
 

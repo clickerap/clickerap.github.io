@@ -21,7 +21,7 @@ import { ONDERWERP_BY_ID } from "./data/vragen.js";
 import { POORTEN, MODI, TAKEN, geldigAdres, geldigeVlan, geldigeVlannaam, schoonOpdracht } from "./data/terminal.js";
 
 // De naam van het spel. Alles in de opslag begint ermee.
-const NAAM = "pingo";
+const NAAM = "egres";
 export const SAVE_KEY = `${NAAM}Clicker`;
 export const LEGACY_KEY = `${SAVE_KEY}Save`;
 const BACKUP_KEY = `${SAVE_KEY}:backup`;
@@ -150,7 +150,7 @@ export function isPassief() {
 
 export function neemTabbladOver({ wacht = 120, bijOvername } = {}) {
   if (typeof BroadcastChannel !== "function") return Promise.resolve();
-  const kanaal = new BroadcastChannel("pingo-clicker");
+  const kanaal = new BroadcastChannel("egres-clicker");
   const slot = currentSlot();
   kanaal.addEventListener("message", (e) => {
     const { soort, tab, slot: hunSlot } = e.data || {};
@@ -382,7 +382,7 @@ function schoonLabo(m, nu) {
   if (mode === "iface" && !iface) mode = "config";
   if (mode === "vlan" && !vlanId) mode = "config";
   const cli = {
-    hostname: typeof c.hostname === "string" && /^[a-z0-9-]{1,16}$/i.test(c.hostname) ? c.hostname.toUpperCase() : "PINGO",
+    hostname: typeof c.hostname === "string" && /^[a-z0-9-]{1,16}$/i.test(c.hostname) ? c.hostname.toUpperCase() : "EGRES",
     mode,
     iface: mode === "iface" ? iface : null,
     vlanId: mode === "vlan" ? vlanId : null,
@@ -557,7 +557,7 @@ function vanVersie2(data) {
   const lijst = Array.isArray(data.skins) ? data.skins : isObject(data.skins) ? Object.keys(data.skins).filter((k) => data.skins[k]) : [];
   const skins = new Set(lijst);
   const hernoemd = {
-    "portret:standaard": "portret:pingo",
+    "portret:standaard": "portret:egres",
     "portret:topologie": "portret:blauwdruk",
     "portret:goud": "ring:goud",
     "portret:regenboog": "ring:regenboog",
@@ -699,7 +699,7 @@ export function exportSave() {
 export function leesCode(text) {
   const trimmed = String(text || "").trim();
   const kop = KOP.exec(trimmed);
-  if (!kop) throw new Error(`Dit is geen Pingo Clicker-code. Een code begint met ${HEADER}`);
+  if (!kop) throw new Error(`Dit is geen Egres Clicker-code. Een code begint met ${HEADER}`);
   let data;
   try {
     const binary = atob(trimmed.slice(kop[0].length).replace(/\s+/g, ""));

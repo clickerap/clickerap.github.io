@@ -113,7 +113,7 @@ test("op een kabel beginnen pakt hem daar op", () => {
   assert.deepEqual(legger.kabels[0], []);
 });
 
-test("Pingo lost elke goot op met zijn hulp", () => {
+test("Egres lost elke goot op met zijn hulp", () => {
   for (const n of [5, 8]) {
     const p = maakPuzzel(n, 2024 + n);
     const legger = new Legger(p, []);
@@ -177,7 +177,7 @@ test("opleveren betaalt seconden productie, en meer voor een luchtdichte goot", 
   assert.equal(opleveren(), null, "twee keer opleveren kan niet");
 });
 
-test("hulp van Pingo kost een deel van het loon", () => {
+test("hulp van Egres kost een deel van het loon", () => {
   assert.ok(Math.abs(loonVoor(5, { hulp: 1 }) / loonVoor(5) - (1 - WERK.hulpKost)) < 1e-12);
   assert.ok(Math.abs(loonVoor(5, { hulp: 99 }) / loonVoor(5) - WERK.hulpMinimum) < 1e-12);
 });

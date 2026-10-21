@@ -5,7 +5,7 @@ import { vulAan, hulpVoor, verwerk, uitvoerRegels } from "../../js/minigames/ter
 import { normaliseerPoort } from "../../js/data/terminal.js";
 
 function nieuweSwitch(opdracht = { poort: "gi0/3", ip: "10.42.7.1", mask: "255.255.255.0" }) {
-  return { hostname: "PINGO", mode: "user", iface: null, interfaces: {}, opdracht, nextAt: 0, gedaan: 0 };
+  return { hostname: "EGRES", mode: "user", iface: null, interfaces: {}, opdracht, nextAt: 0, gedaan: 0 };
 }
 
 function typ(cli, ...regels) {
@@ -85,7 +85,7 @@ test("onbekende en dubbelzinnige invoer geeft een nette melding", () => {
 import { TAKEN, nieuweTaak, schoonOpdracht, kiesTaak } from "../../js/data/terminal.js";
 
 function leegSwitch() {
-  return { hostname: "PINGO", mode: "user", iface: null, vlanId: null, interfaces: {}, vlans: {}, banner: null, secret: false, gateway: null, vorige: null, opdracht: null, nextAt: 0, gedaan: 0 };
+  return { hostname: "EGRES", mode: "user", iface: null, vlanId: null, interfaces: {}, vlans: {}, banner: null, secret: false, gateway: null, vorige: null, opdracht: null, nextAt: 0, gedaan: 0 };
 }
 
 test("elke soort opdracht is op te lossen met de commando's van de switch", () => {

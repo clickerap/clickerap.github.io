@@ -3,7 +3,7 @@
 
 import { G, D, recompute, earn, checkAchievements, checkSkins, refreshSeen, unlock, touch } from "./state.js";
 import { BUFFS, BUFF_BY_ID, HAZARDS, INCIDENTS, INCIDENT_BY_ID, strafId } from "./data/buffs.js";
-import { GENERIC, PINGO, CONTEXTUAL, MILESTONE, KLASSIEK, TRANSCENDENT } from "./data/news.js";
+import { GENERIC, EGRES, CONTEXTUAL, MILESTONE, KLASSIEK, TRANSCENDENT } from "./data/news.js";
 import { BUILDINGS } from "./data/buildings.js";
 import { emit } from "./bus.js";
 import { save } from "./save.js";
@@ -391,7 +391,7 @@ const EIGEN_KANS = 0.35;
 let lastNews = "";
 
 export function nextNews() {
-  const vast = [...KLASSIEK, ...GENERIC, ...PINGO];
+  const vast = [...KLASSIEK, ...GENERIC, ...EGRES];
   // De regels van voorbij het miljard komen er pas bij als je zover bent.
   if (G.prestige >= 1 || G.stats.lifetime >= 1e9) vast.push(...TRANSCENDENT);
 

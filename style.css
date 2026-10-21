@@ -1,4 +1,4 @@
-/* Pingo Clicker — eigen stylesheet, geen framework.
+/* Egres Clicker — eigen stylesheet, geen framework.
    Kleur en maat staan hier bovenaan; de rest volgt daaruit. */
 
 /* IBM Plex, zelf gehost (SIL Open Font License, zie fonts/OFL.txt). Er gaat
@@ -127,7 +127,7 @@
 
 * { box-sizing: border-box; }
 
-/* Geen blauw vlak bij het aanraken van knoppen; het indrukken van Pingo
+/* Geen blauw vlak bij het aanraken van knoppen; het indrukken van Egres
    geeft zelf al genoeg terugkoppeling. */
 html { -webkit-tap-highlight-color: transparent; }
 
@@ -746,7 +746,7 @@ body[data-paneel="retro"] :is(.stage, .status, .panel)::before {
   line-height: 22px;
   text-align: left;
 }
-body[data-paneel="retro"] .stage::before { content: "Pingo.exe"; }
+body[data-paneel="retro"] .stage::before { content: "Egres.exe"; }
 body[data-paneel="retro"] .status::before { content: "Netwerkmonitor"; }
 body[data-paneel="retro"] .panel::before { content: "Beheer"; }
 body[data-paneel="retro"] .btn,
@@ -1161,33 +1161,33 @@ body.rustig :is(.stage, .status, .panel)::before { animation: none; }
 
 /* Discobal: alle kleuren draaien rond. */
 [data-portret="disco"] img, img[data-portret="disco"] { filter: saturate(1.8) hue-rotate(90deg); }
-.pingo[data-portret="disco"] img { animation: ademen 4.5s ease-in-out infinite, disco 3.2s linear infinite; }
+.egres[data-portret="disco"] img { animation: ademen 4.5s ease-in-out infinite, disco 3.2s linear infinite; }
 @keyframes disco {
   from { filter: saturate(1.8) contrast(1.1) hue-rotate(0deg); }
   to { filter: saturate(1.8) contrast(1.1) hue-rotate(360deg); }
 }
 /* Radioactief: groen, en hij gloeit in golven. */
 [data-portret="radioactief"] img, img[data-portret="radioactief"] { filter: grayscale(1) sepia(1) hue-rotate(50deg) saturate(3.4) brightness(1.08); }
-.pingo[data-portret="radioactief"] img { animation: ademen 4.5s ease-in-out infinite, radioactief 2.2s ease-in-out infinite; }
+.egres[data-portret="radioactief"] img { animation: ademen 4.5s ease-in-out infinite, radioactief 2.2s ease-in-out infinite; }
 @keyframes radioactief {
   0%, 100% { box-shadow: 0 0 0 4px var(--ring, #93c5fd), 0 0 14px 2px rgba(163, 230, 53, 0.45); }
   50% { box-shadow: 0 0 0 4px var(--ring, #93c5fd), 0 0 38px 12px rgba(163, 230, 53, 0.75); }
 }
 /* Spook: half doorzichtig, en hij zweeft. */
 [data-portret="spook"] img, img[data-portret="spook"] { filter: grayscale(0.7) brightness(1.2) contrast(0.9); opacity: 0.72; }
-.pingo[data-portret="spook"] img { animation: ademen 4.5s ease-in-out infinite, spookFlakker 7s steps(1, end) infinite; }
+.egres[data-portret="spook"] img { animation: ademen 4.5s ease-in-out infinite, spookFlakker 7s steps(1, end) infinite; }
 @keyframes spookFlakker {
   0%, 88%, 92%, 100% { opacity: 0.72; }
   90% { opacity: 0.3; }
 }
 /* Kosmisch: sterren die om hem heen draaien, en een diepe paarse gloed. */
 [data-portret="kosmisch"] img, img[data-portret="kosmisch"] { filter: saturate(1.3) contrast(1.1) hue-rotate(-20deg); }
-.pingo[data-portret="kosmisch"] img { animation: ademen 4.5s ease-in-out infinite, kosmischeGloed 4s ease-in-out infinite; }
+.egres[data-portret="kosmisch"] img { animation: ademen 4.5s ease-in-out infinite, kosmischeGloed 4s ease-in-out infinite; }
 @keyframes kosmischeGloed {
   0%, 100% { box-shadow: 0 0 0 4px var(--ring, #93c5fd), 0 0 24px 6px rgba(129, 140, 248, 0.55); }
   50% { box-shadow: 0 0 0 4px var(--ring, #93c5fd), 0 0 48px 16px rgba(236, 72, 153, 0.55); }
 }
-.pingo[data-portret="kosmisch"]::after {
+.egres[data-portret="kosmisch"]::after {
   content: "";
   position: absolute;
   inset: -18%;
@@ -1208,7 +1208,7 @@ body.rustig :is(.stage, .status, .panel)::before { animation: none; }
 
 /* Storing: af en toe schiet het beeld uit elkaar. Met `translate` en niet met
    transform, anders botst het met het ademen van de foto. */
-.pingo[data-portret="storing"] img { animation: ademen 4.5s ease-in-out infinite, storing 3.4s steps(1, end) infinite; }
+.egres[data-portret="storing"] img { animation: ademen 4.5s ease-in-out infinite, storing 3.4s steps(1, end) infinite; }
 @keyframes storing {
   0%, 84%, 100% { translate: 0 0; }
   86% { translate: 5px 0; filter: saturate(1.6) contrast(1.2) drop-shadow(-9px 0 0 rgba(255, 0, 90, 0.75)) drop-shadow(9px 0 0 rgba(0, 220, 255, 0.75)); }
@@ -1217,8 +1217,8 @@ body.rustig :is(.stage, .status, .panel)::before { animation: none; }
 }
 
 /* Gouden beeld en Hologram krijgen een laag over de foto. */
-.pingo[data-portret="goudbeeld"]::after,
-.pingo[data-portret="hologram"]::after {
+.egres[data-portret="goudbeeld"]::after,
+.egres[data-portret="hologram"]::after {
   content: "";
   position: absolute;
   inset: 6px;
@@ -1226,16 +1226,16 @@ body.rustig :is(.stage, .status, .panel)::before { animation: none; }
   border-radius: 50%;
   pointer-events: none;
 }
-.pingo[data-portret="goudbeeld"]::after {
+.egres[data-portret="goudbeeld"]::after {
   background: linear-gradient(115deg, transparent 38%, rgba(255, 251, 235, 0.6) 50%, transparent 62%);
   background-size: 260% 100%;
   animation: glans 4.8s ease-in-out infinite;
 }
-.pingo[data-portret="hologram"]::after {
+.egres[data-portret="hologram"]::after {
   background: repeating-linear-gradient(to bottom, rgba(103, 232, 249, 0.22) 0 2px, transparent 2px 5px);
   animation: flikker 5s steps(1, end) infinite;
 }
-.pingo[data-portret="hologram"] img { opacity: 0.88; }
+.egres[data-portret="hologram"] img { opacity: 0.88; }
 @keyframes flikker {
   0%, 46%, 50%, 100% { opacity: 1; }
   48% { opacity: 0.35; }
@@ -1267,19 +1267,19 @@ body.rustig :is(.stage, .status, .panel)::before { animation: none; }
 [data-ring="melkweg"] { --ring: transparent; }
 [data-ring="zonnekroon"] { --ring: #fde68a; }
 
-/* Pingo is pixelkunst: scherpe blokjes, niet wazig opgeschaald. */
-img[src$="pingo.png"],
-:is(.packet, .packet-voorbeeld).stijl-pingo,
+/* Egres is pixelkunst: scherpe blokjes, niet wazig opgeschaald. */
+img[src$="egres.png"],
+:is(.packet, .packet-voorbeeld).stijl-egres,
 .logline[data-nieuws="chat"] .nieuws-tekst::before { image-rendering: pixelated; }
 
-.pingo img {
+.egres img {
   position: relative;
   z-index: 1;
   box-shadow: 0 0 0 4px var(--ring, #93c5fd), 0 14px 30px -12px rgba(11, 37, 69, 0.6);
 }
 /* Een draaiende ring achter de foto. Alleen de thema's die erom vragen
    zetten hem aan; de rest houdt een gewone gekleurde rand. */
-.pingo::before {
+.egres::before {
   content: "";
   position: absolute;
   inset: -11px;
@@ -1288,34 +1288,34 @@ img[src$="pingo.png"],
   animation: draaien 7s linear infinite;
   pointer-events: none;
 }
-.pingo[data-ring="regenboog"]::before {
+.egres[data-ring="regenboog"]::before {
   opacity: 1;
   background: conic-gradient(#f472b6, #fb923c, #facc15, #4ade80, #38bdf8, #a78bfa, #f472b6);
 }
-.pingo[data-ring="goud"]::before {
+.egres[data-ring="goud"]::before {
   opacity: 1;
   background: conic-gradient(#b45309, #fde68a 12%, #b45309 28%, #92400e 52%, #fcd34d 70%, #b45309 88%, #b45309);
   animation-duration: 5s;
 }
-.pingo[data-ring="matrix"]::before {
+.egres[data-ring="matrix"]::before {
   opacity: 1;
   background: conic-gradient(#052e16 0 62%, #22c55e 78%, #bbf7d0 86%, #22c55e 92%, #052e16 100%);
   animation-duration: 3.4s;
 }
 /* Lichtpuls: drie pulsen die door een donkere ring jagen. */
-.pingo[data-ring="lichtpuls"]::before {
+.egres[data-ring="lichtpuls"]::before {
   opacity: 1;
   background: conic-gradient(#0e2a47 0 18%, #67e8f9 24%, #0e2a47 30% 51%, #a7f3d0 57%, #0e2a47 63% 84%, #f0f9ff 90%, #0e2a47 96%);
   animation-duration: 2.2s;
 }
 /* Diamant: harde facetten die langzaam draaien. */
-.pingo[data-ring="diamant"]::before {
+.egres[data-ring="diamant"]::before {
   opacity: 1;
   background: conic-gradient(#f0f9ff 0 8%, #93c5fd 8% 17%, #ffffff 17% 23%, #c4b5fd 23% 33%, #e0f2fe 33% 41%, #67e8f9 41% 50%, #ffffff 50% 56%, #a5b4fc 56% 66%, #f0f9ff 66% 74%, #7dd3fc 74% 83%, #ffffff 83% 90%, #ddd6fe 90%);
   animation-duration: 14s;
 }
 /* Plasma: een gloeiende ring die zachtjes groter en kleiner wordt. */
-.pingo[data-ring="plasma"]::before {
+.egres[data-ring="plasma"]::before {
   opacity: 1;
   background: conic-gradient(#f0abfc, #818cf8, #22d3ee, #a78bfa, #f472b6, #f0abfc);
   filter: blur(4px) saturate(1.3);
@@ -1325,7 +1325,7 @@ img[src$="pingo.png"],
   to { scale: 1.07; }
 }
 /* T568B: wit-oranje, oranje, wit-groen, blauw, wit-blauw, groen, wit-bruin, bruin. */
-.pingo[data-ring="t568b"]::before {
+.egres[data-ring="t568b"]::before {
   opacity: 1;
   background: conic-gradient(#fdf4e7 0 3%, #f97316 3% 9.5%, #fdf4e7 9.5% 12.5%,
     #f97316 12.5% 25%, #f5fbf6 25% 28%, #22c55e 28% 34.5%, #f5fbf6 34.5% 37.5%, #2563eb 37.5% 50%,
@@ -1334,20 +1334,20 @@ img[src$="pingo.png"],
   animation-duration: 12s;
 }
 /* Radar: een straal die rondzwaait en een groen spoor achterlaat. */
-.pingo[data-ring="radar"]::before {
+.egres[data-ring="radar"]::before {
   opacity: 1;
   background: conic-gradient(#052e16 0 70%, rgba(74, 222, 128, 0.25) 82%, #4ade80 99%, #dcfce7 100%);
   animation-duration: 2.6s;
 }
 /* IJs: bleek en koud, met een wolk rijp eromheen. */
-.pingo[data-ring="ijs"]::before {
+.egres[data-ring="ijs"]::before {
   opacity: 1;
   background: conic-gradient(#f0f9ff, #bae6fd 15%, #ffffff 30%, #7dd3fc 48%, #e0f2fe 62%, #ffffff 80%, #bae6fd 90%, #f0f9ff);
   animation-duration: 20s;
 }
-.pingo[data-ring="ijs"] img { box-shadow: 0 0 22px 4px rgba(186, 230, 253, 0.75), 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
+.egres[data-ring="ijs"] img { box-shadow: 0 0 22px 4px rgba(186, 230, 253, 0.75), 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
 /* Vuurring: rood en oranje die opflakkeren. */
-.pingo[data-ring="vuur"]::before {
+.egres[data-ring="vuur"]::before {
   opacity: 1;
   background: conic-gradient(#fde047, #f97316, #dc2626, #fb923c, #facc15, #ef4444, #f97316, #fde047);
   filter: blur(3px) saturate(1.4);
@@ -1359,7 +1359,7 @@ img[src$="pingo.png"],
   100% { scale: 1.02; }
 }
 /* Hartslag: twee snelle slagen, dan rust. */
-.pingo[data-ring="hartslag"] img { animation: ademen 4.5s ease-in-out infinite, hartslag 1.5s ease-in-out infinite; }
+.egres[data-ring="hartslag"] img { animation: ademen 4.5s ease-in-out infinite, hartslag 1.5s ease-in-out infinite; }
 @keyframes hartslag {
   0%, 40%, 100% { box-shadow: 0 0 0 4px #ef4444, 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
   10% { box-shadow: 0 0 0 10px #ef4444, 0 0 26px 6px rgba(239, 68, 68, 0.55); }
@@ -1367,7 +1367,7 @@ img[src$="pingo.png"],
   30% { box-shadow: 0 0 0 9px #ef4444, 0 0 22px 4px rgba(239, 68, 68, 0.45); }
 }
 /* Pulsar: golven die telkens van de foto wegrollen. */
-.pingo[data-ring="pulsar"]::before {
+.egres[data-ring="pulsar"]::before {
   opacity: 1;
   inset: -4px;
   border: 3px solid #67e8f9;
@@ -1378,7 +1378,7 @@ img[src$="pingo.png"],
   to { transform: scale(1.32); opacity: 0; }
 }
 /* Hoogspanning: gekartelde vonken die snel rond de rand flitsen. */
-.pingo[data-ring="hoogspanning"]::before {
+.egres[data-ring="hoogspanning"]::before {
   opacity: 1;
   background: repeating-conic-gradient(from 0deg, #ecfeff 0 3deg, transparent 3deg 11deg, #22d3ee 11deg 13deg, transparent 13deg 24deg);
   -webkit-mask: radial-gradient(circle, transparent 60%, #000 61%);
@@ -1390,9 +1390,9 @@ img[src$="pingo.png"],
   0% { opacity: 1; }
   50% { opacity: 0.55; }
 }
-.pingo[data-ring="hoogspanning"] img { box-shadow: 0 0 0 4px #a5f3fc, 0 0 20px 4px rgba(34, 211, 238, 0.55); }
+.egres[data-ring="hoogspanning"] img { box-shadow: 0 0 0 4px #a5f3fc, 0 0 20px 4px rgba(34, 211, 238, 0.55); }
 /* Satelliet: een lichtje in een baan om de foto, met een dunne baanlijn. */
-.pingo[data-ring="satelliet"]::before {
+.egres[data-ring="satelliet"]::before {
   opacity: 1;
   inset: -16px;
   background: radial-gradient(circle at 50% 3%, #ffffff 0 4px, #93c5fd 5px, rgba(147, 197, 253, 0) 11px);
@@ -1400,7 +1400,7 @@ img[src$="pingo.png"],
   animation-duration: 5s;
 }
 /* Melkweg: een draaiend sterrenstelsel achter de foto. */
-.pingo[data-ring="melkweg"]::before {
+.egres[data-ring="melkweg"]::before {
   opacity: 1;
   inset: -16px;
   background:
@@ -1413,7 +1413,7 @@ img[src$="pingo.png"],
   animation-duration: 16s;
 }
 /* Zonnekroon: stralen van licht die langzaam rond draaien, en een gloed die ademt. */
-.pingo[data-ring="zonnekroon"]::before {
+.egres[data-ring="zonnekroon"]::before {
   opacity: 1;
   inset: -26px;
   background: repeating-conic-gradient(from 0deg, rgba(253, 230, 138, 0.95) 0 5deg, rgba(253, 230, 138, 0) 5deg 15deg);
@@ -1421,25 +1421,25 @@ img[src$="pingo.png"],
   mask: radial-gradient(circle, transparent 46%, #000 50%, #000 58%, transparent 72%);
   animation-duration: 28s;
 }
-.pingo[data-ring="zonnekroon"] img { animation: ademen 4.5s ease-in-out infinite, zonnegloed 3s ease-in-out infinite; }
+.egres[data-ring="zonnekroon"] img { animation: ademen 4.5s ease-in-out infinite, zonnegloed 3s ease-in-out infinite; }
 @keyframes zonnegloed {
   0%, 100% { box-shadow: 0 0 0 4px #fde68a, 0 0 22px 6px rgba(251, 191, 36, 0.55); }
   50% { box-shadow: 0 0 0 5px #fff7d6, 0 0 46px 16px rgba(251, 191, 36, 0.8); }
 }
-.pingo[data-ring="melkweg"] img,
-.pingo[data-ring="satelliet"] img { box-shadow: 0 0 0 3px var(--ring), 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
+.egres[data-ring="melkweg"] img,
+.egres[data-ring="satelliet"] img { box-shadow: 0 0 0 3px var(--ring), 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
 
-.pingo[data-ring="goud"] img,
-.pingo[data-ring="matrix"] img,
-.pingo[data-ring="t568b"] img,
-.pingo[data-ring="radar"] img,
-.pingo[data-ring="vuur"] img,
-.pingo[data-ring="lichtpuls"] img,
-.pingo[data-ring="diamant"] img,
-.pingo[data-ring="plasma"] img { box-shadow: 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
+.egres[data-ring="goud"] img,
+.egres[data-ring="matrix"] img,
+.egres[data-ring="t568b"] img,
+.egres[data-ring="radar"] img,
+.egres[data-ring="vuur"] img,
+.egres[data-ring="lichtpuls"] img,
+.egres[data-ring="diamant"] img,
+.egres[data-ring="plasma"] img { box-shadow: 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
 
 /* Alarmrood knippert niet, het ademt. */
-.pingo[data-ring="rood"] img { animation: ademen 4.5s ease-in-out infinite, alarm 2.2s ease-in-out infinite; }
+.egres[data-ring="rood"] img { animation: ademen 4.5s ease-in-out infinite, alarm 2.2s ease-in-out infinite; }
 @keyframes alarm {
   0%, 100% { box-shadow: 0 0 0 4px var(--ring), 0 0 0 0 rgba(239, 68, 68, 0.5), 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
   50% { box-shadow: 0 0 0 4px var(--ring), 0 0 0 12px rgba(239, 68, 68, 0), 0 14px 30px -12px rgba(11, 37, 69, 0.6); }
@@ -1607,14 +1607,14 @@ img[src$="pingo.png"],
 .panel { grid-area: paneel; }
 
 /* Onder de 1220px past er geen derde kolom meer; de stand van zaken
-   schuift dan onder Pingo. */
+   schuift dan onder Egres. */
 @media (max-width: 1219px) {
   .board {
     grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
     grid-template-areas:
       "klik paneel"
       "status paneel";
-    /* Pingo krijgt de hoogte die hij nodig heeft, de rest vult aan. */
+    /* Egres krijgt de hoogte die hij nodig heeft, de rest vult aan. */
     grid-template-rows: auto minmax(0, 1fr);
   }
 }
@@ -1656,7 +1656,7 @@ img[src$="pingo.png"],
   overflow: hidden;
 }
 
-/* ---------- Teller en Pingo ---------- */
+/* ---------- Teller en Egres ---------- */
 
 .counter { text-align: center; }
 .counter strong {
@@ -1690,7 +1690,7 @@ img[src$="pingo.png"],
 
 .clicker { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 
-.pingo {
+.egres {
   border: 0;
   padding: 0;
   background: none;
@@ -1702,8 +1702,8 @@ img[src$="pingo.png"],
 }
 /* De maat van de foto staat op de plek eromheen, zodat het accessoire
    dezelfde maat kent. */
-.pingo-plek { --foto: clamp(200px, 18vw, 268px); }
-.pingo img {
+.egres-plek { --foto: clamp(200px, 18vw, 268px); }
+.egres img {
   width: var(--foto);
   height: var(--foto);
   border-radius: 50%;
@@ -1713,9 +1713,9 @@ img[src$="pingo.png"],
   -webkit-user-drag: none;
   animation: ademen 4.5s ease-in-out infinite;
 }
-.pingo:hover { transform: scale(1.02); }
-.pingo:active { transform: scale(0.955); }
-.pingo.hit img { animation: hit 260ms cubic-bezier(0.2, 0.9, 0.3, 1); }
+.egres:hover { transform: scale(1.02); }
+.egres:active { transform: scale(0.955); }
+.egres.hit img { animation: hit 260ms cubic-bezier(0.2, 0.9, 0.3, 1); }
 
 @keyframes ademen {
   0%, 100% { transform: scale(1); }
@@ -1728,7 +1728,7 @@ img[src$="pingo.png"],
 }
 
 /* Het maatje zit rechtsonder naast de foto en dobbert zachtjes. */
-.pingo-plek { position: relative; line-height: 0; }
+.egres-plek { position: relative; line-height: 0; }
 .maatje {
   position: absolute;
   right: -10px;
@@ -1777,7 +1777,7 @@ img[src$="pingo.png"],
   font-weight: 600;
   line-height: 1.4;
   text-align: left;
-  /* Klikken gaat gewoon door naar Pingo eronder. */
+  /* Klikken gaat gewoon door naar Egres eronder. */
   pointer-events: none;
 }
 .maatje-ballon::after {
@@ -3222,7 +3222,7 @@ button.kast-bon:hover { background: rgba(96, 165, 250, 0.16); border-color: rgba
   line-height: 1.6;
   overflow-x: auto;
 }
-.cursus-pingo {
+.cursus-egres {
   font-size: 14.5px;
   line-height: 1.6;
   background: var(--goud-vlak);
@@ -3774,8 +3774,8 @@ button.kast-bon:hover { background: rgba(96, 165, 250, 0.16); border-color: rgba
   .board { padding: 0 12px 24px; gap: 14px; }
   .panel { border-radius: var(--r-l); }
   .counter strong { font-size: 42px; }
-  .pingo-plek { --foto: 172px; }
-  .pingo img { border-width: 5px; }
+  .egres-plek { --foto: 172px; }
+  .egres img { border-width: 5px; }
   .toaster { left: 12px; right: 12px; bottom: 12px; align-items: stretch; }
   .toast { max-width: none; }
   .tabpanels > section { padding: 14px; }
@@ -3824,10 +3824,10 @@ body.rustig .zweef { animation: zweefStil 1.1s linear both !important; }
 
 body.rustig::before { animation: none; }
 body.rustig .packet { animation: packetIn 200ms ease-out both; }
-body.rustig .pingo img { animation: none; }
+body.rustig .egres img { animation: none; }
 body.rustig::after { animation: none; }
-body.rustig .pingo::before { animation: none; }
-body.rustig .pingo::after { animation: none; }
+body.rustig .egres::before { animation: none; }
+body.rustig .egres::after { animation: none; }
 body.rustig .maatje { animation: none; }
 body.rustig :is(.rang-legendarisch, .rang-mythisch, .rang-goddelijk, .skin.kaart-mythisch, .skin.kaart-goddelijk) { animation: none; }
 body.rustig .buff, body.rustig .node.kan, body.rustig .kast-led, body.rustig .pip { animation: none; }
@@ -4550,12 +4550,12 @@ body[data-filter="vhs"] .filterlaag::after {
 :is(.packet, .packet-voorbeeld).stijl-kat::after { right: 8%; }
 :is(.packet, .packet-voorbeeld).stijl-diamant { background: conic-gradient(from 20deg, #cffafe, #22d3ee, #ecfeff, #0891b2, #a5f3fc, #06b6d4, #cffafe); }
 .packet.stijl-diamant { box-shadow: 0 0 22px rgba(34, 211, 238, 0.7), 0 0 0 5px rgba(255, 255, 255, 0.7); }
-:is(.packet, .packet-voorbeeld).stijl-pingo { background-size: cover; background-position: center; }
-.packet.stijl-pingo {
+:is(.packet, .packet-voorbeeld).stijl-egres { background-size: cover; background-position: center; }
+.packet.stijl-egres {
   box-shadow: 0 0 0 5px #fbbf24, 0 0 0 8px #fff, 0 8px 22px -6px rgba(180, 83, 9, 0.75);
   animation: packetIn 320ms cubic-bezier(0.16, 0.9, 0.28, 1) both, zweven 3.2s ease-in-out 320ms infinite, wiebel 1.4s ease-in-out infinite;
 }
-.skin-preview.packet-voorbeeld.stijl-pingo { box-shadow: 0 0 0 3px #fbbf24; }
+.skin-preview.packet-voorbeeld.stijl-egres { box-shadow: 0 0 0 3px #fbbf24; }
 @keyframes wiebel {
   0%, 100% { rotate: -8deg; }
   50% { rotate: 8deg; }
@@ -4663,7 +4663,7 @@ body.rustig .accessoire .ring i { transform: rotate(var(--a)) translateY(calc(va
 .accessoire[data-accessoire="vogeltje"] { --x: 52%; --y: 0%; --maat: 0.2; }
 /* Hoge hoeden krijgen wat extra ruimte boven de foto, zodat ze niet tegen
    het getal of de regel "per klik" aan komen. */
-.pingo-plek:has(.accessoire:is([data-accessoire="heksenhoed"], [data-accessoire="kerstmuts"], [data-accessoire="feesthoed"], [data-accessoire="eenhoorn"], [data-accessoire="vlammen"], [data-accessoire="wifi"], [data-accessoire="ruimtehelm"], [data-accessoire="onweer"], [data-accessoire="routerhoed"], [data-accessoire="koffiemok"], [data-accessoire="hogehoed"], [data-accessoire="regenwolk"], [data-accessoire="lampje"])) { margin-top: 18px; }
+.egres-plek:has(.accessoire:is([data-accessoire="heksenhoed"], [data-accessoire="kerstmuts"], [data-accessoire="feesthoed"], [data-accessoire="eenhoorn"], [data-accessoire="vlammen"], [data-accessoire="wifi"], [data-accessoire="ruimtehelm"], [data-accessoire="onweer"], [data-accessoire="routerhoed"], [data-accessoire="koffiemok"], [data-accessoire="hogehoed"], [data-accessoire="regenwolk"], [data-accessoire="lampje"])) { margin-top: 18px; }
 
 /* Kattenoren: af en toe trilt het rechteroor. */
 .acc-svg.kattenoren .oor { transform-box: fill-box; transform-origin: 50% 100%; }
@@ -4769,17 +4769,17 @@ body.rustig .accessoire .ring i { transform: rotate(var(--a)) translateY(calc(va
    scale. Zo botst het niet met het indrukken, dat transform gebruikt.
    Het voorbeeldje in het menu beweegt op dezelfde manier. */
 
-:is(.pingo, .houding-voorbeeld)[data-houding="wiebel"] { animation: hWiebel 3.2s ease-in-out infinite; }
+:is(.egres, .houding-voorbeeld)[data-houding="wiebel"] { animation: hWiebel 3.2s ease-in-out infinite; }
 @keyframes hWiebel {
   0%, 100% { rotate: -3deg; }
   50% { rotate: 3deg; }
 }
-:is(.pingo, .houding-voorbeeld)[data-houding="knikken"] { transform-origin: 50% 90%; animation: hKnik 0.8s ease-in-out infinite; }
+:is(.egres, .houding-voorbeeld)[data-houding="knikken"] { transform-origin: 50% 90%; animation: hKnik 0.8s ease-in-out infinite; }
 @keyframes hKnik {
   0%, 60%, 100% { translate: 0 0; scale: 1 1; }
   25% { translate: 0 1.5%; scale: 1.01 0.985; }
 }
-:is(.pingo, .houding-voorbeeld)[data-houding="pudding"] { transform-origin: 50% 100%; animation: hPudding 2.6s ease-in-out infinite; }
+:is(.egres, .houding-voorbeeld)[data-houding="pudding"] { transform-origin: 50% 100%; animation: hPudding 2.6s ease-in-out infinite; }
 @keyframes hPudding {
   0%, 70%, 100% { scale: 1 1; }
   12% { scale: 1.07 0.93; }
@@ -4787,18 +4787,18 @@ body.rustig .accessoire .ring i { transform: rotate(var(--a)) translateY(calc(va
   36% { scale: 1.03 0.97; }
   48% { scale: 0.99 1.01; }
 }
-:is(.pingo, .houding-voorbeeld)[data-houding="dansen"] { transform-origin: 50% 100%; animation: hDansen 1.1s ease-in-out infinite; }
+:is(.egres, .houding-voorbeeld)[data-houding="dansen"] { transform-origin: 50% 100%; animation: hDansen 1.1s ease-in-out infinite; }
 @keyframes hDansen {
   0%, 100% { rotate: -6deg; translate: -2% 0; }
   25%, 75% { rotate: 0deg; translate: 0 -3%; }
   50% { rotate: 6deg; translate: 2% 0; }
 }
-:is(.pingo, .houding-voorbeeld)[data-houding="tol"] { animation: hTol 6s cubic-bezier(0.5, 0, 0.3, 1) infinite; }
+:is(.egres, .houding-voorbeeld)[data-houding="tol"] { animation: hTol 6s cubic-bezier(0.5, 0, 0.3, 1) infinite; }
 @keyframes hTol {
   0%, 76% { rotate: 0deg; }
   94%, 100% { rotate: 360deg; }
 }
-:is(.pingo, .houding-voorbeeld)[data-houding="cafeine"] { animation: hCafeine 2.8s linear infinite; }
+:is(.egres, .houding-voorbeeld)[data-houding="cafeine"] { animation: hCafeine 2.8s linear infinite; }
 @keyframes hCafeine {
   0%, 27%, 100% { translate: 0 0; }
   2% { translate: -2px 1px; }
@@ -4814,7 +4814,7 @@ body.rustig .accessoire .ring i { transform: rotate(var(--a)) translateY(calc(va
   22% { translate: 1px 2px; }
   24% { translate: -1px 0; }
 }
-:is(.pingo, .houding-voorbeeld)[data-houding="haperen"] { animation: hHaperen 4.2s steps(1, end) infinite; }
+:is(.egres, .houding-voorbeeld)[data-houding="haperen"] { animation: hHaperen 4.2s steps(1, end) infinite; }
 @keyframes hHaperen {
   0%, 89%, 100% { translate: 0 0; filter: none; }
   90% { translate: 3% 0; filter: drop-shadow(-5px 0 0 rgba(255, 0, 90, 0.7)) drop-shadow(5px 0 0 rgba(0, 220, 255, 0.7)); }
@@ -4823,14 +4823,14 @@ body.rustig .accessoire .ring i { transform: rotate(var(--a)) translateY(calc(va
   96% { translate: -1.5% 0; filter: drop-shadow(-3px 0 0 rgba(255, 0, 90, 0.6)); }
   97% { translate: 0 0; filter: none; }
 }
-:is(.pingo, .houding-voorbeeld)[data-houding="stuiter"] { transform-origin: 50% 100%; animation: hStuiter 1s infinite; }
+:is(.egres, .houding-voorbeeld)[data-houding="stuiter"] { transform-origin: 50% 100%; animation: hStuiter 1s infinite; }
 @keyframes hStuiter {
   0%, 100% { translate: 0 0; scale: 1.07 0.92; animation-timing-function: cubic-bezier(0.2, 0.7, 0.4, 1); }
   14% { translate: 0 -2%; scale: 0.97 1.04; animation-timing-function: cubic-bezier(0.2, 0.7, 0.4, 1); }
   50% { translate: 0 -7%; scale: 1 1; animation-timing-function: cubic-bezier(0.6, 0, 0.8, 0.4); }
   92% { translate: 0 -0.5%; scale: 0.98 1.02; }
 }
-:is(.pingo, .houding-voorbeeld)[data-houding="disco"] { transform-origin: 50% 100%; animation: hDisco 0.9s ease-in-out infinite, hKleur 3s linear infinite; }
+:is(.egres, .houding-voorbeeld)[data-houding="disco"] { transform-origin: 50% 100%; animation: hDisco 0.9s ease-in-out infinite, hKleur 3s linear infinite; }
 @keyframes hDisco {
   0%, 100% { rotate: -7deg; translate: 0 0; }
   25%, 75% { rotate: 0deg; translate: 0 -3%; }
@@ -4840,12 +4840,12 @@ body.rustig .accessoire .ring i { transform: rotate(var(--a)) translateY(calc(va
   from { filter: hue-rotate(0deg) saturate(1.3); }
   to { filter: hue-rotate(360deg) saturate(1.3); }
 }
-:is(.pingo, .houding-voorbeeld)[data-houding="zen"] { animation: hZen 6s ease-in-out infinite; }
+:is(.egres, .houding-voorbeeld)[data-houding="zen"] { animation: hZen 6s ease-in-out infinite; }
 @keyframes hZen {
   0%, 100% { scale: 1; filter: drop-shadow(0 0 0 rgba(253, 230, 138, 0)); }
   50% { scale: 1.045; filter: drop-shadow(0 0 22px rgba(253, 230, 138, 0.9)); }
 }
-:is(.pingo, .houding-voorbeeld)[data-houding="hypnose"] { transform-origin: 50% -55%; animation: hHypnose 2.8s ease-in-out infinite, hHypnoseGloed 2.8s ease-in-out infinite; }
+:is(.egres, .houding-voorbeeld)[data-houding="hypnose"] { transform-origin: 50% -55%; animation: hHypnose 2.8s ease-in-out infinite, hHypnoseGloed 2.8s ease-in-out infinite; }
 @keyframes hHypnose {
   0%, 100% { rotate: -7deg; }
   50% { rotate: 7deg; }
@@ -5164,10 +5164,10 @@ body.rustig[data-accent="regenboog"] { animation: none; }
 }
 .toast.stijl-syslog .ikoon { display: none; }
 .toast.stijl-syslog h4 { font-size: 13.5px; font-weight: 600; color: #4ade80; }
-.toast.stijl-syslog h4::before { content: "%PINGO-6-INFO: "; color: #22c55e; opacity: 0.8; }
-.toast.stijl-syslog.goed h4::before { content: "%PINGO-5-OK: "; }
-.toast.stijl-syslog.slecht h4::before { content: "%PINGO-3-ALARM: "; color: #f87171; opacity: 1; }
-.toast.stijl-syslog.goud h4::before { content: "%PINGO-4-GOUD: "; color: #facc15; opacity: 1; }
+.toast.stijl-syslog h4::before { content: "%EGRES-6-INFO: "; color: #22c55e; opacity: 0.8; }
+.toast.stijl-syslog.goed h4::before { content: "%EGRES-5-OK: "; }
+.toast.stijl-syslog.slecht h4::before { content: "%EGRES-3-ALARM: "; color: #f87171; opacity: 1; }
+.toast.stijl-syslog.goud h4::before { content: "%EGRES-4-GOUD: "; color: #facc15; opacity: 1; }
 .toast.stijl-syslog p { font-size: 13px; color: #a7f3d0; }
 
 .toast.stijl-sms {
@@ -5178,7 +5178,7 @@ body.rustig[data-accent="regenboog"] { animation: none; }
   padding: 10px 16px 12px;
   box-shadow: 0 8px 20px -8px rgba(37, 99, 235, 0.65);
 }
-.toast.stijl-sms::before { content: "Pingo · nu"; display: block; font-size: 11.5px; font-weight: 700; opacity: 0.82; margin-bottom: 2px; }
+.toast.stijl-sms::before { content: "Egres · nu"; display: block; font-size: 11.5px; font-weight: 700; opacity: 0.82; margin-bottom: 2px; }
 .toast.stijl-sms.goed { background: #15803d; }
 .toast.stijl-sms.slecht { background: #b91c1c; }
 .toast.stijl-sms.goud { background: #b45309; }
@@ -5485,8 +5485,8 @@ body[data-melding="trofee"] .toaster { left: 12px; right: 12px; align-items: cen
 .combo[data-combo="sport"] { rotate: -3deg; gap: 0; justify-items: start; }
 .combo[data-combo="sport"] b { background: #dc2626; color: #fff; padding: 4px 9px; font-size: 16px; text-transform: uppercase; letter-spacing: 0.04em; }
 .combo[data-combo="sport"] small { background: #0b2545; color: #fff; padding: 5px 9px; font-size: 12.5px; font-weight: 700; max-width: 190px; white-space: normal; line-height: 1.25; }
-.combo[data-combo="pingo"] { rotate: -6deg; }
-.combo[data-combo="pingo"] b {
+.combo[data-combo="egres"] { rotate: -6deg; }
+.combo[data-combo="egres"] b {
   display: grid;
   place-items: center;
   min-width: 52px;
@@ -5498,7 +5498,7 @@ body[data-melding="trofee"] .toaster { left: 12px; right: 12px; align-items: cen
   color: #dc2626;
   font: 700 26px/1 "Bradley Hand", "Segoe Print", "Chalkboard SE", cursive;
 }
-.combo[data-combo="pingo"] small { background: rgba(255, 255, 255, 0.92); color: #b91c1c; padding: 3px 7px; border-radius: 4px; font: 700 15px/1.2 "Bradley Hand", "Segoe Print", "Chalkboard SE", cursive; }
+.combo[data-combo="egres"] small { background: rgba(255, 255, 255, 0.92); color: #b91c1c; padding: 3px 7px; border-radius: 4px; font: 700 15px/1.2 "Bradley Hand", "Segoe Print", "Chalkboard SE", cursive; }
 .combo[data-combo="kracht"] b { font: italic 900 22px/1 Impact, "Arial Black", sans-serif; color: #fef08a; letter-spacing: 0.03em; text-shadow: 0 0 8px #facc15, 0 0 18px #f59e0b, 2px 2px 0 #7c2d12; }
 .combo[data-combo="kracht"] small { background: #dc2626; color: #fff; padding: 4px 7px; font: italic 900 14px/1 Impact, "Arial Black", sans-serif; animation: krachtTril 0.12s steps(2) infinite; }
 .combo[data-combo="kracht"]::before {
@@ -5590,7 +5590,7 @@ body[data-cursor] select { cursor: pointer; }
 }
 .opstart[data-opstart="bios"] .op-console { color: #bdbdbd; }
 .opstart[data-opstart="bios"]::after {
-  content: "★ PINGO\A  ENERGIE";
+  content: "★ EGRES\A  ENERGIE";
   white-space: pre;
   position: absolute;
   top: clamp(16px, 4vw, 48px);
@@ -5764,7 +5764,7 @@ body[data-cursor] select { cursor: pointer; }
 
 /* Met animaties uit staat alles uit deel 3 stil. */
 body.rustig :is(
-  .pingo[data-houding], .houding-voorbeeld, .acc-svg, .acc-svg *, .accessoire .teken,
+  .egres[data-houding], .houding-voorbeeld, .acc-svg, .acc-svg *, .accessoire .teken,
   .combo, .combo *, .combo::before, .toast[class*="stijl-"], .toast[class*="stijl-"]::before, .toast[class*="stijl-"]::after
 ) { animation: none !important; }
 
@@ -5773,9 +5773,9 @@ body.rustig :is(
    nieuwsbalk en looks.
    ===================================================================== */
 
-/* Het decor ligt achter Pingo, de omloop ervoor. De tekst
+/* Het decor ligt achter Egres, de omloop ervoor. De tekst
    boven en onder hem ligt weer boven alles, zodat hij leesbaar blijft. */
-.pingo { z-index: 1; }
+.egres { z-index: 1; }
 .counter, .clicker-hint, .doel, .buffbar { position: relative; z-index: 3; }
 
 /* ---------- Omloop ---------- */
@@ -5809,8 +5809,8 @@ body.rustig :is(
 .omloop-ring b { display: grid; place-items: center; width: 100%; height: 100%; font-weight: 800; filter: drop-shadow(0 1px 1.5px rgba(11, 37, 69, 0.45)); }
 /* De meeste dingen blijven rechtop: elk draait zijn eigen baan en draait
    zichzelf even hard terug. */
-.omloop:is([data-omloop="packets"], [data-omloop="bits"], [data-omloop="hartjes"], [data-omloop="satellieten"], [data-omloop="koffie"], [data-omloop="munten"], [data-omloop="minipingo"], [data-omloop="noten"], [data-omloop="pinguins"]) .omloop-ring { animation: none; }
-.omloop:is([data-omloop="packets"], [data-omloop="bits"], [data-omloop="hartjes"], [data-omloop="satellieten"], [data-omloop="koffie"], [data-omloop="munten"], [data-omloop="minipingo"], [data-omloop="noten"], [data-omloop="pinguins"]) .omloop-ring i {
+.omloop:is([data-omloop="packets"], [data-omloop="bits"], [data-omloop="hartjes"], [data-omloop="satellieten"], [data-omloop="koffie"], [data-omloop="munten"], [data-omloop="miniegres"], [data-omloop="noten"], [data-omloop="pinguins"]) .omloop-ring { animation: none; }
+.omloop:is([data-omloop="packets"], [data-omloop="bits"], [data-omloop="hartjes"], [data-omloop="satellieten"], [data-omloop="koffie"], [data-omloop="munten"], [data-omloop="miniegres"], [data-omloop="noten"], [data-omloop="pinguins"]) .omloop-ring i {
   transform: rotate(var(--a)) translateY(calc(var(--foto) * var(--straal) * -1)) rotate(calc(-1 * var(--a)));
   animation: rechtop var(--duur, 50s) linear infinite;
 }
@@ -5818,7 +5818,7 @@ body.rustig :is(
   from { transform: rotate(var(--a)) translateY(calc(var(--foto) * var(--straal) * -1)) rotate(calc(-1 * var(--a))); }
   to { transform: rotate(calc(var(--a) + 360deg)) translateY(calc(var(--foto) * var(--straal) * -1)) rotate(calc(-1 * var(--a) - 360deg)); }
 }
-/* Muisjes: ze wijzen naar Pingo en tikken om de beurt. */
+/* Muisjes: ze wijzen naar Egres en tikken om de beurt. */
 .omloop[data-omloop="muizen"] { --straal: 0.6; --maat: calc(var(--foto) * 0.09); --duur: 60s; }
 .omloop[data-omloop="muizen"] b { background: url("img/cursor/pijl.svg") center / contain no-repeat; rotate: 225deg; animation: tik 1.6s ease-in-out infinite; animation-delay: calc(var(--i) * -0.19s); }
 @keyframes tik {
@@ -5868,9 +5868,9 @@ body.rustig :is(
   0%, 100% { scale: 1 1; }
   50% { scale: 0.12 1; }
 }
-.omloop[data-omloop="minipingo"] { --maat: calc(var(--foto) * 0.13); --straal: 0.66; --duur: 70s; }
-.omloop[data-omloop="minipingo"] b { animation: zwaai 1.4s ease-in-out infinite alternate; animation-delay: calc(var(--i) * -0.23s); }
-.omloop[data-omloop="minipingo"] img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(11, 37, 69, 0.35); }
+.omloop[data-omloop="miniegres"] { --maat: calc(var(--foto) * 0.13); --straal: 0.66; --duur: 70s; }
+.omloop[data-omloop="miniegres"] b { animation: zwaai 1.4s ease-in-out infinite alternate; animation-delay: calc(var(--i) * -0.23s); }
+.omloop[data-omloop="miniegres"] img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(11, 37, 69, 0.35); }
 @keyframes zwaai {
   from { rotate: -12deg; }
   to { rotate: 12deg; }
@@ -5917,7 +5917,7 @@ body.rustig :is(
   from { transform: rotate(0deg) translateY(calc(var(--foto) * -0.68)) rotate(0deg) scaleY(2.94); }
   to { transform: rotate(360deg) translateY(calc(var(--foto) * -0.68)) rotate(-360deg) scaleY(2.94); }
 }
-/* Zonnestelsel: acht banen van bovenaf, Pingo is de zon. */
+/* Zonnestelsel: acht banen van bovenaf, Egres is de zon. */
 .omloop[data-omloop="zonnestelsel"]::before {
   content: "";
   position: absolute;
@@ -6361,7 +6361,7 @@ body.rustig :is(
   text-shadow: -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000, 0 2px 5px rgba(0, 0, 0, 0.6);
 }
 .logline[data-nieuws="terminal"] .nieuws-tekst { padding: 10px 14px; border: 1px solid #14532d; border-radius: 8px; background: #0a0f0a; color: #86efac; font: 500 13.5px/1.45 "IBM Plex Mono", ui-monospace, monospace; }
-.logline[data-nieuws="terminal"] .nieuws-tekst::before { content: "pingo@netwerk:~$ tail -f nieuws.log"; display: block; margin-bottom: 4px; color: #4ade80; font-size: 12px; opacity: 0.75; }
+.logline[data-nieuws="terminal"] .nieuws-tekst::before { content: "egres@netwerk:~$ tail -f nieuws.log"; display: block; margin-bottom: 4px; color: #4ade80; font-size: 12px; opacity: 0.75; }
 .logline[data-nieuws="terminal"] .nieuws-tekst > span::before { content: "> "; color: #4ade80; }
 .logline[data-nieuws="terminal"] .nieuws-tekst > span::after { content: "▋"; margin-left: 3px; color: #4ade80; animation: knipper 1s steps(1, end) infinite; }
 .logline[data-nieuws="lichtkrant"] .nieuws-tekst { overflow: hidden; padding: 9px 0; border-radius: 6px; background: #120904; box-shadow: inset 0 0 0 2px #2a1508; white-space: nowrap; }
@@ -6380,12 +6380,12 @@ body.rustig :is(
   to { transform: translateX(-100%); }
 }
 .logline[data-nieuws="teletekst"] .nieuws-tekst { padding: 8px 10px; background: #000; color: #ffff00; font: 600 14px/1.35 "IBM Plex Mono", ui-monospace, monospace; }
-.logline[data-nieuws="teletekst"] .nieuws-tekst::before { content: "P101  PINGOTEKST  " attr(data-tijd); display: block; margin: -8px -10px 6px; padding: 2px 10px; background: #0000cc; color: #00ffff; font-weight: 700; }
+.logline[data-nieuws="teletekst"] .nieuws-tekst::before { content: "P101  EGRESTEKST  " attr(data-tijd); display: block; margin: -8px -10px 6px; padding: 2px 10px; background: #0000cc; color: #00ffff; font-weight: 700; }
 .logline[data-nieuws="chat"] .nieuws-tekst { display: flex; align-items: flex-end; gap: 8px; }
-.logline[data-nieuws="chat"] .nieuws-tekst::before { content: ""; flex: none; width: 32px; height: 32px; border-radius: 50%; background: url("img/pingo.png") center / cover; box-shadow: 0 0 0 2px #fff, 0 2px 6px rgba(11, 37, 69, 0.3); }
+.logline[data-nieuws="chat"] .nieuws-tekst::before { content: ""; flex: none; width: 32px; height: 32px; border-radius: 50%; background: url("img/egres.png") center / cover; box-shadow: 0 0 0 2px #fff, 0 2px 6px rgba(11, 37, 69, 0.3); }
 .logline[data-nieuws="chat"] .nieuws-tekst > span { padding: 9px 13px; border-radius: 18px 18px 18px 4px; background: #e5e7eb; color: #111827; font-size: 14.5px; }
 .logline[data-nieuws="radio"] .nieuws-tekst { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; background: linear-gradient(#1f2937, #111827); color: #f9fafb; }
-.logline[data-nieuws="radio"] .nieuws-tekst::before { content: "PINGO FM 101.1"; flex: none; color: #f59e0b; font: 800 11px/1.2 "IBM Plex Mono", ui-monospace, monospace; }
+.logline[data-nieuws="radio"] .nieuws-tekst::before { content: "EGRES FM 101.1"; flex: none; color: #f59e0b; font: 800 11px/1.2 "IBM Plex Mono", ui-monospace, monospace; }
 .logline[data-nieuws="radio"] .nieuws-tekst::after {
   content: "";
   flex: none;
@@ -6406,7 +6406,7 @@ body.rustig :is(
   66% { background-size: 3px 60%, 3px 100%, 3px 40%, 3px 70%, 2px 30%; }
 }
 .logline[data-nieuws="krant"] .nieuws-tekst { padding: 8px 12px; border-top: 3px double #1c1917; border-bottom: 1px solid #1c1917; background: #f5f0e4; color: #1c1917; font-family: Georgia, "Times New Roman", serif; }
-.logline[data-nieuws="krant"] .nieuws-tekst::before { content: "DE PINGO · OCHTENDEDITIE"; display: block; margin-bottom: 4px; color: #b91c1c; font: 700 10px/1 "IBM Plex Sans", sans-serif; letter-spacing: 0.18em; }
+.logline[data-nieuws="krant"] .nieuws-tekst::before { content: "DE EGRES · OCHTENDEDITIE"; display: block; margin-bottom: 4px; color: #b91c1c; font: 700 10px/1 "IBM Plex Sans", sans-serif; letter-spacing: 0.18em; }
 .logline[data-nieuws="krant"] .nieuws-tekst > span { font-size: 16px; font-weight: 800; line-height: 1.2; }
 .logline[data-nieuws="telex"] .nieuws-tekst {
   padding: 13px 14px;
@@ -6491,7 +6491,7 @@ body.rustig :is(
 .skin-preview.omloop-voorbeeld { --foto: 26px; position: relative; overflow: visible; border: 0; box-shadow: none; background: none; }
 .omloop-voorbeeld > img { width: var(--foto); height: var(--foto); border-radius: 50%; box-shadow: 0 0 0 2px var(--lijn-sterk); }
 .omloop-voorbeeld .omloop { --maat: 9px; }
-.omloop-voorbeeld .omloop[data-omloop="minipingo"] { --maat: 10px; }
+.omloop-voorbeeld .omloop[data-omloop="miniegres"] { --maat: 10px; }
 .skin-preview.decor-voorbeeld { --foto: 22px; position: relative; background: var(--vlak-zacht); }
 .decor-voorbeeld .decor { width: 100%; }
 .decor-voorbeeld > img { position: relative; z-index: 1; width: var(--foto); height: var(--foto); border-radius: 50%; }
@@ -6562,7 +6562,7 @@ body.rustig .logline[data-nieuws="openingstekst"] .nieuws-tekst > span { transfo
 [data-portret="duotoon"] img, img[data-portret="duotoon"] { filter: url(#duotoon); }
 [data-portret="infrarood"] img, img[data-portret="infrarood"] { filter: hue-rotate(-105deg) saturate(1.7) contrast(1.12) brightness(1.05); }
 [data-portret="oudetv"] img, img[data-portret="oudetv"] { filter: grayscale(1) contrast(1.35) brightness(1.08); }
-.pingo[data-portret="oudetv"]::after {
+.egres[data-portret="oudetv"]::after {
   content: "";
   position: absolute;
   inset: 6px;
@@ -6623,12 +6623,12 @@ body.rustig .logline[data-nieuws="openingstekst"] .nieuws-tekst > span { transfo
 [data-ring="morse"] { --ring: #f8fafc; }
 [data-ring="glitchring"] { --ring: #0b0b12; }
 [data-ring="klok"] { --ring: #1e293b; }
-.pingo[data-ring="morse"]::before {
+.egres[data-ring="morse"]::before {
   opacity: 1;
   background: repeating-conic-gradient(#1e293b 0 3deg, transparent 3deg 8deg, #1e293b 8deg 18deg, transparent 18deg 23deg);
   animation-duration: 14s;
 }
-.pingo[data-ring="glitchring"]::before {
+.egres[data-ring="glitchring"]::before {
   opacity: 1;
   background: conic-gradient(#ff005a 0 25%, #00dcff 25% 50%, #ff005a 50% 75%, #00dcff 75%);
   animation: draaien 5s linear infinite, glitchRing 2.6s steps(1, end) infinite;
@@ -6644,7 +6644,7 @@ body.rustig .logline[data-nieuws="openingstekst"] .nieuws-tekst > span { transfo
   inherits: false;
   initial-value: 0deg;
 }
-.pingo[data-ring="klok"]::before {
+.egres[data-ring="klok"]::before {
   opacity: 1;
   background:
     conic-gradient(from var(--wijzer), #dc2626 0 4deg, transparent 4deg),
@@ -6663,20 +6663,20 @@ body.rustig .logline[data-nieuws="openingstekst"] .nieuws-tekst > span { transfo
 
 /* ---------- Houding ---------- */
 
-:is(.pingo, .houding-voorbeeld)[data-houding="slaperig"] { transform-origin: 50% 100%; animation: hSlaperig 5s ease-in-out infinite; }
+:is(.egres, .houding-voorbeeld)[data-houding="slaperig"] { transform-origin: 50% 100%; animation: hSlaperig 5s ease-in-out infinite; }
 @keyframes hSlaperig {
   0%, 30%, 100% { rotate: 0deg; translate: 0 0; }
   52%, 62% { rotate: 8deg; translate: 0 2%; }
   66% { rotate: -2deg; translate: 0 -1%; }
   72% { rotate: 0deg; }
 }
-:is(.pingo, .houding-voorbeeld)[data-houding="headbangen"] { transform-origin: 50% 100%; animation: hBang 0.46s ease-in-out infinite; }
+:is(.egres, .houding-voorbeeld)[data-houding="headbangen"] { transform-origin: 50% 100%; animation: hBang 0.46s ease-in-out infinite; }
 @keyframes hBang {
   0%, 100% { rotate: 0deg; translate: 0 0; }
   35% { rotate: -5deg; translate: 0 3%; }
   65% { rotate: 3deg; translate: 0 -1%; }
 }
-:is(.pingo, .houding-voorbeeld)[data-houding="moonwalk"] { animation: hMoonwalk 3.2s ease-in-out infinite; }
+:is(.egres, .houding-voorbeeld)[data-houding="moonwalk"] { animation: hMoonwalk 3.2s ease-in-out infinite; }
 @keyframes hMoonwalk {
   0%, 100% { translate: -6% 0; rotate: -4deg; }
   25% { translate: 0 -1%; rotate: -4deg; }
@@ -7202,7 +7202,7 @@ body.rustig[data-accent="aurora"] { animation: none; }
   font: 700 14px/1.35 "IBM Plex Mono", ui-monospace, monospace;
   box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.18);
 }
-.logline[data-nieuws="gsm"] .nieuws-tekst::before { content: "▮▮▮▯  Pingo-net        ▮▮▮"; display: block; margin-bottom: 4px; font-size: 11px; white-space: pre; }
+.logline[data-nieuws="gsm"] .nieuws-tekst::before { content: "▮▮▮▯  Egres-net        ▮▮▮"; display: block; margin-bottom: 4px; font-size: 11px; white-space: pre; }
 .logline[data-nieuws="strip"] .nieuws-tekst {
   position: relative;
   margin-bottom: 14px;
@@ -7280,7 +7280,7 @@ body.rustig :is(
   .accessoire .stoom i, .acc-svg.routerhoed .lampjes circle, .acc-svg.onweer .flits, .acc-svg.onweer .druppels,
   .omloop[data-omloop="vuurvliegjes"] b, .decor::after, .doel-meter::after, .counter strong
 ) { animation: none !important; }
-body.rustig .pingo[data-portret="oudetv"]::after { animation: none; }
+body.rustig .egres[data-portret="oudetv"]::after { animation: none; }
 
 .maatje:is([data-maatje="muis"], [data-maatje="wolkje"]) { background: var(--blauw-300); }
 .maatje:is([data-maatje="muis"], [data-maatje="wolkje"]) span { filter: drop-shadow(0 1px 1px rgba(11, 37, 69, 0.7)); }

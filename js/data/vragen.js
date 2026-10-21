@@ -1,4 +1,4 @@
-// De vragenbank van Pingo's overhoring.
+// De vragenbank van Egres' overhoring.
 //
 // Rekenvragen (subnetten, binair, IPv6 afkorten) stelt quiz.js zelf op; hier
 // staan de onderwerpen, de tabellen waar vragen uit gemaakt worden, en de

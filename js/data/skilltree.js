@@ -45,7 +45,7 @@ export const NODES = [
   k("praktijk", 2, "p3", "Labo-ervaring", "🧪", "Je hebt de opstelling al drie keer gedaan.", "Minigames leveren 25% meer op.", { minigameReward: 1.25 }),
   k("praktijk", 3, "p4", "Examentraining", "📝", "Oude examens zijn de beste voorbereiding.", "Minigames leveren nog eens 25% meer op.", { minigameReward: 1.25 }),
   k("praktijk", 4, "p5", "Meesterschap", "🥇", "Je klikt niet meer, je dirigeert.", "Elke klik levert er 2% van je productie per seconde bij.", { clickFromPps: 0.02 }),
-  k("praktijk", 5, "p6", "Pingo's zegen", "🙌", "Hij zegt niets. Hij knikt alleen.", "Alles produceert 25% meer.", { allMult: 1.25 }),
+  k("praktijk", 5, "p6", "Egres' zegen", "🙌", "Hij zegt niets. Hij knikt alleen.", "Alles produceert 25% meer.", { allMult: 1.25 }),
 
   // Geluk
   k("geluk", 0, "g1", "Voorgevoel", "🔮", "Je weet net iets eerder waar je moet kijken.", "Gouden packets verschijnen 15% vaker.", { goldenFreq: 1.15 }),
@@ -88,7 +88,7 @@ export const NODES = [
   k("cloud", 5, "c6", "Planetaire cloud", "🪐", "Latency tussen planeten wordt een probleem voor later.", "Cloudapparaten +30%, en alles 5% meer.", { vakMult: { vak: "cloud", x: 1.3 }, allMult: 1.05 }),
 
   // Security
-  k("security", 0, "v1", "Wachtwoordbeleid", "🔑", "Minstens twaalf tekens, en niet Pingo123.", "Securityapparaten produceren 15% meer.", { vakMult: { vak: "security", x: 1.15 } }),
+  k("security", 0, "v1", "Wachtwoordbeleid", "🔑", "Minstens twaalf tekens, en niet Egres123.", "Securityapparaten produceren 15% meer.", { vakMult: { vak: "security", x: 1.15 } }),
   k("security", 1, "v2", "Honeypot", "🍯", "Een nepserver waar aanvallers in trappen.", "Active Directory en firewalls produceren de helft meer.", { buildingMult: [{ id: "ad", x: 1.5 }, { id: "firewall", x: 1.5 }] }),
   k("security", 2, "v3", "Segmentatie", "🧱", "Wie in het gastennetwerk zit, komt nergens anders.", "Securityapparaten produceren nog eens 15% meer.", { vakMult: { vak: "security", x: 1.15 } }),
   k("security", 3, "v4", "Threat intel", "🕵️", "Je weet welke aanval eraan komt voor hij er is.", "Het SOC produceert de helft meer; rode packets verliezen 60% van hun kracht.", { buildingMult: { id: "soc", x: 1.5 }, ddosResist: 0.6 }),
@@ -115,11 +115,11 @@ export const NODES = [
   { id: "x1", branch: "kruis", name: "Didactiek", icon: "🧑‍🏫", cost: 300, pos: [6, 0.5], needs: ["s6", "p6"], desc: "Je kunt het niet alleen, je kunt het ook uitleggen.", note: "Klikkracht x3, en 10% meer studiepunten.", effect: { clickMult: 3, ectsGain: 1.1 } },
   { id: "x2", branch: "kruis", name: "Gelukkige nachten", icon: "🌠", cost: 300, pos: [6, 2.5], needs: ["g6", "b6"], desc: "Terwijl jij slaapt, valt het goud van de hemel.", note: "Gouden packets 20% vaker, en offline tijd telt tot 48 uur mee.", effect: { goldenFreq: 1.2, offlineCap: 48 * 3600, offlineRate: 1 } },
   { id: "x3", branch: "kruis", name: "Netwerkarchitect", icon: "📐", cost: 300, pos: [6, 4.5], needs: ["n6", "d6"], desc: "Je tekent het netwerk, en daarna bestaat het.", note: "Synergieën tussen apparaten de helft sterker; netwerken en datacenter +20%.", effect: { synergyMult: 1.5, vakMult: [{ vak: "netwerken", x: 1.2 }, { vak: "sddc", x: 1.2 }] } },
-  { id: "x4", branch: "kruis", name: "Zero trust", icon: "🔐", cost: 300, pos: [6, 6.5], needs: ["c6", "v6"], desc: "Niemand is te vertrouwen. Zelfs Pingo niet.", note: "Cloud en security +20%, en rode packets doen niets meer.", effect: { vakMult: [{ vak: "cloud", x: 1.2 }, { vak: "security", x: 1.2 }], ddosResist: 1 } },
+  { id: "x4", branch: "kruis", name: "Zero trust", icon: "🔐", cost: 300, pos: [6, 6.5], needs: ["c6", "v6"], desc: "Niemand is te vertrouwen. Zelfs Egres niet.", note: "Cloud en security +20%, en rode packets doen niets meer.", effect: { vakMult: [{ vak: "cloud", x: 1.2 }, { vak: "security", x: 1.2 }], ddosResist: 1 } },
   { id: "x5", branch: "kruis", name: "Spin-off", icon: "🚀", cost: 300, pos: [6, 8.5], needs: ["l6", "e6"], desc: "Je labo wordt een bedrijf.", note: "Apparaten 10% goedkoper, en minigames leveren de helft meer op.", effect: { costMult: 0.9, minigameReward: 1.5 } },
 
   // Het doctoraat, helemaal rechts.
-  { id: "dr", branch: "kruis", name: "Doctoraat", icon: "🎓", cost: 700, pos: [7, 4.5], needs: ["x1", "x2", "x3", "x4", "x5"], desc: "Dr. Pingo. Hij stond erop dat je het zo zou noemen.", note: "Alles produceert 50% meer, en je krijgt 25% meer studiepunten.", effect: { allMult: 1.5, ectsGain: 1.25 } },
+  { id: "dr", branch: "kruis", name: "Doctoraat", icon: "🎓", cost: 700, pos: [7, 4.5], needs: ["x1", "x2", "x3", "x4", "x5"], desc: "Dr. Egres. Hij stond erop dat je het zo zou noemen.", note: "Alles produceert 50% meer, en je krijgt 25% meer studiepunten.", effect: { allMult: 1.5, ectsGain: 1.25 } },
 ];
 
 export const NODE_BY_ID = Object.fromEntries(NODES.map((n) => [n.id, n]));

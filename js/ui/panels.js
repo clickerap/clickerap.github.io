@@ -632,7 +632,7 @@ function voorbeeld(soort, skin, open) {
     case "filter":
       return `<span class="skin-preview filter-voorbeeld" data-filter="${esc(skin.id)}" aria-hidden="true"><i class="kleur"></i><i class="laag"></i></span>`;
     case "packet": {
-      const gezicht = skin.id === "pingo" ? ` style="background-image: url('${esc(FOTO.standaard)}')"` : "";
+      const gezicht = skin.id === "egres" ? ` style="background-image: url('${esc(FOTO.standaard)}')"` : "";
       return `<span class="skin-preview packet-voorbeeld stijl-${esc(skin.id)}" aria-hidden="true"${gezicht}>${esc(skin.inhoud ?? skin.voorbeeld)}</span>`;
     }
     case "titel":
@@ -660,7 +660,7 @@ function voorbeeld(soort, skin, open) {
     case "decor":
       return `<span class="skin-preview decor-voorbeeld" aria-hidden="true"><span class="decor" data-decor="${esc(skin.id)}">${decorHtml(skin.id)}</span>${foto(G.uiterlijk.portret)}</span>`;
     case "nieuws":
-      return `<span class="skin-preview nieuws-voorbeeld" aria-hidden="true"><span class="logline mini" data-nieuws="${esc(skin.id)}"><span class="nieuws-tekst" data-tijd="do 24 sep"><span>Pingo klikt door</span></span></span></span>`;
+      return `<span class="skin-preview nieuws-voorbeeld" aria-hidden="true"><span class="logline mini" data-nieuws="${esc(skin.id)}"><span class="nieuws-tekst" data-tijd="do 24 sep"><span>Egres klikt door</span></span></span></span>`;
     case "voortgang":
       return `<span class="skin-preview voortgang-voorbeeld" aria-hidden="true"><span class="doel" data-voortgang="${esc(skin.id)}" style="--deel: 0.62"><span class="doel-meter"><span></span></span></span></span>`;
     case "grafiek":
@@ -817,7 +817,7 @@ function buildMeer() {
       <p class="panel-intro" id="skin-hint"></p>
       <div class="skinrij" role="group"></div>
       <h4 class="skin-kop"><label for="opt-netwerknaam">Netwerknaam</label></h4>
-      <input class="veld" id="opt-netwerknaam" maxlength="24" placeholder="Bijvoorbeeld: Pingo-net" autocomplete="off" />
+      <input class="veld" id="opt-netwerknaam" maxlength="24" placeholder="Bijvoorbeeld: Egres-net" autocomplete="off" />
       <p class="panel-intro" style="margin-top:8px">Komt onder de titel van het spel te staan. Laat leeg om hem weg te laten.</p>
     </div>
     <div class="kaart">
@@ -872,7 +872,7 @@ function buildMeer() {
     </div>
     <div class="kaart">
       <h3>Over</h3>
-      <p class="panel-intro">Pingo Clicker <span id="versie" style="cursor:default">v${VERSIE}</span> — gemaakt voor de klas.</p>
+      <p class="panel-intro">Egres Clicker <span id="versie" style="cursor:default">v${VERSIE}</span> — gemaakt voor de klas.</p>
     </div>`;
   for (const [sleutel] of STATRIJEN) statEls.set(sleutel, meerEl.querySelector(`[data-stat="${sleutel}"]`));
   for (const id of Object.keys(VAKKEN)) vakEls.set(id, meerEl.querySelector(`[data-vak="${id}"]`));

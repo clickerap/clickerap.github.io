@@ -1,4 +1,4 @@
-// De bugs uit "Verbeterpunten Pingo Clicker", nagespeeld in Chromium.
+// De bugs uit "Verbeterpunten Egres Clicker", nagespeeld in Chromium.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -9,32 +9,32 @@ const RUST = `{ version: 3, packets: 1e6, buildings: { patchkabel: 5, switch: 1 
 
 test("het spel start zonder fouten, ook de lettertypes en foto's laden", async () => {
   const { page, context, fouten } = await openSpel();
-  await page.click("#pingo");
+  await page.click("#egres");
   await page.waitForTimeout(300);
   assert.deepEqual(fouten, []);
   assert.ok(await page.evaluate(() => document.fonts.check("16px 'IBM Plex Sans'")));
-  assert.ok(await page.evaluate(() => document.getElementById("pingo-img").naturalWidth > 0));
+  assert.ok(await page.evaluate(() => document.getElementById("egres-img").naturalWidth > 0));
   await context.close();
 });
 
 test("bug 1: wisselen van bestand laat het doelbestand heel", async () => {
   const { page, context } = await openSpel({
     saves: {
-      pingoClicker: `{ version: 3, packets: 11111, options: { netwerknaam: "BESTAND-EEN" }, lastSeen: nu }`,
-      "pingoClicker:2": `{ version: 3, packets: 22222, options: { netwerknaam: "BESTAND-TWEE" }, lastSeen: nu }`,
+      egresClicker: `{ version: 3, packets: 11111, options: { netwerknaam: "BESTAND-EEN" }, lastSeen: nu }`,
+      "egresClicker:2": `{ version: 3, packets: 22222, options: { netwerknaam: "BESTAND-TWEE" }, lastSeen: nu }`,
     },
   });
   await page.click("#btn-meer");
   await Promise.all([page.waitForNavigation(), page.selectOption("#opt-slot", "2")]);
-  await page.waitForFunction(() => typeof window.pingo?.pps === "number");
+  await page.waitForFunction(() => typeof window.egres?.pps === "number");
   assert.equal(await page.textContent("#netwerknaam"), "BESTAND-TWEE");
-  const een = await page.evaluate(() => JSON.parse(localStorage.getItem("pingoClicker")).options.netwerknaam);
+  const een = await page.evaluate(() => JSON.parse(localStorage.getItem("egresClicker")).options.netwerknaam);
   assert.equal(een, "BESTAND-EEN");
   await context.close();
 });
 
 test("bug 2: het prestatiefilter laat de winkel met rust", async () => {
-  const { page, context } = await openSpel({ saves: { pingoClicker: RUST } });
+  const { page, context } = await openSpel({ saves: { egresClicker: RUST } });
   await page.click('button[data-tab="prestaties"]');
   await page.click('#ach-filter button[data-filter="open"]');
   assert.equal(await page.getAttribute('#ach-filter button[data-filter="open"]', "aria-pressed"), "true");
@@ -48,46 +48,46 @@ test("bug 2: het prestatiefilter laat de winkel met rust", async () => {
 });
 
 test("bug 3: een code met HTML erin voert niets uit", async () => {
-  const { page, context } = await openSpel({ saves: { pingoClicker: RUST } });
+  const { page, context } = await openSpel({ saves: { egresClicker: RUST } });
   const save = {
     version: 3, packets: 1e6, buildings: { switch: 1 }, stats: { lifetime: 1e6 }, lastSeen: Date.now(),
     options: { netwerknaam: "<img src=x onerror=\"window.__xss=1\">" },
     minigames: { laatste: "cli", cli: { hostname: "<b>", opdracht: { poort: "<img src=x onerror=\"window.__xss=1\">", ip: "10.1.1.1", mask: "255.255.255.0" } } },
   };
-  const code = "PINGO1:" + Buffer.from(JSON.stringify(save)).toString("base64");
+  const code = "EGRES1:" + Buffer.from(JSON.stringify(save)).toString("base64");
   await page.click("#btn-meer");
   await page.click("#btn-import");
   await page.fill("#import-veld", code);
   await Promise.all([page.waitForNavigation(), page.click("#modal-actions button:last-child")]);
-  await page.waitForFunction(() => typeof window.pingo?.pps === "number");
+  await page.waitForFunction(() => typeof window.egres?.pps === "number");
   await page.click('button[data-tab="labo"]');
   await page.waitForSelector("#term-opdracht");
   await page.waitForTimeout(300);
   assert.equal(await page.evaluate(() => window.__xss), undefined);
   assert.match(await page.textContent("#term-opdracht"), /Zet gi0\/\d/);
-  assert.match(await page.textContent("#prompt"), /^PINGO/);
+  assert.match(await page.textContent("#prompt"), /^EGRES/);
   await context.close();
 });
 
 test("een ongeldige code houdt het venster open met een melding", async () => {
-  const { page, context } = await openSpel({ saves: { pingoClicker: RUST } });
+  const { page, context } = await openSpel({ saves: { egresClicker: RUST } });
   await page.click("#btn-meer");
   await page.click("#btn-import");
   await page.fill("#import-veld", "dit is niks");
   await page.click("#modal-actions button:last-child");
   assert.ok(await page.evaluate(() => document.getElementById("modal").open));
-  assert.match(await page.textContent("#import-fout"), /geen Pingo Clicker-code/);
+  assert.match(await page.textContent("#import-fout"), /geen Egres Clicker-code/);
   assert.equal(await page.inputValue("#import-veld"), "dit is niks");
   await context.close();
 });
 
 test("bug 4: een straf blijft na herladen werken", async () => {
   const { page, context } = await openSpel({
-    saves: { pingoClicker: `{ version: 3, buildings: { switch: 100 }, seen: ["patchkabel", "switch"], stats: { lifetime: 1e6 }, buffs: [{ id: "congestie", until: nu + 120000 }], lastSeen: nu }` },
+    saves: { egresClicker: `{ version: 3, buildings: { switch: 100 }, seen: ["patchkabel", "switch"], stats: { lifetime: 1e6 }, buffs: [{ id: "congestie", until: nu + 120000 }], lastSeen: nu }` },
   });
   assert.ok(Math.abs((await staat(page)).pps - 54) < 1e-9);
   await page.reload();
-  await page.waitForFunction(() => typeof window.pingo?.pps === "number");
+  await page.waitForFunction(() => typeof window.egres?.pps === "number");
   const na = await staat(page);
   assert.deepEqual(na.buffs, ["congestie"]);
   assert.ok(Math.abs(na.pps - 54) < 1e-9, `pps is ${na.pps}`);
@@ -95,14 +95,14 @@ test("bug 4: een straf blijft na herladen werken", async () => {
 });
 
 test("bug 6: spatie en Enter zijn geen autoclicker, en spatie bedient knoppen", async () => {
-  const { page, context } = await openSpel({ saves: { pingoClicker: RUST } });
+  const { page, context } = await openSpel({ saves: { egresClicker: RUST } });
   const voor = await staat(page);
   await page.evaluate(() => {
     for (let i = 0; i < 30; i++) document.dispatchEvent(new KeyboardEvent("keydown", { code: "Space", key: " ", repeat: i > 0, bubbles: true }));
   });
   assert.equal((await staat(page)).clicks - voor.clicks, 1);
 
-  await page.focus("#pingo");
+  await page.focus("#egres");
   for (let i = 0; i < 20; i++) await page.keyboard.down("Enter");
   await page.keyboard.up("Enter");
   assert.equal((await staat(page)).clicks - voor.clicks, 2);
@@ -115,7 +115,7 @@ test("bug 6: spatie en Enter zijn geen autoclicker, en spatie bedient knoppen", 
 
 test("bug 7: de overhoring tekent niet over een andere opdracht heen", async () => {
   const { page, context } = await openSpel({
-    saves: { pingoClicker: `{ version: 3, packets: 1e6, buildings: { switch: 1 }, stats: { lifetime: 1e6 }, minigames: { laatste: "quiz" }, lastSeen: nu }` },
+    saves: { egresClicker: `{ version: 3, packets: 1e6, buildings: { switch: 1 }, stats: { lifetime: 1e6 }, minigames: { laatste: "quiz" }, lastSeen: nu }` },
   });
   await page.click('button[data-tab="labo"]');
   await page.click(".quiz-optie");
@@ -127,7 +127,7 @@ test("bug 7: de overhoring tekent niet over een andere opdracht heen", async () 
 
 test("bug 10: je kunt terugscrollen in de terminal", async () => {
   const { page, context } = await openSpel({
-    saves: { pingoClicker: `{ version: 3, packets: 1e6, buildings: { switch: 1 }, stats: { lifetime: 1e6 }, minigames: { laatste: "cli" }, lastSeen: nu }` },
+    saves: { egresClicker: `{ version: 3, packets: 1e6, buildings: { switch: 1 }, stats: { lifetime: 1e6 }, minigames: { laatste: "cli" }, lastSeen: nu }` },
   });
   await page.click('button[data-tab="labo"]');
   for (let i = 0; i < 6; i++) {
@@ -147,7 +147,7 @@ test("bug 10: je kunt terugscrollen in de terminal", async () => {
 test("bug 12: de afstudeerkaart werkt zichzelf bij", async () => {
   const { page, context } = await openSpel({
     // Het tabblad is open, maar het eerste studiepunt is nog niet binnen.
-    saves: { pingoClicker: `{ version: 3, packets: 0, stats: { lifetime: ${STUDIE_OPEN * 2} }, lastSeen: nu }` },
+    saves: { egresClicker: `{ version: 3, packets: 0, stats: { lifetime: ${STUDIE_OPEN * 2} }, lastSeen: nu }` },
   });
   await page.click('button[data-tab="studie"]');
   assert.equal(await page.isDisabled("#graduate-btn"), true);
@@ -171,7 +171,7 @@ test("bug 14: zonder localStorage speelt het spel gewoon", async () => {
       });
     },
   });
-  await page.click("#pingo");
+  await page.click("#egres");
   assert.equal((await staat(page)).clicks, 1);
   assert.match(await page.textContent("#toaster"), /Opslaan lukt niet/);
   assert.deepEqual(fouten.filter((f) => f.startsWith("pageerror")), []);
@@ -179,15 +179,15 @@ test("bug 14: zonder localStorage speelt het spel gewoon", async () => {
 });
 
 test("een tweede tabblad neemt het spel over zonder voortgang te verliezen", async () => {
-  const { page, context } = await openSpel({ saves: { pingoClicker: RUST } });
+  const { page, context } = await openSpel({ saves: { egresClicker: RUST } });
   await page.evaluate(async () => {
     const { G } = await import("/js/state.js");
     G.packets = 424242;
   });
   const tweede = await context.newPage();
   await tweede.goto(page.url());
-  await tweede.waitForFunction(() => typeof window.pingo?.pps === "number");
-  assert.equal(Math.floor(await tweede.evaluate(() => window.pingo.packets)), 424242);
+  await tweede.waitForFunction(() => typeof window.egres?.pps === "number");
+  assert.equal(Math.floor(await tweede.evaluate(() => window.egres.packets)), 424242);
   await page.waitForFunction(() => document.getElementById("modal").open);
   assert.match(await page.textContent("#modal-title"), /ander tabblad/);
   await context.close();
@@ -212,7 +212,7 @@ test("vensters houden de focus vast en geven hem terug", async () => {
 });
 
 test("G pakt een gouden packet", async () => {
-  const { page, context } = await openSpel({ saves: { pingoClicker: RUST } });
+  const { page, context } = await openSpel({ saves: { egresClicker: RUST } });
   await page.evaluate(async () => {
     const { emit } = await import("/js/bus.js");
     emit("golden:spawn", { hazard: false, lifetimeMs: 10000, spawnedAt: Date.now() });
@@ -226,7 +226,7 @@ test("G pakt een gouden packet", async () => {
 test("bug 11 en 13: afstuderen geeft de gratis buff en laat het labo stil", async () => {
   const { page, context } = await openSpel({
     saves: {
-      pingoClicker: `{ version: 3, packets: 1e6, buildings: { switch: 1, rack: 1 }, stats: { lifetime: 1e11 }, prestige: 1, ects: 0,
+      egresClicker: `{ version: 3, packets: 1e6, buildings: { switch: 1, rack: 1 }, stats: { lifetime: 1e11 }, prestige: 1, ects: 0,
         nodes: ["g1", "g2", "g3", "g4", "g5", "g6"], minigames: { laatste: "market" }, lastSeen: nu }`,
     },
   });
@@ -250,7 +250,7 @@ test("bug 11 en 13: afstuderen geeft de gratis buff en laat het labo stil", asyn
 
 test("de cursus beloont pas na de leestijd, met een knop onderaan", async () => {
   const { page, context } = await openSpel({
-    saves: { pingoClicker: `{ version: 3, packets: 0, stats: { lifetime: 1e4 }, minigames: { laatste: "cursus", cursus: { open: "packets" } }, lastSeen: nu }` },
+    saves: { egresClicker: `{ version: 3, packets: 0, stats: { lifetime: 1e4 }, minigames: { laatste: "cursus", cursus: { open: "packets" } }, lastSeen: nu }` },
   });
   await page.click('button[data-tab="labo"]');
   assert.equal(await page.isDisabled("#cursus-gelezen"), true);
@@ -268,7 +268,7 @@ test("de cursus beloont pas na de leestijd, met een knop onderaan", async () => 
 
 test("een storing overleeft een herlaadbeurt", async () => {
   const { page, context } = await openSpel({
-    saves: { pingoClicker: `{ version: 3, packets: 1e9, buildings: { switch: 10 }, stats: { lifetime: 1e9 }, incident: { id: "dhcp", startedAt: nu, until: nu + 40000, cost: 500 }, lastSeen: nu }` },
+    saves: { egresClicker: `{ version: 3, packets: 1e9, buildings: { switch: 10 }, stats: { lifetime: 1e9 }, incident: { id: "dhcp", startedAt: nu, until: nu + 40000, cost: 500 }, lastSeen: nu }` },
   });
   await page.waitForSelector("#incident:not([hidden])");
   assert.match(await page.textContent("#incident-text"), /DHCP/);
@@ -279,7 +279,7 @@ test("een storing overleeft een herlaadbeurt", async () => {
 
 test("de markt: kiezen, kopen, een order zetten en verkopen", async () => {
   const { page, context, fouten } = await openSpel({
-    saves: { pingoClicker: `{ version: 4, packets: 1e9, buildings: { switch: 100, rack: 1 }, stats: { lifetime: 1e9 }, minigames: { laatste: "market" }, lastSeen: nu }` },
+    saves: { egresClicker: `{ version: 4, packets: 1e9, buildings: { switch: 100, rack: 1 }, stats: { lifetime: 1e9 }, minigames: { laatste: "market" }, lastSeen: nu }` },
   });
   await page.click('button[data-tab="labo"]');
   await page.click('.beurs-rij[data-goed="gpu"]');

@@ -13,7 +13,7 @@ const saveMet = (zaad) => `{
 }`;
 
 async function openKast(zaad) {
-  const spel = await openSpel({ saves: { pingoClicker: saveMet(zaad) } });
+  const spel = await openSpel({ saves: { egresClicker: saveMet(zaad) } });
   await spel.page.click("#labo-tab");
   await spel.page.waitForSelector(".kast-svg");
   // Het bord moet helemaal in beeld staan, anders valt de muis ernaast.
@@ -119,7 +119,7 @@ test("een kabel leggen met het toetsenbord", async () => {
 
 test("elk onderdeel van het labo heeft een knop met uitleg", async () => {
   const { page, context, fouten } = await openSpel({
-    saves: { pingoClicker: `{ version: 5, packets: 1e6, buildings: { switch: 1, fiber: 1, rack: 1 }, seen: ["switch", "fiber", "rack"], stats: { lifetime: 1e6 }, lastSeen: nu }` },
+    saves: { egresClicker: `{ version: 5, packets: 1e6, buildings: { switch: 1, fiber: 1, rack: 1 }, seen: ["switch", "fiber", "rack"], stats: { lifetime: 1e6 }, lastSeen: nu }` },
   });
   await page.click("#labo-tab");
   for (const id of ["cursus", "quiz", "cli", "market", "patch"]) {

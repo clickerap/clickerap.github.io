@@ -17,7 +17,7 @@ await neemTabbladOver({
   bijOvername: () => {
     dialog({
       title: "Verder in een ander tabblad",
-      body: "<p>Je hebt Pingo Clicker in een ander tabblad geopend. Dit tabblad slaat niets meer op, zodat ze elkaars voortgang niet overschrijven.</p><p>Herlaad deze pagina om hier verder te spelen.</p>",
+      body: "<p>Je hebt Egres Clicker in een ander tabblad geopend. Dit tabblad slaat niets meer op, zodat ze elkaars voortgang niet overschrijven.</p><p>Herlaad deze pagina om hier verder te spelen.</p>",
       actions: [
         { label: "Sluiten", style: "ghost" },
         { label: "Hier verder spelen", onClick: () => location.reload() },
@@ -109,7 +109,7 @@ start();
 emit("news", nextNews());
 
 // Voor wie in de console rondkijkt: hallo. Er valt hier meer te vinden.
-window.pingo = {
+window.egres = {
   get pps() {
     return D.pps;
   },

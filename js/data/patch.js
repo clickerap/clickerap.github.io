@@ -34,7 +34,7 @@ export const WERK = {
   interval: 150,
   // Een luchtdichte goot levert de helft meer op.
   luchtdicht: 1.5,
-  // Elke keer dat Pingo een kabel voor je legt, kost dat een vijfde, tot je
+  // Elke keer dat Egres een kabel voor je legt, kost dat een vijfde, tot je
   // nog minstens twee vijfden overhoudt.
   hulpKost: 0.2,
   hulpMinimum: 0.4,
@@ -85,6 +85,6 @@ export const NOTITIES = [
   "De leerlingen zeggen dat er niets werkt.",
   "Opendeurdag: alles moet werken.",
   "De vorige technicus is met pensioen.",
-  "Pingo heeft het beloofd aan de collega's.",
+  "Egres heeft het beloofd aan de collega's.",
   "Er hangt al een week een briefje op de deur.",
 ];
